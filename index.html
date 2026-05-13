@@ -1,24 +1,455 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>My Trae Project</title>
-    <script type="module">
-      if (import.meta.hot?.on) {
-        import.meta.hot.on('vite:error', (error) => {
-          if (error.err) {
-            console.error(
-              [error.err.message, error.err.frame].filter(Boolean).join('\n'),
-            )
-          }
-        })
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>每日一学 - 书籍推荐首页</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+      min-height: 100vh;
+      padding: 30px 20px;
+      color: #e8e0f0;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .header h1 {
+      font-size: 42px;
+      font-weight: 800;
+      background: linear-gradient(90deg, #a78bfa, #f472b6, #fb923c);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 15px;
+    }
+    .header .subtitle {
+      font-size: 16px;
+      color: #c4b5fd;
+      letter-spacing: 1px;
+    }
+    .toolbar {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      padding: 12px 24px;
+      border-radius: 10px;
+      border: none;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #7c3aed, #db2777);
+      color: white;
+      box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(124, 58, 237, 0.5);
+    }
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: #e8e0f0;
+      border: 1px solid rgba(167, 139, 250, 0.3);
+    }
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+    .search-box {
+      flex: 1;
+      max-width: 400px;
+      position: relative;
+    }
+    .search-box input {
+      width: 100%;
+      padding: 12px 20px;
+      padding-right: 45px;
+      border-radius: 10px;
+      border: 1px solid rgba(167, 139, 250, 0.3);
+      background: rgba(255, 255, 255, 0.08);
+      color: white;
+      font-size: 15px;
+      outline: none;
+    }
+    .search-box input::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+    .search-box input:focus {
+      border-color: #a78bfa;
+      box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.2);
+    }
+    .search-icon {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #a78bfa;
+      font-size: 18px;
+    }
+    .books-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+    .book-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(167, 139, 250, 0.2);
+      border-radius: 16px;
+      padding: 24px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .book-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(167, 139, 250, 0.3);
+      border-color: rgba(167, 139, 250, 0.4);
+    }
+    .book-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #7c3aed, #db2777);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      margin-bottom: 16px;
+    }
+    .book-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 8px;
+    }
+    .book-date {
+      font-size: 13px;
+      color: #a78bfa;
+      margin-bottom: 12px;
+    }
+    .book-desc {
+      font-size: 14px;
+      color: #d1c4e9;
+      line-height: 1.6;
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal.active {
+      display: flex;
+    }
+    .modal-content {
+      background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+      border-radius: 20px;
+      padding: 30px;
+      max-width: 500px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      border: 1px solid rgba(167, 139, 250, 0.3);
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+    .modal-header h2 {
+      font-size: 24px;
+      font-weight: 700;
+      background: linear-gradient(90deg, #a78bfa, #f472b6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .close-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: white;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 20px;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      color: #c4b5fd;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    .form-group input, .form-group textarea {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(167, 139, 250, 0.3);
+      background: rgba(255, 255, 255, 0.08);
+      color: white;
+      font-size: 15px;
+      outline: none;
+    }
+    .form-group textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+    .form-group input::placeholder, .form-group textarea::placeholder {
+      color: rgba(255, 255, 255, 0.4);
+    }
+    .form-group input:focus, .form-group textarea:focus {
+      border-color: #a78bfa;
+      box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.2);
+    }
+    .btn-group {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+    }
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 13px;
+      color: #6b7280;
+    }
+    @media (max-width: 768px) {
+      .header h1 { font-size: 32px; }
+      .books-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>📚 每日一学 · 书籍推荐</h1>
+      <div class="subtitle">探索知识，持续成长</div>
+    </div>
+
+    <div class="toolbar">
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="搜索书籍名称..." onkeyup="filterBooks()">
+        <span class="search-icon">🔍</span>
+      </div>
+      <button class="btn btn-primary" onclick="openAddModal()">
+        ➕ 添加新书籍
+      </button>
+      <button class="btn btn-secondary" onclick="refreshBooks()">
+        🔄 刷新列表
+      </button>
+    </div>
+
+    <div class="books-grid" id="booksGrid">
+      <!-- 书籍卡片将通过JavaScript动态生成 -->
+    </div>
+
+    <footer>
+      <p>每日一学 · 书籍推荐系统</p>
+      <p style="margin-top: 6px;">探索经典，终身学习</p>
+    </footer>
+  </div>
+
+  <!-- 添加书籍模态框 -->
+  <div class="modal" id="addModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>📖 添加新书籍</h2>
+        <button class="close-btn" onclick="closeAddModal()">×</button>
+      </div>
+      <form id="addForm" onsubmit="addBook(event)">
+        <div class="form-group">
+          <label>书籍名称</label>
+          <input type="text" id="bookName" required placeholder="例如：纳瓦尔宝典">
+        </div>
+        <div class="form-group">
+          <label>日期</label>
+          <input type="date" id="bookDate" required>
+        </div>
+        <div class="form-group">
+          <label>HTML文件名</label>
+          <input type="text" id="bookFilename" required placeholder="例如：2026-05-13-每日一学-书籍名称.html">
+        </div>
+        <div class="form-group">
+          <label>描述</label>
+          <textarea id="bookDesc" placeholder="简要描述这本书的内容..."></textarea>
+        </div>
+        <div class="btn-group">
+          <button type="submit" class="btn btn-primary" style="flex: 1;">
+            ✅ 添加书籍
+          </button>
+          <button type="button" class="btn btn-secondary" style="flex: 1;" onclick="closeAddModal()">
+            取消
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // 书籍数据 - 从目录中解析
+    const booksPath = "C:/Users/Administrator/WorkBuddy/automation-claw-20260403145841";
+    
+    // 默认书籍列表（基于目录中的文件）
+    let books = [
+      { name: "原则", date: "2026-04-03", filename: "2026-04-03-每日一学-原则.html", desc: "探索生活与工作的原则，构建决策系统" },
+      { name: "思考快与慢", date: "2026-04-03", filename: "2026-04-03-每日一学-思考快与慢.html", desc: "了解大脑的两种思考模式" },
+      { name: "穷查理宝典", date: "2026-04-09", filename: "2026-04-09-每日一学-穷查理宝典.html", desc: "查理·芒格的人生智慧与投资哲学" },
+      { name: "非暴力沟通", date: "2026-04-10", filename: "2026-04-10-每日一学-非暴力沟通.html", desc: "建立有效的沟通方式" },
+      { name: "刻意练习", date: "2026-04-11", filename: "2026-04-11-每日一学-刻意练习.html", desc: "如何从新手到大师" },
+      { name: "心流", date: "2026-04-17", filename: "2026-04-17-每日一学-心流.html", desc: "最优体验心理学" },
+      { name: "高效能人士的七个习惯", date: "2026-04-21", filename: "2026-04-21-每日一学-高效能人士的七个习惯.html", desc: "个人成长与成功的经典法则" },
+      { name: "深度工作", date: "2026-04-22", filename: "2026-04-22-每日一学-深度工作.html", desc: "在分心的世界中专注的力量" },
+      { name: "学会提问", date: "2026-04-23", filename: "2026-04-23-每日一学-学会提问.html", desc: "批判性思维指南" },
+      { name: "被讨厌的勇气", date: "2026-04-24", filename: "2026-04-24-每日一学-被讨厌的勇气.html", desc: "阿德勒心理学入门" },
+      { name: "纳瓦尔宝典", date: "2026-04-26", filename: "2026-04-26-每日一学-纳瓦尔宝典.html", desc: "财富与幸福的智慧" },
+      { name: "反脆弱", date: "2026-04-27", filename: "2026-04-27-每日一学-反脆弱.html", desc: "从不确定性中获益" },
+      { name: "掌控习惯", date: "2026-04-28", filename: "2026-04-28-每日一学-掌控习惯.html", desc: "培养好习惯的实用方法" },
+      { name: "第五项修炼", date: "2026-04-29", filename: "2026-04-29-每日一学-第五项修炼.html", desc: "学习型组织的艺术与实践" },
+      { name: "活出生命的意义", date: "2026-05-06", filename: "2026-05-06-每日一学-活出生命的意义.html", desc: "弗兰克尔的生命哲学" },
+      { name: "纳瓦尔宝典", date: "2026-05-07", filename: "2026-05-07-每日一学-纳瓦尔宝典.html", desc: "财富与幸福的智慧（更新版）" },
+      { name: "影响力", date: "2026-05-08", filename: "2026-05-08-每日一学-影响力.html", desc: "说服心理学" },
+      { name: "清醒思考的艺术", date: "2026-05-09", filename: "2026-05-09-每日一学-清醒思考的艺术.html", desc: "避免思维陷阱" },
+      { name: "金字塔原理", date: "2026-05-10", filename: "2026-05-10-每日一学-金字塔原理.html", desc: "思考、表达和解决问题的逻辑" },
+      { name: "模型思维", date: "2026-05-11", filename: "2026-05-11-每日一学-模型思维.html", desc: "多模型思考方式" },
+      { name: "当下的力量", date: "2026-05-12", filename: "2026-05-12-每日一学-当下的力量.html", desc: "活在当下的智慧" },
+      { name: "福格行为模型", date: "2026-05-13", filename: "2026-05-13-每日一学-福格行为模型.html", desc: "行为设计学" }
+    ];
+
+    // 书籍图标
+    const bookIcons = ["📚", "📖", "📕", "📗", "📘", "📙", "📓", "📒", "📔"];
+
+    // 初始化页面
+    function init() {
+      renderBooks(books);
+      // 设置默认日期为今天
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('bookDate').value = today;
+    }
+
+    // 渲染书籍列表
+    function renderBooks(booksToRender) {
+      const grid = document.getElementById('booksGrid');
+      grid.innerHTML = '';
+      
+      if (booksToRender.length === 0) {
+        grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 60px; color: #9ca3af;"><p style="font-size: 18px;">没有找到匹配的书籍</p></div>';
+        return;
       }
-    </script>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+      
+      booksToRender.sort((a, b) => new Date(b.date) - new Date(a.date));
+      
+      booksToRender.forEach((book, index) => {
+        const card = document.createElement('div');
+        card.className = 'book-card';
+        card.onclick = () => openBook(book.filename);
+        
+        const icon = bookIcons[index % bookIcons.length];
+        
+        card.innerHTML = `
+          <div class="book-icon">${icon}</div>
+          <div class="book-title">${book.name}</div>
+          <div class="book-date">📅 ${book.date}</div>
+          <div class="book-desc">${book.desc || '探索知识，持续成长'}</div>
+        `;
+        
+        grid.appendChild(card);
+      });
+    }
+
+    // 打开书籍
+    function openBook(filename) {
+        window.location.href = filename;
+    }
+
+    // 搜索过滤
+    function filterBooks() {
+      const query = document.getElementById('searchInput').value.toLowerCase();
+      const filtered = books.filter(book => 
+        book.name.toLowerCase().includes(query) || 
+        book.desc.toLowerCase().includes(query) ||
+        book.date.includes(query)
+      );
+      renderBooks(filtered);
+    }
+
+    // 打开添加模态框
+    function openAddModal() {
+      document.getElementById('addModal').classList.add('active');
+    }
+
+    // 关闭添加模态框
+    function closeAddModal() {
+      document.getElementById('addModal').classList.remove('active');
+      document.getElementById('addForm').reset();
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('bookDate').value = today;
+    }
+
+    // 添加书籍
+    function addBook(event) {
+      event.preventDefault();
+      
+      const name = document.getElementById('bookName').value;
+      const date = document.getElementById('bookDate').value;
+      const filename = document.getElementById('bookFilename').value;
+      const desc = document.getElementById('bookDesc').value;
+      
+      books.push({
+        name,
+        date,
+        filename,
+        desc
+      });
+      
+      closeAddModal();
+      renderBooks(books);
+      
+      // 提示用户
+      alert('✅ 书籍已成功添加！');
+    }
+
+    // 刷新书籍列表
+    function refreshBooks() {
+      renderBooks(books);
+      document.getElementById('searchInput').value = '';
+      alert('✅ 书籍列表已刷新！');
+    }
+
+    // 点击模态框外部关闭
+    document.getElementById('addModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeAddModal();
+      }
+    });
+
+    // 页面加载完成后初始化
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
 </html>
