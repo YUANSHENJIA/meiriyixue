@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>清醒思考的艺术 - 每日一学思维导图</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'PingFang SC', 'Microsoft YaHei', 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    min-height: 100vh;
+    color: #fff;
+    padding: 20px;
+  }
+  .header {
+    text-align: center;
+    padding: 40px 20px 30px;
+    position: relative;
+  }
+  .date-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 20px;
+    padding: 6px 18px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 16px;
+    letter-spacing: 1px;
+  }
+  .title {
+    font-size: clamp(28px, 5vw, 48px);
+    font-weight: 800;
+    background: linear-gradient(135deg, #f093fb, #f5576c, #fda085);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+  }
+  .subtitle {
+    font-size: 16px;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 8px;
+  }
+  .author {
+    font-size: 14px;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 1px;
+  }
+  .core-insight {
+    max-width: 900px;
+    margin: 0 auto 40px;
+    background: linear-gradient(135deg, rgba(240,147,251,0.15), rgba(245,87,108,0.15));
+    border: 1px solid rgba(240,147,251,0.3);
+    border-radius: 16px;
+    padding: 28px 32px;
+    text-align: center;
+  }
+  .core-insight h2 {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: #f093fb;
+    margin-bottom: 16px;
+  }
+  .core-insight p {
+    font-size: 18px;
+    line-height: 1.8;
+    color: rgba(255,255,255,0.9);
+    font-weight: 300;
+  }
+  .mind-map {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .section {
+    margin-bottom: 30px;
+  }
+  .section-title {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 16px;
+    padding-left: 4px;
+  }
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+  }
+  .card {
+    border-radius: 16px;
+    padding: 22px 20px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: default;
+  }
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    border-radius: 16px 16px 0 0;
+  }
+  .card-c1 { background: rgba(102,126,234,0.15); border: 1px solid rgba(102,126,234,0.3); }
+  .card-c1::before { background: linear-gradient(90deg, #667eea, #764ba2); }
+  .card-c2 { background: rgba(253,160,133,0.12); border: 1px solid rgba(253,160,133,0.3); }
+  .card-c2::before { background: linear-gradient(90deg, #fda085, #f6d365); }
+  .card-c3 { background: rgba(79,172,254,0.12); border: 1px solid rgba(79,172,254,0.3); }
+  .card-c3::before { background: linear-gradient(90deg, #4facfe, #00f2fe); }
+  .card-c4 { background: rgba(67,233,123,0.12); border: 1px solid rgba(67,233,123,0.3); }
+  .card-c4::before { background: linear-gradient(90deg, #43e97b, #38f9d7); }
+  .card-c5 { background: rgba(240,147,251,0.12); border: 1px solid rgba(240,147,251,0.3); }
+  .card-c5::before { background: linear-gradient(90deg, #f093fb, #f5576c); }
+  .card-c6 { background: rgba(255,204,112,0.12); border: 1px solid rgba(255,204,112,0.3); }
+  .card-c6::before { background: linear-gradient(90deg, #ffcc70, #ff6b6b); }
+  .card-icon { font-size: 28px; margin-bottom: 12px; display: block; }
+  .card-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #fff;
+  }
+  .card-body {
+    font-size: 13px;
+    line-height: 1.7;
+    color: rgba(255,255,255,0.7);
+  }
+  .card-tag {
+    display: inline-block;
+    background: rgba(255,255,255,0.1);
+    border-radius: 8px;
+    padding: 3px 10px;
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
+    margin-top: 10px;
+  }
+
+  /* 错误目录大表 */
+  .errors-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+  }
+  .error-item {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 14px 16px;
+    transition: background 0.2s;
+  }
+  .error-item:hover { background: rgba(255,255,255,0.09); }
+  .error-num {
+    font-size: 11px;
+    color: rgba(255,255,255,0.3);
+    margin-bottom: 4px;
+  }
+  .error-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 5px;
+  }
+  .error-desc {
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.5;
+  }
+
+  /* 金句 */
+  .quotes-list { display: flex; flex-direction: column; gap: 14px; }
+  .quote-item {
+    background: rgba(255,255,255,0.05);
+    border-left: 3px solid;
+    border-radius: 0 12px 12px 0;
+    padding: 16px 20px;
+    font-size: 15px;
+    line-height: 1.7;
+    color: rgba(255,255,255,0.85);
+    font-style: italic;
+  }
+  .q1 { border-color: #f093fb; }
+  .q2 { border-color: #4facfe; }
+  .q3 { border-color: #43e97b; }
+  .q4 { border-color: #fda085; }
+
+  /* 行动建议 */
+  .actions-list { display: flex; flex-direction: column; gap: 12px; }
+  .action-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 16px 18px;
+  }
+  .action-num {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #f093fb, #f5576c);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .action-text {
+    font-size: 14px;
+    line-height: 1.7;
+    color: rgba(255,255,255,0.8);
+    padding-top: 3px;
+  }
+  .action-text strong { color: #fff; }
+
+  .footer {
+    text-align: center;
+    padding: 40px 20px;
+    color: rgba(255,255,255,0.3);
+    font-size: 13px;
+    letter-spacing: 1px;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="date-badge">📅 2026-05-09 · 每日一学</div>
+  <div class="title">清醒思考的艺术</div>
+  <div class="subtitle">The Art of Thinking Clearly</div>
+  <div class="author">罗尔夫·多贝里（Rolf Dobelli）著</div>
+</div>
+
+<div class="core-insight">
+  <h2>💡 核心洞见</h2>
+  <p>人类大脑在进化过程中形成了大量"认知捷径"，这些捷径在远古时代帮助我们生存，却在现代社会中系统性地扭曲我们的判断。<br>
+  清醒思考不是追求完美理性，而是<strong>识别并绕过大脑的天然陷阱</strong>，用刻意的意识修正本能的偏误，从而做出更好的决策。</p>
+</div>
+
+<div class="mind-map">
+
+  <!-- 四大核心框架 -->
+  <div class="section">
+    <div class="section-title">⬡ 四大核心框架</div>
+    <div class="cards-grid">
+      <div class="card card-c1">
+        <span class="card-icon">🧠</span>
+        <div class="card-title">认知偏误层</div>
+        <div class="card-body">系统化分类52种人类常见思维错误，从确认偏误到沉没成本，构建完整的"错误目录"，让你在犯错前先认出它。</div>
+        <span class="card-tag">自我认知</span>
+      </div>
+      <div class="card card-c2">
+        <span class="card-icon">⚖️</span>
+        <div class="card-title">决策修正层</div>
+        <div class="card-body">每种偏误配套"解药"——用反向检查、预设清单、慢思考模式抵消系统1的快速直觉，让理性介入关键决策。</div>
+        <span class="card-tag">理性决策</span>
+      </div>
+      <div class="card card-c3">
+        <span class="card-icon">🌍</span>
+        <div class="card-title">社会环境层</div>
+        <div class="card-body">认识从众效应、权威偏误、聚光灯效应等社会性偏误，理解他人如何系统性地影响（扭曲）你的判断与行为。</div>
+        <span class="card-tag">人际关系</span>
+      </div>
+      <div class="card card-c4">
+        <span class="card-icon">🎯</span>
+        <div class="card-title">概率直觉层</div>
+        <div class="card-body">修正赌徒谬误、基础概率忽视、可得性偏误等数字直觉陷阱，在不确定环境中做出更准确的概率判断。</div>
+        <span class="card-tag">数理思维</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 52种错误精选（分类展示） -->
+  <div class="section">
+    <div class="section-title">📋 52种思维偏误精选（15大核心）</div>
+    <div class="errors-grid">
+      <div class="error-item">
+        <div class="error-num">01</div>
+        <div class="error-name">幸存者偏误</div>
+        <div class="error-desc">只看到成功案例，忽略失败的沉默大多数</div>
+      </div>
+      <div class="error-item">
+        <div class="error-num">02</div>
+        <div class="error-name">游泳选手的身材</div>
+        <div class="error-desc">把结果的特征当成成功的原因（选择效应）</div>
+      </div>
+      <div class="error-item">
+        <div class="error-num">03</div>
+        <div class="error-name">沉没成本谬误</div>
+        <div class="error-desc">因为已投入而继续亏损，无法理性止损</div>
+      </div>
+      <div class="error-item">
+        <div class="error-num">04</div>
+        <div class="error-name">互惠式讨好</div>
+        <div class="error-desc">收到礼物后产生强烈回报义务感，被操控</div>
+      </div>
+      <div class="error-item">
+        <div class="error-num">05</div>
+        <div class="error-name">确认偏误</div>
+        <div class="error-desc">只搜集支持已有观点的信息，屏蔽反面证据</div>
+      </div>
+      <div class="error-item">
+        <div class="error-num">06</div>
+        <div class="error-name">权威偏误</div>
+        <div class="error-desc">无条件服从专家，即使专家在自身领域之外</div>
+      </div>
+      <div class="error-item">
+        <div class="error-num">07</div>
+        <div class="error-name">对比效应</div>
+        <div class="error-desc">判断价值依赖参照物，而非客观标准</div>
+      </div>
+      <div class="error-item">
+        <div class="error-num">08</div>
+        <div class="error-name">可得性偏误</div>
+        <div class="error-desc">越容易想到的例子，被认为越普遍、越重要</div>
+      </div>
+      <div class="error-item">
+        <div class="error-num">09</div>
+        <div class="error-name">故事偏误</div>
+        <div class="error-desc">大脑偏爱故事叙述，忽略干燥但重要的数据</div>
+      </div>
+      <div class="error-item">
+        <div class="error-num">10</div>
+        <div class="error-name">禀赋效应</div>
+        <div class="error-desc">高估自己拥有的东西的价值，阻碍合理决策</div>
+      </div>
+      <div class="error-item">
+        <div class="error-num">11</div>
+        <div class="error-name">从众效应</div>
+        <div class="error-desc">因为别人都这样做，所以我也这样做（羊群效应）</div>
+      </div>
+      <div class="error-item">
+        <div class="error-num">12</div>
+        <div class="error-name">过度自信</div>
+        <div class="error-desc">系统性高估自己的知识与能力，导致冒险过度</div>
+      </div>
+      <div class="error-item">
+        <div class="error-num">13</div>
+        <div class="error-name">规划谬误</div>
+        <div class="error-desc">乐观低估完成时间、成本，高估未来收益</div>
+      </div>
+      <div class="error-item">
+        <div class="error-num">14</div>
+        <div class="error-name">后视偏误</div>
+        <div class="error-desc">事后觉得结果"本该如此"，夸大自己的预测能力</div>
+      </div>
+      <div class="error-item">
+        <div class="error-num">15</div>
+        <div class="error-name">聚光灯效应</div>
+        <div class="error-desc">高估他人对自己的关注度，产生不必要焦虑</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 主要知识点 -->
+  <div class="section">
+    <div class="section-title">📚 主要知识点</div>
+    <div class="cards-grid">
+      <div class="card card-c5">
+        <span class="card-icon">🔍</span>
+        <div class="card-title">系统1 vs 系统2</div>
+        <div class="card-body">大脑有两套运作系统：系统1（快速、直觉、自动）产生大多数偏误；系统2（缓慢、理性、费力）能纠正偏误。清醒思考的本质是激活系统2。</div>
+      </div>
+      <div class="card card-c6">
+        <span class="card-icon">📉</span>
+        <div class="card-title">损失厌恶</div>
+        <div class="card-body">损失100元的痛苦约等于获得200元的快乐。这种不对称导致人们过度规避风险，或在亏损时死扛，在盈利时过早离场。</div>
+      </div>
+      <div class="card card-c1">
+        <span class="card-icon">🎭</span>
+        <div class="card-title">基本归因错误</div>
+        <div class="card-body">把他人的失败归结为"性格问题"，把自己的失败归结为"环境因素"——正好相反。换位思考能有效校正这一偏误。</div>
+      </div>
+      <div class="card card-c3">
+        <span class="card-icon">🎲</span>
+        <div class="card-title">均值回归的忽视</div>
+        <div class="card-body">极端表现之后往往回归平均——最好的员工会变普通，最差的员工会变好。把自然回归误认为干预效果，是管理中最常见的误判。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 金句 -->
+  <div class="section">
+    <div class="section-title">✨ 金句</div>
+    <div class="quotes-list">
+      <div class="quote-item q1">"幸存者会写书、做访谈、登上杂志封面。失败者则沉默。我们只看到成功者，于是系统性地高估了成功的概率。"</div>
+      <div class="quote-item q2">"你不需要变得聪明——避免愚蠢就已经是巨大的优势了。"</div>
+      <div class="quote-item q3">"在不确定的情况下，大脑不是在寻找真相，而是在构建一个自洽的故事。"</div>
+      <div class="quote-item q4">"每一个错误都是一位免费的老师，但你必须先认出它的名字，才能听懂它的课。"</div>
+    </div>
+  </div>
+
+  <!-- 行动建议 -->
+  <div class="section">
+    <div class="section-title">🚀 行动建议</div>
+    <div class="actions-list">
+      <div class="action-item">
+        <div class="action-num">1</div>
+        <div class="action-text"><strong>建立"偏误核查清单"</strong>：在重大决策前，逐一核查：我是否在幸存者偏误？是否受到沉没成本影响？是否只寻找支持意见？用清单替代直觉。</div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">2</div>
+        <div class="action-text"><strong>主动寻找反面证据</strong>：每当形成一个结论，立刻问自己"什么样的信息会证明我是错的？"——如果找不到，说明你可能陷入了确认偏误。</div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">3</div>
+        <div class="action-text"><strong>用"旁观者视角"评估投入</strong>：问自己"如果这是别人的项目/关系/投资，你会建议他继续吗？"——用局外人视角打破沉没成本的束缚。</div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">4</div>
+        <div class="action-text"><strong>减少媒体消费，提升基础概率意识</strong>：媒体放大低概率高冲击事件（飞机失事、恐袭），扭曲你的风险感知。每周主动阅读统计数据，校正可得性偏误。</div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">5</div>
+        <div class="action-text"><strong>为重要决策设置"冷却期"</strong>：在情绪激动或时间紧迫时，推迟24小时再做决定。系统1在情绪激活时最活跃，系统2需要冷静才能发挥作用。</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  📖 《清醒思考的艺术》· 每日一学 · 2026-05-09<br>
+  <span style="opacity:0.5">52种思维偏误 · 认知升级 · 理性决策</span>
+</div>
+
+</body>
+</html>

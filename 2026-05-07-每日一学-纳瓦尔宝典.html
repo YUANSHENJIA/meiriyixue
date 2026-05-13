@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>每日一学 · 纳瓦尔宝典 · 2026-05-07</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+      min-height: 100vh;
+      padding: 30px 20px;
+      color: #e8e0f0;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .header .date {
+      font-size: 13px;
+      color: #a78bfa;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .header h1 {
+      font-size: 36px;
+      font-weight: 800;
+      background: linear-gradient(90deg, #a78bfa, #f472b6, #fb923c);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 10px;
+    }
+    .header .subtitle {
+      font-size: 15px;
+      color: #c4b5fd;
+      letter-spacing: 1px;
+    }
+    .header .author {
+      margin-top: 8px;
+      font-size: 13px;
+      color: #9ca3af;
+    }
+
+    .mindmap {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* 中央核心 */
+    .center-node {
+      text-align: center;
+      margin: 0 auto 40px;
+      background: linear-gradient(135deg, #7c3aed, #db2777);
+      border-radius: 20px;
+      padding: 22px 40px;
+      max-width: 500px;
+      box-shadow: 0 0 40px rgba(167, 139, 250, 0.4);
+    }
+    .center-node h2 {
+      font-size: 22px;
+      font-weight: 800;
+      color: #fff;
+    }
+    .center-node p {
+      font-size: 13px;
+      color: #e9d5ff;
+      margin-top: 6px;
+    }
+
+    /* 主分支网格 */
+    .branches {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    @media (max-width: 768px) {
+      .branches { grid-template-columns: 1fr; }
+      .header h1 { font-size: 26px; }
+    }
+
+    .branch {
+      border-radius: 16px;
+      padding: 22px;
+      position: relative;
+      overflow: hidden;
+    }
+    .branch::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      border-radius: 16px 16px 0 0;
+    }
+
+    .branch-1 { background: rgba(124, 58, 237, 0.15); border: 1px solid rgba(124, 58, 237, 0.3); }
+    .branch-1::before { background: linear-gradient(90deg, #7c3aed, #a78bfa); }
+    .branch-2 { background: rgba(219, 39, 119, 0.15); border: 1px solid rgba(219, 39, 119, 0.3); }
+    .branch-2::before { background: linear-gradient(90deg, #db2777, #f472b6); }
+    .branch-3 { background: rgba(234, 88, 12, 0.15); border: 1px solid rgba(234, 88, 12, 0.3); }
+    .branch-3::before { background: linear-gradient(90deg, #ea580c, #fb923c); }
+    .branch-4 { background: rgba(5, 150, 105, 0.15); border: 1px solid rgba(5, 150, 105, 0.3); }
+    .branch-4::before { background: linear-gradient(90deg, #059669, #34d399); }
+    .branch-5 { background: rgba(37, 99, 235, 0.15); border: 1px solid rgba(37, 99, 235, 0.3); }
+    .branch-5::before { background: linear-gradient(90deg, #2563eb, #60a5fa); }
+    .branch-6 { background: rgba(180, 83, 9, 0.15); border: 1px solid rgba(180, 83, 9, 0.3); }
+    .branch-6::before { background: linear-gradient(90deg, #b45309, #fbbf24); }
+
+    .branch-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .branch-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    .icon-1 { background: rgba(124, 58, 237, 0.4); }
+    .icon-2 { background: rgba(219, 39, 119, 0.4); }
+    .icon-3 { background: rgba(234, 88, 12, 0.4); }
+    .icon-4 { background: rgba(5, 150, 105, 0.4); }
+    .icon-5 { background: rgba(37, 99, 235, 0.4); }
+    .icon-6 { background: rgba(180, 83, 9, 0.4); }
+
+    .branch-title h3 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+    }
+    .branch-title .label {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 20px;
+      margin-left: auto;
+    }
+    .label-1 { background: rgba(124,58,237,0.3); color: #c4b5fd; }
+    .label-2 { background: rgba(219,39,119,0.3); color: #fbcfe8; }
+    .label-3 { background: rgba(234,88,12,0.3); color: #fed7aa; }
+    .label-4 { background: rgba(5,150,105,0.3); color: #a7f3d0; }
+    .label-5 { background: rgba(37,99,235,0.3); color: #bfdbfe; }
+    .label-6 { background: rgba(180,83,9,0.3); color: #fde68a; }
+
+    .items {
+      list-style: none;
+    }
+    .items li {
+      display: flex;
+      gap: 10px;
+      padding: 9px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      font-size: 13.5px;
+      line-height: 1.6;
+      color: #d1c4e9;
+    }
+    .items li:last-child { border-bottom: none; }
+    .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      margin-top: 7px;
+      flex-shrink: 0;
+    }
+    .dot-1 { background: #a78bfa; }
+    .dot-2 { background: #f472b6; }
+    .dot-3 { background: #fb923c; }
+    .dot-4 { background: #34d399; }
+    .dot-5 { background: #60a5fa; }
+    .dot-6 { background: #fbbf24; }
+
+    .items li strong {
+      color: #f3f0ff;
+      font-weight: 600;
+    }
+
+    /* 金句区 */
+    .quotes-section {
+      margin-top: 30px;
+      max-width: 1100px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .quotes-section h3 {
+      text-align: center;
+      font-size: 16px;
+      color: #a78bfa;
+      letter-spacing: 2px;
+      margin-bottom: 18px;
+    }
+    .quotes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 16px;
+    }
+    .quote-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(167, 139, 250, 0.2);
+      border-left: 3px solid #a78bfa;
+      border-radius: 12px;
+      padding: 16px 18px;
+    }
+    .quote-card p {
+      font-size: 14px;
+      color: #e9d5ff;
+      line-height: 1.7;
+      font-style: italic;
+    }
+    .quote-card .quote-author {
+      font-size: 12px;
+      color: #9ca3af;
+      margin-top: 8px;
+    }
+
+    /* 行动建议 */
+    .action-section {
+      margin-top: 30px;
+      max-width: 1100px;
+      margin-left: auto;
+      margin-right: auto;
+      background: rgba(124, 58, 237, 0.12);
+      border: 1px solid rgba(124, 58, 237, 0.25);
+      border-radius: 16px;
+      padding: 24px;
+    }
+    .action-section h3 {
+      font-size: 16px;
+      color: #c4b5fd;
+      margin-bottom: 16px;
+      letter-spacing: 1px;
+    }
+    .action-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 12px;
+    }
+    .action-item {
+      background: rgba(255,255,255,0.05);
+      border-radius: 10px;
+      padding: 14px;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .action-num {
+      width: 24px;
+      height: 24px;
+      background: linear-gradient(135deg, #7c3aed, #db2777);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .action-text {
+      font-size: 13px;
+      color: #d1c4e9;
+      line-height: 1.6;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 12px;
+      color: #6b7280;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="date">每日一学 · 2026-05-07 · 思维类书籍精读</div>
+    <h1>纳瓦尔宝典</h1>
+    <div class="subtitle">The Almanack of Naval Ravikant</div>
+    <div class="author">Eric Jorgenson 整编 · Naval Ravikant 原著思想</div>
+  </div>
+
+  <div class="mindmap">
+
+    <!-- 中央核心 -->
+    <div class="center-node">
+      <h2>🌟 核心洞见</h2>
+      <p>财富与幸福可以同时追求，两者并不矛盾。<br>真正的自由是：做自己选择的工作，与自己选择的人，在自己选择的时间，以自己选择的方式。</p>
+    </div>
+
+    <!-- 主分支 -->
+    <div class="branches">
+
+      <!-- 分支1：财富创造 -->
+      <div class="branch branch-1">
+        <div class="branch-title">
+          <div class="branch-icon icon-1">💰</div>
+          <h3>财富创造</h3>
+          <span class="label label-1">四要素之一</span>
+        </div>
+        <ul class="items">
+          <li><span class="dot dot-1"></span><div><strong>追求财富，而非金钱或地位：</strong>财富是睡觉时也在赚钱的资产，而非出租时间。</div></li>
+          <li><span class="dot dot-1"></span><div><strong>发展专业技能（Specific Knowledge）：</strong>找到不能被培训取代、让你感觉是玩耍的独特能力。</div></li>
+          <li><span class="dot dot-1"></span><div><strong>学会使用杠杆：</strong>代码、媒体、资本、劳动——其中代码和内容是边际成本为零的最优杠杆。</div></li>
+          <li><span class="dot dot-1"></span><div><strong>增加决策责任：</strong>接受风险，才能获得丰厚回报；承担责任才能获得信任和财富。</div></li>
+          <li><span class="dot dot-1"></span><div><strong>做长期游戏，找长期玩家：</strong>复利的力量——财富、关系、知识都需要长期积累。</div></li>
+        </ul>
+      </div>
+
+      <!-- 分支2：判断力与决策 -->
+      <div class="branch branch-2">
+        <div class="branch-title">
+          <div class="branch-icon icon-2">🧠</div>
+          <h3>判断力与决策</h3>
+          <span class="label label-2">四要素之二</span>
+        </div>
+        <ul class="items">
+          <li><span class="dot dot-2"></span><div><strong>判断力比努力更重要：</strong>做对了事事半功倍，用好判断力比埋头苦干更有价值。</div></li>
+          <li><span class="dot dot-3"></span><div><strong>第一性原理思维：</strong>从基本事实出发，不受过去框架束缚，独立推导结论。</div></li>
+          <li><span class="dot dot-2"></span><div><strong>找到你真正热爱的事：</strong>真正的创造力来自于内在热情，不是外部激励。</div></li>
+          <li><span class="dot dot-2"></span><div><strong>阅读是最好的投资：</strong>深度阅读科学、数学、哲学——理解世界的基础规律。</div></li>
+          <li><span class="dot dot-2"></span><div><strong>从智者身上偷师：</strong>把最聪明的人的思想吸收为自己的心智模型。</div></li>
+        </ul>
+      </div>
+
+      <!-- 分支3：幸福与内心平静 -->
+      <div class="branch branch-3">
+        <div class="branch-title">
+          <div class="branch-icon icon-3">☀️</div>
+          <h3>幸福与内心平静</h3>
+          <span class="label label-3">四要素之三</span>
+        </div>
+        <ul class="items">
+          <li><span class="dot dot-3"></span><div><strong>幸福是一种选择，也是一项技能：</strong>可以通过训练刻意培养，而非等待外部给予。</div></li>
+          <li><span class="dot dot-3"></span><div><strong>欲望是痛苦之源：</strong>减少欲望，而非满足欲望；满足感来自于接受当下。</div></li>
+          <li><span class="dot dot-3"></span><div><strong>内心平静 = 优秀表现：</strong>平静的心才能做出最好的工作和最清晰的判断。</div></li>
+          <li><span class="dot dot-3"></span><div><strong>消灭愤怒与嫉妒：</strong>这些情绪消耗你最宝贵的注意力资源，是财富与幸福的杀手。</div></li>
+          <li><span class="dot dot-3"></span><div><strong>活在当下：</strong>大脑默认状态应是平静，而非焦虑或期待。</div></li>
+        </ul>
+      </div>
+
+      <!-- 分支4：自由与哲学 -->
+      <div class="branch branch-4">
+        <div class="branch-title">
+          <div class="branch-icon icon-4">🕊️</div>
+          <h3>自由与哲学人生观</h3>
+          <span class="label label-4">四要素之四</span>
+        </div>
+        <ul class="items">
+          <li><span class="dot dot-4"></span><div><strong>真正的自由：</strong>选择权是最高的财富——自主选择工作、时间、地点、伴侣。</div></li>
+          <li><span class="dot dot-4"></span><div><strong>拒绝"出售时间"：</strong>时薪制是穷人思维的根源，要让资产为你工作。</div></li>
+          <li><span class="dot dot-4"></span><div><strong>优化时间，而非收入：</strong>每天问：有什么事情不值得我做？提升时间单位价值。</div></li>
+          <li><span class="dot dot-4"></span><div><strong>不依赖于任何特定结果：</strong>去做但不执著于结果，类似斯多葛哲学的内在宁静。</div></li>
+          <li><span class="dot dot-4"></span><div><strong>死亡是最好的人生顾问：</strong>以"如果我明天死去"为视角，检验当下行为是否真正重要。</div></li>
+        </ul>
+      </div>
+
+      <!-- 分支5：学习与成长 -->
+      <div class="branch branch-5">
+        <div class="branch-title">
+          <div class="branch-icon icon-5">📚</div>
+          <h3>学习与成长方法论</h3>
+          <span class="label label-5">主要知识点</span>
+        </div>
+        <ul class="items">
+          <li><span class="dot dot-5"></span><div><strong>真正学会一件事：</strong>向10岁孩子解释，是检验理解的最好标准。</div></li>
+          <li><span class="dot dot-5"></span><div><strong>保持好奇心优先于强迫自己：</strong>跟随兴趣，而非"应该学什么"。</div></li>
+          <li><span class="dot dot-5"></span><div><strong>快速试错：</strong>不要过度规划，尽快开始，快速迭代，根据现实反馈修正。</div></li>
+          <li><span class="dot dot-5"></span><div><strong>建立复合技能：</strong>成为数学+写作+技术+沟通交叉能力者，竞争对手罕见。</div></li>
+          <li><span class="dot dot-5"></span><div><strong>微量阅读，深度消化：</strong>读一本真正理解，胜过速读百本走马观花。</div></li>
+        </ul>
+      </div>
+
+      <!-- 分支6：健康与冥想 -->
+      <div class="branch branch-6">
+        <div class="branch-title">
+          <div class="branch-icon icon-6">🧘</div>
+          <h3>健康、冥想与专注</h3>
+          <span class="label label-6">基础支柱</span>
+        </div>
+        <ul class="items">
+          <li><span class="dot dot-6"></span><div><strong>健康是第一财富：</strong>身体健康是所有其他成就的基础，不能用金钱换健康。</div></li>
+          <li><span class="dot dot-6"></span><div><strong>冥想是清空思维的工具：</strong>每天冥想帮助识别哪些想法是真正的"自己"，哪些是噪声。</div></li>
+          <li><span class="dot dot-6"></span><div><strong>减少无意义的输入：</strong>新闻、社交媒体、短视频——它们劫持注意力，降低思考深度。</div></li>
+          <li><span class="dot dot-6"></span><div><strong>长期睡眠优先：</strong>睡足是认知能力最廉价的提升方式，优先于任何效率技巧。</div></li>
+          <li><span class="dot dot-6"></span><div><strong>与自己独处的能力：</strong>能独自平静，才能做出最好的决定，不被他人情绪劫持。</div></li>
+        </ul>
+      </div>
+
+    </div><!-- end branches -->
+
+    <!-- 金句区 -->
+    <div class="quotes-section" style="margin-top:30px;">
+      <h3>✦ 金句精选 ✦</h3>
+      <div class="quotes-grid">
+        <div class="quote-card">
+          <p>"Seek wealth, not money or status. Wealth is having assets that earn while you sleep."</p>
+          <div class="quote-author">—— 追求财富，而非金钱或地位。财富是睡觉时也在为你赚钱的资产。</div>
+        </div>
+        <div class="quote-card">
+          <p>"你生命中最重要的技能，是学会如何让自己快乐。"</p>
+          <div class="quote-author">—— Naval Ravikant</div>
+        </div>
+        <div class="quote-card">
+          <p>"用你真实的身份公开表达，就不会有竞争对手——因为没有人能做另一个你。"</p>
+          <div class="quote-author">—— 纳瓦尔宝典</div>
+        </div>
+        <div class="quote-card">
+          <p>"Desire is a contract you make with yourself to be unhappy until you get what you want."</p>
+          <div class="quote-author">—— 欲望是你与自己签订的协议：在得到想要的东西之前，你必须保持不快乐。</div>
+        </div>
+        <div class="quote-card">
+          <p>"所有回报——人生中的财富、关系、知识——都来自于复利。"</p>
+          <div class="quote-author">—— Naval Ravikant</div>
+        </div>
+        <div class="quote-card">
+          <p>"代码和媒体是不需要雇主的杠杆，可以在你睡觉时为你工作，无需许可。"</p>
+          <div class="quote-author">—— 纳瓦尔宝典·财富篇</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 行动建议 -->
+    <div class="action-section">
+      <h3>⚡ 七项行动建议</h3>
+      <div class="action-grid">
+        <div class="action-item">
+          <div class="action-num">1</div>
+          <div class="action-text">找出你最独特的专业技能，每天投入30分钟深耕，而非分散精力学通用技能。</div>
+        </div>
+        <div class="action-item">
+          <div class="action-num">2</div>
+          <div class="action-text">今天起停止"出售时间"的思维，开始问：有哪些资产可以帮我创造被动收入？</div>
+        </div>
+        <div class="action-item">
+          <div class="action-num">3</div>
+          <div class="action-text">每天删除一项低价值活动（刷手机/无效会议），用这段时间进行深度思考或阅读。</div>
+        </div>
+        <div class="action-item">
+          <div class="action-num">4</div>
+          <div class="action-text">尝试每天5-10分钟正念冥想，只是安静坐着，观察自己的思维，不判断不追逐。</div>
+        </div>
+        <div class="action-item">
+          <div class="action-num">5</div>
+          <div class="action-text">用第一性原理重新审视一个你一直接受的信念或做法，问自己：它真的正确吗？</div>
+        </div>
+        <div class="action-item">
+          <div class="action-num">6</div>
+          <div class="action-text">列出你当前最强烈的3个欲望，问自己：如果它们永远不能实现，我还能幸福吗？</div>
+        </div>
+        <div class="action-item">
+          <div class="action-num">7</div>
+          <div class="action-text">今晚早睡1小时，把睡眠当作最高优先级投资，持续30天，观察认知与情绪的变化。</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end mindmap -->
+
+  <footer>
+    <p>每日一学 · WorkBuddy 自动化推送 · 2026-05-07</p>
+    <p style="margin-top:4px;">《纳瓦尔宝典》· The Almanack of Naval Ravikant · Eric Jorgenson 整编</p>
+  </footer>
+
+</body>
+</html>

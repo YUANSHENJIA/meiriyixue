@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 福格行为模型</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    min-height: 100vh;
+    padding: 30px 20px;
+    color: #fff;
+  }
+  .header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .header .date {
+    font-size: 13px;
+    color: #a78bfa;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .header h1 {
+    font-size: 36px;
+    font-weight: 800;
+    background: linear-gradient(90deg, #a78bfa, #60a5fa, #34d399);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 6px;
+  }
+  .header .subtitle {
+    font-size: 14px;
+    color: #94a3b8;
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(167,139,250,0.2);
+    border: 1px solid rgba(167,139,250,0.4);
+    border-radius: 20px;
+    padding: 4px 16px;
+    font-size: 12px;
+    color: #c4b5fd;
+    margin-top: 10px;
+  }
+
+  /* 核心公式区 */
+  .formula-section {
+    max-width: 800px;
+    margin: 0 auto 30px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(167,139,250,0.3);
+    border-radius: 20px;
+    padding: 28px;
+    text-align: center;
+  }
+  .formula-section h2 {
+    font-size: 16px;
+    color: #a78bfa;
+    margin-bottom: 18px;
+    letter-spacing: 2px;
+  }
+  .formula {
+    font-size: 28px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 4px;
+    padding: 16px 24px;
+    background: linear-gradient(90deg, rgba(167,139,250,0.2), rgba(96,165,250,0.2));
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.1);
+    margin-bottom: 14px;
+  }
+  .formula span { color: #34d399; }
+  .formula .eq { color: #60a5fa; }
+  .formula-desc {
+    font-size: 13px;
+    color: #94a3b8;
+    line-height: 1.8;
+  }
+
+  /* 三要素卡片 */
+  .three-elements {
+    max-width: 800px;
+    margin: 0 auto 30px;
+  }
+  .three-elements h2 {
+    font-size: 16px;
+    color: #60a5fa;
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+  .elements-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .element-card {
+    background: rgba(255,255,255,0.06);
+    border-radius: 16px;
+    padding: 22px 16px;
+    text-align: center;
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: transform 0.2s;
+  }
+  .element-card:hover { transform: translateY(-4px); }
+  .element-card.motivation { border-top: 3px solid #f472b6; }
+  .element-card.ability { border-top: 3px solid #34d399; }
+  .element-card.prompt { border-top: 3px solid #fbbf24; }
+  .element-icon { font-size: 36px; margin-bottom: 10px; }
+  .element-name { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+  .element-card.motivation .element-name { color: #f472b6; }
+  .element-card.ability .element-name { color: #34d399; }
+  .element-card.prompt .element-name { color: #fbbf24; }
+  .element-en { font-size: 11px; color: #64748b; letter-spacing: 1px; margin-bottom: 10px; }
+  .element-desc { font-size: 12px; color: #94a3b8; line-height: 1.6; }
+
+  /* 主要内容区 */
+  .main-grid {
+    max-width: 800px;
+    margin: 0 auto 30px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .card {
+    background: rgba(255,255,255,0.05);
+    border-radius: 16px;
+    padding: 22px;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .card h3 {
+    font-size: 14px;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .card.insights h3 { color: #a78bfa; }
+  .card.knowpoints h3 { color: #60a5fa; }
+  .card.action h3 { color: #34d399; }
+  .card.quotes h3 { color: #fbbf24; }
+
+  .insight-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 12px;
+    font-size: 13px;
+    color: #cbd5e1;
+    line-height: 1.6;
+  }
+  .insight-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #a78bfa;
+    flex-shrink: 0;
+    margin-top: 6px;
+  }
+
+  .kp-item {
+    margin-bottom: 14px;
+  }
+  .kp-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #93c5fd;
+    margin-bottom: 4px;
+  }
+  .kp-desc {
+    font-size: 12px;
+    color: #94a3b8;
+    line-height: 1.6;
+  }
+
+  .action-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 10px;
+    font-size: 13px;
+    color: #cbd5e1;
+    line-height: 1.6;
+  }
+  .action-num {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #34d399, #059669);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  .quote-item {
+    background: rgba(251,191,36,0.08);
+    border-left: 3px solid #fbbf24;
+    border-radius: 0 8px 8px 0;
+    padding: 12px 14px;
+    margin-bottom: 12px;
+    font-size: 13px;
+    color: #fde68a;
+    line-height: 1.7;
+    font-style: italic;
+  }
+
+  /* 行为设计模型图 */
+  .model-section {
+    max-width: 800px;
+    margin: 0 auto 30px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(96,165,250,0.3);
+    border-radius: 20px;
+    padding: 28px;
+  }
+  .model-section h2 {
+    font-size: 16px;
+    color: #60a5fa;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  .habit-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .habit-step {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 12px;
+    padding: 14px 18px;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .habit-step-icon { font-size: 24px; flex-shrink: 0; }
+  .habit-step-content .title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #e2e8f0;
+    margin-bottom: 4px;
+  }
+  .habit-step-content .desc {
+    font-size: 12px;
+    color: #94a3b8;
+    line-height: 1.5;
+  }
+  .arrow { text-align: center; color: #475569; font-size: 20px; margin: -4px 0; }
+
+  /* 激励轴图 */
+  .motivation-axis {
+    max-width: 800px;
+    margin: 0 auto 30px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(52,211,153,0.3);
+    border-radius: 20px;
+    padding: 28px;
+  }
+  .motivation-axis h2 {
+    font-size: 16px;
+    color: #34d399;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  .axis-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .axis-cell {
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+  }
+  .axis-cell.high-m-low-a {
+    background: rgba(251,191,36,0.1);
+    border: 1px solid rgba(251,191,36,0.3);
+  }
+  .axis-cell.high-m-high-a {
+    background: rgba(52,211,153,0.15);
+    border: 2px solid rgba(52,211,153,0.5);
+  }
+  .axis-cell.low-m-low-a {
+    background: rgba(248,113,113,0.1);
+    border: 1px solid rgba(248,113,113,0.3);
+  }
+  .axis-cell.low-m-high-a {
+    background: rgba(96,165,250,0.1);
+    border: 1px solid rgba(96,165,250,0.3);
+  }
+  .axis-cell .label { font-size: 12px; color: #94a3b8; margin-bottom: 6px; }
+  .axis-cell .result { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+  .axis-cell.high-m-low-a .result { color: #fbbf24; }
+  .axis-cell.high-m-high-a .result { color: #34d399; }
+  .axis-cell.low-m-low-a .result { color: #f87171; }
+  .axis-cell.low-m-high-a .result { color: #93c5fd; }
+  .axis-cell .tip { font-size: 11px; color: #64748b; line-height: 1.5; }
+
+  /* 黄金句子区 - 全宽 */
+  .full-quotes {
+    max-width: 800px;
+    margin: 0 auto 30px;
+  }
+  .full-quotes h2 {
+    font-size: 16px;
+    color: #fbbf24;
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+  .big-quote {
+    background: linear-gradient(135deg, rgba(251,191,36,0.1), rgba(249,115,22,0.1));
+    border: 1px solid rgba(251,191,36,0.3);
+    border-radius: 16px;
+    padding: 24px 28px;
+    font-size: 16px;
+    color: #fde68a;
+    font-style: italic;
+    line-height: 1.8;
+    text-align: center;
+    margin-bottom: 12px;
+  }
+
+  /* 底部 */
+  .footer {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+    font-size: 12px;
+    color: #475569;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+
+  @media (max-width: 600px) {
+    .elements-grid { grid-template-columns: 1fr; }
+    .main-grid { grid-template-columns: 1fr; }
+    .axis-grid { grid-template-columns: 1fr; }
+    .header h1 { font-size: 26px; }
+    .formula { font-size: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- 页头 -->
+<div class="header">
+  <div class="date">2026 · 05 · 13 &nbsp;|&nbsp; 每日一学</div>
+  <h1>福格行为模型</h1>
+  <div class="subtitle">Tiny Habits — BJ Fogg</div>
+  <span class="badge">🧠 行为设计 · 习惯养成 · 人生改变</span>
+</div>
+
+<!-- 核心公式 -->
+<div class="formula-section">
+  <h2>⚡ 核心公式</h2>
+  <div class="formula">
+    B <span class="eq">=</span> MAP
+  </div>
+  <div class="formula-desc">
+    <strong style="color:#e2e8f0;">行为（Behavior）= 动机（Motivation）× 能力（Ability）× 提示（Prompt）</strong><br>
+    三者必须在同一时刻同时存在，行为才会发生。<br>
+    缺少任意一个，行为就不会产生。
+  </div>
+</div>
+
+<!-- 三要素 -->
+<div class="three-elements">
+  <h2>🔑 三大核心要素</h2>
+  <div class="elements-grid">
+    <div class="element-card motivation">
+      <div class="element-icon">🔥</div>
+      <div class="element-name">动机</div>
+      <div class="element-en">MOTIVATION</div>
+      <div class="element-desc">做某件事的欲望与意愿。动机不稳定、会波动，不能单纯依赖动机驱动长期行为。</div>
+    </div>
+    <div class="element-card ability">
+      <div class="element-icon">💪</div>
+      <div class="element-name">能力</div>
+      <div class="element-en">ABILITY</div>
+      <div class="element-desc">完成行为的难易程度。让行为变得更简单，是打造习惯最可靠的杠杆。</div>
+    </div>
+    <div class="element-card prompt">
+      <div class="element-icon">🔔</div>
+      <div class="element-name">提示</div>
+      <div class="element-en">PROMPT</div>
+      <div class="element-desc">触发行为发生的信号或锚点。没有提示，即使有动机和能力，行为也不会发生。</div>
+    </div>
+  </div>
+</div>
+
+<!-- 主要知识点 + 核心洞见 -->
+<div class="main-grid">
+  <div class="card insights">
+    <h3>💡 核心洞见</h3>
+    <div class="insight-item">
+      <div class="insight-dot"></div>
+      <div>真正的行为改变不靠意志力，而靠<strong style="color:#c4b5fd;">系统设计</strong>——降低行为难度比提高动机更有效。</div>
+    </div>
+    <div class="insight-item">
+      <div class="insight-dot"></div>
+      <div>从微小习惯开始：<strong style="color:#c4b5fd;">微小 ≠ 不重要</strong>，小行为会带动神经回路，产生滚雪球效应。</div>
+    </div>
+    <div class="insight-item">
+      <div class="insight-dot"></div>
+      <div>庆祝是习惯养成的隐藏武器——<strong style="color:#c4b5fd;">即时正向情绪</strong>让大脑将行为标记为"好事"，自动强化。</div>
+    </div>
+    <div class="insight-item">
+      <div class="insight-dot"></div>
+      <div>"锚点习惯"策略：把新习惯<strong style="color:#c4b5fd;">附着在已有的稳定行为后面</strong>，成功率大幅提升。</div>
+    </div>
+    <div class="insight-item">
+      <div class="insight-dot"></div>
+      <div>动机是波动的，<strong style="color:#c4b5fd;">能力才是可以持续优化的变量</strong>——简化行为，让行为本身不依赖高动机。</div>
+    </div>
+  </div>
+
+  <div class="card knowpoints">
+    <h3>📖 主要知识点</h3>
+    <div class="kp-item">
+      <div class="kp-title">🌱 微小习惯（Tiny Habits）</div>
+      <div class="kp-desc">把习惯缩到极小：每天只做1个俯卧撑、只看1页书。降低启动门槛，克服拖延。</div>
+    </div>
+    <div class="kp-item">
+      <div class="kp-title">⚓ 锚点（Anchor）</div>
+      <div class="kp-desc">把新习惯链接到已有的行为后面。公式：【做完A之后，我就做B】</div>
+    </div>
+    <div class="kp-item">
+      <div class="kp-title">🎉 庆祝（Celebration）</div>
+      <div class="kp-desc">完成后立刻给自己一个正向反馈（举拳、说"太棒了"），强化神经回路。</div>
+    </div>
+    <div class="kp-item">
+      <div class="kp-title">📉 动机浪潮</div>
+      <div class="kp-desc">动机有高低潮，只在高动机期才做习惯非常脆弱，应在低动机时也能执行。</div>
+    </div>
+    <div class="kp-item">
+      <div class="kp-title">🎯 行为设计地图</div>
+      <div class="kp-desc">列出所有期望行为 → 按动机/能力排布 → 从"黄金区"（高能力+高动机）开始。</div>
+    </div>
+  </div>
+</div>
+
+<!-- 行为设计步骤 -->
+<div class="model-section">
+  <h2>🗺️ 福格习惯养成四步法</h2>
+  <div class="habit-stack">
+    <div class="habit-step">
+      <div class="habit-step-icon">🎯</div>
+      <div class="habit-step-content">
+        <div class="title">Step 1 · 聚焦渴望（Clarify Aspiration）</div>
+        <div class="desc">明确你真正想要的是什么？不是"我想健身"，而是"我想每天充满活力、精力旺盛"。</div>
+      </div>
+    </div>
+    <div class="arrow">↓</div>
+    <div class="habit-step">
+      <div class="habit-step-icon">🌱</div>
+      <div class="habit-step-content">
+        <div class="title">Step 2 · 找到微小行为（Explore Behavior Options）</div>
+        <div class="desc">列出所有能帮你达到目标的行为，然后选择最微小、最容易的那个开始。</div>
+      </div>
+    </div>
+    <div class="arrow">↓</div>
+    <div class="habit-step">
+      <div class="habit-step-icon">⚓</div>
+      <div class="habit-step-content">
+        <div class="title">Step 3 · 设定锚点（Match with Anchor）</div>
+        <div class="desc">把微小行为附加在每天必做的稳定行为之后。例："刷完牙之后，我就做2分钟冥想。"</div>
+      </div>
+    </div>
+    <div class="arrow">↓</div>
+    <div class="habit-step">
+      <div class="habit-step-icon">🎉</div>
+      <div class="habit-step-content">
+        <div class="title">Step 4 · 即时庆祝（Celebrate Immediately）</div>
+        <div class="desc">完成后立刻给自己一个正向情绪反馈。庆祝是让大脑"记住"这个习惯的核心机制。</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 动机×能力坐标 -->
+<div class="motivation-axis">
+  <h2>📊 动机 × 能力 行为矩阵</h2>
+  <div class="axis-grid">
+    <div class="axis-cell high-m-low-a">
+      <div class="label">高动机 × 低能力</div>
+      <div class="result">⚠️ 勉强执行</div>
+      <div class="tip">有心无力，容易半途而废<br>→ 需要降低行为难度</div>
+    </div>
+    <div class="axis-cell high-m-high-a">
+      <div class="label">高动机 × 高能力</div>
+      <div class="result">✅ 黄金区域</div>
+      <div class="tip">行为最容易发生且可持续<br>→ 优先从这里开始！</div>
+    </div>
+    <div class="axis-cell low-m-low-a">
+      <div class="label">低动机 × 低能力</div>
+      <div class="result">❌ 行为不发生</div>
+      <div class="tip">什么都缺，行为根本不会启动<br>→ 先提升能力/简化行为</div>
+    </div>
+    <div class="axis-cell low-m-high-a">
+      <div class="label">低动机 × 高能力</div>
+      <div class="result">🔵 习惯化区域</div>
+      <div class="tip">行为极简，不依赖动机<br>→ 最稳定的长期习惯形态</div>
+    </div>
+  </div>
+</div>
+
+<!-- 行动建议 + 金句 -->
+<div class="main-grid">
+  <div class="card action">
+    <h3>🚀 行动建议</h3>
+    <div class="action-item">
+      <div class="action-num">1</div>
+      <div>今天选一个想养成的习惯，把它缩小到"2分钟版本"——小到不可能失败为止。</div>
+    </div>
+    <div class="action-item">
+      <div class="action-num">2</div>
+      <div>为这个微小习惯找一个"锚点"：每次做完X之后，我就做Y（新习惯）。</div>
+    </div>
+    <div class="action-item">
+      <div class="action-num">3</div>
+      <div>完成后立刻庆祝——哪怕只是握拳说"Yes！"让大脑接收到正向信号。</div>
+    </div>
+    <div class="action-item">
+      <div class="action-num">4</div>
+      <div>不要依赖动机，把注意力放在降低行为难度：准备好装备、减少决策摩擦。</div>
+    </div>
+    <div class="action-item">
+      <div class="action-num">5</div>
+      <div>每周回顾：哪些习惯已经自动化？哪些还需要调整锚点或进一步简化？</div>
+    </div>
+  </div>
+
+  <div class="card quotes">
+    <h3>✨ 金句</h3>
+    <div class="quote-item">"停止责怪自己，开始设计你的行为。你不是懒惰，你只是没有正确的系统。"</div>
+    <div class="quote-item">"动机是不可靠的，能力才是你真正可以掌控的变量。"</div>
+    <div class="quote-item">"微小不是目标，微小是通往伟大的入口。"</div>
+    <div class="quote-item">"庆祝，是让习惯扎根的隐藏关键——情绪创造习惯。"</div>
+  </div>
+</div>
+
+<!-- 大金句 -->
+<div class="full-quotes">
+  <h2>💬 本书最重要的一句话</h2>
+  <div class="big-quote">
+    "改变从来不关乎意志力或动机，<br>
+    真正的改变来自于<strong>设计正确的环境与系统</strong>，<br>
+    让正确的行为变得比错误的行为更容易发生。"<br>
+    <span style="font-size:12px; color:#92400e; font-style:normal;">—— BJ Fogg，《福格行为模型》</span>
+  </div>
+</div>
+
+<div class="footer">
+  每日一学 · 2026年5月13日 · 福格行为模型 (Tiny Habits) · BJ Fogg<br>
+  <span style="color:#334155;">知识改变命运，行动创造未来</span>
+</div>
+
+</body>
+</html>

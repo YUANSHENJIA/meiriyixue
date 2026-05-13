@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 学会提问</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+    min-height: 100vh;
+    color: #fff;
+    padding: 20px;
+  }
+  .header {
+    text-align: center;
+    padding: 40px 20px 30px;
+  }
+  .date-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 20px;
+    padding: 6px 18px;
+    font-size: 13px;
+    color: #a8b2d8;
+    margin-bottom: 16px;
+    letter-spacing: 1px;
+  }
+  .title {
+    font-size: 36px;
+    font-weight: 800;
+    background: linear-gradient(90deg, #f7971e, #ffd200);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+  }
+  .subtitle {
+    font-size: 16px;
+    color: #a8b2d8;
+    margin-bottom: 6px;
+  }
+  .author {
+    font-size: 14px;
+    color: #6b7db3;
+  }
+  .tagline {
+    margin-top: 16px;
+    font-size: 15px;
+    color: #c5cae9;
+    background: rgba(247,151,30,0.15);
+    border-left: 3px solid #f7971e;
+    padding: 10px 16px;
+    border-radius: 0 8px 8px 0;
+    display: inline-block;
+    max-width: 600px;
+  }
+
+  .mindmap {
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  /* 中心节点 */
+  .center-node {
+    background: linear-gradient(135deg, #f7971e, #ffd200);
+    color: #1a1a2e;
+    border-radius: 16px;
+    padding: 20px 30px;
+    text-align: center;
+    margin: 30px auto;
+    max-width: 400px;
+    box-shadow: 0 8px 32px rgba(247,151,30,0.4);
+  }
+  .center-node h2 {
+    font-size: 22px;
+    font-weight: 800;
+    margin-bottom: 6px;
+  }
+  .center-node p {
+    font-size: 13px;
+    opacity: 0.8;
+  }
+
+  /* 分支 */
+  .branches {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 10px;
+  }
+  @media (max-width: 600px) {
+    .branches { grid-template-columns: 1fr; }
+    .title { font-size: 26px; }
+  }
+
+  .branch {
+    background: rgba(255,255,255,0.05);
+    border-radius: 14px;
+    padding: 20px;
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .branch:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+  }
+  .branch-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .branch-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .branch-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  /* 颜色主题 */
+  .c1 .branch-icon { background: linear-gradient(135deg, #667eea, #764ba2); }
+  .c2 .branch-icon { background: linear-gradient(135deg, #f093fb, #f5576c); }
+  .c3 .branch-icon { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+  .c4 .branch-icon { background: linear-gradient(135deg, #43e97b, #38f9d7); }
+  .c5 .branch-icon { background: linear-gradient(135deg, #fa709a, #fee140); }
+  .c6 .branch-icon { background: linear-gradient(135deg, #a18cd1, #fbc2eb); }
+  .c1 { border-top: 2px solid #667eea; }
+  .c2 { border-top: 2px solid #f5576c; }
+  .c3 { border-top: 2px solid #4facfe; }
+  .c4 { border-top: 2px solid #43e97b; }
+  .c5 { border-top: 2px solid #fa709a; }
+  .c6 { border-top: 2px solid #a18cd1; }
+
+  .leaf-list { list-style: none; }
+  .leaf-list li {
+    padding: 7px 0;
+    font-size: 13.5px;
+    color: #c5cae9;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    line-height: 1.5;
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+  }
+  .leaf-list li:last-child { border-bottom: none; }
+  .leaf-list li::before {
+    content: "▸";
+    color: #f7971e;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .leaf-label {
+    font-weight: 600;
+    color: #fff;
+    margin-right: 4px;
+    white-space: nowrap;
+  }
+
+  /* 金句区 */
+  .quotes-section {
+    margin-top: 20px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 14px;
+    padding: 20px;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .section-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #ffd200;
+  }
+  .quote-item {
+    background: rgba(247,151,30,0.1);
+    border-left: 3px solid #f7971e;
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    color: #e8eaf6;
+    font-style: italic;
+    line-height: 1.7;
+  }
+  .quote-item:last-child { margin-bottom: 0; }
+
+  /* 行动建议 */
+  .actions-section {
+    margin-top: 20px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 14px;
+    padding: 20px;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .action-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    font-size: 13.5px;
+    color: #c5cae9;
+    line-height: 1.6;
+  }
+  .action-item:last-child { border-bottom: none; }
+  .action-num {
+    width: 24px;
+    height: 24px;
+    background: linear-gradient(135deg, #43e97b, #38f9d7);
+    color: #1a1a2e;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .footer {
+    text-align: center;
+    padding: 40px 20px 20px;
+    color: #6b7db3;
+    font-size: 12px;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="date-badge">📅 2026-04-25 · 每日一学</div>
+  <div class="title">学会提问</div>
+  <div class="subtitle">Asking the Right Questions</div>
+  <div class="author">尼尔·布朗 &amp; 斯图尔特·基利 著</div>
+  <div class="tagline">🧠 批判性思维的基石——学会问"为什么"，才能真正独立思考</div>
+</div>
+
+<div class="mindmap">
+
+  <div class="center-node">
+    <h2>🎯 核心主题</h2>
+    <p>批判性思维 · 苏格拉底式追问 · 独立思考 · 理性决策</p>
+  </div>
+
+  <div class="branches">
+
+    <!-- 核心洞见 -->
+    <div class="branch c1">
+      <div class="branch-header">
+        <div class="branch-icon">💡</div>
+        <div class="branch-title">核心洞见</div>
+      </div>
+      <ul class="leaf-list">
+        <li><span class="leaf-label">两种思维者：</span>海绵式（被动吸收）vs. 淘金式（主动筛选）</li>
+        <li><span class="leaf-label">论证≠事实：</span>所有结论都需要论据支撑，论据决定结论可信度</li>
+        <li><span class="leaf-label">问题是工具：</span>好的问题比好的答案更有价值</li>
+        <li><span class="leaf-label">歧义是陷阱：</span>模糊语言是操控的温床，精确定义是起点</li>
+        <li><span class="leaf-label">证据有质量：</span>不同来源和类型的证据，可信度天差地别</li>
+      </ul>
+    </div>
+
+    <!-- 批判性思维10步框架 -->
+    <div class="branch c2">
+      <div class="branch-header">
+        <div class="branch-icon">🗺️</div>
+        <div class="branch-title">核心框架：10个关键问题</div>
+      </div>
+      <ul class="leaf-list">
+        <li>① 论题和结论是什么？</li>
+        <li>② 理由是什么？</li>
+        <li>③ 哪些词语有歧义？</li>
+        <li>④ 价值观假设和描述性假设是什么？</li>
+        <li>⑤ 推理过程有无谬误？</li>
+        <li>⑥ 证据有多可靠？</li>
+        <li>⑦ 数据有无欺骗性？</li>
+        <li>⑧ 有无重要信息被省略？</li>
+        <li>⑨ 有哪些合理的替代结论？</li>
+        <li>⑩ 最终采纳哪个结论？</li>
+      </ul>
+    </div>
+
+    <!-- 常见逻辑谬误 -->
+    <div class="branch c3">
+      <div class="branch-header">
+        <div class="branch-icon">⚠️</div>
+        <div class="branch-title">常见逻辑谬误</div>
+      </div>
+      <ul class="leaf-list">
+        <li><span class="leaf-label">人身攻击：</span>攻击说话者而非论点本身</li>
+        <li><span class="leaf-label">滑坡谬误：</span>夸大后果形成恐惧链条</li>
+        <li><span class="leaf-label">诉诸权威：</span>以权威代替论据</li>
+        <li><span class="leaf-label">稻草人：</span>歪曲对方观点再反驳</li>
+        <li><span class="leaf-label">虚假两难：</span>把多选项压缩成非此即彼</li>
+        <li><span class="leaf-label">循环论证：</span>用结论证明结论</li>
+        <li><span class="leaf-label">诉诸群众：</span>大多数人认为≠正确</li>
+      </ul>
+    </div>
+
+    <!-- 证据的质量评估 -->
+    <div class="branch c4">
+      <div class="branch-header">
+        <div class="branch-icon">🔬</div>
+        <div class="branch-title">证据质量评估</div>
+      </div>
+      <ul class="leaf-list">
+        <li><span class="leaf-label">个人经历：</span>最弱，样本单一，不具代表性</li>
+        <li><span class="leaf-label">案例故事：</span>生动但易被选择性使用</li>
+        <li><span class="leaf-label">专家意见：</span>需评估专业性与利益冲突</li>
+        <li><span class="leaf-label">调研数据：</span>关注样本量、设计、来源</li>
+        <li><span class="leaf-label">相关≠因果：</span>两件事同时发生不代表有因果</li>
+        <li><span class="leaf-label">可重复研究：</span>科学证据的最高标准</li>
+      </ul>
+    </div>
+
+    <!-- 价值观与假设 -->
+    <div class="branch c5">
+      <div class="branch-header">
+        <div class="branch-icon">🎭</div>
+        <div class="branch-title">价值观与隐性假设</div>
+      </div>
+      <ul class="leaf-list">
+        <li><span class="leaf-label">价值假设：</span>作者隐含的价值排序（如自由&gt;平等）</li>
+        <li><span class="leaf-label">描述假设：</span>关于世界运作方式的未言明信念</li>
+        <li><span class="leaf-label">如何识别：</span>问"作者需要假设什么，结论才能成立？"</li>
+        <li><span class="leaf-label">框架效应：</span>同样数据，不同框架产生不同结论</li>
+        <li><span class="leaf-label">省略信息：</span>未说出的内容有时比说出的更关键</li>
+      </ul>
+    </div>
+
+    <!-- 实践应用 -->
+    <div class="branch c6">
+      <div class="branch-header">
+        <div class="branch-icon">🚀</div>
+        <div class="branch-title">实践应用场景</div>
+      </div>
+      <ul class="leaf-list">
+        <li><span class="leaf-label">阅读新闻：</span>识别立场、追问证据来源</li>
+        <li><span class="leaf-label">工作决策：</span>检验方案假设，寻找替代方案</li>
+        <li><span class="leaf-label">日常对话：</span>听清论点结构，不被情绪带走</li>
+        <li><span class="leaf-label">广告营销：</span>辨别诉诸情感与实质论据</li>
+        <li><span class="leaf-label">自我思考：</span>对自己的信念也要提批判性问题</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- 金句 -->
+  <div class="quotes-section">
+    <div class="section-title">✨ 核心金句</div>
+    <div class="quote-item">
+      "海绵式思维让你获得知识，淘金式思维让你形成判断。两者都需要，但后者更难得。"
+    </div>
+    <div class="quote-item">
+      "一个结论，只有在经过理性检验后依然站得住脚，才值得你相信。"
+    </div>
+    <div class="quote-item">
+      "问题不是对抗，而是对话的邀请。好的问题打开思路，坏的问题关闭可能性。"
+    </div>
+    <div class="quote-item">
+      "你是否愿意被自己的论据所说服？如果不愿意，那你只是在寻找支持，而不是在思考。"
+    </div>
+  </div>
+
+  <!-- 行动建议 -->
+  <div class="actions-section">
+    <div class="section-title">⚡ 5个立刻可用的行动建议</div>
+    <div class="action-item">
+      <div class="action-num">1</div>
+      <div>读新闻或看到论点时，先问：<strong>这个结论的核心理由是什么？</strong> 不要直接接受，先把结构提炼出来。</div>
+    </div>
+    <div class="action-item">
+      <div class="action-num">2</div>
+      <div>遇到统计数据，问三个问题：<strong>谁说的、样本多大、有无利益关系？</strong> 数字不等于真相。</div>
+    </div>
+    <div class="action-item">
+      <div class="action-num">3</div>
+      <div>听到强烈主张时，找<strong>至少一个替代结论</strong>——同样的事实，是否还有另一种合理解释？</div>
+    </div>
+    <div class="action-item">
+      <div class="action-num">4</div>
+      <div>在做重要决策前，写下<strong>自己的核心假设</strong>，并问：如果这个假设是错的，结论还成立吗？</div>
+    </div>
+    <div class="action-item">
+      <div class="action-num">5</div>
+      <div>每天选一篇文章或对话，用10个关键问题框架做<strong>5分钟批判性阅读练习</strong>，形成思维肌肉。</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  📚 每日一学 · 2026-04-25 · 学会提问 · 批判性思维终身修炼
+</div>
+
+</body>
+</html>

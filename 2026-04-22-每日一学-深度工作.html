@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 深度工作 · 2026-04-22</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    min-height: 100vh;
+    color: #fff;
+    padding: 20px;
+  }
+  .header {
+    text-align: center;
+    padding: 30px 20px 20px;
+    margin-bottom: 30px;
+  }
+  .date-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 20px;
+    padding: 4px 16px;
+    font-size: 13px;
+    color: #ccc;
+    margin-bottom: 12px;
+  }
+  .title-main {
+    font-size: 36px;
+    font-weight: 800;
+    background: linear-gradient(90deg, #f7971e, #ffd200);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+  }
+  .title-sub {
+    font-size: 16px;
+    color: #aaa;
+    letter-spacing: 1px;
+  }
+  .author {
+    margin-top: 8px;
+    font-size: 14px;
+    color: #f7971e;
+    opacity: 0.9;
+  }
+  /* Mind map container */
+  .mindmap {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  /* Central node */
+  .center-node {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .center-circle {
+    display: inline-block;
+    background: linear-gradient(135deg, #f7971e, #ffd200);
+    color: #1a1a2e;
+    border-radius: 50%;
+    width: 160px;
+    height: 160px;
+    line-height: 160px;
+    font-size: 22px;
+    font-weight: 800;
+    box-shadow: 0 8px 32px rgba(247,151,30,0.5);
+    position: relative;
+  }
+  /* Branch grid */
+  .branches {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+  .branch {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: transform 0.2s;
+  }
+  .branch:hover { transform: translateY(-3px); }
+  .branch-header {
+    padding: 16px 20px;
+    font-size: 16px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .branch-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .branch-body {
+    padding: 0 20px 18px;
+  }
+  .branch-item {
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    font-size: 14px;
+    color: #ddd;
+    line-height: 1.6;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .branch-item:last-child { border-bottom: none; }
+  .bullet {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin-top: 7px;
+    flex-shrink: 0;
+  }
+
+  /* Color schemes */
+  .c1 .branch-header { background: linear-gradient(90deg, rgba(255,107,107,0.3), transparent); color: #ff6b6b; }
+  .c1 .branch-icon { background: rgba(255,107,107,0.2); }
+  .c1 .bullet { background: #ff6b6b; }
+
+  .c2 .branch-header { background: linear-gradient(90deg, rgba(78,205,196,0.3), transparent); color: #4ecdc4; }
+  .c2 .branch-icon { background: rgba(78,205,196,0.2); }
+  .c2 .bullet { background: #4ecdc4; }
+
+  .c3 .branch-header { background: linear-gradient(90deg, rgba(255,209,102,0.3), transparent); color: #ffd166; }
+  .c3 .branch-icon { background: rgba(255,209,102,0.2); }
+  .c3 .bullet { background: #ffd166; }
+
+  .c4 .branch-header { background: linear-gradient(90deg, rgba(166,124,255,0.3), transparent); color: #a67cff; }
+  .c4 .branch-icon { background: rgba(166,124,255,0.2); }
+  .c4 .bullet { background: #a67cff; }
+
+  .c5 .branch-header { background: linear-gradient(90deg, rgba(83,197,255,0.3), transparent); color: #53c5ff; }
+  .c5 .branch-icon { background: rgba(83,197,255,0.2); }
+  .c5 .bullet { background: #53c5ff; }
+
+  .c6 .branch-header { background: linear-gradient(90deg, rgba(255,159,67,0.3), transparent); color: #ff9f43; }
+  .c6 .branch-icon { background: rgba(255,159,67,0.2); }
+  .c6 .bullet { background: #ff9f43; }
+
+  /* Quote section */
+  .quotes-section {
+    max-width: 1100px;
+    margin: 20px auto;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 24px;
+  }
+  .section-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .quote-card {
+    background: rgba(247,151,30,0.08);
+    border-left: 3px solid #f7971e;
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin-bottom: 12px;
+    font-size: 14px;
+    color: #f0e6d3;
+    line-height: 1.7;
+    font-style: italic;
+  }
+  .quote-card:last-child { margin-bottom: 0; }
+
+  /* Action section */
+  .action-section {
+    max-width: 1100px;
+    margin: 20px auto;
+    background: linear-gradient(135deg, rgba(247,151,30,0.15), rgba(255,210,0,0.1));
+    border: 1px solid rgba(247,151,30,0.3);
+    border-radius: 16px;
+    padding: 24px;
+  }
+  .action-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .action-item:last-child { border-bottom: none; }
+  .action-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #f7971e, #ffd200);
+    color: #1a1a2e;
+    font-weight: 800;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .action-text { font-size: 14px; color: #f0e6d3; line-height: 1.7; }
+  .action-title { font-weight: 700; color: #ffd200; margin-bottom: 4px; }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 30px 20px;
+    font-size: 12px;
+    color: #555;
+  }
+
+  @media (max-width: 680px) {
+    .branches { grid-template-columns: 1fr; }
+    .title-main { font-size: 26px; }
+    .center-circle { width: 120px; height: 120px; line-height: 120px; font-size: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="date-badge">📅 2026-04-22 · 每日一学</div>
+  <div class="title-main">深度工作</div>
+  <div class="title-sub">Deep Work: Rules for Focused Success in a Distracted World</div>
+  <div class="author">✍️ Cal Newport（卡尔·纽波特）著</div>
+</div>
+
+<!-- Center Node -->
+<div class="mindmap">
+  <div class="center-node">
+    <div class="center-circle">深度<br>工作</div>
+  </div>
+
+  <!-- Branches -->
+  <div class="branches">
+
+    <!-- 1. 书籍背景 -->
+    <div class="branch c1">
+      <div class="branch-header">
+        <div class="branch-icon">📖</div>
+        书籍背景
+      </div>
+      <div class="branch-body">
+        <div class="branch-item"><span class="bullet"></span>作者 Cal Newport 是乔治城大学计算机科学教授，同时也是知名生产力博主</div>
+        <div class="branch-item"><span class="bullet"></span>出版于2016年，迅速成为知识工作者必读经典</div>
+        <div class="branch-item"><span class="bullet"></span>核心问题：在注意力涣散的时代，如何做出真正重要的工作？</div>
+        <div class="branch-item"><span class="bullet"></span>提出"深度工作"（Deep Work）与"浮浅工作"（Shallow Work）的对立概念</div>
+      </div>
+    </div>
+
+    <!-- 2. 核心概念 -->
+    <div class="branch c2">
+      <div class="branch-header">
+        <div class="branch-icon">💡</div>
+        核心概念定义
+      </div>
+      <div class="branch-body">
+        <div class="branch-item"><span class="bullet"></span><strong>深度工作：</strong>在无干扰的专注状态下进行的职业活动，能把认知能力逼到极限，创造新价值、提升技能</div>
+        <div class="branch-item"><span class="bullet"></span><strong>浮浅工作：</strong>不需高度专注的事务性任务（收邮件、开会、刷社交媒体），难以创造新价值</div>
+        <div class="branch-item"><span class="bullet"></span>深度工作产出方程式：高质量产出 = 时间 × 专注强度</div>
+        <div class="branch-item"><span class="bullet"></span>深度工作是稀缺的，也是越来越有价值的能力</div>
+      </div>
+    </div>
+
+    <!-- 3. 深度工作假设 -->
+    <div class="branch c3">
+      <div class="branch-header">
+        <div class="branch-icon">🧠</div>
+        三大核心洞见
+      </div>
+      <div class="branch-body">
+        <div class="branch-item"><span class="bullet"></span><strong>洞见一：</strong>深度工作愈发稀缺——科技让浮浅工作泛滥，大多数人丧失了深度专注的能力</div>
+        <div class="branch-item"><span class="bullet"></span><strong>洞见二：</strong>深度工作愈发有价值——经济转型让掌握深度工作能力的人脱颖而出</div>
+        <div class="branch-item"><span class="bullet"></span><strong>洞见三：</strong>深度工作愈发有意义——专注状态能带来心流体验，提升生活幸福感与人生满足度</div>
+      </div>
+    </div>
+
+    <!-- 4. 四种深度工作哲学 -->
+    <div class="branch c4">
+      <div class="branch-header">
+        <div class="branch-icon">⚙️</div>
+        四种实践哲学
+      </div>
+      <div class="branch-body">
+        <div class="branch-item"><span class="bullet"></span><strong>禁欲主义哲学：</strong>彻底远离浮浅事务（如作家隐居写作）——适合创作型独立工作者</div>
+        <div class="branch-item"><span class="bullet"></span><strong>双峰哲学：</strong>将时间分为深度期和浮浅期，以天/周/月为单位切换——适合需要社交的工作者</div>
+        <div class="branch-item"><span class="bullet"></span><strong>节奏哲学：</strong>每天固定时间段进行深度工作，形成习惯——最适合普通上班族</div>
+        <div class="branch-item"><span class="bullet"></span><strong>记者哲学：</strong>随时随地利用碎片时间切入深度状态——需要高度训练，初学者慎用</div>
+      </div>
+    </div>
+
+    <!-- 5. 四大规则 -->
+    <div class="branch c5">
+      <div class="branch-header">
+        <div class="branch-icon">📋</div>
+        四大执行规则
+      </div>
+      <div class="branch-body">
+        <div class="branch-item"><span class="bullet"></span><strong>规则一·专注工作：</strong>选定哲学，安排固定的深度工作时间，做仪式感准备（咖啡、手机关机等）</div>
+        <div class="branch-item"><span class="bullet"></span><strong>规则二·拥抱无聊：</strong>训练大脑忍受无聊，停止用手机填满每一个空闲时刻，重建专注肌肉</div>
+        <div class="branch-item"><span class="bullet"></span><strong>规则三·远离社交媒体：</strong>用"工匠视角"评估每款工具——只保留益大于害的，主动退出其他</div>
+        <div class="branch-item"><span class="bullet"></span><strong>规则四·清空浮浅工作：</strong>固定下班时间、每日计划关机仪式，将浮浅工作压缩在有限时段内</div>
+      </div>
+    </div>
+
+    <!-- 6. 关键方法论 -->
+    <div class="branch c6">
+      <div class="branch-header">
+        <div class="branch-icon">🔧</div>
+        关键实操工具
+      </div>
+      <div class="branch-body">
+        <div class="branch-item"><span class="bullet"></span><strong>深度工作计分板：</strong>追踪每周深度工作小时数，目标4小时/天，初学者从1小时起步</div>
+        <div class="branch-item"><span class="bullet"></span><strong>关机仪式：</strong>每天固定时间完成收件箱清零+明日计划，用"关机完成"口令结束工作</div>
+        <div class="branch-item"><span class="bullet"></span><strong>罗斯福冲刺：</strong>给任务设定激进的截止时间，逼迫自己进入深度专注状态</div>
+        <div class="branch-item"><span class="bullet"></span><strong>生产性冥想：</strong>散步/通勤时将注意力专注于一个具体问题，训练深度思考能力</div>
+      </div>
+    </div>
+
+  </div><!-- /branches -->
+
+  <!-- Quotes -->
+  <div class="quotes-section">
+    <div class="section-title">💬 金句摘录</div>
+    <div class="quote-card">"深度工作：在无干扰状态下进行的职业活动，能把认知能力逼到极限，创造新价值、提升技能，且难以复制。"</div>
+    <div class="quote-card">"浮浅工作不会让你出类拔萃，深度工作才会。"</div>
+    <div class="quote-card">"专注是一种越来越稀缺、越来越有价值的能力——掌握它，将是你在新经济中最持久的竞争优势。"</div>
+    <div class="quote-card">"如果你无法安静地独处与思考，你就无法做出真正重要的东西。"</div>
+    <div class="quote-card">"忙碌不等于高效；产出，才是衡量真实价值的标尺。"</div>
+  </div>
+
+  <!-- Actions -->
+  <div class="action-section">
+    <div class="section-title">🚀 行动建议</div>
+    <div class="action-item">
+      <div class="action-num">1</div>
+      <div class="action-text">
+        <div class="action-title">今天起，设定你的"深度工作时段"</div>
+        选择节奏哲学：每天固定 1 个时间段（建议早上9:00–11:00），关闭手机、关闭通知、关闭邮件，只做一件最重要的事。坚持 21 天，形成习惯。
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="action-num">2</div>
+      <div class="action-text">
+        <div class="action-title">建立"关机仪式"，告别焦虑</div>
+        每天下班前，用 10 分钟完成：清空收件箱 + 写明日 Top3 任务 + 说出"关机完成"。明确的结束信号让大脑真正放松，避免工作侵占休息时间。
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="action-num">3</div>
+      <div class="action-text">
+        <div class="action-title">审视你的"工具清单"</div>
+        列出你每天使用的 App 和平台，用"工匠视角"评估：它对我最重要的目标有实质帮助吗？害处是否大于益处？本周删除或退出至少 1 个低价值工具。
+      </div>
+    </div>
+  </div>
+
+</div><!-- /mindmap -->
+
+<div class="footer">
+  📚 每日一学 · 2026-04-22 · 《深度工作》Cal Newport · 让专注成为你最强的竞争力
+</div>
+
+</body>
+</html>

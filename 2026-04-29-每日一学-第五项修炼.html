@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 第五项修炼 — 彼得·圣吉</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+    background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+    min-height: 100vh;
+    color: #e8f4f8;
+    padding: 20px;
+  }
+  .container { max-width: 1200px; margin: 0 auto; }
+
+  /* Header */
+  .header {
+    text-align: center;
+    padding: 40px 20px 30px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 20px;
+    margin-bottom: 30px;
+    border: 1px solid rgba(255,255,255,0.1);
+    backdrop-filter: blur(10px);
+  }
+  .date-badge {
+    display: inline-block;
+    background: linear-gradient(90deg, #00c6ff, #0072ff);
+    color: white;
+    padding: 6px 20px;
+    border-radius: 20px;
+    font-size: 13px;
+    margin-bottom: 16px;
+    letter-spacing: 1px;
+  }
+  .book-title {
+    font-size: 2.8em;
+    font-weight: 800;
+    background: linear-gradient(90deg, #00c6ff, #0072ff, #7f53ac);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+  .book-subtitle {
+    font-size: 1.1em;
+    color: #a8d8ea;
+    margin-bottom: 12px;
+    font-style: italic;
+  }
+  .book-author {
+    font-size: 1em;
+    color: #7ec8e3;
+  }
+  .book-meta {
+    margin-top: 16px;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .tag {
+    background: rgba(0,198,255,0.15);
+    border: 1px solid rgba(0,198,255,0.3);
+    color: #00c6ff;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+  }
+
+  /* Grid Layout */
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+  .full-width { grid-column: 1 / -1; }
+
+  /* Cards */
+  .card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 16px;
+    padding: 24px;
+    backdrop-filter: blur(8px);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0,198,255,0.15);
+  }
+  .card-title {
+    font-size: 1em;
+    font-weight: 700;
+    color: #00c6ff;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(0,198,255,0.2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card-title .icon { font-size: 1.2em; }
+
+  /* Core Insight */
+  .core-insight {
+    background: linear-gradient(135deg, rgba(0,198,255,0.12), rgba(127,83,172,0.12));
+    border: 1px solid rgba(0,198,255,0.25);
+    border-radius: 16px;
+    padding: 28px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  .core-insight .label {
+    font-size: 0.85em;
+    color: #00c6ff;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .core-insight .text {
+    font-size: 1.4em;
+    font-weight: 600;
+    color: #e8f4f8;
+    line-height: 1.6;
+  }
+  .core-insight .sub {
+    margin-top: 10px;
+    font-size: 0.95em;
+    color: #a8d8ea;
+    line-height: 1.6;
+  }
+
+  /* Five Disciplines */
+  .discipline-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-top: 8px; }
+  .discipline-item {
+    background: rgba(255,255,255,0.05);
+    border-radius: 12px;
+    padding: 16px 12px;
+    text-align: center;
+    border: 1px solid rgba(255,255,255,0.1);
+    position: relative;
+  }
+  .discipline-item.highlight {
+    background: linear-gradient(135deg, rgba(0,198,255,0.2), rgba(127,83,172,0.2));
+    border-color: rgba(0,198,255,0.4);
+  }
+  .disc-num {
+    font-size: 1.6em;
+    font-weight: 800;
+    background: linear-gradient(90deg, #00c6ff, #7f53ac);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 6px;
+  }
+  .disc-name { font-size: 0.9em; font-weight: 700; color: #e8f4f8; margin-bottom: 4px; }
+  .disc-en { font-size: 0.72em; color: #7ec8e3; margin-bottom: 8px; font-style: italic; }
+  .disc-desc { font-size: 0.78em; color: #b0c4d8; line-height: 1.5; }
+  .fifth-label {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: linear-gradient(90deg, #00c6ff, #7f53ac);
+    color: white;
+    font-size: 0.65em;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 700;
+  }
+
+  /* Systems Thinking */
+  .archetype-list { list-style: none; }
+  .archetype-list li {
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .archetype-list li:last-child { border-bottom: none; }
+  .arch-badge {
+    background: rgba(0,198,255,0.15);
+    color: #00c6ff;
+    padding: 2px 10px;
+    border-radius: 10px;
+    font-size: 0.78em;
+    white-space: nowrap;
+    font-weight: 600;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .arch-text { font-size: 0.88em; color: #c8dde8; line-height: 1.5; }
+
+  /* Knowledge Points */
+  .kp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 4px; }
+  .kp-item {
+    background: rgba(255,255,255,0.04);
+    border-left: 3px solid #00c6ff;
+    border-radius: 0 8px 8px 0;
+    padding: 10px 14px;
+  }
+  .kp-title { font-size: 0.88em; font-weight: 700; color: #00c6ff; margin-bottom: 4px; }
+  .kp-text { font-size: 0.8em; color: #b0c4d8; line-height: 1.5; }
+
+  /* Quotes */
+  .quote-list { list-style: none; }
+  .quote-list li {
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+  .quote-list li:last-child { border-bottom: none; }
+  .quote-text {
+    font-size: 0.95em;
+    color: #e8f4f8;
+    line-height: 1.7;
+    font-style: italic;
+    padding-left: 16px;
+    border-left: 3px solid rgba(0,198,255,0.5);
+  }
+  .quote-author { font-size: 0.78em; color: #7ec8e3; margin-top: 6px; padding-left: 16px; }
+
+  /* Action Steps */
+  .action-list { list-style: none; counter-reset: action; }
+  .action-list li {
+    counter-increment: action;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .action-list li:last-child { border-bottom: none; }
+  .action-list li::before {
+    content: counter(action);
+    background: linear-gradient(135deg, #00c6ff, #7f53ac);
+    color: white;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8em;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .action-text { font-size: 0.88em; color: #c8dde8; line-height: 1.6; padding-top: 2px; }
+  .action-text strong { color: #00c6ff; }
+
+  /* Iceberg Model */
+  .iceberg { margin-top: 8px; }
+  .iceberg-level {
+    padding: 12px 20px;
+    margin-bottom: 4px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .ice-1 { background: rgba(0,198,255,0.25); border-left: 4px solid #00c6ff; }
+  .ice-2 { background: rgba(0,198,255,0.18); border-left: 4px solid #0089d0; margin-left: 20px; }
+  .ice-3 { background: rgba(0,198,255,0.12); border-left: 4px solid #005b8e; margin-left: 40px; }
+  .ice-4 { background: rgba(127,83,172,0.18); border-left: 4px solid #7f53ac; margin-left: 60px; }
+  .ice-label { font-size: 0.88em; font-weight: 700; color: #e8f4f8; min-width: 80px; }
+  .ice-desc { font-size: 0.82em; color: #b0c4d8; line-height: 1.4; }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 24px;
+    color: #5a7a8a;
+    font-size: 0.82em;
+    margin-top: 10px;
+  }
+
+  @media (max-width: 768px) {
+    .grid, .grid-3 { grid-template-columns: 1fr; }
+    .discipline-grid { grid-template-columns: 1fr 1fr; }
+    .kp-grid { grid-template-columns: 1fr; }
+    .book-title { font-size: 2em; }
+    .full-width { grid-column: 1; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="date-badge">📚 每日一学 · 2026年4月29日 · 第14期</div>
+    <div class="book-title">第五项修炼</div>
+    <div class="book-subtitle">The Fifth Discipline: The Art and Practice of the Learning Organization</div>
+    <div class="book-author">彼得·圣吉（Peter M. Senge）著 | 麻省理工学院斯隆管理学院高级讲师</div>
+    <div class="book-meta">
+      <span class="tag">系统思考</span>
+      <span class="tag">学习型组织</span>
+      <span class="tag">心智模式</span>
+      <span class="tag">共同愿景</span>
+      <span class="tag">团队学习</span>
+      <span class="tag">个人成长</span>
+    </div>
+  </div>
+
+  <!-- Core Insight -->
+  <div class="core-insight">
+    <div class="label">💡 核心洞见</div>
+    <div class="text">真正持久的竞争优势，来自组织的学习能力——<br>而"系统思考"是贯穿一切的第五项修炼，也是根本。</div>
+    <div class="sub">我们从小被教导把世界切割成碎片，但要解决我们自己创造的问题，必须学会"整体看"。<br>系统思考不只是工具，而是一种思维方式的革命：看见循环，而非直线；看见过程，而非事件；看见自己是系统的一部分。</div>
+  </div>
+
+  <!-- Five Disciplines -->
+  <div class="card full-width" style="margin-bottom:20px;">
+    <div class="card-title"><span class="icon">🏛️</span>五项修炼 — 学习型组织的核心框架</div>
+    <div class="discipline-grid">
+      <div class="discipline-item">
+        <div class="disc-num">01</div>
+        <div class="disc-name">自我超越</div>
+        <div class="disc-en">Personal Mastery</div>
+        <div class="disc-desc">不断厘清个人愿景，聚焦真正重要的事，如实看清现实，并保持创造性张力驱动成长。</div>
+      </div>
+      <div class="discipline-item">
+        <div class="disc-num">02</div>
+        <div class="disc-name">改善心智模式</div>
+        <div class="disc-en">Mental Models</div>
+        <div class="disc-desc">觉察并挑战内心深处的假设与信念，使之走上台面接受检验，避免"预设"绑架行动。</div>
+      </div>
+      <div class="discipline-item">
+        <div class="disc-num">03</div>
+        <div class="disc-name">建立共同愿景</div>
+        <div class="disc-en">Shared Vision</div>
+        <div class="disc-desc">真正的愿景不是强制认同，而是由个体真实愿景汇聚而成，激发内生动力而非服从。</div>
+      </div>
+      <div class="discipline-item">
+        <div class="disc-num">04</div>
+        <div class="disc-name">团队学习</div>
+        <div class="disc-en">Team Learning</div>
+        <div class="disc-desc">通过深度汇谈（Dialogue）而非辩论，让团队智慧超越个体之和，形成集体智识。</div>
+      </div>
+      <div class="discipline-item highlight">
+        <div class="fifth-label">核心</div>
+        <div class="disc-num">05</div>
+        <div class="disc-name">系统思考</div>
+        <div class="disc-en">Systems Thinking</div>
+        <div class="disc-desc">看见事件背后的结构与规律，理解反馈回路与延迟效应，将其他四项修炼整合为整体。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <!-- Systems Archetypes -->
+    <div class="card">
+      <div class="card-title"><span class="icon">🔄</span>系统基模 — 常见的系统陷阱</div>
+      <ul class="archetype-list">
+        <li>
+          <span class="arch-badge">成长上限</span>
+          <span class="arch-text">增长触碰隐性限制因素，继续施压反而加剧恶化——应改变限制因素，而非加大油门</span>
+        </li>
+        <li>
+          <span class="arch-badge">舍本逐末</span>
+          <span class="arch-text">不断用"权宜之计"解决症状，导致根本问题越来越难解决——症状解越用越依赖</span>
+        </li>
+        <li>
+          <span class="arch-badge">恶性竞争</span>
+          <span class="arch-text">两方相互以对方行动为威胁而升级响应，结果两败俱伤——升级螺旋需要单边停止</span>
+        </li>
+        <li>
+          <span class="arch-badge">公地悲剧</span>
+          <span class="arch-text">共享资源被个体理性过度消耗，集体陷入崩溃——需建立共同管理机制</span>
+        </li>
+        <li>
+          <span class="arch-badge">负担转移</span>
+          <span class="arch-text">解决方案削弱了解决根本问题的能力，形成依赖——识别症状解与根本解的区别</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Iceberg Model -->
+    <div class="card">
+      <div class="card-title"><span class="icon">🧊</span>冰山模型 — 四层观察现实</div>
+      <div class="iceberg">
+        <div class="iceberg-level ice-1">
+          <div class="ice-label">事件层</div>
+          <div class="ice-desc">我们看到的"发生了什么"——新闻、报告、数据波动，仅是表象</div>
+        </div>
+        <div class="iceberg-level ice-2">
+          <div class="ice-label">趋势层</div>
+          <div class="ice-desc">一段时间内的规律与模式——识别趋势，能预见方向但仍难以干预</div>
+        </div>
+        <div class="iceberg-level ice-3">
+          <div class="ice-label">结构层</div>
+          <div class="ice-desc">产生趋势的系统结构——反馈回路、激励机制、政策制度，这里才是干预点</div>
+        </div>
+        <div class="iceberg-level ice-4">
+          <div class="ice-label">心智层</div>
+          <div class="ice-desc">支撑整个结构的假设与信念——心智模式决定了我们如何设计系统，是最深层的杠杆</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Knowledge Points -->
+  <div class="card full-width" style="margin-top:20px;">
+    <div class="card-title"><span class="icon">📖</span>主要知识点</div>
+    <div class="kp-grid">
+      <div class="kp-item">
+        <div class="kp-title">创造性张力 vs 情绪性张力</div>
+        <div class="kp-text">愿景与现实之间的落差产生张力。创造性张力是成长的动力；而情绪性张力（焦虑）会驱使人降低愿景以消除不适，导致向下螺旋。</div>
+      </div>
+      <div class="kp-item">
+        <div class="kp-title">推论阶梯</div>
+        <div class="kp-text">从观察数据→选择性关注→赋予含义→假设→得出结论→形成信念→采取行动，每一步都可能偏离真实。意识到这个梯子，才能延缓跳跃。</div>
+      </div>
+      <div class="kp-item">
+        <div class="kp-title">深度汇谈 vs 讨论</div>
+        <div class="kp-text">讨论是各方说服对方；深度汇谈（Dialogue）是共同探索，悬挂假设，倾听不同声音，让集体智慧涌现而非强行收敛。</div>
+      </div>
+      <div class="kp-item">
+        <div class="kp-title">反馈回路：增强与调节</div>
+        <div class="kp-text">增强回路（滚雪球）：越多→越多，推动指数增长或崩溃。调节回路（追目标）：偏差越大→纠正力度越大，维持系统稳定。两者共同构成系统动态。</div>
+      </div>
+      <div class="kp-item">
+        <div class="kp-title">延迟效应</div>
+        <div class="kp-text">系统中行动与结果之间往往存在时间差。忽视延迟会导致过度调整——油门踩太久才见效，不停地"补救"反而震荡。</div>
+      </div>
+      <div class="kp-item">
+        <div class="kp-title">今日行动的明日惩罚</div>
+        <div class="kp-text">"今日行动的最优化，往往是明日问题的根源。"短期最优解常常削弱系统长期健康，如大量外包省了成本却失去了核心能力。</div>
+      </div>
+      <div class="kp-item">
+        <div class="kp-title">学习障碍的七个陷阱</div>
+        <div class="kp-text">我就是我的职位 / 敌人在外部 / 掌控的幻觉 / 专注于事件 / 温水煮青蛙 / 从经验中学习的错觉 / 管理团队的神话——这七大陷阱让组织无法真正学习。</div>
+      </div>
+      <div class="kp-item">
+        <div class="kp-title">杠杆点 — 小改变大影响</div>
+        <div class="kp-text">系统中存在少数高杠杆干预点，微小变化可产生持久改变。关键是找到它们——通常违反直觉，不在最显眼的地方，需要系统思考才能看见。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid" style="margin-top:20px;">
+    <!-- Quotes -->
+    <div class="card">
+      <div class="card-title"><span class="icon">✨</span>金句</div>
+      <ul class="quote-list">
+        <li>
+          <div class="quote-text">"今日的问题，来自昨日的解决方案。"</div>
+          <div class="quote-author">— 系统思考第一定律</div>
+        </li>
+        <li>
+          <div class="quote-text">"治标越努力，治本越无力。"</div>
+          <div class="quote-author">— 关于舍本逐末基模</div>
+        </li>
+        <li>
+          <div class="quote-text">"真正的学习，会触动你内心深处对'我是谁''我能做什么'这类问题的认知，从而改变你对世界的感知与行动能力。"</div>
+          <div class="quote-author">— 彼得·圣吉</div>
+        </li>
+        <li>
+          <div class="quote-text">"如果你只用直线思考，而所有系统都是圆形的，你永远都无法学到真正重要的东西。"</div>
+          <div class="quote-author">— 彼得·圣吉</div>
+        </li>
+        <li>
+          <div class="quote-text">"学习型组织的核心，不是'学了更多知识'，而是成员共同扩展了创造未来的能力。"</div>
+          <div class="quote-author">— 彼得·圣吉</div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Action Steps -->
+    <div class="card">
+      <div class="card-title"><span class="icon">🚀</span>行动建议</div>
+      <ol class="action-list">
+        <li>
+          <div class="action-text"><strong>画出你的系统图</strong>：选一个当前遇到的反复出现的问题，画出涉及的各要素之间的因果关系图，找出是否存在增强回路或调节回路。</div>
+        </li>
+        <li>
+          <div class="action-text"><strong>识别症状解与根本解</strong>：在下次遇到问题时，问自己"这是症状还是根因？"抵制"快速解决"的冲动，寻找系统结构层的干预点。</div>
+        </li>
+        <li>
+          <div class="action-text"><strong>觉察你的心智模式</strong>：记录一次与他人意见相左的场景，用"推论阶梯"追溯自己跳跃的步骤，看看哪个环节存在未验证的假设。</div>
+        </li>
+        <li>
+          <div class="action-text"><strong>练习深度汇谈</strong>：在团队会议中，尝试设立"不争对错"的时段，每人分享自己的假设而非结论，观察集体理解如何自然深化。</div>
+        </li>
+        <li>
+          <div class="action-text"><strong>写下你的个人愿景</strong>：用具体、感官化的语言描述三年后理想的生活与工作状态，与现实对比，感受"创造性张力"，让它成为前进的动力而非焦虑。</div>
+        </li>
+        <li>
+          <div class="action-text"><strong>注意延迟效应</strong>：在启动一项新举措时，预设"看到效果需要多久"，抵制在延迟期内的频繁干预与过度调整，给系统留出响应的时间。</div>
+        </li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <p>📚 每日一学 · 第14期 · 2026.04.29 · 《第五项修炼》彼得·圣吉</p>
+    <p style="margin-top:6px;">系统看见，整体理解，修炼不止。</p>
+  </div>
+
+</div>
+</body>
+</html>

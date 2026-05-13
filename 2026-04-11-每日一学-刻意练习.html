@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日一学：刻意练习 - 思维导图</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .date {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        
+        .title {
+            font-size: 32px;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 18px;
+            color: #7f8c8d;
+            font-weight: normal;
+        }
+        
+        .mindmap {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            min-height: 600px;
+            margin-bottom: 40px;
+        }
+        
+        .central-node {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            z-index: 10;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .central-title {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .central-subtitle {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .branch {
+            position: absolute;
+            width: 200px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .branch:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .branch-title {
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-size: 16px;
+        }
+        
+        .branch-content {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.4;
+        }
+        
+        .connector {
+            position: absolute;
+            background: #ddd;
+            z-index: 1;
+        }
+        
+        .summary {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-top: 40px;
+        }
+        
+        .summary h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        .section {
+            margin-bottom: 25px;
+        }
+        
+        .section h3 {
+            color: #3498db;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        
+        .section-content {
+            padding-left: 20px;
+            line-height: 1.6;
+        }
+        
+        .quote {
+            background: #f8f9fa;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 15px 0;
+            font-style: italic;
+        }
+        
+        .action-list {
+            list-style-type: none;
+            padding-left: 20px;
+        }
+        
+        .action-list li {
+            margin-bottom: 8px;
+            position: relative;
+            padding-left: 25px;
+        }
+        
+        .action-list li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #3498db;
+            font-weight: bold;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="date">2026年4月11日</div>
+            <h1 class="title">每日一学：刻意练习</h1>
+            <p class="subtitle">《刻意练习：如何从新手到大师》- 安德斯·艾利克森 & 罗伯特·普尔</p>
+        </div>
+        
+        <div class="mindmap" id="mindmap">
+            <!-- 中央节点 -->
+            <div class="central-node">
+                <div class="central-title">刻意练习</div>
+                <div class="central-subtitle">Deliberate Practice</div>
+            </div>
+            
+            <!-- 分支将通过JavaScript生成 -->
+        </div>
+        
+        <div class="summary">
+            <h2>核心内容摘要</h2>
+            
+            <div class="section">
+                <h3>一、核心洞见</h3>
+                <div class="section-content">
+                    <p>天才不是天生的，而是通过正确的方法训练出来的。刻意练习是迄今为止发现的最强大的学习方法，它颠覆了传统"天赋论"的认知，证明通过系统性的训练，任何人都可以在特定领域达到卓越水平。</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3>二、四要素/核心框架</h3>
+                <div class="section-content">
+                    <p><strong>1. 明确目标：</strong>设定具体、可衡量的目标，而不是模糊的"变得更好"</p>
+                    <p><strong>2. 专注投入：</strong>100%的注意力集中，不能走神</p>
+                    <p><strong>3. 及时反馈：</strong>获得关于表现的即时、准确的反馈</p>
+                    <p><strong>4. 走出舒适区：</strong>不断挑战略高于当前能力水平的任务</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3>三、主要知识点</h3>
+                <div class="section-content">
+                    <p><strong>• 心理表征：</strong>专家通过长期训练形成高度组织的"心理结构"，能够快速识别模式并做出有效决策</p>
+                    <p><strong>• 一万小时定律的误区：</strong>单纯的时间堆积无效，必须是"刻意练习"的时间</p>
+                    <p><strong>• 有效训练 vs 无效训练：</strong>天真的练习（重复）vs 刻意练习（有目标、有反馈、有挑战）</p>
+                    <p><strong>• 导师的作用：</strong>帮助设计训练计划，提供反馈，突破瓶颈</p>
+                    <p><strong>• 动机的维持：</strong>内在动机、社会支持、阶段性成就是持续练习的关键</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3>四、金句摘录</h3>
+                <div class="quote">
+                    "刻意练习的本质是创建心理表征，而心理表征反过来使得刻意练习更有效。"
+                </div>
+                <div class="quote">
+                    "最杰出的人是那些在各种有目的的练习中花了最多时间的人。"
+                </div>
+                <div class="quote">
+                    "如果你从来不迫使自己走出舒适区，便永远无法进步。"
+                </div>
+                <div class="quote">
+                    "大脑和身体一样，对于处在舒适区之外却离得并不太远的"甜蜜点"上的挑战，改变最为迅速。"
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3>五、行动建议</h3>
+                <div class="section-content">
+                    <ul class="action-list">
+                        <li><strong>找到优秀导师：</strong>寻找能给你明确反馈、指导你突破瓶颈的导师</li>
+                        <li><strong>分解技能：</strong>将大技能分解为小组成部分，逐一攻克</li>
+                        <li><strong>建立反馈机制：</strong>记录练习过程，定期回顾分析，识别改进点</li>
+                        <li><strong>保持专注：</strong>每次练习设定明确目标，全神贯注</li>
+                        <li><strong>突破舒适区：</strong>识别"最近发展区"，持续挑战略高于当前水平的目标</li>
+                        <li><strong>建立心理表征：</strong>通过刻意观察、模仿、反思，构建专业领域的思维模型</li>
+                        <li><strong>保持动机：</strong>设定短期目标，庆祝小成就，寻找练习伙伴</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>每日一学 · 思维成长计划 | 生成时间：2026-04-11 09:10</p>
+            <p>《刻意练习：如何从新手到大师》- 安德斯·艾利克森 & 罗伯特·普尔</p>
+        </div>
+    </div>
+    
+    <script>
+        // 思维导图数据
+        const branches = [
+            {
+                id: 1,
+                title: "核心概念",
+                content: "有目的、有反馈、专注的练习",
+                position: { top: "20%", left: "20%" },
+                color: "#3498db"
+            },
+            {
+                id: 2,
+                title: "四大要素",
+                content: "明确目标、专注投入、及时反馈、走出舒适区",
+                position: { top: "20%", left: "80%" },
+                color: "#2ecc71"
+            },
+            {
+                id: 3,
+                title: "心理表征",
+                content: "专家形成的思维结构，快速识别模式",
+                position: { top: "50%", left: "10%" },
+                color: "#e74c3c"
+            },
+            {
+                id: 4,
+                title: "训练误区",
+                content: "一万小时≠有效，必须是刻意练习的时间",
+                position: { top: "50%", left: "90%" },
+                color: "#f39c12"
+            },
+            {
+                id: 5,
+                title: "实践方法",
+                content: "找导师、分解技能、建立反馈、保持专注",
+                position: { top: "80%", left: "20%" },
+                color: "#9b59b6"
+            },
+            {
+                id: 6,
+                title: "动机维持",
+                content: "内在动机、社会支持、阶段性成就",
+                position: { top: "80%", left: "80%" },
+                color: "#1abc9c"
+            }
+        ];
+        
+        // 生成分支
+        const mindmap = document.getElementById('mindmap');
+        
+        branches.forEach(branch => {
+            // 创建分支
+            const branchEl = document.createElement('div');
+            branchEl.className = 'branch';
+            branchEl.style.top = branch.position.top;
+            branchEl.style.left = branch.position.left;
+            branchEl.style.borderTop = `3px solid ${branch.color}`;
+            
+            branchEl.innerHTML = `
+                <div class="branch-title" style="color: ${branch.color}">${branch.title}</div>
+                <div class="branch-content">${branch.content}</div>
+            `;
+            
+            mindmap.appendChild(branchEl);
+            
+            // 创建连接线
+            const connector = document.createElement('div');
+            connector.className = 'connector';
+            
+            // 计算连接线位置和角度
+            const centerX = 50; // 中央节点中心位置百分比
+            const centerY = 50;
+            const branchX = parseInt(branch.position.left);
+            const branchY = parseInt(branch.position.top);
+            
+            const dx = branchX - centerX;
+            const dy = branchY - centerY;
+            const length = Math.sqrt(dx * dx + dy * dy) * 0.8; // 连接线长度
+            const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+            
+            connector.style.width = `${length}%`;
+            connector.style.height = '2px';
+            connector.style.background = `linear-gradient(90deg, ${branch.color}80, ${branch.color})`;
+            connector.style.transformOrigin = '0 0';
+            connector.style.transform = `rotate(${angle}deg)`;
+            connector.style.left = `${centerX}%`;
+            connector.style.top = `${centerY}%`;
+            
+            mindmap.appendChild(connector);
+        });
+        
+        // 添加动画效果
+        document.addEventListener('DOMContentLoaded', () => {
+            const branches = document.querySelectorAll('.branch');
+            branches.forEach((branch, index) => {
+                branch.style.opacity = '0';
+                branch.style.transform = 'scale(0.8)';
+                
+                setTimeout(() => {
+                    branch.style.transition = 'all 0.5s ease';
+                    branch.style.opacity = '1';
+                    branch.style.transform = 'scale(1)';
+                }, index * 100);
+            });
+        });
+    </script>
+</body>
+</html>

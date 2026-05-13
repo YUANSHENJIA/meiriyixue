@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 金字塔原理</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; background: #f0f4f8; color: #1a202c; }
+  header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; padding: 28px 20px 22px; text-align: center; }
+  header h1 { font-size: 1.5em; font-weight: 700; letter-spacing: 2px; }
+  header p { margin-top: 6px; font-size: 0.95em; opacity: 0.85; }
+  .container { max-width: 900px; margin: 0 auto; padding: 20px 16px 40px; }
+  .book-info { background: #fff; border-radius: 12px; padding: 20px 24px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+  .book-info h2 { font-size: 1.15em; color: #667eea; margin-bottom: 10px; border-left: 4px solid #667eea; padding-left: 10px; }
+  .book-info p { line-height: 1.8; font-size: 0.95em; color: #4a5568; }
+  .book-info .meta { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
+  .book-info .meta span { background: #ebf0ff; color: #4c51bf; padding: 3px 12px; border-radius: 20px; font-size: 0.85em; }
+  .section { background: #fff; border-radius: 12px; padding: 20px 24px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+  .section h2 { font-size: 1.1em; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+  .section h2 .icon { width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.95em; color: #fff; }
+  .insight .icon { background: #f6ad55; }
+  .framework .icon { background: #667eea; }
+  .knowledge .icon { background: #48bb78; }
+  .quotes .icon { background: #ed64a6; }
+  .action .icon { background: #4299e1; }
+  .tag { display: inline-block; background: #fff5eb; color: #c05621; border: 1px solid #feebc8; border-radius: 6px; padding: 2px 10px; font-size: 0.82em; margin: 3px 4px 3px 0; }
+  .framework-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 600px) { .framework-grid { grid-template-columns: 1fr; } }
+  .fw-card { background: #f7fafc; border-radius: 10px; padding: 14px 16px; border-left: 4px solid #667eea; }
+  .fw-card h3 { font-size: 0.95em; color: #4c51bf; margin-bottom: 6px; }
+  .fw-card p { font-size: 0.88em; color: #718096; line-height: 1.6; }
+  .kw-list { list-style: none; }
+  .kw-list li { padding: 8px 0 8px 20px; position: relative; font-size: 0.92em; line-height: 1.7; color: #4a5568; border-bottom: 1px dashed #e2e8f0; }
+  .kw-list li:last-child { border-bottom: none; }
+  .kw-list li::before { content: "◆"; position: absolute; left: 0; color: #667eea; font-size: 0.8em; top: 10px; }
+  .quote-card { background: linear-gradient(135deg, #fff5f7 0%, #fff0f6 100%); border-radius: 10px; padding: 16px 20px; margin-bottom: 10px; border-left: 4px solid #ed64a6; font-style: italic; color: #744210; line-height: 1.8; }
+  .quote-card .source { font-style: normal; font-size: 0.82em; color: #a0aec0; margin-top: 6px; text-align: right; }
+  .action-list { list-style: none; counter-reset: action; }
+  .action-list li { counter-increment: action; padding: 10px 0 10px 38px; position: relative; font-size: 0.92em; line-height: 1.7; color: #4a5568; border-bottom: 1px dashed #e2e8f0; }
+  .action-list li:last-child { border-bottom: none; }
+  .action-list li::before { content: counter(action); position: absolute; left: 0; top: 10px; width: 26px; height: 26px; background: #4299e1; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.82em; font-weight: 700; }
+  .mindmap-container { background: #fff; border-radius: 12px; padding: 20px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); overflow-x: auto; }
+  .mindmap-container h2 { font-size: 1.1em; margin-bottom: 14px; color: #667eea; }
+  /* Mind Map SVG Styles */
+  .mm-node { cursor: pointer; }
+  .mm-node rect, .mm-node circle { transition: all 0.2s; }
+  .mm-node:hover rect { filter: brightness(1.08); }
+  .mm-line { stroke: #cbd5e0; stroke-width: 2; fill: none; }
+  footer { text-align: center; font-size: 0.8em; color: #a0aec0; padding: 20px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>📚 每日一学</h1>
+  <p>2026-05-10 · 思维提升 · 第 13 期</p>
+</header>
+
+<div class="container">
+
+  <!-- 书籍信息 -->
+  <div class="book-info">
+    <div class="meta">
+      <span>📖 金字塔原理</span>
+      <span>✍️ Barbara Minto</span>
+      <span>🏷️ 思维 · 表达 · 写作</span>
+      <span>⭐ 推荐指数: 9.2/10</span>
+    </div>
+    <h2>📖 书籍简介</h2>
+    <p>《金字塔原理》是麦肯锡第一位女性咨询顾问芭芭拉·明托（Barbara Minto）的经典之作，系统阐述了结构化思考、表达和解决问题的核心方法。该书自1973年出版以来，成为全球商务人士、咨询顾问、写作者和演讲者的必读经典，被誉为"思考、表达和解决问题的逻辑圣经"。</p>
+    <p style="margin-top:10px;">核心思想：<strong>任何内容都可以归纳为一个中心思想，下级论点支持上级论点，同一组论点按逻辑顺序组织</strong>——这就是"金字塔结构"。</p>
+  </div>
+
+  <!-- 思维导图 -->
+  <div class="mindmap-container">
+    <h2>🧠 思维导图</h2>
+    <svg viewBox="0 0 900 650" width="100%" height="650" xmlns="http://www.w3.org/2000/svg">
+      <!-- 连接线 -->
+      <line x1="450" y1="40" x2="200" y2="140" stroke="#667eea" stroke-width="2.5" />
+      <line x1="450" y1="40" x2="700" y2="140" stroke="#667eea" stroke-width="2.5" />
+      <line x1="200" y1="140" x2="100" y2="240" stroke="#48bb78" stroke-width="2" />
+      <line x1="200" y1="140" x2="300" y2="240" stroke="#48bb78" stroke-width="2" />
+      <line x1="700" y1="140" x2="600" y2="240" stroke="#f6ad55" stroke-width="2" />
+      <line x1="700" y1="140" x2="800" y2="240" stroke="#f6ad55" stroke-width="2" />
+      <line x1="100" y1="240" x2="60" y2="330" stroke="#a0aec0" stroke-width="1.5" />
+      <line x1="100" y1="240" x2="160" y2="330" stroke="#a0aec0" stroke-width="1.5" />
+      <line x1="300" y1="240" x2="260" y2="330" stroke="#a0aec0" stroke-width="1.5" />
+      <line x1="300" y1="240" x2="360" y2="330" stroke="#a0aec0" stroke-width="1.5" />
+      <line x1="600" y1="240" x2="540" y2="330" stroke="#a0aec0" stroke-width="1.5" />
+      <line x1="600" y1="240" x2="680" y2="330" stroke="#a0aec0" stroke-width="1.5" />
+      <line x1="800" y1="240" x2="750" y2="330" stroke="#a0aec0" stroke-width="1.5" />
+      <line x1="800" y1="240" x2="860" y2="330" stroke="#a0aec0" stroke-width="1.5" />
+      <line x1="450" y1="40" x2="450" y2="140" stroke="#667eea" stroke-width="2" />
+      <line x1="450" y1="140" x2="450" y2="240" stroke="#ed64a6" stroke-width="2" />
+      <line x1="450" y1="240" x2="400" y2="330" stroke="#a0aec0" stroke-width="1.5" />
+      <line x1="450" y1="240" x2="520" y2="330" stroke="#a0aec0" stroke-width="1.5" />
+
+      <!-- 中心节点 -->
+      <rect x="360" y="18" width="180" height="44" rx="22" fill="#667eea"/>
+      <text x="450" y="44" text-anchor="middle" fill="#fff" font-size="15" font-weight="700">金字塔原理</text>
+
+      <!-- 一级分支：核心原则 -->
+      <rect x="130" y="118" width="140" height="44" rx="10" fill="#48bb78"/>
+      <text x="200" y="144" text-anchor="middle" fill="#fff" font-size="13" font-weight="600">核心原则</text>
+
+      <!-- 一级分支：SCQA故事结构 -->
+      <rect x="383" y="118" width="134" height="44" rx="10" fill="#ed64a6"/>
+      <text x="450" y="144" text-anchor="middle" fill="#fff" font-size="13" font-weight="600">SCQA结构</text>
+
+      <!-- 一级分支：纵向结构 -->
+      <rect x="630" y="118" width="140" height="44" rx="10" fill="#f6ad55"/>
+      <text x="700" y="144" text-anchor="middle" fill="#fff" font-size="13" font-weight="600">横向/纵向结构</text>
+
+      <!-- 二级：核心原则 子节点 -->
+      <rect x="30" y="308" width="130" height="38" rx="8" fill="#e6fffa" stroke="#38b2ac" stroke-width="1.5"/>
+      <text x="95" y="332" text-anchor="middle" fill="#234e52" font-size="11">结论先行</text>
+
+      <rect x="130" y="308" width="130" height="38" rx="8" fill="#e6fffa" stroke="#38b2ac" stroke-width="1.5"/>
+      <text x="195" y="332" text-anchor="middle" fill="#234e52" font-size="11">以上统下</text>
+
+      <rect x="230" y="308" width="130" height="38" rx="8" fill="#e6fffa" stroke="#38b2ac" stroke-width="1.5"/>
+      <text x="295" y="332" text-anchor="middle" fill="#234e52" font-size="11">归类分组</text>
+
+      <rect x="330" y="308" width="130" height="38" rx="8" fill="#e6fffa" stroke="#38b2ac" stroke-width="1.5"/>
+      <text x="395" y="332" text-anchor="middle" fill="#234e52" font-size="11">逻辑递进</text>
+
+      <!-- 二级：SCQA 子节点 -->
+      <rect x="480" y="308" width="120" height="38" rx="8" fill="#fff5f7" stroke="#ed64a6" stroke-width="1.5"/>
+      <text x="540" y="325" text-anchor="middle" fill="#744210" font-size="11">S 情境</text>
+      <text x="540" y="340" text-anchor="middle" fill="#a0aec0" font-size="9">Situation</text>
+
+      <rect x="610" y="308" width="120" height="38" rx="8" fill="#fff5f7" stroke="#ed64a6" stroke-width="1.5"/>
+      <text x="670" y="325" text-anchor="middle" fill="#744210" font-size="11">C 冲突</text>
+      <text x="670" y="340" text-anchor="middle" fill="#a0aec0" font-size="9">Complication</text>
+
+      <rect x="480" y="358" width="120" height="38" rx="8" fill="#fff5f7" stroke="#ed64a6" stroke-width="1.5"/>
+      <text x="540" y="375" text-anchor="middle" fill="#744210" font-size="11">Q 问题</text>
+      <text x="540" y="390" text-anchor="middle" fill="#a0aec0" font-size="9">Question</text>
+
+      <rect x="610" y="358" width="120" height="38" rx="8" fill="#fff5f7" stroke="#ed64a6" stroke-width="1.5"/>
+      <text x="670" y="375" text-anchor="middle" fill="#744210" font-size="11">A 答案</text>
+      <text x="670" y="390" text-anchor="middle" fill="#a0aec0" font-size="9">Answer</text>
+
+      <!-- 二级：纵向结构 子节点 -->
+      <rect x="50" y="208" width="100" height="34" rx="8" fill="#f0fff4" stroke="#48bb78" stroke-width="1.5"/>
+      <text x="100" y="230" text-anchor="middle" fill="#22543d" font-size="11">自上而下</text>
+
+      <rect x="240" y="208" width="120" height="34" rx="8" fill="#f0fff4" stroke="#48bb78" stroke-width="1.5"/>
+      <text x="300" y="230" text-anchor="middle" fill="#22543d" font-size="11">自下而上</text>
+
+      <!-- 二级：横向结构 子节点 -->
+      <rect x="550" y="208" width="100" height="34" rx="8" fill="#fffaf0" stroke="#f6ad55" stroke-width="1.5"/>
+      <text x="600" y="230" text-anchor="middle" fill="#7c2d12" font-size="11">MECE原则</text>
+
+      <rect x="740" y="208" width="120" height="34" rx="8" fill="#fffaf0" stroke="#f6ad55" stroke-width="1.5"/>
+      <text x="800" y="230" text-anchor="middle" fill="#7c2d12" font-size="11">逻辑顺序</text>
+
+      <!-- 二级：横向子节点详情 -->
+      <rect x="700" y="308" width="100" height="34" rx="8" fill="#fffaf0" stroke="#f6ad55" stroke-width="1.5"/>
+      <text x="750" y="330" text-anchor="middle" fill="#7c2d12" font-size="11">演绎顺序</text>
+
+      <rect x="810" y="308" width="100" height="34" rx="8" fill="#fffaf0" stroke="#f6ad55" stroke-width="1.5"/>
+      <text x="860" y="330" text-anchor="middle" fill="#7c2d12" font-size="11">归纳顺序</text>
+
+      <!-- 三级节点：归类分组 展开 -->
+      <rect x="370" y="208" width="160" height="34" rx="8" fill="#e6fffa" stroke="#38b2ac" stroke-width="1.5"/>
+      <text x="450" y="230" text-anchor="middle" fill="#234e52" font-size="11">同一组思想属于同一范畴</text>
+
+      <!-- 应用场最分支 -->
+      <rect x="370" y="500" width="160" height="38" rx="10" fill="#667eea"/>
+      <text x="450" y="524" text-anchor="middle" fill="#fff" font-size="13" font-weight="600">应用场景</text>
+
+      <rect x="60" y="560" width="120" height="34" rx="8" fill="#ebf4ff" stroke="#4299e1" stroke-width="1.5"/>
+      <text x="120" y="582" text-anchor="middle" fill="#2a4365" font-size="11">书面表达</text>
+
+      <rect x="210" y="560" width="120" height="34" rx="8" fill="#ebf4ff" stroke="#4299e1" stroke-width="1.5"/>
+      <text x="270" y="582" text-anchor="middle" fill="#2a4365" font-size="11">口头表达</text>
+
+      <rect x="360" y="560" width="120" height="34" rx="8" fill="#ebf4ff" stroke="#4299e1" stroke-width="1.5"/>
+      <text x="420" y="582" text-anchor="middle" fill="#2a4365" font-size="11">问题解决</text>
+
+      <rect x="510" y="560" width="120" height="34" rx="8" fill="#ebf4ff" stroke="#4299e1" stroke-width="1.5"/>
+      <text x="570" y="582" text-anchor="middle" fill="#2a4365" font-size="11">会议管理</text>
+
+      <rect x="660" y="560" width="120" height="34" rx="8" fill="#ebf4ff" stroke="#4299e1" stroke-width="1.5"/>
+      <text x="720" y="582" text-anchor="middle" fill="#2a4365" font-size="11">PPT设计</text>
+
+      <line x1="450" y1="540" x2="120" y2="560" stroke="#4299e1" stroke-width="1.5"/>
+      <line x1="450" y1="540" x2="270" y2="560" stroke="#4299e1" stroke-width="1.5"/>
+      <line x1="450" y1="540" x2="420" y2="560" stroke="#4299e1" stroke-width="1.5"/>
+      <line x1="450" y1="540" x2="570" y2="560" stroke="#4299e1" stroke-width="1.5"/>
+      <line x1="450" y1="540" x2="720" y2="560" stroke="#4299e1" stroke-width="1.5"/>
+
+      <!-- 标注 -->
+      <rect x="40" y="440" width="820" height="44" rx="10" fill="#fefcbf" stroke="#ecc94b" stroke-width="1"/>
+      <text x="60" y="462" fill="#744210" font-size="12">💡 核心法则：先说结论 → 以上统下 → 归类分组 → 逻辑递进（MECE：相互独立，完全穷尽）</text>
+    </svg>
+  </div>
+
+  <!-- 核心洞见 -->
+  <div class="section insight">
+    <h2><span class="icon">💡</span> 核心洞见</h2>
+    <p style="line-height:2; color:#4a5568; font-size:0.95em;">
+      <span class="tag">洞见1</span>人是"有限理性"的动物，工作记忆只能同时处理 <strong>4±1</strong> 个信息单元。金字塔结构通过将信息分层归类，让读者/听众在每级只需处理少量信息，大幅降低认知负荷。<br><br>
+      <span class="tag">洞见2</span><strong>结论先行</strong>不是" arrogance（傲慢）"，而是对读者时间的尊重。先告诉对方你要说什么，再解释为什么——这符合大脑的信息处理习惯。<br><br>
+      <span class="tag">洞见3</span>金字塔原理的本质是 <strong>MECE（Mutually Exclusive, Collectively Exhaustive）</strong>——"相互独立，完全穷尽"。这不仅是表达技巧，更是一种思维纪律，迫使你厘清概念边界、排查逻辑漏洞。<br><br>
+      <span class="tag">洞见4</span>SCQA 不仅是写作框架，更是<strong>讲故事的万能公式</strong>。无论是一封邮件、一次汇报，还是一个产品发布会，都可以用"情境→冲突→问题→答案"的结构来组织，瞬间抓住注意力。<br><br>
+      <span class="tag">洞见5</span>金字塔原理的<strong>底层逻辑是"受众意识"</strong>——所有的结构安排，都是为了让你表达的对象（而非你自己）更容易理解。这是从"自我中心"到"用户中心"的关键转变。
+    </p>
+  </div>
+
+  <!-- 四要素 / 核心框架 -->
+  <div class="section framework">
+    <h2><span class="icon">🏗️</span> 核心框架：金字塔四大原则</h2>
+    <div class="framework-grid">
+      <div class="fw-card">
+        <h3>① 结论先行</h3>
+        <p>每篇文章/演讲/邮件，先抛出核心结论或中心思想，再展开论证。读者最先看到的是最重要的信息。</p>
+      </div>
+      <div class="fw-card">
+        <h3>② 以上统下</h3>
+        <p>上层思想必须是下层思想的总结概括；下层思想必须支撑上层思想。上下级之间有严格的论证关系。</p>
+      </div>
+      <div class="fw-card">
+        <h3>③ 归类分组</h3>
+        <p>每一组的思想必须属于同一逻辑范畴。把相似的观点放在一起，不同类的观点分开，避免信息混乱。</p>
+      </div>
+      <div class="fw-card">
+        <h3>④ 逻辑递进</h3>
+        <p>每一组的思想必须按照逻辑顺序组织：演绎顺序、时间顺序、结构顺序或重要性顺序排列。</p>
+      </div>
+    </div>
+    <div style="margin-top:16px; background:#f7fafc; border-radius:10px; padding:14px 18px;">
+      <strong style="color:#4c51bf; font-size:0.95em;">📐 MECE 原则详解</strong>
+      <p style="font-size:0.88em; color:#718096; margin-top:6px; line-height:1.7;">
+        <strong>相互独立（Mutually Exclusive）</strong>：分类之间不能有重叠，A 和 B 不能是"包含"或"交叉"关系。<br>
+        <strong>完全穷尽（Collectively Exhaustive）</strong>：所有分类加起来必须覆盖全部可能性，不能有遗漏。<br>
+        例：把人分为"男人、女人"是 MECE 的；分为"男人、女人、老人"则既不是独立也不是穷尽。
+      </p>
+    </div>
+    <div style="margin-top:14px; background:#fff5f7; border-radius:10px; padding:14px 18px;">
+      <strong style="color:#ed64a6; font-size:0.95em;">📖 SCQA 故事结构</strong>
+      <p style="font-size:0.88em; color:#718096; margin-top:6px; line-height:1.7;">
+        <strong>S（Situation）情境</strong>：双方共识的背景，让读者产生"没错，就是这样"的共鸣。<br>
+        <strong>C（Complication）冲突</strong>：情境中发生了什么问题或变化，打破共识，引发好奇。<br>
+        <strong>Q（Question）问题</strong>：面对冲突，我们应该怎么办？（可隐可显）<br>
+        <strong>A（Answer）答案</strong>：你的解决方案或核心结论，即金字塔的塔尖。
+      </p>
+    </div>
+  </div>
+
+  <!-- 主要知识点 -->
+  <div class="section knowledge">
+    <h2><span class="icon">📚</span> 主要知识点</h2>
+    <ul class="kw-list">
+      <li><strong>金字塔的垂直结构（纵向关系）</strong>：自上而下法（已知主题，找支持论据）和自下而上法（有素材，提炼结论）。实际写作时两种方法交替使用。</li>
+      <li><strong>金字塔的水平结构（横向关系）</strong>：演绎推理（大前提→小前提→结论，线性的、封闭的）与归纳推理（一组事实→共同结论，发散的、开放的）。商务表达中归纳优于演绎。</li>
+      <li><strong>序言（Introduction）的写作套路</strong>：标准结构是 SCQA；在电子邮件中可以简化为"背景+目的+要求"；在PPT中常用"S+Q+A"（省略C）以节省时间。</li>
+      <li><strong>逻辑顺序的三种类型</strong>：① 演绎顺序（大前提→小前提→结论）；② 时间顺序（步骤1→步骤2→步骤3）；③ 结构顺序（整体→部分1、部分2、部分3）；④ 重要性顺序（最重要→次重要→最不重要）。</li>
+      <li><strong>概括各组思想的技巧</strong>：不要用"存在以下问题"这种空洞的话概括，而要用"措施+目标"的结构，如"建议采取X措施，以实现Y目标"。</li>
+      <li><strong>问题解决的金字塔</strong>：定义问题（界定现状与目标差距）→ 结构化分析问题（用逻辑树拆解）→ 提出可验证的假设 → 根据假设制定方案。</li>
+      <li><strong>Top-Down 与 Bottom-Up 的适用场景</strong>：你想说服别人时用自上而下（先结论）；你自己还没想清楚时用自下而上（先罗列再归纳）。</li>
+      <li><strong>表达时的"30秒电梯演讲"</strong>：用金字塔结构，在30秒内把"结论+3个支撑论据"说清楚，是商务场合的必备能力。</li>
+    </ul>
+  </div>
+
+  <!-- 金句 -->
+  <div class="section quotes">
+    <h2><span class="icon">✨</span> 金句摘抄</h2>
+    <div class="quote-card">
+      "你要表达的思想，应当先以总结性的语句呈现，然后再逐步展开细节。"
+      <div class="source">—— Barbara Minto</div>
+    </div>
+    <div class="quote-card">
+      "读者的阅读习惯是从上到下、从总到分。如果你的表达顺序与读者的理解顺序一致，沟通效率最高。"
+      <div class="source">—— 《金字塔原理》</div>
+    </div>
+    <div class="quote-card">
+      "MECE——相互独立，完全穷尽。这不仅是一个分类原则，更是一种思维习惯。"
+      <div class="source">—— 《金字塔原理》</div>
+    </div>
+    <div class="quote-card">
+      "在商务写作中，最重要的不是你写了什么，而是读者读懂了什么。"
+      <div class="source">—— Barbara Minto</div>
+    </div>
+    <div class="quote-card">
+      "先说你想要的，再说为什么想要。这不是操纵，这是清晰。"
+      <div class="source">—— 读者感悟</div>
+    </div>
+  </div>
+
+  <!-- 行动建议 -->
+  <div class="section action">
+    <h2><span class="icon">🎯</span> 行动建议</h2>
+    <ol class="action-list">
+      <li>从今天起，任何超过100字的书面表达（邮件、报告、微信长文），先写一句话总结，再展开。强制自己"结论先行"。</li>
+      <li>下周写工作邮件时，用 SCQA 结构重写：第一句写共同背景（S），第二句写冲突/问题（C），第三句写你的建议/结论（A）。</li>
+      <li>拿一篇你最近写过的文章或报告，检查每一层的论点是否支撑上一层——找出"上下脱节"的地方，重新修改。</li>
+      <li>练习 MECE 分类：随机选一个主题（如"提升团队效率的方法"），列出所有想法，再试着用 MECE 标准重新分组，看是否有重叠或遗漏。</li>
+      <li>下次开会发言，用"结论+三点支撑"的格式：先说结论，再说"主要有三点原因……"，强迫自己结构化表达。</li>
+      <li>把今天学到的内容，用金字塔结构画一张图（纸笔即可），送给一位同事，教他/她用——费曼技巧，教是最好的学。</li>
+    </ol>
+  </div>
+
+</div>
+
+<footer>
+  每日一学 · 自动化推送 · 2026-05-10<br>
+  思维提升系列 第 13 期 · Powered by WorkBuddy
+</footer>
+
+</body>
+</html>

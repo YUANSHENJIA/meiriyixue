@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>当下的力量 · 思维导图</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+    min-height: 100vh;
+    color: #fff;
+    padding: 20px;
+  }
+  .header {
+    text-align: center;
+    padding: 40px 20px 30px;
+    position: relative;
+  }
+  .book-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #a18cd1, #fbc2eb);
+    color: #1a0533;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    padding: 5px 18px;
+    border-radius: 20px;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+  }
+  .title {
+    font-size: 36px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 50%, #fddb92 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+    letter-spacing: 3px;
+  }
+  .subtitle {
+    font-size: 15px;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 5px;
+  }
+  .author {
+    font-size: 13px;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 1px;
+  }
+  .date-tag {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(161,140,209,0.2);
+    border: 1px solid rgba(161,140,209,0.4);
+    color: rgba(255,255,255,0.7);
+    font-size: 12px;
+    padding: 4px 12px;
+    border-radius: 12px;
+  }
+  .divider {
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, #a18cd1, #fbc2eb);
+    margin: 15px auto;
+    border-radius: 2px;
+  }
+
+  /* Core Insight */
+  .core-insight {
+    max-width: 800px;
+    margin: 0 auto 30px;
+    background: linear-gradient(135deg, rgba(161,140,209,0.15), rgba(251,194,235,0.1));
+    border: 1px solid rgba(161,140,209,0.3);
+    border-radius: 16px;
+    padding: 24px 28px;
+    text-align: center;
+  }
+  .section-label {
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: #fbc2eb;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+  .core-text {
+    font-size: 18px;
+    font-weight: 600;
+    color: #fff;
+    line-height: 1.8;
+  }
+  .core-text em {
+    color: #fbc2eb;
+    font-style: normal;
+  }
+
+  /* Grid layout */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    max-width: 960px;
+    margin: 0 auto 20px;
+  }
+  .grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+    max-width: 960px;
+    margin: 0 auto 20px;
+  }
+  @media (max-width: 700px) {
+    .grid-2 { grid-template-columns: 1fr; }
+    .grid-3 { grid-template-columns: 1fr; }
+  }
+
+  /* Card */
+  .card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 14px;
+    padding: 22px;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+  .card:hover { transform: translateY(-3px); border-color: rgba(161,140,209,0.5); }
+  .card-title {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  /* Framework cards */
+  .fw-card {
+    background: rgba(255,255,255,0.05);
+    border-radius: 14px;
+    padding: 20px;
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: transform 0.2s;
+    text-align: center;
+  }
+  .fw-card:hover { transform: translateY(-3px); }
+  .fw-icon {
+    font-size: 32px;
+    margin-bottom: 10px;
+  }
+  .fw-title {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .fw-desc {
+    font-size: 12px;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.6;
+  }
+  .fw-tag {
+    display: inline-block;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-top: 8px;
+    font-weight: 600;
+    letter-spacing: 1px;
+  }
+
+  /* Colors per framework */
+  .c1 { border-top: 3px solid #a18cd1; }
+  .c1 .fw-tag { background: rgba(161,140,209,0.2); color: #c9b5f0; }
+  .c2 { border-top: 3px solid #fbc2eb; }
+  .c2 .fw-tag { background: rgba(251,194,235,0.2); color: #fdd3f3; }
+  .c3 { border-top: 3px solid #fddb92; }
+  .c3 .fw-tag { background: rgba(253,219,146,0.2); color: #fde9b4; }
+  .c4 { border-top: 3px solid #84fab0; }
+  .c4 .fw-tag { background: rgba(132,250,176,0.2); color: #b0f8cf; }
+
+  /* Knowledge items */
+  .kw-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .kw-item:last-child { border-bottom: none; }
+  .kw-num {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    background: linear-gradient(135deg, #a18cd1, #fbc2eb);
+    border-radius: 50%;
+    font-size: 10px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #1a0533;
+    margin-top: 2px;
+  }
+  .kw-text {
+    font-size: 13px;
+    line-height: 1.6;
+    color: rgba(255,255,255,0.85);
+  }
+  .kw-text strong { color: #c9b5f0; }
+
+  /* Quotes */
+  .quote-item {
+    background: linear-gradient(135deg, rgba(161,140,209,0.1), rgba(251,194,235,0.05));
+    border-left: 3px solid #a18cd1;
+    border-radius: 0 10px 10px 0;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    font-style: italic;
+    color: rgba(255,255,255,0.9);
+    line-height: 1.7;
+  }
+  .quote-item:last-child { margin-bottom: 0; }
+
+  /* Actions */
+  .action-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .action-item:last-child { border-bottom: none; }
+  .action-icon {
+    font-size: 18px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .action-text {
+    font-size: 13px;
+    line-height: 1.6;
+    color: rgba(255,255,255,0.85);
+  }
+  .action-text strong { color: #84fab0; }
+
+  /* Full-width card */
+  .full-card {
+    max-width: 960px;
+    margin: 0 auto 20px;
+  }
+
+  /* Section header */
+  .section-header {
+    max-width: 960px;
+    margin: 30px auto 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-header h2 {
+    font-size: 13px;
+    letter-spacing: 3px;
+    color: rgba(255,255,255,0.5);
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .section-header::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(255,255,255,0.08);
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 30px 20px;
+    color: rgba(255,255,255,0.3);
+    font-size: 12px;
+    letter-spacing: 1px;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="date-tag">2026-05-12</div>
+  <div class="book-badge">每日一学 · 第14期</div>
+  <div class="title">当下的力量</div>
+  <div class="subtitle">The Power of Now</div>
+  <div class="author">埃克哈特·托利（Eckhart Tolle）著</div>
+  <div class="divider"></div>
+</div>
+
+<!-- 核心洞见 -->
+<div class="core-insight">
+  <div class="section-label">✦ 核心洞见</div>
+  <div class="core-text">
+    过去是记忆，未来是想象——<em>真正存在的，只有此刻。</em><br>
+    心理痛苦的根源是<em>对当下的抗拒</em>，而非境况本身；<br>
+    活在当下，即是觉醒的本质，也是自由的入口。
+  </div>
+</div>
+
+<!-- 四大核心框架 -->
+<div class="section-header"><h2>四大核心框架</h2></div>
+<div class="grid-2" style="max-width:960px;margin:0 auto 20px;">
+  <div class="fw-card c1">
+    <div class="fw-icon">🧠</div>
+    <div class="fw-title">痛苦之身（Pain-Body）</div>
+    <div class="fw-desc">积累的情绪能量形成"痛苦之身"，它以负面思维为食，操控人的行为与情绪。觉察痛苦之身，是摆脱它的第一步。</div>
+    <span class="fw-tag">觉察工具</span>
+  </div>
+  <div class="fw-card c2">
+    <div class="fw-icon">⏳</div>
+    <div class="fw-title">心理时间 vs 时钟时间</div>
+    <div class="fw-desc">时钟时间是处理现实事务所需，心理时间是对过去的执念与对未来的焦虑。前者有用，后者是苦难之源。</div>
+    <span class="fw-tag">时间认知</span>
+  </div>
+  <div class="fw-card c3">
+    <div class="fw-icon">🌿</div>
+    <div class="fw-title">临在状态（Presence）</div>
+    <div class="fw-desc">将注意力带回此刻，不评判、不抗拒、不逃避。临在是一种意识状态，比任何问题都更深邃，它是痛苦的终结者。</div>
+    <span class="fw-tag">核心修炼</span>
+  </div>
+  <div class="fw-card c4">
+    <div class="fw-icon">🔮</div>
+    <div class="fw-title">观察者意识</div>
+    <div class="fw-desc">你不是你的思想——你是思想的观察者。当你能观察自己的思维，你就超越了它，进入更高层次的意识。</div>
+    <span class="fw-tag">意识升维</span>
+  </div>
+</div>
+
+<!-- 主要知识点 -->
+<div class="section-header"><h2>主要知识点</h2></div>
+<div class="grid-2" style="max-width:960px;margin:0 auto 20px;">
+  <div class="card">
+    <div class="card-title" style="color:#c9b5f0;">📚 关于自我与思维</div>
+    <div class="kw-item">
+      <div class="kw-num">1</div>
+      <div class="kw-text"><strong>小我（Ego）的本质</strong>：小我是由思维构建的虚假身份，依赖对过去与未来的认同维持存在，它是焦虑、防御与冲突的根源。</div>
+    </div>
+    <div class="kw-item">
+      <div class="kw-num">2</div>
+      <div class="kw-text"><strong>思维不是你</strong>：大多数人被思维所占据，以为自己"就是"那个思维者，但真正的自我是超越思维的意识本体。</div>
+    </div>
+    <div class="kw-item">
+      <div class="kw-num">3</div>
+      <div class="kw-text"><strong>强迫性思维</strong>：无法停止思维是一种痛苦的根源。通过观察自己的思维而不认同它，可以打破强迫性思维的循环。</div>
+    </div>
+    <div class="kw-item">
+      <div class="kw-num">4</div>
+      <div class="kw-text"><strong>内在宁静</strong>：真正的宁静不是没有噪音，而是在噪音中保有的那片空间——临在的状态。</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title" style="color:#fdd3f3;">🔑 关于当下与痛苦</div>
+    <div class="kw-item">
+      <div class="kw-num">5</div>
+      <div class="kw-text"><strong>当下时刻永远是够的</strong>：抵触当下的心理倾向是所有痛苦的根本原因，接受现实并不是软弱，而是觉知的力量。</div>
+    </div>
+    <div class="kw-item">
+      <div class="kw-num">6</div>
+      <div class="kw-text"><strong>痛苦之身的运作</strong>：情绪痛苦累积在能量场中，在特定触发情境下被激活，导致情绪爆发与非理性行为。</div>
+    </div>
+    <div class="kw-item">
+      <div class="kw-num">7</div>
+      <div class="kw-text"><strong>接受 vs 屈服</strong>：接受当下不意味着被动放弃，而是从清晰的内在状态出发，再采取高效行动。</div>
+    </div>
+    <div class="kw-item">
+      <div class="kw-num">8</div>
+      <div class="kw-text"><strong>觉察即转化</strong>：只需将意识带到情绪上，不压制也不放大，情绪自然会消融——觉察本身就是疗愈的力量。</div>
+    </div>
+  </div>
+</div>
+
+<!-- 金句 -->
+<div class="section-header"><h2>金句精选</h2></div>
+<div class="full-card">
+  <div class="card">
+    <div class="quote-item">
+      "你无法在当下时刻中找到任何问题。你可以找到痛苦、困难，但不是问题，因为问题意味着你的思维把某种情境过度渲染了。"
+    </div>
+    <div class="quote-item">
+      "时间是一种幻觉，你总是在当下，这是唯一存在的时刻。"
+    </div>
+    <div class="quote-item">
+      "小我认同于自己的痛苦，因为它将痛苦视为自我的一部分；放下痛苦，就像是放下自我本身，这正是让人难以做到的原因。"
+    </div>
+    <div class="quote-item">
+      "临在是你能给予他人的最大礼物，也是你给予自己的最深慈悲。"
+    </div>
+    <div class="quote-item">
+      "如果你发现自己无法进入临在，那就去观察你无法进入临在这个事实——观察本身就是临在的开始。"
+    </div>
+  </div>
+</div>
+
+<!-- 行动建议 -->
+<div class="section-header"><h2>行动建议</h2></div>
+<div class="full-card">
+  <div class="card">
+    <div class="action-item">
+      <div class="action-icon">🧘</div>
+      <div class="action-text"><strong>每日一分钟临在练习：</strong>每天设定3次提醒，每次停下手边工作，深呼吸，将注意力集中在身体感受上，感受此刻的存在——这是最简单的临在训练。</div>
+    </div>
+    <div class="action-item">
+      <div class="action-icon">👁️</div>
+      <div class="action-text"><strong>观察者训练：</strong>当你感到焦虑或烦躁时，不要试图压制，而是问自己："我现在有什么情绪？"——用观察者的视角注视情绪，而非被情绪淹没。</div>
+    </div>
+    <div class="action-item">
+      <div class="action-icon">⏰</div>
+      <div class="action-text"><strong>停止心理时间的旅行：</strong>每当你发现自己在反复回忆过去或担忧未来时，轻轻将注意力拉回："现在，此刻，我需要做什么？"只处理当下可以处理的事。</div>
+    </div>
+    <div class="action-item">
+      <div class="action-icon">💬</div>
+      <div class="action-text"><strong>减少自动评判：</strong>练习"看见但不评判"——看到一朵花，不说"漂亮"，只是感受它；见到一个人，不急于分类，只是临在地感知。一周后你会发现内心杂音明显减少。</div>
+    </div>
+    <div class="action-item">
+      <div class="action-icon">📖</div>
+      <div class="action-text"><strong>痛苦之身日记：</strong>记录一周内触发你强烈情绪反应的事件，找出规律。情绪反应越剧烈的地方，越可能是积累的痛苦之身在起作用，而非真正的当下威胁。</div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  每日一学 · 2026-05-12 · 《当下的力量》Eckhart Tolle<br>
+  Power of Now · Presence · Consciousness · Inner Peace
+</div>
+
+</body>
+</html>

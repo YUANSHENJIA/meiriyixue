@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 学会提问 — 批判性思维指南</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+    min-height: 100vh;
+    color: #e0f0ff;
+    padding: 20px;
+  }
+  .header {
+    text-align: center;
+    padding: 40px 20px 30px;
+    position: relative;
+  }
+  .date-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 20px;
+    padding: 4px 16px;
+    font-size: 13px;
+    color: #a0c8e8;
+    margin-bottom: 14px;
+    letter-spacing: 1px;
+  }
+  .book-title {
+    font-size: 36px;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: 2px;
+    text-shadow: 0 2px 20px rgba(0,200,255,0.4);
+    margin-bottom: 8px;
+  }
+  .book-subtitle {
+    font-size: 16px;
+    color: #7ec8e3;
+    margin-bottom: 6px;
+  }
+  .book-author {
+    font-size: 14px;
+    color: #a0b8c8;
+  }
+  .tagline {
+    margin-top: 18px;
+    font-size: 15px;
+    color: #c0ddf0;
+    font-style: italic;
+    opacity: 0.85;
+  }
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .section {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 28px 28px 24px;
+    margin-bottom: 20px;
+    backdrop-filter: blur(8px);
+    transition: transform 0.2s;
+  }
+  .section:hover { transform: translateY(-2px); }
+  .section-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #7ec8e3;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid rgba(126,200,227,0.25);
+    padding-bottom: 10px;
+  }
+  .section-icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  /* ① 核心洞见 */
+  .insight-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 14px;
+  }
+  .insight-card {
+    background: rgba(126,200,227,0.08);
+    border: 1px solid rgba(126,200,227,0.2);
+    border-radius: 12px;
+    padding: 16px;
+  }
+  .insight-card .ic-num {
+    font-size: 28px; font-weight: 900; color: #7ec8e3; opacity: 0.4; line-height: 1;
+  }
+  .insight-card .ic-title { font-size: 14px; font-weight: 700; color: #c0eaff; margin: 6px 0 5px; }
+  .insight-card .ic-desc { font-size: 13px; color: #a0c0d8; line-height: 1.7; }
+
+  /* ② 核心框架 */
+  .framework-flow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+  }
+  .fw-step {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 12px;
+    padding: 14px 18px;
+    min-width: 120px;
+    text-align: center;
+    position: relative;
+    flex: 1 1 140px;
+  }
+  .fw-step .step-num {
+    font-size: 10px; color: #7ec8e3; font-weight: 700; letter-spacing: 1px; margin-bottom: 6px;
+  }
+  .fw-step .step-title { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 5px; }
+  .fw-step .step-desc { font-size: 12px; color: #a0c0d8; line-height: 1.6; }
+  .fw-arrow {
+    display: flex; align-items: center; justify-content: center;
+    color: #7ec8e3; font-size: 20px; font-weight: bold;
+    padding-top: 20px;
+  }
+
+  /* ③ 主要知识点 */
+  .knowledge-list { display: flex; flex-direction: column; gap: 12px; }
+  .kn-item {
+    display: flex; gap: 14px; align-items: flex-start;
+    background: rgba(255,255,255,0.04);
+    border-left: 3px solid #7ec8e3;
+    border-radius: 0 10px 10px 0;
+    padding: 13px 16px;
+  }
+  .kn-tag {
+    background: rgba(126,200,227,0.15);
+    color: #7ec8e3;
+    border-radius: 6px;
+    padding: 2px 8px;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .kn-content { font-size: 13px; color: #c0ddf0; line-height: 1.75; }
+  .kn-content strong { color: #fff; }
+
+  /* ④ 金句 */
+  .quotes-list { display: flex; flex-direction: column; gap: 14px; }
+  .quote-card {
+    background: linear-gradient(135deg, rgba(126,200,227,0.08), rgba(126,200,227,0.03));
+    border: 1px solid rgba(126,200,227,0.2);
+    border-radius: 12px;
+    padding: 18px 20px;
+    position: relative;
+  }
+  .quote-card::before {
+    content: '"';
+    position: absolute; top: 8px; left: 14px;
+    font-size: 48px; color: #7ec8e3; opacity: 0.25; line-height: 1; font-family: Georgia;
+  }
+  .quote-text { font-size: 15px; color: #e0f0ff; line-height: 1.8; padding-left: 24px; font-style: italic; }
+  .quote-source { font-size: 12px; color: #7ea8c0; margin-top: 8px; padding-left: 24px; }
+
+  /* ⑤ 行动建议 */
+  .action-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px;
+  }
+  .action-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 12px;
+    padding: 16px;
+  }
+  .action-card .ac-step {
+    font-size: 11px; color: #7ec8e3; font-weight: 700; letter-spacing: 1px; margin-bottom: 8px;
+  }
+  .action-card .ac-title { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+  .action-card .ac-desc { font-size: 12px; color: #a0c0d8; line-height: 1.7; }
+
+  /* 思维导图部分 */
+  .mindmap-section {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 28px;
+    margin-bottom: 20px;
+    overflow-x: auto;
+  }
+  .mindmap-title {
+    font-size: 16px; font-weight: 700; color: #7ec8e3;
+    margin-bottom: 24px; text-align: center; letter-spacing: 1px;
+  }
+  .mindmap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    min-width: 600px;
+  }
+  .mm-center {
+    background: linear-gradient(135deg, #1a6b8a, #0f4f6b);
+    border: 2px solid #7ec8e3;
+    border-radius: 16px;
+    padding: 18px 24px;
+    text-align: center;
+    min-width: 130px;
+    box-shadow: 0 0 30px rgba(126,200,227,0.25);
+    flex-shrink: 0;
+  }
+  .mm-center .mc-title { font-size: 16px; font-weight: 800; color: #fff; }
+  .mm-center .mc-sub { font-size: 11px; color: #a0d0e8; margin-top: 4px; }
+  .mm-branches {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-left: 24px;
+  }
+  .mm-branch {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .mm-line {
+    width: 30px; height: 2px;
+    background: rgba(126,200,227,0.4);
+    flex-shrink: 0;
+  }
+  .mm-node {
+    background: rgba(126,200,227,0.1);
+    border: 1px solid rgba(126,200,227,0.3);
+    border-radius: 10px;
+    padding: 8px 14px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #c0eaff;
+    min-width: 110px;
+  }
+  .mm-leaves {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-left: 10px;
+  }
+  .mm-leaf {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    padding: 5px 12px;
+    font-size: 12px;
+    color: #a0c8e0;
+  }
+
+  /* 底部 */
+  .footer {
+    text-align: center;
+    padding: 30px 20px 10px;
+    font-size: 12px;
+    color: rgba(160,200,220,0.5);
+    letter-spacing: 1px;
+  }
+
+  @media (max-width: 600px) {
+    .book-title { font-size: 26px; }
+    .section { padding: 20px 16px; }
+    .fw-arrow { display: none; }
+    .mindmap { min-width: 340px; }
+    .mm-leaves { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <!-- 头部 -->
+  <div class="header">
+    <div class="date-badge">📅 每日一学 · 2026-04-23</div>
+    <div class="book-title">学会提问</div>
+    <div class="book-subtitle">Asking the Right Questions: A Guide to Critical Thinking</div>
+    <div class="book-author">作者：尼尔·布朗（Neil Browne）& 斯图尔特·基利（Stuart Keeley）</div>
+    <div class="tagline">「不会提问的人，注定被别人的答案所控制。」</div>
+  </div>
+
+  <!-- 思维导图 -->
+  <div class="mindmap-section">
+    <div class="mindmap-title">🗺 核心框架思维导图</div>
+    <div class="mindmap">
+      <div class="mm-center">
+        <div class="mc-title">学会提问</div>
+        <div class="mc-sub">批判性思维 10步法</div>
+      </div>
+      <div class="mm-branches">
+        <div class="mm-branch">
+          <div class="mm-line"></div>
+          <div class="mm-node">① 识别论题</div>
+          <div class="mm-leaves">
+            <div class="mm-leaf">描述性 vs 规范性</div>
+            <div class="mm-leaf">找到真正的问题</div>
+          </div>
+        </div>
+        <div class="mm-branch">
+          <div class="mm-line"></div>
+          <div class="mm-node">② 辨别结论</div>
+          <div class="mm-leaves">
+            <div class="mm-leaf">作者真实主张</div>
+            <div class="mm-leaf">明示 vs 隐含</div>
+          </div>
+        </div>
+        <div class="mm-branch">
+          <div class="mm-line"></div>
+          <div class="mm-node">③ 找出理由</div>
+          <div class="mm-leaves">
+            <div class="mm-leaf">支撑结论的依据</div>
+            <div class="mm-leaf">前提与假设</div>
+          </div>
+        </div>
+        <div class="mm-branch">
+          <div class="mm-line"></div>
+          <div class="mm-node">④ 评价论证</div>
+          <div class="mm-leaves">
+            <div class="mm-leaf">演绎 / 归纳</div>
+            <div class="mm-leaf">是否有效？</div>
+          </div>
+        </div>
+        <div class="mm-branch">
+          <div class="mm-line"></div>
+          <div class="mm-node">⑤ 寻找谬误</div>
+          <div class="mm-leaves">
+            <div class="mm-leaf">人身攻击</div>
+            <div class="mm-leaf">滑坡谬误</div>
+            <div class="mm-leaf">诉诸权威</div>
+          </div>
+        </div>
+        <div class="mm-branch">
+          <div class="mm-line"></div>
+          <div class="mm-node">⑥ 检验证据</div>
+          <div class="mm-leaves">
+            <div class="mm-leaf">数据可信度</div>
+            <div class="mm-leaf">来源质量</div>
+          </div>
+        </div>
+        <div class="mm-branch">
+          <div class="mm-line"></div>
+          <div class="mm-node">⑦ 歧义分析</div>
+          <div class="mm-leaves">
+            <div class="mm-leaf">关键词的定义</div>
+            <div class="mm-leaf">语境偷换</div>
+          </div>
+        </div>
+        <div class="mm-branch">
+          <div class="mm-line"></div>
+          <div class="mm-node">⑧ 隐含假设</div>
+          <div class="mm-leaves">
+            <div class="mm-leaf">价值观预设</div>
+            <div class="mm-leaf">事实假设</div>
+          </div>
+        </div>
+        <div class="mm-branch">
+          <div class="mm-line"></div>
+          <div class="mm-node">⑨ 替代方案</div>
+          <div class="mm-leaves">
+            <div class="mm-leaf">其他可能解释</div>
+            <div class="mm-leaf">多元视角</div>
+          </div>
+        </div>
+        <div class="mm-branch">
+          <div class="mm-line"></div>
+          <div class="mm-node">⑩ 综合判断</div>
+          <div class="mm-leaves">
+            <div class="mm-leaf">理性结论</div>
+            <div class="mm-leaf">保留开放性</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ① 核心洞见 -->
+  <div class="section">
+    <div class="section-title">
+      <div class="section-icon" style="background:rgba(126,200,227,0.15);">💡</div>
+      核心洞见
+    </div>
+    <div class="insight-grid">
+      <div class="insight-card">
+        <div class="ic-num">01</div>
+        <div class="ic-title">海绵式 vs 淘金式思维</div>
+        <div class="ic-desc">大多数人像海绵一样吸收信息，被动接受；批判性思维者像淘金者，主动筛选、质疑、评估，找到真正有价值的内容。</div>
+      </div>
+      <div class="insight-card">
+        <div class="ic-num">02</div>
+        <div class="ic-title">提问才是思维的核动力</div>
+        <div class="ic-desc">好的问题比好的答案更重要。面对任何主张，先问"凭什么？""你如何得出这个结论？"而不是默默接受。</div>
+      </div>
+      <div class="insight-card">
+        <div class="ic-num">03</div>
+        <div class="ic-title">语言是操控的温床</div>
+        <div class="ic-desc">模糊词汇、情绪化措辞、定义偷换是话术的核心工具。识别关键词的歧义性，是防御信息操控的第一道防线。</div>
+      </div>
+      <div class="insight-card">
+        <div class="ic-num">04</div>
+        <div class="ic-title">结论不等于事实</div>
+        <div class="ic-desc">任何人提出的结论都只是推断，再权威的来源也需要检验其理由和证据。不迷信权威，是成熟思维者的基本素质。</div>
+      </div>
+      <div class="insight-card">
+        <div class="ic-num">05</div>
+        <div class="ic-title">强弱两种论证方式</div>
+        <div class="ic-desc">演绎论证（必然推出）VS归纳论证（概率推出）。识别论证类型，才能准确判断其说服力的边界在哪里。</div>
+      </div>
+      <div class="insight-card">
+        <div class="ic-num">06</div>
+        <div class="ic-title">开放性是批判思维的底色</div>
+        <div class="ic-desc">批判性思维不是为了"赢得辩论"，而是为了更接近真相。对自己的结论也保持质疑，才是真正的智识诚实。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ② 核心框架 -->
+  <div class="section">
+    <div class="section-title">
+      <div class="section-icon" style="background:rgba(100,180,220,0.15);">🧩</div>
+      核心框架 · 批判性思维 10步提问法
+    </div>
+    <div class="framework-flow">
+      <div class="fw-step">
+        <div class="step-num">STEP 01</div>
+        <div class="step-title">识别论题</div>
+        <div class="step-desc">这是在讨论什么问题？是描述性还是规范性议题？</div>
+      </div>
+      <div class="fw-arrow">›</div>
+      <div class="fw-step">
+        <div class="step-num">STEP 02</div>
+        <div class="step-title">辨别结论</div>
+        <div class="step-desc">作者最终想让你相信什么？找到核心主张。</div>
+      </div>
+      <div class="fw-arrow">›</div>
+      <div class="fw-step">
+        <div class="step-num">STEP 03</div>
+        <div class="step-title">找出理由</div>
+        <div class="step-desc">支撑结论的理由是什么？有哪些前提和假设？</div>
+      </div>
+      <div class="fw-arrow">›</div>
+      <div class="fw-step">
+        <div class="step-num">STEP 04</div>
+        <div class="step-title">澄清歧义</div>
+        <div class="step-desc">关键词是否存在多种解读？有无偷换定义？</div>
+      </div>
+      <div class="fw-arrow">›</div>
+      <div class="fw-step">
+        <div class="step-num">STEP 05</div>
+        <div class="step-title">评估证据</div>
+        <div class="step-desc">数据从何而来？样本是否有效？来源是否可靠？</div>
+      </div>
+    </div>
+    <div style="margin-top:12px;">
+    <div class="framework-flow">
+      <div class="fw-step">
+        <div class="step-num">STEP 06</div>
+        <div class="step-title">检视假设</div>
+        <div class="step-desc">论证背后隐含了哪些价值观或事实假设？</div>
+      </div>
+      <div class="fw-arrow">›</div>
+      <div class="fw-step">
+        <div class="step-num">STEP 07</div>
+        <div class="step-title">发现谬误</div>
+        <div class="step-desc">有无人身攻击、稻草人、滑坡、诉诸权威等逻辑谬误？</div>
+      </div>
+      <div class="fw-arrow">›</div>
+      <div class="fw-step">
+        <div class="step-num">STEP 08</div>
+        <div class="step-title">统计陷阱</div>
+        <div class="step-desc">数字是否被误用？平均值/百分比是否具有误导性？</div>
+      </div>
+      <div class="fw-arrow">›</div>
+      <div class="fw-step">
+        <div class="step-num">STEP 09</div>
+        <div class="step-title">替代解释</div>
+        <div class="step-desc">除了作者的解释，还有哪些合理的替代方案？</div>
+      </div>
+      <div class="fw-arrow">›</div>
+      <div class="fw-step">
+        <div class="step-num">STEP 10</div>
+        <div class="step-title">综合判断</div>
+        <div class="step-desc">基于以上，这个结论值得相信到什么程度？</div>
+      </div>
+    </div>
+    </div>
+  </div>
+
+  <!-- ③ 主要知识点 -->
+  <div class="section">
+    <div class="section-title">
+      <div class="section-icon" style="background:rgba(80,160,200,0.15);">📖</div>
+      主要知识点
+    </div>
+    <div class="knowledge-list">
+      <div class="kn-item">
+        <div class="kn-tag">论题识别</div>
+        <div class="kn-content"><strong>描述性论题</strong>关注"世界是什么样的"（事实），<strong>规范性论题</strong>关注"世界应该怎样"（价值判断）。混淆两者是许多争论无法解决的根本原因。</div>
+      </div>
+      <div class="kn-item">
+        <div class="kn-tag">逻辑谬误</div>
+        <div class="kn-content">常见谬误包括：<strong>诉诸权威</strong>（某专家说→不一定对）、<strong>人身攻击</strong>（攻击提议者而非议题）、<strong>稻草人谬误</strong>（歪曲对方观点再反驳）、<strong>滑坡谬误</strong>（A→必然导致Z的极端推断）、<strong>虚假二分</strong>（非此即彼的假设）。</div>
+      </div>
+      <div class="kn-item">
+        <div class="kn-tag">证据评估</div>
+        <div class="kn-content">判断证据质量的三要素：<strong>来源可靠性</strong>（谁提供的？有无利益冲突？）、<strong>样本代表性</strong>（是否足够大、是否随机抽取？）、<strong>研究方法</strong>（相关性≠因果关系，不可混淆）。</div>
+      </div>
+      <div class="kn-item">
+        <div class="kn-tag">统计陷阱</div>
+        <div class="kn-content"><strong>平均值的谎言</strong>：均值可能被极端值严重扭曲，中位数更有代表性。<strong>基数陷阱</strong>：百分比变化需结合绝对值理解。<strong>忽略对照组</strong>：没有对照组的数据几乎毫无意义。</div>
+      </div>
+      <div class="kn-item">
+        <div class="kn-tag">隐含假设</div>
+        <div class="kn-content">每个论证背后都有<strong>价值假设</strong>（认为什么更重要）和<strong>事实假设</strong>（对现实的预设判断）。挖出这些假设，才能真正理解对方的论证基础，也才能有效反驳或认同。</div>
+      </div>
+      <div class="kn-item">
+        <div class="kn-tag">歧义分析</div>
+        <div class="kn-content">议论中的关键词往往存在多种含义。说"成功"时，你指的是财富、名声、还是内心满足？识别<strong>关键词歧义</strong>是理解争论双方为何各说各话的关键。</div>
+      </div>
+      <div class="kn-item">
+        <div class="kn-tag">相关 vs 因果</div>
+        <div class="kn-content">两件事同时发生≠一件事导致了另一件事。理解<strong>第三变量的干扰</strong>、<strong>逆向因果</strong>、<strong>巧合相关</strong>这三种情况，是避免被统计数据误导的核心技能。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ④ 金句 -->
+  <div class="section">
+    <div class="section-title">
+      <div class="section-icon" style="background:rgba(60,140,180,0.15);">✨</div>
+      金句精选
+    </div>
+    <div class="quotes-list">
+      <div class="quote-card">
+        <div class="quote-text">不能有效提问，就只能被动接受别人告诉你的一切。批判性思维不是批评，而是一种对真相负责的态度。</div>
+        <div class="quote-source">— 尼尔·布朗 & 斯图尔特·基利《学会提问》</div>
+      </div>
+      <div class="quote-card">
+        <div class="quote-text">海绵式思维获得信息，但淘金式思维才能识别价值。好的思考者既吸收又筛选。</div>
+        <div class="quote-source">— 《学会提问》核心比喻</div>
+      </div>
+      <div class="quote-card">
+        <div class="quote-text">当你听到"研究表明……"，第一个反应应该是："哪项研究？谁做的？样本多大？有无利益冲突？"</div>
+        <div class="quote-source">— 批判性思维实践要点</div>
+      </div>
+      <div class="quote-card">
+        <div class="quote-text">结论不是终点，而是起点。每一个结论背后，都藏着一套需要被检验的假设和理由。</div>
+        <div class="quote-source">— 《学会提问》方法论精髓</div>
+      </div>
+      <div class="quote-card">
+        <div class="quote-text">弱势批判性思维：用逻辑工具为自己辩护。强势批判性思维：用逻辑工具逼近真相，哪怕结果不利于自己。</div>
+        <div class="quote-source">— 批判性思维的两种层次</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ⑤ 行动建议 -->
+  <div class="section">
+    <div class="section-title">
+      <div class="section-icon" style="background:rgba(40,120,160,0.15);">🎯</div>
+      行动建议
+    </div>
+    <div class="action-grid">
+      <div class="action-card">
+        <div class="ac-step">ACTION 01</div>
+        <div class="ac-title">建立"凭什么"反射</div>
+        <div class="ac-desc">每次接收到重要结论时，立即问自己：这个结论的理由是什么？支撑的证据是什么？养成自动质疑的习惯。</div>
+      </div>
+      <div class="action-card">
+        <div class="ac-step">ACTION 02</div>
+        <div class="ac-title">阅读时标注结构</div>
+        <div class="ac-desc">读文章时标出：论题是什么 / 结论是什么 / 理由是什么。三者找清楚，才能评估文章是否言之有据。</div>
+      </div>
+      <div class="action-card">
+        <div class="ac-step">ACTION 03</div>
+        <div class="ac-title">认识10种逻辑谬误</div>
+        <div class="ac-desc">背下常见逻辑谬误的名称和模式，让识别谬误成为即时反应，而非事后反思。可制作一张速查卡片。</div>
+      </div>
+      <div class="action-card">
+        <div class="ac-step">ACTION 04</div>
+        <div class="ac-title">看新闻时检验数据</div>
+        <div class="ac-desc">遇到数字时问：这个数据的来源是？基数是多少？有无对照组？只用百分比说事的报道要格外警惕。</div>
+      </div>
+      <div class="action-card">
+        <div class="ac-step">ACTION 05</div>
+        <div class="ac-title">主动寻找反方观点</div>
+        <div class="ac-desc">对于重要决策，主动搜索"最强的反对意见是什么"。如果无法反驳对立论点，你对自己观点的信心就应该打折。</div>
+      </div>
+      <div class="action-card">
+        <div class="ac-step">ACTION 06</div>
+        <div class="ac-title">每周反思一次决策</div>
+        <div class="ac-desc">复盘上周一个重要判断：我当时的理由是什么？现在看来，那些理由充分吗？有无我忽视的假设？</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    每日一学 · 2026-04-23 · 学会提问：批判性思维指南<br>
+    Asking the Right Questions · Neil Browne & Stuart Keeley
+  </div>
+</div>
+
+</body>
+</html>

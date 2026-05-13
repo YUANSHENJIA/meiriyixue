@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 掌控习惯 | 2026-04-28</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+    min-height: 100vh;
+    color: #e8e8f0;
+    padding: 20px;
+  }
+  .header {
+    text-align: center;
+    padding: 40px 20px 30px;
+    position: relative;
+  }
+  .date-badge {
+    display: inline-block;
+    background: rgba(99,102,241,0.3);
+    border: 1px solid rgba(99,102,241,0.6);
+    color: #a5b4fc;
+    font-size: 13px;
+    padding: 4px 16px;
+    border-radius: 20px;
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+  }
+  .book-title {
+    font-size: 42px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #818cf8, #c084fc, #f472b6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+    line-height: 1.2;
+  }
+  .book-subtitle {
+    font-size: 18px;
+    color: #a5b4fc;
+    margin-bottom: 6px;
+    letter-spacing: 1px;
+  }
+  .author {
+    font-size: 14px;
+    color: #7c7c9e;
+    margin-bottom: 4px;
+  }
+  .tagline {
+    font-size: 16px;
+    color: #c084fc;
+    font-style: italic;
+    margin-top: 10px;
+  }
+
+  /* 核心洞见 */
+  .section {
+    max-width: 960px;
+    margin: 20px auto;
+    background: rgba(255,255,255,0.05);
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.1);
+    overflow: hidden;
+  }
+  .section-header {
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .section-icon { font-size: 24px; }
+  .section-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #e2e8f0;
+  }
+  .section-body { padding: 20px 24px; }
+
+  /* 核心洞见卡片 */
+  .insight-card {
+    background: linear-gradient(135deg, rgba(99,102,241,0.15), rgba(192,132,252,0.1));
+    border: 1px solid rgba(99,102,241,0.4);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+  }
+  .insight-card:last-child { margin-bottom: 0; }
+  .insight-num {
+    display: inline-block;
+    background: linear-gradient(135deg, #6366f1, #a855f7);
+    color: white;
+    font-size: 12px;
+    font-weight: 700;
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 26px;
+    margin-bottom: 10px;
+  }
+  .insight-text {
+    font-size: 15px;
+    line-height: 1.8;
+    color: #d1d5db;
+  }
+  .insight-highlight {
+    color: #c084fc;
+    font-weight: 600;
+  }
+
+  /* 四大核心框架 */
+  .framework-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  @media (max-width: 600px) {
+    .framework-grid { grid-template-columns: 1fr; }
+    .book-title { font-size: 30px; }
+  }
+  .framework-card {
+    border-radius: 12px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .f1 { background: linear-gradient(135deg, rgba(99,102,241,0.25), rgba(99,102,241,0.1)); border: 1px solid rgba(99,102,241,0.5); }
+  .f2 { background: linear-gradient(135deg, rgba(168,85,247,0.25), rgba(168,85,247,0.1)); border: 1px solid rgba(168,85,247,0.5); }
+  .f3 { background: linear-gradient(135deg, rgba(236,72,153,0.25), rgba(236,72,153,0.1)); border: 1px solid rgba(236,72,153,0.5); }
+  .f4 { background: linear-gradient(135deg, rgba(14,165,233,0.25), rgba(14,165,233,0.1)); border: 1px solid rgba(14,165,233,0.5); }
+  .f-num {
+    font-size: 48px;
+    font-weight: 900;
+    opacity: 0.12;
+    position: absolute;
+    top: 8px; right: 16px;
+    line-height: 1;
+  }
+  .f-icon { font-size: 28px; margin-bottom: 10px; }
+  .f-name { font-size: 17px; font-weight: 700; color: #f1f5f9; margin-bottom: 8px; }
+  .f-eng { font-size: 12px; color: #94a3b8; margin-bottom: 10px; letter-spacing: 1px; }
+  .f-desc { font-size: 13px; color: #cbd5e1; line-height: 1.7; }
+  .f-steps { margin-top: 10px; }
+  .f-step {
+    font-size: 12px;
+    color: #a5b4fc;
+    padding: 3px 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  .f-step::before { content: '▸'; flex-shrink: 0; margin-top: 1px; }
+
+  /* 主要知识点 */
+  .knowledge-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+  @media (max-width: 700px) {
+    .knowledge-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 480px) {
+    .knowledge-grid { grid-template-columns: 1fr; }
+  }
+  .know-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px;
+    padding: 16px;
+    transition: all 0.2s;
+  }
+  .know-card:hover {
+    background: rgba(99,102,241,0.1);
+    border-color: rgba(99,102,241,0.4);
+    transform: translateY(-2px);
+  }
+  .know-icon { font-size: 22px; margin-bottom: 8px; }
+  .know-title { font-size: 14px; font-weight: 700; color: #e2e8f0; margin-bottom: 6px; }
+  .know-desc { font-size: 12px; color: #94a3b8; line-height: 1.6; }
+
+  /* 金句 */
+  .quote-list { list-style: none; }
+  .quote-item {
+    padding: 16px 20px;
+    border-left: 3px solid;
+    margin-bottom: 14px;
+    border-radius: 0 10px 10px 0;
+    background: rgba(255,255,255,0.03);
+    font-size: 15px;
+    line-height: 1.7;
+    color: #d1d5db;
+    font-style: italic;
+  }
+  .quote-item:nth-child(1) { border-color: #6366f1; }
+  .quote-item:nth-child(2) { border-color: #a855f7; }
+  .quote-item:nth-child(3) { border-color: #ec4899; }
+  .quote-item:nth-child(4) { border-color: #06b6d4; }
+  .quote-item:nth-child(5) { border-color: #10b981; }
+  .quote-em { color: #f1f5f9; font-weight: 600; font-style: normal; }
+
+  /* 行动建议 */
+  .action-list { list-style: none; }
+  .action-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 14px 16px;
+    margin-bottom: 12px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.07);
+    transition: all 0.2s;
+  }
+  .action-item:hover {
+    background: rgba(99,102,241,0.08);
+    border-color: rgba(99,102,241,0.3);
+  }
+  .action-num {
+    flex-shrink: 0;
+    width: 28px; height: 28px;
+    background: linear-gradient(135deg, #6366f1, #a855f7);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; color: white;
+  }
+  .action-content {}
+  .action-title { font-size: 14px; font-weight: 700; color: #e2e8f0; margin-bottom: 4px; }
+  .action-desc { font-size: 12px; color: #94a3b8; line-height: 1.6; }
+
+  /* 习惯定律思维导图区域 */
+  .mindmap-center {
+    text-align: center;
+    padding: 10px 0 20px;
+  }
+  .mindmap-wrap {
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+  }
+  .law-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-top: 16px;
+  }
+  @media (max-width: 560px) {
+    .law-grid { grid-template-columns: 1fr; }
+  }
+  .law-card {
+    border-radius: 14px;
+    padding: 20px;
+    position: relative;
+  }
+  .law1 { background: linear-gradient(135deg, #1e1b4b, #312e81); border: 1px solid #4338ca; }
+  .law2 { background: linear-gradient(135deg, #2e1065, #4a044e); border: 1px solid #7e22ce; }
+  .law3 { background: linear-gradient(135deg, #1a1a2e, #16213e); border: 1px solid #2563eb; }
+  .law4 { background: linear-gradient(135deg, #064e3b, #065f46); border: 1px solid #059669; }
+  .law-num {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    opacity: 0.6;
+    margin-bottom: 6px;
+  }
+  .law-title { font-size: 20px; font-weight: 800; margin-bottom: 8px; }
+  .law1 .law-title { color: #818cf8; }
+  .law2 .law-title { color: #c084fc; }
+  .law3 .law-title { color: #60a5fa; }
+  .law4 .law-title { color: #34d399; }
+  .law-sub { font-size: 13px; color: #94a3b8; margin-bottom: 12px; }
+  .law-pair {
+    display: flex;
+    gap: 10px;
+  }
+  .law-good, .law-bad {
+    flex: 1;
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+  .law-good {
+    background: rgba(74,222,128,0.1);
+    border: 1px solid rgba(74,222,128,0.3);
+  }
+  .law-bad {
+    background: rgba(248,113,113,0.1);
+    border: 1px solid rgba(248,113,113,0.3);
+  }
+  .pair-label {
+    font-size: 10px;
+    letter-spacing: 1px;
+    font-weight: 700;
+    margin-bottom: 5px;
+  }
+  .law-good .pair-label { color: #4ade80; }
+  .law-bad .pair-label { color: #f87171; }
+  .pair-text { color: #d1d5db; line-height: 1.6; }
+
+  /* identity section */
+  .identity-box {
+    background: linear-gradient(135deg, rgba(99,102,241,0.2), rgba(168,85,247,0.15));
+    border: 1px solid rgba(99,102,241,0.5);
+    border-radius: 14px;
+    padding: 24px;
+    text-align: center;
+  }
+  .identity-icon { font-size: 40px; margin-bottom: 12px; }
+  .identity-title { font-size: 20px; font-weight: 800; color: #e2e8f0; margin-bottom: 10px; }
+  .identity-desc { font-size: 14px; color: #a5b4fc; line-height: 1.8; }
+  .identity-example {
+    margin-top: 16px;
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .id-chip {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-size: 13px;
+    color: #c7d2fe;
+  }
+  .id-chip.new {
+    background: rgba(99,102,241,0.25);
+    border-color: rgba(99,102,241,0.6);
+    color: #a5b4fc;
+  }
+
+  /* footer */
+  .footer {
+    text-align: center;
+    padding: 30px 20px;
+    color: #4b5563;
+    font-size: 12px;
+    letter-spacing: 1px;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="date-badge">2026 · 04 · 28 &nbsp;每日一学</div>
+  <div class="book-title">掌控习惯</div>
+  <div class="book-subtitle">Atomic Habits</div>
+  <div class="author">詹姆斯·克利尔（James Clear）著</div>
+  <div class="tagline">微小改变，非凡成就 · 1% 的每日进步，一年后你将好 37 倍</div>
+</div>
+
+<!-- 核心洞见 -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-icon">💡</span>
+    <span class="section-title">核心洞见</span>
+  </div>
+  <div class="section-body">
+    <div class="insight-card">
+      <div class="insight-num">1</div>
+      <div class="insight-text">
+        习惯改变的关键不是<span class="insight-highlight">目标</span>，而是<span class="insight-highlight">系统</span>。赢家和输家有相同的目标，区别只在于他们建立了什么样的系统。目标是你想要达到的结果，系统是导致这些结果的过程。
+      </div>
+    </div>
+    <div class="insight-card">
+      <div class="insight-num">2</div>
+      <div class="insight-text">
+        习惯改变的本质是<span class="insight-highlight">身份认同的转变</span>，而非结果导向。大多数人关注"我想减掉20斤"（结果），而真正持久的改变来自"我是一个健康的人"（身份）。每一个习惯行为都是对你想成为谁的一张选票。
+      </div>
+    </div>
+    <div class="insight-card">
+      <div class="insight-num">3</div>
+      <div class="insight-text">
+        <span class="insight-highlight">复利效应</span>的力量被严重低估。每天进步1%，一年后你将比现在好37倍；每天退步1%，一年后你将衰退到接近于零。微小改变看起来微不足道，但它们是宏大结果的组成部分。
+      </div>
+    </div>
+    <div class="insight-card">
+      <div class="insight-num">4</div>
+      <div class="insight-text">
+        人类大脑遵循<span class="insight-highlight">四步习惯回路</span>：提示 → 渴望 → 反应 → 奖励。理解并设计这四个环节，是掌控任何习惯的核心方法论。
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 四大法则 核心框架 -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-icon">⚙️</span>
+    <span class="section-title">四大核心框架：习惯四定律</span>
+  </div>
+  <div class="section-body">
+    <div class="law-grid">
+      <!-- 第一定律 -->
+      <div class="law-card law1">
+        <div class="law-num">第一定律</div>
+        <div class="law-title">让它显而易见</div>
+        <div class="law-sub">Make it Obvious · 操控「提示」</div>
+        <div class="law-pair">
+          <div class="law-good">
+            <div class="pair-label">建立好习惯</div>
+            <div class="pair-text">设计环境，让好习惯的提示随处可见；实施习惯叠加（If X then Y）</div>
+          </div>
+          <div class="law-bad">
+            <div class="pair-label">打破坏习惯</div>
+            <div class="pair-text">让坏习惯的诱因隐形；从视野中移除触发器</div>
+          </div>
+        </div>
+      </div>
+      <!-- 第二定律 -->
+      <div class="law-card law2">
+        <div class="law-num">第二定律</div>
+        <div class="law-title">让它有吸引力</div>
+        <div class="law-sub">Make it Attractive · 操控「渴望」</div>
+        <div class="law-pair">
+          <div class="law-good">
+            <div class="pair-label">建立好习惯</div>
+            <div class="pair-text">诱惑捆绑法：将你需要做的与你想做的结合；加入习惯文化圈</div>
+          </div>
+          <div class="law-bad">
+            <div class="pair-label">打破坏习惯</div>
+            <div class="pair-text">重新框架思维；突出坏习惯的代价和负面联想</div>
+          </div>
+        </div>
+      </div>
+      <!-- 第三定律 -->
+      <div class="law-card law3">
+        <div class="law-num">第三定律</div>
+        <div class="law-title">让它简便易行</div>
+        <div class="law-sub">Make it Easy · 操控「反应」</div>
+        <div class="law-pair">
+          <div class="law-good">
+            <div class="pair-label">建立好习惯</div>
+            <div class="pair-text">减少阻力：提前备好装备；用两分钟法则降低启动门槛</div>
+          </div>
+          <div class="law-bad">
+            <div class="pair-label">打破坏习惯</div>
+            <div class="pair-text">增加阻力：让坏习惯更难执行；在当下绑住未来选择</div>
+          </div>
+        </div>
+      </div>
+      <!-- 第四定律 -->
+      <div class="law-card law4">
+        <div class="law-num">第四定律</div>
+        <div class="law-title">让它令人满足</div>
+        <div class="law-sub">Make it Satisfying · 操控「奖励」</div>
+        <div class="law-pair">
+          <div class="law-good">
+            <div class="pair-label">建立好习惯</div>
+            <div class="pair-text">使用习惯追踪器；给予即时奖励；不要打破连胜链</div>
+          </div>
+          <div class="law-bad">
+            <div class="pair-label">打破坏习惯</div>
+            <div class="pair-text">设置即时惩罚；建立习惯合同；找人监督问责</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 身份认同 -->
+    <div style="margin-top:20px">
+      <div class="identity-box">
+        <div class="identity-icon">🪞</div>
+        <div class="identity-title">三层行为改变模型（最深层：身份认同）</div>
+        <div class="identity-desc">
+          绝大多数人试图从外到内改变：先改结果，再调过程，最后期待自我改变。<br>
+          真正持久的改变路径是由内而外：先确立想成为什么样的人（身份），再建立支持该身份的系统，最终交付你期望的结果。
+        </div>
+        <div class="identity-example">
+          <div class="id-chip">❌ 我想跑步减肥</div>
+          <div style="display:flex;align-items:center;color:#6b7280">→</div>
+          <div class="id-chip new">✅ 我是一个跑步者</div>
+        </div>
+        <div class="identity-example">
+          <div class="id-chip">❌ 我想读更多书</div>
+          <div style="display:flex;align-items:center;color:#6b7280">→</div>
+          <div class="id-chip new">✅ 我是一个爱读书的人</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 主要知识点 -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-icon">📚</span>
+    <span class="section-title">主要知识点</span>
+  </div>
+  <div class="section-body">
+    <div class="knowledge-grid">
+      <div class="know-card">
+        <div class="know-icon">🔁</div>
+        <div class="know-title">习惯叠加法</div>
+        <div class="know-desc">公式：做完【当前习惯】后，我将【新习惯】。利用已有习惯作为锚点触发新习惯，无需消耗额外意志力。</div>
+      </div>
+      <div class="know-card">
+        <div class="know-icon">⏱️</div>
+        <div class="know-title">两分钟法则</div>
+        <div class="know-desc">任何新习惯都应该在两分钟以内就能完成。目标是建立出现的习惯，而不是完美执行。先做到，再做好。</div>
+      </div>
+      <div class="know-card">
+        <div class="know-icon">🏆</div>
+        <div class="know-title">不要打破链条</div>
+        <div class="know-desc">习惯追踪可视化连续记录，建立坚持的连胜感。关键是：如果不得不错过，绝不连错两天（Never miss twice）。</div>
+      </div>
+      <div class="know-card">
+        <div class="know-icon">🌍</div>
+        <div class="know-title">环境设计</div>
+        <div class="know-desc">环境是隐形的习惯建筑师。把目标物品放在显眼位置、为不同习惯创造专属空间，远比依赖动力和意志力有效。</div>
+      </div>
+      <div class="know-card">
+        <div class="know-icon">📈</div>
+        <div class="know-title">高原效应与突破</div>
+        <div class="know-desc">习惯养成期间会经历"失望之谷"：看不到进步，内心焦虑。实际上变化在以隐形方式积累，坚持过临界点会突然爆发。</div>
+      </div>
+      <div class="know-card">
+        <div class="know-icon">🎯</div>
+        <div class="know-title">诱惑捆绑法</div>
+        <div class="know-desc">将你想做的事（娱乐）与你需要做的事（习惯）绑定。例：只在跑步时才能听喜欢的播客，使习惯本身更有吸引力。</div>
+      </div>
+      <div class="know-card">
+        <div class="know-icon">🤝</div>
+        <div class="know-title">习惯合同与问责</div>
+        <div class="know-desc">书面承诺并附加惩罚后果，找一个问责伙伴监督。外部问责机制能让坏习惯即时产生代价，大幅降低重复概率。</div>
+      </div>
+      <div class="know-card">
+        <div class="know-icon">🧠</div>
+        <div class="know-title">基因与匹配法则</div>
+        <div class="know-desc">选择与你天赋和特质匹配的习惯领域，会让坚持变得更轻松。努力方向的选择比努力本身更重要。</div>
+      </div>
+      <div class="know-card">
+        <div class="know-icon">⚡</div>
+        <div class="know-title">金发女孩法则</div>
+        <div class="know-desc">人类在挑战刚好超出当前能力时，动力最强。任务太难→放弃；太简单→无聊；恰好在边缘→进入心流，习惯得以维持。</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 金句 -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-icon">✨</span>
+    <span class="section-title">金句</span>
+  </div>
+  <div class="section-body">
+    <ul class="quote-list">
+      <li class="quote-item">
+        <span class="quote-em">「你不会上升到目标的高度，你只会下降到系统的水平。」</span><br>
+        —— 目标只是一个方向，系统才是日常行动的轨道。
+      </li>
+      <li class="quote-item">
+        <span class="quote-em">「每一个习惯行为，都是对你想成为谁的一张选票。」</span><br>
+        —— 习惯的本质是身份的证明，不是结果的获取。
+      </li>
+      <li class="quote-item">
+        <span class="quote-em">「问题不是"你有没有时间读书"，而是"你是不是一个读书的人"。」</span><br>
+        —— 身份认同先于行动，行动强化身份认同。
+      </li>
+      <li class="quote-item">
+        <span class="quote-em">「你不需要靠意志力，你需要靠环境。让好的行为成为默认选项。」</span><br>
+        —— 意志力有限，环境设计是可持续的解决方案。
+      </li>
+      <li class="quote-item">
+        <span class="quote-em">「大多数人高估了一个决定性时刻的重要性，低估了每天做出微小改进的价值。」</span><br>
+        —— 复利是最强大的力量，适用于习惯，也适用于人生。
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- 行动建议 -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-icon">🚀</span>
+    <span class="section-title">行动建议</span>
+  </div>
+  <div class="section-body">
+    <ul class="action-list">
+      <li class="action-item">
+        <div class="action-num">1</div>
+        <div class="action-content">
+          <div class="action-title">做习惯记分卡（Habit Scorecard）</div>
+          <div class="action-desc">列出你每天所有的习惯（早上到睡前），对每个习惯标注"+"（好）、"-"（坏）、"="（中性）。觉察是改变的第一步，大多数习惯是自动化的无意识行为。</div>
+        </div>
+      </li>
+      <li class="action-item">
+        <div class="action-num">2</div>
+        <div class="action-content">
+          <div class="action-title">用"实施意图"锁定一个新习惯</div>
+          <div class="action-desc">格式：「我将在【时间】于【地点】进行【行为】。」例如：「我将在每天早上7点在厨房桌边阅读20分钟。」具体化大幅提升执行率。</div>
+        </div>
+      </li>
+      <li class="action-item">
+        <div class="action-num">3</div>
+        <div class="action-content">
+          <div class="action-title">重新设计你的环境</div>
+          <div class="action-desc">把水杯放在桌上（多喝水）、把书放在枕边（多读书）、把手机移出卧室（少刷屏）。让好习惯的摩擦力趋近于零，让坏习惯的摩擦力增大。</div>
+        </div>
+      </li>
+      <li class="action-item">
+        <div class="action-num">4</div>
+        <div class="action-content">
+          <div class="action-title">用两分钟法则启动任何新习惯</div>
+          <div class="action-desc">今天想开始冥想？从「坐下来，闭眼一分钟」开始。想写作？只写一句话。习惯的关键是出现，而不是完美表现。门槛越低，越容易开始并坚持。</div>
+        </div>
+      </li>
+      <li class="action-item">
+        <div class="action-num">5</div>
+        <div class="action-content">
+          <div class="action-title">建立习惯追踪，永不连错两天</div>
+          <div class="action-desc">用日历或APP记录每天的习惯完成情况，建立连胜链。偶尔错过一天是正常的，但永不连续错两天——第一次是意外，第二次是新习惯的开始。</div>
+        </div>
+      </li>
+      <li class="action-item">
+        <div class="action-num">6</div>
+        <div class="action-content">
+          <div class="action-title">重新定义自我身份</div>
+          <div class="action-desc">每当执行一个习惯，告诉自己「这就是我这类人做的事」。不断强化身份认同：我是一个健康的人、我是一个学习者、我是一个创造者。行动→身份→更多行动，形成飞轮效应。</div>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="footer">
+  📖 每日一学 &nbsp;|&nbsp; 2026-04-28 &nbsp;|&nbsp; 《掌控习惯》Atomic Habits &nbsp;·&nbsp; James Clear<br>
+  微小改变 · 复利人生 · 系统制胜
+</div>
+
+</body>
+</html>

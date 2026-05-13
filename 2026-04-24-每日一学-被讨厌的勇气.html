@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>每日一学 · 被讨厌的勇气</title>
+  <style>
+    :root {
+      --primary: #5B4FCF;
+      --primary-light: #EDE9FF;
+      --accent1: #F97316;
+      --accent2: #10B981;
+      --accent3: #3B82F6;
+      --accent4: #EC4899;
+      --accent5: #F59E0B;
+      --bg: #F8F7FF;
+      --card: #FFFFFF;
+      --text: #1E1B3A;
+      --muted: #6B7280;
+      --border: #E5E0FF;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 0 0 60px;
+    }
+
+    /* HERO */
+    .hero {
+      background: linear-gradient(135deg, #5B4FCF 0%, #8B5CF6 50%, #C4B5FD 100%);
+      color: #fff;
+      padding: 40px 24px 32px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 200px; height: 200px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 50%;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -80px; left: -40px;
+      width: 240px; height: 240px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 50%;
+    }
+    .hero-tag {
+      display: inline-block;
+      background: rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.35);
+      border-radius: 20px;
+      padding: 4px 16px;
+      font-size: 12px;
+      letter-spacing: 2px;
+      margin-bottom: 16px;
+    }
+    .hero-date { font-size: 13px; opacity: 0.7; margin-bottom: 8px; }
+    .hero h1 {
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      margin-bottom: 6px;
+      position: relative; z-index: 1;
+    }
+    .hero-sub {
+      font-size: 14px;
+      opacity: 0.85;
+      margin-bottom: 16px;
+      position: relative; z-index: 1;
+    }
+    .hero-author {
+      font-size: 13px;
+      opacity: 0.7;
+      position: relative; z-index: 1;
+    }
+    .hero-tags {
+      margin-top: 18px;
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      flex-wrap: wrap;
+      position: relative; z-index: 1;
+    }
+    .hero-tags span {
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 12px;
+      padding: 4px 12px;
+      font-size: 11px;
+    }
+
+    /* CONTAINER */
+    .container { max-width: 720px; margin: 0 auto; padding: 0 16px; }
+
+    /* SECTION TITLE */
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 28px 0 14px;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    .section-title .icon {
+      width: 30px; height: 30px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    /* CARD */
+    .card {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 18px;
+      box-shadow: 0 2px 12px rgba(91,79,207,0.08);
+      border: 1px solid var(--border);
+      margin-bottom: 12px;
+    }
+
+    /* INSIGHT BOX */
+    .insight-box {
+      background: linear-gradient(135deg, #5B4FCF, #8B5CF6);
+      border-radius: 16px;
+      padding: 20px;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+    .insight-box p { font-size: 15px; line-height: 1.8; }
+    .insight-label {
+      font-size: 11px;
+      opacity: 0.75;
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+
+    /* MIND MAP */
+    .mindmap-wrap {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 20px 16px;
+      box-shadow: 0 2px 12px rgba(91,79,207,0.08);
+      border: 1px solid var(--border);
+      overflow-x: auto;
+      margin-bottom: 12px;
+    }
+    .mindmap-center {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .mindmap-center-box {
+      display: inline-block;
+      background: linear-gradient(135deg, #5B4FCF, #8B5CF6);
+      color: #fff;
+      border-radius: 14px;
+      padding: 12px 24px;
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+    .branches {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 480px) { .branches { grid-template-columns: 1fr; } }
+    .branch {
+      border-radius: 12px;
+      padding: 14px;
+      border-left: 4px solid;
+    }
+    .branch-title {
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .branch ul { list-style: none; padding: 0; }
+    .branch ul li {
+      font-size: 12px;
+      line-height: 1.8;
+      padding: 2px 0;
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+    }
+    .branch ul li::before { content: '•'; flex-shrink: 0; }
+    .b1 { background: #FFF7ED; border-color: var(--accent1); }
+    .b1 .branch-title { color: var(--accent1); }
+    .b1 ul li::before { color: var(--accent1); }
+    .b2 { background: #ECFDF5; border-color: var(--accent2); }
+    .b2 .branch-title { color: var(--accent2); }
+    .b2 ul li::before { color: var(--accent2); }
+    .b3 { background: #EFF6FF; border-color: var(--accent3); }
+    .b3 .branch-title { color: var(--accent3); }
+    .b3 ul li::before { color: var(--accent3); }
+    .b4 { background: #FDF2F8; border-color: var(--accent4); }
+    .b4 .branch-title { color: var(--accent4); }
+    .b4 ul li::before { color: var(--accent4); }
+    .b5 { background: #FFFBEB; border-color: var(--accent5); }
+    .b5 .branch-title { color: var(--accent5); }
+    .b5 ul li::before { color: var(--accent5); }
+    .b6 { background: #F5F3FF; border-color: var(--primary); }
+    .b6 .branch-title { color: var(--primary); }
+    .b6 ul li::before { color: var(--primary); }
+
+    /* FRAMEWORK */
+    .framework-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    @media (max-width: 480px) { .framework-grid { grid-template-columns: 1fr; } }
+    .fw-card {
+      border-radius: 14px;
+      padding: 16px;
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+    }
+    .fw-card::after {
+      content: attr(data-num);
+      position: absolute;
+      bottom: -12px; right: 8px;
+      font-size: 56px;
+      font-weight: 900;
+      opacity: 0.12;
+      line-height: 1;
+    }
+    .fw-card h3 { font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+    .fw-card p { font-size: 12px; line-height: 1.7; opacity: 0.92; }
+    .fw1 { background: linear-gradient(135deg, #F97316, #FB923C); }
+    .fw2 { background: linear-gradient(135deg, #10B981, #34D399); }
+    .fw3 { background: linear-gradient(135deg, #3B82F6, #60A5FA); }
+    .fw4 { background: linear-gradient(135deg, #EC4899, #F472B6); }
+
+    /* KNOWLEDGE POINTS */
+    .kp-list { display: flex; flex-direction: column; gap: 10px; }
+    .kp-item {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 14px 16px;
+      border: 1px solid var(--border);
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      box-shadow: 0 1px 6px rgba(91,79,207,0.06);
+    }
+    .kp-num {
+      width: 28px; height: 28px;
+      border-radius: 8px;
+      background: var(--primary-light);
+      color: var(--primary);
+      font-weight: 800;
+      font-size: 13px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .kp-content h4 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+    .kp-content p { font-size: 12px; color: var(--muted); line-height: 1.7; }
+
+    /* QUOTES */
+    .quote-list { display: flex; flex-direction: column; gap: 12px; }
+    .quote-item {
+      border-radius: 14px;
+      padding: 16px 18px;
+      position: relative;
+      padding-left: 22px;
+    }
+    .quote-item::before {
+      content: '"';
+      position: absolute;
+      left: -4px; top: -8px;
+      font-size: 64px;
+      opacity: 0.15;
+      font-family: Georgia, serif;
+      line-height: 1;
+    }
+    .quote-item p { font-size: 14px; line-height: 1.9; font-weight: 500; }
+    .q1 { background: var(--primary-light); color: var(--primary); }
+    .q2 { background: #FFF7ED; color: #92400E; }
+    .q3 { background: #ECFDF5; color: #065F46; }
+    .q4 { background: #EFF6FF; color: #1E40AF; }
+    .q5 { background: #FDF2F8; color: #831843; }
+
+    /* ACTIONS */
+    .action-list { display: flex; flex-direction: column; gap: 10px; }
+    .action-item {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 14px 16px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      border: 1px solid var(--border);
+      box-shadow: 0 1px 6px rgba(91,79,207,0.05);
+    }
+    .action-icon {
+      width: 30px; height: 30px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .action-content h4 { font-size: 13px; font-weight: 700; margin-bottom: 3px; }
+    .action-content p { font-size: 12px; color: var(--muted); line-height: 1.6; }
+
+    /* FOOTER */
+    .footer {
+      text-align: center;
+      margin-top: 36px;
+      padding: 0 16px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .footer .logo {
+      display: inline-block;
+      background: linear-gradient(135deg, #5B4FCF, #8B5CF6);
+      color: #fff;
+      border-radius: 10px;
+      padding: 6px 18px;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-date">2026年04月24日 · 每日一学</div>
+  <div class="hero-tag">📚 第十期推荐</div>
+  <h1>被讨厌的勇气</h1>
+  <div class="hero-sub">The Courage to Be Disliked</div>
+  <div class="hero-author">岸见一郎 · 古贺史健 著 ｜ 阿德勒心理学 · 个人成长</div>
+  <div class="hero-tags">
+    <span>🧠 自我接纳</span>
+    <span>🔓 课题分离</span>
+    <span>🤝 人际关系</span>
+    <span>🌱 共同体感觉</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- 核心洞见 -->
+  <div class="section-title">
+    <div class="icon" style="background:#EDE9FF;">💡</div>
+    核心洞见
+  </div>
+  <div class="insight-box">
+    <div class="insight-label">CORE INSIGHT</div>
+    <p>你之所以不幸福，不是因为过去的创伤，也不是因为别人不认可你——而是因为你缺乏"被讨厌的勇气"。一切人际关系的烦恼，根源在于自我中心；真正的自由，在于不在乎别人的评价，做自己课题内的事情。</p>
+  </div>
+  <div class="card" style="border-left: 4px solid var(--accent2);">
+    <p style="font-size:14px; line-height:1.8;">阿德勒认为：<strong>人不是被过去决定的，而是被"目的"驱动的。</strong>我们选择了自己的情绪，也选择了自己的生活方式。改变，随时都可以开始——只要你决定改变。</p>
+  </div>
+
+  <!-- 思维导图 -->
+  <div class="section-title">
+    <div class="icon" style="background:#EDE9FF;">🗺️</div>
+    核心思维导图
+  </div>
+  <div class="mindmap-wrap">
+    <div class="mindmap-center">
+      <div class="mindmap-center-box">被讨厌的勇气<br><span style="font-size:11px;opacity:0.85;font-weight:400">阿德勒心理学 · 五夜对话</span></div>
+    </div>
+    <div class="branches">
+      <div class="branch b1">
+        <div class="branch-title">🔬 目的论 vs 原因论</div>
+        <ul>
+          <li>过去不决定现在</li>
+          <li>情绪由目的驱动</li>
+          <li>改变随时可发生</li>
+          <li>创伤是自己赋予的意义</li>
+        </ul>
+      </div>
+      <div class="branch b2">
+        <div class="branch-title">✂️ 课题分离</div>
+        <ul>
+          <li>区分"我的课题"与"他人的课题"</li>
+          <li>不干涉他人课题</li>
+          <li>不让他人干涉自己课题</li>
+          <li>人际关系烦恼由此消解</li>
+        </ul>
+      </div>
+      <div class="branch b3">
+        <div class="branch-title">🪞 自我接纳</div>
+        <ul>
+          <li>接受"此刻的自己"</li>
+          <li>区别于自我肯定（欺骗自己）</li>
+          <li>接受不足，仍努力前行</li>
+          <li>由内而外的安全感</li>
+        </ul>
+      </div>
+      <div class="branch b4">
+        <div class="branch-title">🌍 共同体感觉</div>
+        <ul>
+          <li>他者信赖 · 他者贡献</li>
+          <li>关注"我能给予什么"</li>
+          <li>横向关系而非纵向关系</li>
+          <li>幸福 = 贡献感</li>
+        </ul>
+      </div>
+      <div class="branch b5">
+        <div class="branch-title">⭐ 活在当下</div>
+        <ul>
+          <li>人生是点的连续，非线</li>
+          <li>此刻舞动，不为终点</li>
+          <li>普通之人即有价值</li>
+          <li>现在最重要</li>
+        </ul>
+      </div>
+      <div class="branch b6">
+        <div class="branch-title">🚫 否定认可欲求</div>
+        <ul>
+          <li>不活在他人期待中</li>
+          <li>称赞是纵向关系的产物</li>
+          <li>自由 = 被讨厌的勇气</li>
+          <li>真正的鼓励是横向赋能</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 四大核心框架 -->
+  <div class="section-title">
+    <div class="icon" style="background:#EDE9FF;">🧩</div>
+    四大核心框架
+  </div>
+  <div class="framework-grid">
+    <div class="fw-card fw1" data-num="1">
+      <h3>① 目的论</h3>
+      <p>人的行为不是被过去的"原因"推动，而是被未来的"目的"拉动。愤怒、悲伤都是工具，用于达成某种目的。认识到这一点，你才能掌控自己的情绪。</p>
+    </div>
+    <div class="fw-card fw2" data-num="2">
+      <h3>② 课题分离</h3>
+      <p>"这是谁的课题？"——把自己的课题和他人的课题分开。别人怎么看你，是他们的课题；你是否认真生活，是你的课题。厘清边界，是人际自由的起点。</p>
+    </div>
+    <div class="fw-card fw3" data-num="3">
+      <h3>③ 共同体感觉</h3>
+      <p>从"我能得到什么"转向"我能贡献什么"。幸福感的本质不是被认可，而是贡献感——感到自己对他人有用，这才是真实的价值感来源。</p>
+    </div>
+    <div class="fw-card fw4" data-num="4">
+      <h3>④ 活在当下</h3>
+      <p>人生不是一条通向目标的线，而是无数个当下"点"的集合。不为未来焦虑，不被过去束缚，在此刻全力舞动。每个瞬间都完整，都有意义。</p>
+    </div>
+  </div>
+
+  <!-- 主要知识点 -->
+  <div class="section-title">
+    <div class="icon" style="background:#EDE9FF;">📖</div>
+    主要知识点
+  </div>
+  <div class="kp-list">
+    <div class="kp-item">
+      <div class="kp-num">1</div>
+      <div class="kp-content">
+        <h4>阿德勒 vs 弗洛伊德：目的论 vs 原因论</h4>
+        <p>弗洛伊德认为过去的创伤决定现在；阿德勒认为人是自己赋予意义的主体，"现在选择什么样的生活方式"才是关键。过去无法改变，但对过去的解读可以改变。</p>
+      </div>
+    </div>
+    <div class="kp-item">
+      <div class="kp-num">2</div>
+      <div class="kp-content">
+        <h4>人际关系是一切烦恼的根源</h4>
+        <p>阿德勒断言：所有烦恼都来自人际关系。消除烦恼不是逃避关系，而是学会用"课题分离"重建健康边界——你不必取悦所有人，也不必为所有人的情绪负责。</p>
+      </div>
+    </div>
+    <div class="kp-item">
+      <div class="kp-num">3</div>
+      <div class="kp-content">
+        <h4>纵向关系 vs 横向关系</h4>
+        <p>称赞和批评都是纵向关系（上对下）的产物，会产生依赖和对抗。真正的健康关系是横向的——"谢谢你"而非"你真棒"，鼓励而非表扬，平等而非评判。</p>
+      </div>
+    </div>
+    <div class="kp-item">
+      <div class="kp-num">4</div>
+      <div class="kp-content">
+        <h4>自卑感是进步的动力，自卑情结是借口</h4>
+        <p>适度的自卑感驱动人追求卓越；但把"因为我自卑，所以我做不到"当借口，就成了自卑情结。关键：承认差距，但不把差距当命运。</p>
+      </div>
+    </div>
+    <div class="kp-item">
+      <div class="kp-num">5</div>
+      <div class="kp-content">
+        <h4>存在贡献 vs 行为贡献</h4>
+        <p>你不需要"做了什么"才有价值——你的存在本身已经对他人有意义。这是对"只有有用才有价值"这一焦虑思维的根本解放。</p>
+      </div>
+    </div>
+    <div class="kp-item">
+      <div class="kp-num">6</div>
+      <div class="kp-content">
+        <h4>工作狂与逃避人生课题</h4>
+        <p>真正的人生课题有三：工作课题、交友课题、爱的课题。把全部精力投入工作，是在逃避后两者——用"忙"来回避真实的人际关系与亲密关系。</p>
+      </div>
+    </div>
+    <div class="kp-item">
+      <div class="kp-num">7</div>
+      <div class="kp-content">
+        <h4>"普通"意味着有能力</h4>
+        <p>追求"特别"（无论优越还是自卑）都是一种逃避。甘愿做"普通人"，是真正接受自我的勇气——普通不是无能，而是不需要通过比较来证明自己。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 金句 -->
+  <div class="section-title">
+    <div class="icon" style="background:#EDE9FF;">✨</div>
+    金句引用
+  </div>
+  <div class="quote-list">
+    <div class="quote-item q1">
+      <p>「重要的不是被给予了什么，而是如何利用被给予的东西。」</p>
+    </div>
+    <div class="quote-item q2">
+      <p>「自由，就是被别人讨厌。」</p>
+    </div>
+    <div class="quote-item q3">
+      <p>「人的烦恼皆源于人际关系。」</p>
+    </div>
+    <div class="quote-item q4">
+      <p>「不是能力不足，而是缺乏勇气。」</p>
+    </div>
+    <div class="quote-item q5">
+      <p>「如果在意别人的目光、害怕别人的评价，归根究底，还是以自我为中心。」</p>
+    </div>
+  </div>
+
+  <!-- 行动建议 -->
+  <div class="section-title">
+    <div class="icon" style="background:#EDE9FF;">🎯</div>
+    行动建议
+  </div>
+  <div class="action-list">
+    <div class="action-item">
+      <div class="action-icon" style="background:#FFF7ED;">✂️</div>
+      <div class="action-content">
+        <h4>今日练习：课题分离</h4>
+        <p>遇到一件让你烦恼的事，问自己："这是我的课题，还是对方的课题？"如果是对方的，练习放手，不介入。</p>
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="action-icon" style="background:#ECFDF5;">🪞</div>
+      <div class="action-content">
+        <h4>停止"为了被认可"而行动</h4>
+        <p>今天做一件事，完全不考虑别人的看法，只问自己："这是我真正想做的吗？"记录感受。</p>
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="action-icon" style="background:#EFF6FF;">↔️</div>
+      <div class="action-content">
+        <h4>把一句"你真棒"换成"谢谢你"</h4>
+        <p>在今日与人互动中，有意识地将纵向的"称赞"替换为横向的"感谢"，体会关系质量的变化。</p>
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="action-icon" style="background:#FDF2F8;">🌱</div>
+      <div class="action-content">
+        <h4>关注贡献感，而非认可感</h4>
+        <p>今天问自己："我今天为他人做了什么？感觉如何？"把关注点从"别人认不认可我"移向"我能给予什么"。</p>
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="action-icon" style="background:#FFFBEB;">🕐</div>
+      <div class="action-content">
+        <h4>活在"此刻"——放下结果，全情投入</h4>
+        <p>选择一件正在做的事，不想"做完能得到什么"，只关注"此刻做这件事本身"的体验。这就是人生的舞。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 阅读延伸 -->
+  <div class="section-title">
+    <div class="icon" style="background:#EDE9FF;">📚</div>
+    延伸阅读
+  </div>
+  <div class="card">
+    <p style="font-size:13px; color:var(--muted); line-height:1.9;">
+      📘 <strong>《被讨厌的勇气 二部曲》</strong>——进一步探讨爱与人生意义<br>
+      📗 <strong>《自卑与超越》</strong>—— 阿德勒原著，建立完整理论体系<br>
+      📙 <strong>《接受不完美的自己》》》</strong>——实践阿德勒式自我接纳<br>
+      📕 <strong>《人生的意义》》》</strong>——阿德勒论幸福、价值与贡献
+    </p>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="logo">每日一学</div>
+  <p>2026-04-24 · 第十期 · 被讨厌的勇气</p>
+  <p style="margin-top:6px;">坚持每天成长一点点 🌱</p>
+</div>
+
+</body>
+</html>
