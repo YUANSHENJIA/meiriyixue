@@ -12,7 +12,8 @@ body {
   min-height:100vh; padding:28px 18px; color:#e8e8e8;
 }
 .container { max-width:1060px; margin:0 auto; }
-.header { text-align:center; margin-bottom:32px; }
+.header {
+    position: relative; text-align:center; margin-bottom:32px; }
 .date-tag {
   display:inline-block; background:rgba(255,255,255,0.1);
   border:1px solid rgba(255,255,255,0.2); border-radius:20px;
@@ -118,6 +119,10 @@ body {
 <div class="container">
 
 <div class="header">
+  <a href="index.html" style="position: absolute; top: 20px; left: 30px; display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background: linear-gradient(135deg, #7c3aed, #db2777); color: white; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 14px; box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4); transition: all 0.3s ease; z-index: 100;">
+    ← 返回首页
+  </a>
+
   <div class="date-tag">📅 每日一学 · 2026-04-21</div>
   <h1>🌟 <span>高效能人士的七个习惯</span></h1>
   <div class="meta">斯蒂芬·柯维（Stephen R. Covey）著 · 全球销量超 4000 万册</div>
