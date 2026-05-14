@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 巨人的工具 | 2026-05-14</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+    min-height: 100vh;
+    color: #fff;
+    padding: 20px;
+  }
+  .header {
+    text-align: center;
+    padding: 40px 20px 30px;
+    position: relative;
+  }
+  .date-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 20px;
+    padding: 6px 18px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 16px;
+    letter-spacing: 1px;
+  }
+  .book-title {
+    font-size: 38px;
+    font-weight: 700;
+    background: linear-gradient(90deg, #f7c59f, #f9a825, #ff7043);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+    line-height: 1.2;
+  }
+  .book-sub {
+    font-size: 16px;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 8px;
+  }
+  .book-author {
+    font-size: 14px;
+    color: rgba(255,255,255,0.45);
+  }
+  .tag-row {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+  }
+  .tag {
+    background: rgba(249,168,37,0.2);
+    border: 1px solid rgba(249,168,37,0.4);
+    color: #f9a825;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+  }
+  .mindmap-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 10px 0 40px;
+  }
+  /* 核心根节点 */
+  .root-node {
+    background: linear-gradient(135deg, #f9a825, #ff7043);
+    border-radius: 16px;
+    padding: 20px 30px;
+    text-align: center;
+    margin: 0 auto 40px;
+    max-width: 400px;
+    box-shadow: 0 8px 32px rgba(249,168,37,0.4);
+  }
+  .root-node h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.4;
+  }
+  .root-node p {
+    font-size: 13px;
+    color: rgba(255,255,255,0.85);
+    margin-top: 6px;
+  }
+  /* 分支区域 */
+  .branches {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+  }
+  .branch {
+    border-radius: 14px;
+    padding: 22px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .branch:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+  }
+  .branch::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+  .branch-1 { background: rgba(244,67,54,0.12); border: 1px solid rgba(244,67,54,0.25); }
+  .branch-1::before { background: linear-gradient(90deg, #f44336, #ff7043); }
+  .branch-2 { background: rgba(33,150,243,0.12); border: 1px solid rgba(33,150,243,0.25); }
+  .branch-2::before { background: linear-gradient(90deg, #2196f3, #00bcd4); }
+  .branch-3 { background: rgba(76,175,80,0.12); border: 1px solid rgba(76,175,80,0.25); }
+  .branch-3::before { background: linear-gradient(90deg, #4caf50, #8bc34a); }
+  .branch-4 { background: rgba(156,39,176,0.12); border: 1px solid rgba(156,39,176,0.25); }
+  .branch-4::before { background: linear-gradient(90deg, #9c27b0, #e040fb); }
+  .branch-5 { background: rgba(255,152,0,0.12); border: 1px solid rgba(255,152,0,0.25); }
+  .branch-5::before { background: linear-gradient(90deg, #ff9800, #ffc107); }
+  .branch-6 { background: rgba(0,188,212,0.12); border: 1px solid rgba(0,188,212,0.25); }
+  .branch-6::before { background: linear-gradient(90deg, #00bcd4, #26c6da); }
+  .branch-icon {
+    font-size: 28px;
+    margin-bottom: 10px;
+    display: block;
+  }
+  .branch-title {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    line-height: 1.3;
+  }
+  .branch-1 .branch-title { color: #ff7043; }
+  .branch-2 .branch-title { color: #42a5f5; }
+  .branch-3 .branch-title { color: #66bb6a; }
+  .branch-4 .branch-title { color: #ce93d8; }
+  .branch-5 .branch-title { color: #ffa726; }
+  .branch-6 .branch-title { color: #26c6da; }
+  .leaf-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .leaf-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 13.5px;
+    color: rgba(255,255,255,0.85);
+    line-height: 1.5;
+  }
+  .leaf-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin-top: 6px;
+    flex-shrink: 0;
+  }
+  .branch-1 .leaf-dot { background: #ff7043; }
+  .branch-2 .leaf-dot { background: #42a5f5; }
+  .branch-3 .leaf-dot { background: #66bb6a; }
+  .branch-4 .leaf-dot { background: #ce93d8; }
+  .branch-5 .leaf-dot { background: #ffa726; }
+  .branch-6 .leaf-dot { background: #26c6da; }
+  .sub-item {
+    margin-left: 14px;
+    margin-top: 4px;
+    font-size: 12.5px;
+    color: rgba(255,255,255,0.6);
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  .sub-item::before {
+    content: '›';
+    flex-shrink: 0;
+    color: rgba(255,255,255,0.4);
+    margin-top: -1px;
+  }
+  /* 金句区域 */
+  .quotes-section {
+    max-width: 1100px;
+    margin: 0 auto 30px;
+  }
+  .section-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.9);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(255,255,255,0.15);
+  }
+  .quotes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+  }
+  .quote-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-left: 3px solid #f9a825;
+    border-radius: 10px;
+    padding: 16px 18px;
+    font-size: 14px;
+    color: rgba(255,255,255,0.8);
+    line-height: 1.7;
+    font-style: italic;
+  }
+  .quote-card strong {
+    display: block;
+    font-size: 12px;
+    color: rgba(255,255,255,0.4);
+    font-style: normal;
+    margin-top: 8px;
+  }
+  /* 行动建议 */
+  .actions-section {
+    max-width: 1100px;
+    margin: 0 auto 30px;
+  }
+  .actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+  }
+  .action-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .action-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #f9a825, #ff7043);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+    color: #fff;
+  }
+  .action-text {
+    font-size: 13.5px;
+    color: rgba(255,255,255,0.8);
+    line-height: 1.6;
+  }
+  .action-text strong {
+    display: block;
+    color: rgba(255,255,255,0.95);
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+  /* 底部 */
+  .footer {
+    text-align: center;
+    padding: 30px 20px;
+    color: rgba(255,255,255,0.3);
+    font-size: 12px;
+  }
+  /* 动画 */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .branch { animation: fadeInUp 0.6s ease forwards; }
+  .branch:nth-child(1) { animation-delay: 0.1s; }
+  .branch:nth-child(2) { animation-delay: 0.2s; }
+  .branch:nth-child(3) { animation-delay: 0.3s; }
+  .branch:nth-child(4) { animation-delay: 0.4s; }
+  .branch:nth-child(5) { animation-delay: 0.5s; }
+  .branch:nth-child(6) { animation-delay: 0.6s; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="date-badge">📅 2026 · 05 · 14 · 每日一学</div>
+  <div class="book-title">巨人的工具</div>
+  <div class="book-sub">Tools of Titans</div>
+  <div class="book-author">蒂姆·费里斯（Tim Ferriss）著</div>
+  <div class="tag-row">
+    <span class="tag">🏆 世界顶尖高手秘籍</span>
+    <span class="tag">🧠 成功习惯</span>
+    <span class="tag">💡 思维工具</span>
+    <span class="tag">⚡ 行动指南</span>
+  </div>
+</div>
+
+<div class="mindmap-container">
+
+  <!-- 根节点 -->
+  <div class="root-node">
+    <h2>🔱 巨人的工具</h2>
+    <p>200+ 位世界顶尖高手的战术、习惯与工具<br>浓缩为可立即行动的成功路线图</p>
+  </div>
+
+  <!-- 核心洞见 + 框架 -->
+  <div class="branches">
+
+    <!-- 1. 核心洞见 -->
+    <div class="branch branch-1">
+      <span class="branch-icon">🎯</span>
+      <div class="branch-title">核心洞见 · 三大主题</div>
+      <ul class="leaf-list">
+        <li><span class="leaf-dot"></span><span><strong>健康（Healthy）</strong><br>
+          <span class="sub-item">身体是一切的基础，精英普遍投资睡眠、冥想与运动</span>
+          <span class="sub-item">80% 的精英有晨间冥想习惯</span>
+        </span></li>
+        <li><span class="leaf-dot"></span><span><strong>富有（Wealthy）</strong><br>
+          <span class="sub-item">财富来自杠杆：代码、媒体、劳动力、资本四大杠杆</span>
+          <span class="sub-item">专注于不对称押注，下行有限而上行无界</span>
+        </span></li>
+        <li><span class="leaf-dot"></span><span><strong>智慧（Wise）</strong><br>
+          <span class="sub-item">阅读是最高投资回报率的习惯</span>
+          <span class="sub-item">失败是数据，而非终点</span>
+        </span></li>
+      </ul>
+    </div>
+
+    <!-- 2. 晨间习惯框架 -->
+    <div class="branch branch-2">
+      <span class="branch-icon">🌅</span>
+      <div class="branch-title">晨间 5 件事 · 黄金起点</div>
+      <ul class="leaf-list">
+        <li><span class="leaf-dot"></span><span>① <strong>床铺整理</strong> — 第一个小胜利，构建动能</span></li>
+        <li><span class="leaf-dot"></span><span>② <strong>20 分钟冥想</strong> — 激活前额叶，降低皮质醇</span></li>
+        <li><span class="leaf-dot"></span><span>③ <strong>晨间运动</strong> — 5-10 分钟激活，提升 BDNF</span></li>
+        <li><span class="leaf-dot"></span><span>④ <strong>感恩日记</strong> — 写下 3 件值得感恩的事</span></li>
+        <li><span class="leaf-dot"></span><span>⑤ <strong>MIT 任务</strong> — 确定今日最重要的 1-3 件事</span></li>
+      </ul>
+    </div>
+
+    <!-- 3. 思维工具 -->
+    <div class="branch branch-3">
+      <span class="branch-icon">🧰</span>
+      <div class="branch-title">顶尖高手的思维工具</div>
+      <ul class="leaf-list">
+        <li><span class="leaf-dot"></span><span><strong>恐惧设定（Fear-Setting）</strong> — 斯多葛式预演最坏结果，消除决策瘫痪</span></li>
+        <li><span class="leaf-dot"></span><span><strong>80/20法则深化</strong> — 找到带来80%结果的20%行动，砍掉其余</span></li>
+        <li><span class="leaf-dot"></span><span><strong>"如果可以，我会怎么做？"</strong> — 绕过内心审查官</span></li>
+        <li><span class="leaf-dot"></span><span><strong>拒绝艺术</strong> — 说 "No" 是对时间最大的保护</span></li>
+        <li><span class="leaf-dot"></span><span><strong>元学习法</strong> — 找到最优 学习路径，而非最努力路径</span></li>
+      </ul>
+    </div>
+
+    <!-- 4. 顶尖高手共性 -->
+    <div class="branch branch-4">
+      <span class="branch-icon">👑</span>
+      <div class="branch-title">200+ 巨人的共性规律</div>
+      <ul class="leaf-list">
+        <li><span class="leaf-dot"></span><span><strong>大量阅读</strong> — 巴菲特、芒格每天读 5 小时</span></li>
+        <li><span class="leaf-dot"></span><span><strong>冥想/正念</strong> — 超 80% 有稳定冥想练习</span></li>
+        <li><span class="leaf-dot"></span><span><strong>日记写作</strong> — 清晨或睡前的反思习惯</span></li>
+        <li><span class="leaf-dot"></span><span><strong>单任务专注</strong> — 深度工作而非多任务处理</span></li>
+        <li><span class="leaf-dot"></span><span><strong>拥抱失败</strong> — 视失败为反馈，快速迭代</span></li>
+      </ul>
+    </div>
+
+    <!-- 5. 健康与表现 -->
+    <div class="branch branch-5">
+      <span class="branch-icon">💪</span>
+      <div class="branch-title">身体表现优化工具箱</div>
+      <ul class="leaf-list">
+        <li><span class="leaf-dot"></span><span><strong>睡眠优先</strong> — 不是懒惰，是高绩效基础</span></li>
+        <li><span class="leaf-dot"></span><span><strong>间歇性禁食</strong> — 16:8 提升认知清晰度</span></li>
+        <li><span class="leaf-dot"></span><span><strong>冷水浴/冰浴</strong> — 激活去甲肾上腺素，提升意志力</span></li>
+        <li><span class="leaf-dot"></span><span><strong>电解质补充</strong> — 低碳水状态下的必备</span></li>
+        <li><span class="leaf-dot"></span><span><strong>光照管理</strong> — 早晨阳光锚定昼夜节律</span></li>
+      </ul>
+    </div>
+
+    <!-- 6. 财富与商业 -->
+    <div class="branch branch-6">
+      <span class="branch-icon">💰</span>
+      <div class="branch-title">财富构建与商业智慧</div>
+      <ul class="leaf-list">
+        <li><span class="leaf-dot"></span><span><strong>小赌注哲学</strong> — 以小博大的不对称风险</span></li>
+        <li><span class="leaf-dot"></span><span><strong>找到"灰熊市场"</strong> — 在别人看不到的地方创造价值</span></li>
+        <li><span class="leaf-dot"></span><span><strong>构建 1000 个铁杆粉丝</strong> — 凯文·凯利理论，真诚社群</span></li>
+        <li><span class="leaf-dot"></span><span><strong>外包与杠杆</strong> — 只做自己独特能贡献的事</span></li>
+        <li><span class="leaf-dot"></span><span><strong>定期"数字排毒"</strong> — 低信息饮食，提升信噪比</span></li>
+      </ul>
+    </div>
+
+  </div><!-- /branches -->
+
+  <!-- 金句 -->
+  <div class="quotes-section">
+    <div class="section-title">💎 核心金句</div>
+    <div class="quotes-grid">
+      <div class="quote-card">
+        "大多数人高估一年能做的事，而严重低估十年能做的事。"
+        <strong>— 思维框架</strong>
+      </div>
+      <div class="quote-card">
+        "成功不是拥有最多机会，而是拒绝了最多机会。"
+        <strong>— 关于专注</strong>
+      </div>
+      <div class="quote-card">
+        "如果这是我一生只能做一件事，我会怎么做？"
+        <strong>— 优先级工具</strong>
+      </div>
+      <div class="quote-card">
+        "恐惧是一个指南针。你最害怕做的事，往往是你最需要做的事。"
+        <strong>— Tim Ferriss</strong>
+      </div>
+      <div class="quote-card">
+        "世界级高手从不依赖动力，他们依赖的是系统和习惯。"
+        <strong>— 习惯系统</strong>
+      </div>
+      <div class="quote-card">
+        "你不需要成为天才，你只需要成为一个有工具的普通人。"
+        <strong>— 本书核心理念</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- 行动建议 -->
+  <div class="actions-section">
+    <div class="section-title">🚀 本周行动建议</div>
+    <div class="actions-grid">
+      <div class="action-card">
+        <div class="action-num">1</div>
+        <div class="action-text">
+          <strong>启动晨间仪式</strong>
+          明天起床后立即整理床铺，然后做 5 分钟冥想，写下今日 3 件感恩的事
+        </div>
+      </div>
+      <div class="action-card">
+        <div class="action-num">2</div>
+        <div class="action-text">
+          <strong>执行恐惧设定</strong>
+          选一件你一直拖延的事，纸上写出最坏结果、可能性和修复方案
+        </div>
+      </div>
+      <div class="action-card">
+        <div class="action-num">3</div>
+        <div class="action-text">
+          <strong>80/20 审计</strong>
+          列出本周所有任务，标出带来 80% 价值的 20%，砍掉或委托其余
+        </div>
+      </div>
+      <div class="action-card">
+        <div class="action-num">4</div>
+        <div class="action-text">
+          <strong>练习说 "No"</strong>
+          本周至少拒绝一个不符合你核心优先级的请求，体验边界的力量
+        </div>
+      </div>
+      <div class="action-card">
+        <div class="action-num">5</div>
+        <div class="action-text">
+          <strong>30 天阅读挑战</strong>
+          每天固定 20 分钟阅读，坚持 30 天，体验知识复利效应
+        </div>
+      </div>
+      <div class="action-card">
+        <div class="action-num">6</div>
+        <div class="action-text">
+          <strong>数字排毒 24 小时</strong>
+          选一天关闭社交媒体和新闻，感受低信息饮食带来的专注感
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /mindmap-container -->
+
+<div class="footer">
+  📚 每日一学 · WorkBuddy 自动化推送 · 2026-05-14<br>
+  《巨人的工具》 · Tim Ferriss · 个人成长 × 顶尖思维
+</div>
+
+</body>
+</html>
