@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>系统之美 · 每日一学</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    min-height: 100vh;
+    padding: 30px 20px;
+    color: #fff;
+  }
+  .header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .header .date {
+    font-size: 13px;
+    color: #7ecac3;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .header h1 {
+    font-size: 36px;
+    font-weight: 800;
+    background: linear-gradient(90deg, #7ecac3, #a8edea, #fed6e3);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+  }
+  .header .subtitle {
+    font-size: 15px;
+    color: #a0c4c0;
+  }
+  .author-tag {
+    display: inline-block;
+    background: rgba(126,202,195,0.15);
+    border: 1px solid rgba(126,202,195,0.4);
+    color: #7ecac3;
+    font-size: 12px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-top: 10px;
+    letter-spacing: 1px;
+  }
+
+  /* Mind Map Container */
+  .mindmap {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  /* Core Node */
+  .core-node {
+    text-align: center;
+    margin-bottom: 50px;
+    position: relative;
+  }
+  .core-box {
+    display: inline-block;
+    background: linear-gradient(135deg, #7ecac3, #4db6ac);
+    color: #0f2027;
+    font-size: 22px;
+    font-weight: 700;
+    padding: 18px 48px;
+    border-radius: 50px;
+    box-shadow: 0 8px 30px rgba(126,202,195,0.5);
+    position: relative;
+  }
+  .core-box::after {
+    content: '';
+    position: absolute;
+    bottom: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 30px;
+    background: linear-gradient(to bottom, #7ecac3, transparent);
+  }
+
+  /* Branch Sections */
+  .branches {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  @media (max-width: 768px) {
+    .branches { grid-template-columns: 1fr; }
+  }
+
+  .branch {
+    background: rgba(255,255,255,0.05);
+    border-radius: 16px;
+    padding: 20px;
+    border: 1px solid rgba(255,255,255,0.08);
+    backdrop-filter: blur(10px);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .branch:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+  }
+
+  .branch-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .branch-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .branch-title {
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+  .branch-sub {
+    font-size: 11px;
+    opacity: 0.6;
+    margin-top: 2px;
+  }
+
+  /* Color themes per branch */
+  .branch-1 .branch-icon { background: rgba(126,202,195,0.2); }
+  .branch-1 .branch-title { color: #7ecac3; }
+  .branch-2 .branch-icon { background: rgba(255,183,77,0.2); }
+  .branch-2 .branch-title { color: #ffb74d; }
+  .branch-3 .branch-icon { background: rgba(171,110,244,0.2); }
+  .branch-3 .branch-title { color: #ab6ef4; }
+  .branch-4 .branch-icon { background: rgba(240,98,146,0.2); }
+  .branch-4 .branch-title { color: #f06292; }
+  .branch-5 .branch-icon { background: rgba(79,195,247,0.2); }
+  .branch-5 .branch-title { color: #4fc3f7; }
+  .branch-6 .branch-icon { background: rgba(102,187,106,0.2); }
+  .branch-6 .branch-title { color: #66bb6a; }
+
+  .leaf-list { list-style: none; }
+  .leaf-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    font-size: 14px;
+    line-height: 1.6;
+    color: rgba(255,255,255,0.85);
+  }
+  .leaf-item:last-child { border-bottom: none; }
+  .leaf-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin-top: 7px;
+    flex-shrink: 0;
+  }
+  .branch-1 .leaf-dot { background: #7ecac3; }
+  .branch-2 .leaf-dot { background: #ffb74d; }
+  .branch-3 .leaf-dot { background: #ab6ef4; }
+  .branch-4 .leaf-dot { background: #f06292; }
+  .branch-5 .leaf-dot { background: #4fc3f7; }
+  .branch-6 .leaf-dot { background: #66bb6a; }
+
+  .sub-label {
+    display: inline-block;
+    font-size: 11px;
+    padding: 1px 7px;
+    border-radius: 4px;
+    margin-right: 6px;
+    opacity: 0.85;
+    font-weight: 600;
+  }
+  .branch-1 .sub-label { background: rgba(126,202,195,0.2); color: #7ecac3; }
+  .branch-2 .sub-label { background: rgba(255,183,77,0.2); color: #ffb74d; }
+  .branch-3 .sub-label { background: rgba(171,110,244,0.2); color: #ab6ef4; }
+  .branch-4 .sub-label { background: rgba(240,98,146,0.2); color: #f06292; }
+  .branch-5 .sub-label { background: rgba(79,195,247,0.2); color: #4fc3f7; }
+  .branch-6 .sub-label { background: rgba(102,187,106,0.2); color: #66bb6a; }
+
+  /* Quote section */
+  .quotes-section {
+    margin-top: 30px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 16px;
+    padding: 24px;
+    border: 1px solid rgba(255,255,255,0.07);
+  }
+  .section-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #fed6e3;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .quote-card {
+    background: rgba(255,255,255,0.04);
+    border-left: 3px solid #fed6e3;
+    padding: 12px 16px;
+    border-radius: 0 10px 10px 0;
+    margin-bottom: 12px;
+    font-size: 14px;
+    color: rgba(255,255,255,0.85);
+    font-style: italic;
+    line-height: 1.7;
+  }
+  .quote-card:last-child { margin-bottom: 0; }
+
+  /* Action section */
+  .actions-section {
+    margin-top: 24px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 16px;
+    padding: 24px;
+    border: 1px solid rgba(255,255,255,0.07);
+  }
+  .action-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    font-size: 14px;
+    color: rgba(255,255,255,0.85);
+    line-height: 1.6;
+  }
+  .action-item:last-child { border-bottom: none; }
+  .action-num {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #7ecac3, #4db6ac);
+    color: #0f2027;
+    font-size: 13px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    margin-top: 50px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.3);
+    letter-spacing: 1px;
+  }
+
+  /* Full width branch */
+  .branch-full {
+    grid-column: 1 / -1;
+  }
+  .leaf-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  @media (max-width: 600px) {
+    .leaf-grid { grid-template-columns: 1fr 1fr; }
+  }
+  .leaf-card {
+    background: rgba(255,255,255,0.04);
+    border-radius: 10px;
+    padding: 12px;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .leaf-card-title {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .leaf-card-text {
+    font-size: 12px;
+    opacity: 0.7;
+    line-height: 1.5;
+  }
+  .branch-2 .leaf-card-title { color: #ffb74d; }
+  .branch-3 .leaf-card-title { color: #ab6ef4; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="date">📅 2026 · 05 · 14 &nbsp;|&nbsp; 每日一学</div>
+  <h1>系统之美</h1>
+  <div class="subtitle">Thinking in Systems: A Primer</div>
+  <div class="author-tag">多内拉·梅多斯 Donella H. Meadows</div>
+</div>
+
+<div class="mindmap">
+
+  <!-- Core Node -->
+  <div class="core-node">
+    <div class="core-box">🌐 系统思维 · 看见世界的隐藏结构</div>
+  </div>
+
+  <!-- Branches Grid -->
+  <div class="branches">
+
+    <!-- Branch 1: Core Insight -->
+    <div class="branch branch-1">
+      <div class="branch-header">
+        <div class="branch-icon">💡</div>
+        <div>
+          <div class="branch-title">核心洞见</div>
+          <div class="branch-sub">Core Insight</div>
+        </div>
+      </div>
+      <ul class="leaf-list">
+        <li class="leaf-item">
+          <div class="leaf-dot"></div>
+          <span>世界由<strong>系统</strong>构成，而非孤立的线性因果链</span>
+        </li>
+        <li class="leaf-item">
+          <div class="leaf-dot"></div>
+          <span>大多数问题（贫困、战争、污染）都是系统失调的结果，而非个人失败</span>
+        </li>
+        <li class="leaf-item">
+          <div class="leaf-dot"></div>
+          <span>系统会<strong>自我维持</strong>——它有存量、流量和反馈回路，内置抵抗改变的机制</span>
+        </li>
+        <li class="leaf-item">
+          <div class="leaf-dot"></div>
+          <span>改变系统，需要找到<strong>杠杆点</strong>：在关键位置施加微小力量产生巨大改变</span>
+        </li>
+        <li class="leaf-item">
+          <div class="leaf-dot"></div>
+          <span>系统思维是一种<strong>谦逊</strong>——承认复杂性，放弃控制幻觉</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Branch 2: Three Core Elements -->
+    <div class="branch branch-2">
+      <div class="branch-header">
+        <div class="branch-icon">🔷</div>
+        <div>
+          <div class="branch-title">系统三要素</div>
+          <div class="branch-sub">Three Elements of a System</div>
+        </div>
+      </div>
+      <ul class="leaf-list">
+        <li class="leaf-item">
+          <div class="leaf-dot"></div>
+          <span><span class="sub-label">存量</span>系统中任何时刻可测量的量（水库水量、银行存款、人口数）</span>
+        </li>
+        <li class="leaf-item">
+          <div class="leaf-dot"></div>
+          <span><span class="sub-label">流量</span>存量随时间的变化率（降水与蒸发、收入与支出、出生与死亡）</span>
+        </li>
+        <li class="leaf-item">
+          <div class="leaf-dot"></div>
+          <span><span class="sub-label">反馈</span>信息在系统中循环流动，影响未来流量决策的机制</span>
+        </li>
+        <li class="leaf-item">
+          <div class="leaf-dot"></div>
+          <span>存量是系统的<strong>记忆</strong>，变化缓慢——这是系统稳定性的来源</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Branch 3: Two Feedback Loops -->
+    <div class="branch branch-3">
+      <div class="branch-header">
+        <div class="branch-icon">🔄</div>
+        <div>
+          <div class="branch-title">两类反馈回路</div>
+          <div class="branch-sub">Two Types of Feedback Loops</div>
+        </div>
+      </div>
+      <ul class="leaf-list">
+        <li class="leaf-item">
+          <div class="leaf-dot"></div>
+          <span><span class="sub-label">调节回路 B</span>维持平衡、趋向目标（恒温器、血糖调节、价格机制）</span>
+        </li>
+        <li class="leaf-item">
+          <div class="leaf-dot"></div>
+          <span><span class="sub-label">增强回路 R</span>放大变化、自我强化（复利、病毒传播、贫困陷阱）</span>
+        </li>
+        <li class="leaf-item">
+          <div class="leaf-dot"></div>
+          <span>大多数真实系统是<strong>多回路嵌套</strong>的，不同时期不同回路主导</span>
+        </li>
+        <li class="leaf-item">
+          <div class="leaf-dot"></div>
+          <span><strong>时间延迟</strong>是系统振荡与过冲的根本原因——决策者必须感知并补偿延迟</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Branch 4: System Traps -->
+    <div class="branch branch-4">
+      <div class="branch-header">
+        <div class="branch-icon">⚠️</div>
+        <div>
+          <div class="branch-title">系统陷阱与机遇</div>
+          <div class="branch-sub">System Traps & Opportunities</div>
+        </div>
+      </div>
+      <ul class="leaf-list">
+        <li class="leaf-item">
+          <div class="leaf-dot"></div>
+          <span><span class="sub-label">政策阻力</span>各方维护自身存量，改革努力被系统抵消</span>
+        </li>
+        <li class="leaf-item">
+          <div class="leaf-dot"></div>
+          <span><span class="sub-label">公地悲剧</span>个体理性导致集体灾难（过度捕鱼/放牧）</span>
+        </li>
+        <li class="leaf-item">
+          <div class="leaf-dot"></div>
+          <span><span class="sub-label">目标侵蚀</span>为减轻差距感而降低目标而非提升绩效</span>
+        </li>
+        <li class="leaf-item">
+          <div class="leaf-dot"></div>
+          <span><span class="sub-label">成瘾/移位</span>治标不治本，依赖外部干预，能力萎缩</span>
+        </li>
+        <li class="leaf-item">
+          <div class="leaf-dot"></div>
+          <span><span class="sub-label">竞争升级</span>双方增强回路相互刺激（军备竞赛、价格战）</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Branch 5: Leverage Points -->
+    <div class="branch branch-5">
+      <div class="branch-header">
+        <div class="branch-icon">🎯</div>
+        <div>
+          <div class="branch-title">系统杠杆点（12级）</div>
+          <div class="branch-sub">Leverage Points · 力量从低到高</div>
+        </div>
+      </div>
+      <ul class="leaf-list">
+        <li class="leaf-item">
+          <div class="leaf-dot"></div>
+          <span><span class="sub-label">低效杠杆</span>调整数字与参数（税率、补贴额）——效果最弱</span>
+        </li>
+        <li class="leaf-item">
+          <div class="leaf-dot"></div>
+          <span><span class="sub-label">中效杠杆</span>改变反馈回路的结构（增加调节回路、减少延迟）</span>
+        </li>
+        <li class="leaf-item">
+          <div class="leaf-dot"></div>
+          <span><span class="sub-label">强效杠杆</span>改变系统目标、信息流、规则（法律/激励机制）</span>
+        </li>
+        <li class="leaf-item">
+          <div class="leaf-dot"></div>
+          <span><span class="sub-label">最强杠杆</span>改变人们的心智模式——对系统目的的共识信念</span>
+        </li>
+        <li class="leaf-item">
+          <div class="leaf-dot"></div>
+          <span>直觉往往选错方向：人们倾向于在<strong>低效杠杆</strong>上过度用力</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Branch 6: System Wisdom -->
+    <div class="branch branch-6">
+      <div class="branch-header">
+        <div class="branch-icon">🌱</div>
+        <div>
+          <div class="branch-title">系统思维者的智慧</div>
+          <div class="branch-sub">Wisdom of Systems Thinkers</div>
+        </div>
+      </div>
+      <ul class="leaf-list">
+        <li class="leaf-item">
+          <div class="leaf-dot"></div>
+          <span>观察系统<strong>行为模式</strong>，而非单次事件——把时间轴拉长</span>
+        </li>
+        <li class="leaf-item">
+          <div class="leaf-dot"></div>
+          <span>对信息保持<strong>谦逊</strong>——地图不是领土，模型永远简化了现实</span>
+        </li>
+        <li class="leaf-item">
+          <div class="leaf-dot"></div>
+          <span>关注<strong>非线性</strong>：小投入可能有大产出，也可能没有</span>
+        </li>
+        <li class="leaf-item">
+          <div class="leaf-dot"></div>
+          <span>系统有其<strong>自组织</strong>能力——不要过度控制，留有余地</span>
+        </li>
+        <li class="leaf-item">
+          <div class="leaf-dot"></div>
+          <span>培育<strong>韧性</strong>而非效率最优——冗余是系统生存的保险</span>
+        </li>
+      </ul>
+    </div>
+
+  </div><!-- /branches -->
+
+  <!-- Quotes -->
+  <div class="quotes-section">
+    <div class="section-title">💬 金句摘录</div>
+    <div class="quote-card">「你永远无法只做一件事。」——系统中任何干预都会有涟漪效应蔓延至整个网络。</div>
+    <div class="quote-card">「问题从不来自坏人的恶意，而来自好人陷入了坏系统。」——系统结构决定行为，而非个体意志。</div>
+    <div class="quote-card">「增强回路是系统中所有指数增长和崩溃的引擎。」——理解复利，才能理解世界。</div>
+    <div class="quote-card">「杠杆点往往是反直觉的——你可能找到了它，但却以错误的方向推动它。」</div>
+  </div>
+
+  <!-- Actions -->
+  <div class="actions-section">
+    <div class="section-title">⚡ 行动建议</div>
+    <div class="action-item">
+      <div class="action-num">1</div>
+      <div>遇到棘手问题时，<strong>画出因果反馈图</strong>：找出存量、流量和反馈回路，而不是直接寻找"谁之过"。</div>
+    </div>
+    <div class="action-item">
+      <div class="action-num">2</div>
+      <div>识别生活/工作中的<strong>增强回路</strong>，刻意加强正向的（学习-能力-机会-动力），打断负向的（焦虑-回避-落后-焦虑）。</div>
+    </div>
+    <div class="action-item">
+      <div class="action-num">3</div>
+      <div>面对目标偏差时，警惕<strong>目标侵蚀陷阱</strong>——优先提升绩效，而非通过降低目标减轻痛苦。</div>
+    </div>
+    <div class="action-item">
+      <div class="action-num">4</div>
+      <div>做决策时纳入<strong>时间延迟</strong>：今天的行动效果会延迟显现，不要因短期无反应就过度加力。</div>
+    </div>
+    <div class="action-item">
+      <div class="action-num">5</div>
+      <div>在团队/组织中找<strong>系统杠杆点</strong>：与其频繁调整参数，不如改变信息流和激励结构。</div>
+    </div>
+    <div class="action-item">
+      <div class="action-num">6</div>
+      <div>保持<strong>韧性思维</strong>：不追求极致效率，保留一定冗余与缓冲，以应对黑天鹅式扰动。</div>
+    </div>
+  </div>
+
+</div><!-- /mindmap -->
+
+<div class="footer">每日一学 · 2026-05-14 · 系统之美 | Thinking in Systems</div>
+
+</body>
+</html>
