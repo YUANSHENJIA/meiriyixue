@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 黑天鹅</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3e 40%, #0d0d2b 100%);
+    min-height: 100vh;
+    color: #e2e8f0;
+    padding: 24px 16px;
+    line-height: 1.6;
+  }
+  .container { max-width: 800px; margin: 0 auto; }
+
+  /* Header */
+  .header { text-align: center; padding: 20px 0 32px; }
+  .header .date { font-size: 13px; color: rgba(255,255,255,0.35); letter-spacing: 2px; margin-bottom: 8px; }
+  .header h1 {
+    font-size: 30px; font-weight: 800;
+    background: linear-gradient(90deg, #a78bfa, #6366f1, #818cf8);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    margin-bottom: 6px;
+  }
+  .header .subtitle { font-size: 14px; color: rgba(255,255,255,0.4); margin-bottom: 12px; }
+  .header .author { font-size: 13px; color: rgba(255,255,255,0.5); }
+  .badge-row { display: flex; justify-content: center; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+  .badge {
+    display: inline-block; padding: 3px 12px; border-radius: 20px; font-size: 11px;
+    background: rgba(99,102,241,0.15); border: 1px solid rgba(99,102,241,0.3); color: #a5b4fc;
+  }
+
+  /* Core Insight */
+  .core-insight {
+    background: linear-gradient(135deg, rgba(99,102,241,0.12), rgba(139,92,246,0.08));
+    border: 1px solid rgba(99,102,241,0.25); border-radius: 16px;
+    padding: 20px 22px; margin-bottom: 24px;
+  }
+  .core-insight .label { font-size: 12px; color: #a5b4fc; letter-spacing: 1px; margin-bottom: 8px; text-transform: uppercase; }
+  .core-insight p { font-size: 15px; color: rgba(255,255,255,0.85); line-height: 1.8; }
+
+  /* Section */
+  .section { margin-bottom: 24px; }
+  .section-title {
+    font-size: 18px; font-weight: 700; color: #c4b5fd;
+    margin-bottom: 14px; padding-left: 12px;
+    border-left: 3px solid #6366f1;
+  }
+
+  /* Framework Card */
+  .framework {
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px; padding: 18px 20px; margin-bottom: 12px;
+  }
+  .framework-title { font-size: 15px; font-weight: 600; color: #e0e7ff; margin-bottom: 10px; }
+  .framework-item {
+    display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px;
+    padding: 8px 12px; background: rgba(255,255,255,0.03); border-radius: 8px;
+  }
+  .framework-item:last-child { margin-bottom: 0; }
+  .framework-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .framework-item .item-title { font-size: 14px; font-weight: 600; color: #c7d2fe; }
+  .framework-item .item-desc { font-size: 13px; color: rgba(255,255,255,0.55); margin-top: 2px; }
+
+  /* Knowledge Points */
+  .kp-card {
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px; padding: 16px 20px; margin-bottom: 10px;
+  }
+  .kp-title { font-size: 14px; font-weight: 600; color: #e0e7ff; margin-bottom: 6px; }
+  .kp-desc { font-size: 13px; color: rgba(255,255,255,0.55); }
+
+  /* Quotes */
+  .quote-card {
+    background: linear-gradient(135deg, rgba(139,92,246,0.08), rgba(99,102,241,0.05));
+    border-left: 3px solid #8b5cf6; border-radius: 0 12px 12px 0;
+    padding: 16px 20px; margin-bottom: 10px;
+  }
+  .quote-text { font-size: 14px; color: rgba(255,255,255,0.8); font-style: italic; line-height: 1.7; }
+
+  /* Actions */
+  .action-card {
+    display: flex; align-items: flex-start; gap: 12px;
+    background: rgba(99,102,241,0.08); border: 1px solid rgba(99,102,241,0.2);
+    border-radius: 12px; padding: 14px 18px; margin-bottom: 10px;
+  }
+  .action-num {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: rgba(99,102,241,0.3); color: #c4b5fd;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; flex-shrink: 0;
+  }
+  .action-text { font-size: 14px; color: rgba(255,255,255,0.75); padding-top: 3px; }
+
+  /* Footer */
+  .footer { text-align: center; margin-top: 36px; padding: 16px 0; border-top: 1px solid rgba(255,255,255,0.06); }
+  .footer p { font-size: 12px; color: rgba(255,255,255,0.2); }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="date">2026 / 05 / 15</div>
+    <h1>黑天鹅</h1>
+    <div class="subtitle">如何应对不可预知的未来</div>
+    <div class="author">纳西姆·尼古拉斯·塔勒布（Nassim Nicholas Taleb）</div>
+    <div class="badge-row">
+      <span class="badge">不确定性</span>
+      <span class="badge">认知偏差</span>
+      <span class="badge">风险管理</span>
+      <span class="badge">反脆弱思维</span>
+    </div>
+  </div>
+
+  <!-- Core Insight -->
+  <div class="core-insight">
+    <div class="label">Core Insight</div>
+    <p>人类天生倾向于从过去的经验中预测未来，但真正改变世界的事件——黑天鹅——几乎总是不可预测的。它们具有三个特征：<strong>极端意外性</strong>（超出预期）、<strong>巨大影响力</strong>（改变历史进程）、<strong>事后可解释性</strong>（发生后总有人能找到"原因"）。我们不应试图预测黑天鹅，而应构建能从中获益的系统。</p>
+  </div>
+
+  <!-- Framework -->
+  <div class="section">
+    <div class="section-title">核心框架：黑天鹅思维体系</div>
+
+    <div class="framework">
+      <div class="framework-title">一、黑天鹅的定义与三大特征</div>
+      <div class="framework-item">
+        <div class="framework-icon">⚡</div>
+        <div><div class="item-title">异常性</div><div class="item-desc">超出常规预期的范围，没有任何先兆能让我们合理地预测到它的发生</div></div>
+      </div>
+      <div class="framework-item">
+        <div class="framework-icon">💥</div>
+        <div><div class="item-title">极端影响力</div><div class="item-desc">一旦发生，产生巨大的、深远的影响，足以改变历史进程和人类认知</div></div>
+      </div>
+      <div class="framework-item">
+        <div class="framework-icon">🔮</div>
+        <div><div class="item-title">事后可预测性</div><div class="item-desc">虽然事前无法预测，但事后人们总能编造各种解释，使其看起来是可预测的</div></div>
+      </div>
+    </div>
+
+    <div class="framework">
+      <div class="framework-title">二、认知陷阱：为什么我们看不到黑天鹅</div>
+      <div class="framework-item">
+        <div class="framework-icon">🧩</div>
+        <div><div class="item-title">叙述谬误（Narrative Fallacy）</div><div class="item-desc">人类天生喜欢编故事，用因果关系强行解释随机事件，让我们误以为世界是可预测的</div></div>
+      </div>
+      <div class="framework-item">
+        <div class="framework-icon">🎲</div>
+        <div><div class="item-title">游戏谬误（Ludic Fallacy）</div><div class="item-desc">将现实世界的复杂性等同于已知概率的赌场游戏，低估了未知的未知</div></div>
+      </div>
+      <div class="framework-item">
+        <div class="framework-icon">🎯</div>
+        <div><div class="item-title">确认偏误</div><div class="item-desc">只关注支持自己已有观点的证据，过滤掉反面信息，形成"知识的傲慢"</div></div>
+      </div>
+      <div class="framework-item">
+        <div class="framework-icon">📊</div>
+        <div><div class="item-title">沉默的证据</div><div class="item-desc">幸存者偏差——我们只看到成功案例，看不到无数失败者，导致对概率的系统性误判</div></div>
+      </div>
+    </div>
+
+    <div class="framework">
+      <div class="framework-title">三、两个世界：平均斯坦 vs 极端斯坦</div>
+      <div class="framework-item">
+        <div class="framework-icon">📏</div>
+        <div><div class="item-title">平均斯坦（Mediocristan）</div><div class="item-desc">个体影响小，整体服从正态分布。如身高、体重——一个巨人不会显著改变人类平均身高</div></div>
+      </div>
+      <div class="framework-item">
+        <div class="framework-icon">🌋</div>
+        <div><div class="item-title">极端斯坦（Extremistan）</div><div class="item-desc">个体可以产生极端影响，服从幂律分布。如财富、图书销量、社交媒体——一个爆款可以碾压所有</div></div>
+      </div>
+    </div>
+
+    <div class="framework">
+      <div class="framework-title">四、应对策略：从预测转向构建韧性</div>
+      <div class="framework-item">
+        <div class="framework-icon">🛡️</div>
+        <div><div class="item-title">杠铃策略（Barbell Strategy）</div><div class="item-desc">将大部分资源放在极端安全的领域，小部分投入高风险高回报的领域，彻底规避中间地带</div></div>
+      </div>
+      <div class="framework-item">
+        <div class="framework-icon">🔍</div>
+        <div><div class="item-title">利用正面黑天鹅</div><div class="item-desc">在暴露于正面黑天鹅（意外好运）的同时，限制负面黑天鹅的破坏力，让不确定性为你工作</div></div>
+      </div>
+      <div class="framework-item">
+        <div class="framework-icon">🌱</div>
+        <div><div class="item-title">保持可选择性</div><div class="item-desc">不做不可逆的决策，保持开放的选择空间，让自己能够灵活应对变化</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Knowledge Points -->
+  <div class="section">
+    <div class="section-title">主要知识点</div>
+
+    <div class="kp-card">
+      <div class="kp-title">专家预测的局限性</div>
+      <div class="kp-desc">专家在复杂领域的预测准确率并不显著优于随机猜测。经济学家的预测、政治分析师的判断，在黑天鹅面前毫无优势。过度依赖专家是危险的。</div>
+    </div>
+    <div class="kp-card">
+      <div class="kp-title">知识的傲慢与学习的错觉</div>
+      <div class="kp-desc">每一次"准确预测"都增强了我们的自信，但那些失败的预测被选择性遗忘。我们的知识增长速度远不及复杂性的增长速度。</div>
+    </div>
+    <div class="kp-card">
+      <div class="kp-title"> scalable 与 nonscalable 职业的选择</div>
+      <div class="kp-desc">Scalable 职业（作家、投资者、企业家）的收入上限无限，一个作品可以改变一切；nonscalable 职业（牙医、厨师）收入相对稳定。前者充满黑天鹅，后者更可预测。</div>
+    </div>
+    <div class="kp-card">
+      <div class="kp-title">不作为也是一种行动</div>
+      <div class="kp-desc">在极端斯坦中，有时候什么都不做反而是最优策略。过度干预往往制造新的问题，而自然系统有自我修复能力。</div>
+    </div>
+    <div class="kp-card">
+      <div class="kp-title">尾部风险决定一切</div>
+      <div class="kp-desc">在幂律分布中，平均数毫无意义。决定结果的不是日常事件，而是极少数的极端事件。关注尾部（分布的两端）比关注中心更重要。</div>
+    </div>
+    <div class="kp-card">
+      <div class="kp-title">否定法：知道自己不知道什么</div>
+      <div class="kp-desc">与其试图积累正面知识（知道什么），不如专注于消除错误认知（知道自己不知道什么）。减法知识比加法知识更可靠。</div>
+    </div>
+  </div>
+
+  <!-- Quotes -->
+  <div class="section">
+    <div class="section-title">金句精选</div>
+
+    <div class="quote-card">
+      <div class="quote-text">"历史和社会不是缓慢爬行的，而是在一步步地跳跃。它们从一个断层跃上另一个断层，其间极少有波折。而我们（以及我们的专家）喜欢相信那些可预测的小的渐进。"</div>
+    </div>
+    <div class="quote-card">
+      <div class="quote-text">"我们的世界是由极端的、未知的、非常不可能的事件所主导的——而这些事件，我们在事后总试图为它们编造解释，并使它们变得可解释。"</div>
+    </div>
+    <div class="quote-card">
+      <div class="quote-text">"我可以告诉你富人的秘密，但穷人的秘密对你是隐藏的。这叫沉默的证据。"</div>
+    </div>
+    <div class="quote-card">
+      <div class="quote-text">"不要试图去预测黑天鹅，因为那是不可能的。应该做的是构建一个能从黑天鹅中受益的系统。"</div>
+    </div>
+    <div class="quote-card">
+      <div class="quote-text">"你永远无法通过有限的观察来证明一个普遍的命题，但只需一个反例就能推翻它。"</div>
+    </div>
+  </div>
+
+  <!-- Actions -->
+  <div class="section">
+    <div class="section-title">行动建议</div>
+
+    <div class="action-card">
+      <div class="action-num">1</div>
+      <div class="action-text">采用杠铃策略配置资源：80% 放在极安全的资产/工作中，20% 投入高风险高回报的机会，彻底放弃"中等风险"的中间路线</div>
+    </div>
+    <div class="action-card">
+      <div class="action-num">2</div>
+      <div class="action-text">对自己的"确定感"保持警觉——每当觉得某事"显而易见"时，提醒自己可能是叙述谬误在作怪</div>
+    </div>
+    <div class="action-card">
+      <div class="action-num">3</div>
+      <div class="action-text">减少对专家预测的依赖，特别是在经济、政治、市场等复杂领域，培养自己的独立判断力</div>
+    </div>
+    <div class="action-card">
+      <div class="action-num">4</div>
+      <div class="action-text">主动寻找正面黑天鹅的机会：尝试新事物、建立弱连接、接触不同领域——让好运有降临的可能</div>
+    </div>
+    <div class="action-card">
+      <div class="action-num">5</div>
+      <div class="action-text">做好最坏打算的底线防御：确保在负面黑天鹅来临时你有基本保障——充足的现金储备、多元收入来源、健康的身体</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>WorkBuddy 每日一学 · 2026-05-15 · 持续成长</p>
+  </div>
+
+</div>
+</body>
+</html>
