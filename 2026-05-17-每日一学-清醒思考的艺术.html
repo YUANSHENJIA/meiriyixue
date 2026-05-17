@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>清醒思考的艺术 · 每日一学 2026-05-17</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    min-height: 100vh;
+    color: #e0e0e0;
+    padding: 20px;
+  }
+  .container { max-width: 1100px; margin: 0 auto; }
+
+  /* 标题区 */
+  .header {
+    text-align: center;
+    padding: 40px 20px 30px;
+    margin-bottom: 30px;
+  }
+  .date-tag {
+    display: inline-block;
+    background: rgba(99, 179, 237, 0.15);
+    border: 1px solid rgba(99, 179, 237, 0.4);
+    color: #63b3ed;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+  }
+  .book-title {
+    font-size: 38px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #f7d794, #f3a683);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.3;
+    margin-bottom: 10px;
+  }
+  .book-author {
+    font-size: 15px;
+    color: #a0aec0;
+    margin-bottom: 8px;
+  }
+  .book-subtitle {
+    font-size: 14px;
+    color: #718096;
+    font-style: italic;
+  }
+
+  /* 核心洞见 */
+  .insight-box {
+    background: linear-gradient(135deg, rgba(247, 215, 148, 0.12), rgba(243, 166, 131, 0.08));
+    border: 1px solid rgba(247, 215, 148, 0.3);
+    border-radius: 16px;
+    padding: 28px 32px;
+    margin-bottom: 28px;
+    position: relative;
+    overflow: hidden;
+  }
+  .insight-box::before {
+    content: '"';
+    position: absolute;
+    top: -10px;
+    left: 20px;
+    font-size: 100px;
+    color: rgba(247, 215, 148, 0.08);
+    font-family: Georgia, serif;
+    line-height: 1;
+  }
+  .section-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #f7d794;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, rgba(247,215,148,0.3), transparent);
+  }
+  .insight-text {
+    font-size: 17px;
+    line-height: 1.8;
+    color: #e2e8f0;
+    font-weight: 400;
+  }
+
+  /* 四要素网格 */
+  .framework-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .framework-card {
+    background: rgba(255,255,255,0.04);
+    border-radius: 14px;
+    padding: 22px;
+    border: 1px solid rgba(255,255,255,0.08);
+    transition: transform 0.2s, border-color 0.2s;
+  }
+  .framework-card:hover { transform: translateY(-2px); border-color: rgba(255,255,255,0.18); }
+  .framework-number {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .framework-card:nth-child(1) .framework-number { color: #fc8181; }
+  .framework-card:nth-child(2) .framework-number { color: #68d391; }
+  .framework-card:nth-child(3) .framework-number { color: #63b3ed; }
+  .framework-card:nth-child(4) .framework-number { color: #f6e05e; }
+  .framework-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #e2e8f0;
+    margin-bottom: 8px;
+  }
+  .framework-desc {
+    font-size: 13px;
+    color: #a0aec0;
+    line-height: 1.6;
+  }
+
+  /* 知识点列表 */
+  .knowledge-box {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 28px 32px;
+    margin-bottom: 28px;
+  }
+  .knowledge-list { list-style: none; }
+  .knowledge-list li {
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    font-size: 14px;
+    line-height: 1.7;
+    color: #cbd5e0;
+  }
+  .knowledge-list li:last-child { border-bottom: none; }
+  .k-icon {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .k-icon.red { background: rgba(252,129,129,0.2); color: #fc8181; }
+  .k-icon.green { background: rgba(104,211,145,0.2); color: #68d391; }
+  .k-icon.blue { background: rgba(99,179,237,0.2); color: #63b3ed; }
+  .k-icon.yellow { background: rgba(246,224,94,0.2); color: #f6e05e; }
+  .k-icon.purple { background: rgba(183,148,244,0.2); color: #b794f4; }
+  .k-icon.orange { background: rgba(251,191,36,0.2); color: #fbbf24; }
+  .k-name { font-weight: 600; color: #e2e8f0; min-width: 90px; }
+
+  /* 金句 */
+  .quotes-section { margin-bottom: 28px; }
+  .quote-card {
+    background: linear-gradient(135deg, rgba(99,179,237,0.08), rgba(183,148,244,0.06));
+    border-left: 3px solid #63b3ed;
+    border-radius: 0 12px 12px 0;
+    padding: 18px 22px;
+    margin-bottom: 12px;
+    font-size: 15px;
+    color: #e2e8f0;
+    font-style: italic;
+    line-height: 1.7;
+    position: relative;
+  }
+  .quote-card::before {
+    content: '\201C';
+    font-size: 36px;
+    color: rgba(99,179,237,0.3);
+    position: absolute;
+    top: 8px;
+    right: 16px;
+    font-family: Georgia, serif;
+    line-height: 1;
+  }
+
+  /* 行动建议 */
+  .actions-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+  .action-card {
+    background: rgba(104,211,145,0.06);
+    border: 1px solid rgba(104,211,145,0.15);
+    border-radius: 12px;
+    padding: 18px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .action-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #68d391, #48bb78);
+    color: #1a1a2e;
+    font-weight: 700;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .action-text {
+    font-size: 13px;
+    color: #a0aec0;
+    line-height: 1.6;
+  }
+  .action-text strong { color: #e2e8f0; display: block; margin-bottom: 4px; font-size: 14px; }
+
+  /* 全局偏误地图 */
+  .bias-map {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 16px;
+    padding: 28px;
+    margin-bottom: 28px;
+  }
+  .bias-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 16px;
+  }
+  .bias-tag {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 12px;
+    color: #a0aec0;
+    text-align: center;
+    line-height: 1.4;
+  }
+  .bias-tag span {
+    display: block;
+    font-size: 11px;
+    color: #718096;
+    margin-top: 2px;
+  }
+
+  /* 页脚 */
+  .footer {
+    text-align: center;
+    padding: 20px;
+    color: #4a5568;
+    font-size: 12px;
+    letter-spacing: 1px;
+  }
+
+  @media (max-width: 600px) {
+    .framework-grid, .actions-grid { grid-template-columns: 1fr; }
+    .bias-grid { grid-template-columns: repeat(2, 1fr); }
+    .book-title { font-size: 28px; }
+    .insight-text { font-size: 15px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- 头部 -->
+  <div class="header">
+    <div class="date-tag">📅 每日一学 · 2026-05-17</div>
+    <h1 class="book-title">清醒思考的艺术</h1>
+    <p class="book-author">罗尔夫·多贝里（Rolf Dobelli）</p>
+    <p class="book-subtitle">The Art of Thinking Clearly — 52种认知偏误与思维陷阱全解</p>
+  </div>
+
+  <!-- 核心洞见 -->
+  <div class="insight-box">
+    <div class="section-label">🔑 核心洞见</div>
+    <p class="insight-text">
+      人类大脑是为生存而设计的，而非为理性决策而设计的。我们每天都在无意识地落入数十种认知偏误的陷阱——从幸存者偏差到羊群效应，从损失厌恶到确认偏误。清醒思考，不是拥有更多知识，而是<strong style="color:#f7d794">识别并主动规避大脑的系统性错误</strong>，让理性引导行动，而非本能冲动。
+    </p>
+  </div>
+
+  <!-- 四核心框架 -->
+  <div class="section-label" style="margin-bottom:14px; padding:0 4px;">🧩 四大核心框架</div>
+  <div class="framework-grid">
+    <div class="framework-card">
+      <div class="framework-number">01</div>
+      <div class="framework-title">认知偏误层</div>
+      <div class="framework-desc">大脑在信息处理时产生的系统性偏差。包括确认偏误、可得性偏误、锚定效应等。识别是第一步，承认偏误的存在比消除它更现实。</div>
+    </div>
+    <div class="framework-card">
+      <div class="framework-number">02</div>
+      <div class="framework-title">社会影响层</div>
+      <div class="framework-desc">羊群效应、权威偏误、社会认同——我们的决策深受他人行为左右。独立思考需要有意识地与群体保持距离，建立自己的判断标准。</div>
+    </div>
+    <div class="framework-card">
+      <div class="framework-number">03</div>
+      <div class="framework-title">结果误判层</div>
+      <div class="framework-desc">幸存者偏差、结果偏见、后见之明——我们看到的总是成功的例子，忽视失败的沉默大多数。判断质量应看决策过程，而非结果。</div>
+    </div>
+    <div class="framework-card">
+      <div class="framework-number">04</div>
+      <div class="framework-title">行动纠偏层</div>
+      <div class="framework-desc">建立"偏误检查清单"、引入外部视角、强迫暂停思考——通过制度化的流程对抗本能反应，让慢思维介入快思维的领域。</div>
+    </div>
+  </div>
+
+  <!-- 主要知识点 -->
+  <div class="knowledge-box">
+    <div class="section-label" style="margin-bottom:16px;">📚 主要知识点（核心偏误精选）</div>
+    <ul class="knowledge-list">
+      <li>
+        <div class="k-icon red">1</div>
+        <div><span class="k-name">幸存者偏差</span>我们只看到成功者的故事，那些失败的人已经消失在统计数据里。商学院只教成功案例，让你误以为成功有规律可循。</div>
+      </li>
+      <li>
+        <div class="k-icon green">2</div>
+        <div><span class="k-name">沉没成本谬误</span>越亏损越不愿放弃——因为已经投入了时间、金钱或感情。理性决策只看未来收益，与过去的投入无关。</div>
+      </li>
+      <li>
+        <div class="k-icon blue">3</div>
+        <div><span class="k-name">羊群效应</span>当不确定时，我们倾向于跟随大多数人。进化上这是安全的，但在投资市场和集体决策中，这会制造泡沫和灾难。</div>
+      </li>
+      <li>
+        <div class="k-icon yellow">4</div>
+        <div><span class="k-name">禀赋效应</span>我们给自己拥有的东西赋予更高价值。卖家总觉得自己东西值更多，买家总觉得太贵——同一物品，拥有与否改变估值。</div>
+      </li>
+      <li>
+        <div class="k-icon purple">5</div>
+        <div><span class="k-name">确认偏误</span>我们倾向于寻找支持已有观点的证据，忽视反驳证据。主动寻找反例，是对抗确认偏误最有效的方法。</div>
+      </li>
+      <li>
+        <div class="k-icon orange">6</div>
+        <div><span class="k-name">可得性偏误</span>越容易想起的事，感觉越普遍。飞机事故上新闻，汽车事故不上，所以人们高估飞行风险，低估驾车风险。</div>
+      </li>
+      <li>
+        <div class="k-icon red">7</div>
+        <div><span class="k-name">过度自信效应</span>90%的司机认为自己驾驶技术高于平均水平——这在统计上不可能成立。我们系统性地高估自己的能力与判断。</div>
+      </li>
+      <li>
+        <div class="k-icon green">8</div>
+        <div><span class="k-name">损失厌恶</span>失去100元的痛苦是得到100元快乐的约两倍。这导致我们过度规避风险，错失合理机会，也让我们在亏损时死扛不放。</div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- 偏误全景图 -->
+  <div class="bias-map">
+    <div class="section-label">🗺️ 认知偏误全景（52种精华节选）</div>
+    <div class="bias-grid">
+      <div class="bias-tag">锚定效应<span>第一个数字控制判断</span></div>
+      <div class="bias-tag">稀缺效应<span>越少越想要</span></div>
+      <div class="bias-tag">后见之明<span>"我早就知道"</span></div>
+      <div class="bias-tag">对比效应<span>参照物扭曲判断</span></div>
+      <div class="bias-tag">光环效应<span>外表影响全面评价</span></div>
+      <div class="bias-tag">曝光效应<span>熟悉即喜爱</span></div>
+      <div class="bias-tag">现状偏误<span>不愿改变现状</span></div>
+      <div class="bias-tag">控制幻觉<span>高估自己影响力</span></div>
+      <div class="bias-tag">权威偏误<span>专家说的都对？</span></div>
+      <div class="bias-tag">框架效应<span>表述方式改变选择</span></div>
+      <div class="bias-tag">赌徒谬误<span>随机事件无记忆</span></div>
+      <div class="bias-tag">零风险偏误<span>消除小风险的迷恋</span></div>
+    </div>
+  </div>
+
+  <!-- 金句 -->
+  <div class="quotes-section">
+    <div class="section-label" style="margin-bottom:14px;">✨ 金句摘录</div>
+    <div class="quote-card">不要试图消灭所有认知偏误——这不可能做到。你需要做的，是识别那些代价最高的偏误，并在关键决策时刻主动暂停。</div>
+    <div class="quote-card">幸存者偏差让我们相信成功是常态，失败是例外。现实恰恰相反——失败才是大多数，成功者只是那少数幸运的幸存者。</div>
+    <div class="quote-card">沉没成本不是成本，它是历史。好的决策者只问：从现在起，哪条路更值得走？</div>
+    <div class="quote-card">清醒思考不是天生的礼物，而是一种需要刻意训练的纪律——每天检查自己的推理，就像每天刷牙一样。</div>
+  </div>
+
+  <!-- 行动建议 -->
+  <div class="section-label" style="margin-bottom:14px; padding:0 4px;">🚀 行动建议</div>
+  <div class="actions-grid">
+    <div class="action-card">
+      <div class="action-num">1</div>
+      <div class="action-text">
+        <strong>建立个人偏误清单</strong>
+        挑选5个你最容易犯的偏误，写在卡片上，重大决策前逐一对照检查。
+      </div>
+    </div>
+    <div class="action-card">
+      <div class="action-num">2</div>
+      <div class="action-text">
+        <strong>主动寻找反例</strong>
+        每次形成观点后，逼自己找出3个反驳该观点的证据，对抗确认偏误。
+      </div>
+    </div>
+    <div class="action-card">
+      <div class="action-num">3</div>
+      <div class="action-text">
+        <strong>切断沉没成本思维</strong>
+        评估任何项目时只问：如果今天重新开始，我还会做吗？如果不会，就停止。
+      </div>
+    </div>
+    <div class="action-card">
+      <div class="action-num">4</div>
+      <div class="action-text">
+        <strong>延迟重要决策</strong>
+        对重要决策设24小时冷静期，让情绪退潮，让理性介入，避免热情时冲动。
+      </div>
+    </div>
+    <div class="action-card">
+      <div class="action-num">5</div>
+      <div class="action-text">
+        <strong>寻找沉默的大多数</strong>
+        看到成功故事时，主动问：同样尝试的人有多少失败了？幸存者只是冰山一角。
+      </div>
+    </div>
+    <div class="action-card">
+      <div class="action-num">6</div>
+      <div class="action-text">
+        <strong>独立判断后再看群体</strong>
+        在查看他人意见之前，先写下自己的判断。这样可以保留独立思考，对抗羊群效应。
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    每日一学 · 清醒思考的艺术 · 2026-05-17 · WorkBuddy
+  </div>
+</div>
+</body>
+</html>
