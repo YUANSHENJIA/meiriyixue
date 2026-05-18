@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 人类简史 2026-05-18</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #0f3460 100%);
+    min-height: 100vh;
+    color: #e8e8f0;
+    overflow-x: hidden;
+  }
+  .header {
+    text-align: center;
+    padding: 50px 20px 30px;
+    position: relative;
+  }
+  .date-tag {
+    display: inline-block;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 20px;
+    padding: 6px 18px;
+    font-size: 13px;
+    letter-spacing: 2px;
+    color: #a0c4ff;
+    margin-bottom: 16px;
+  }
+  .header h1 {
+    font-size: clamp(28px, 5vw, 48px);
+    font-weight: 800;
+    background: linear-gradient(135deg, #a0c4ff, #ffd6e0, #c3f1c8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+  .header .author {
+    color: #a0c4ff;
+    font-size: 16px;
+    opacity: 0.8;
+  }
+  .subtitle {
+    color: #c8d8ff;
+    font-size: 14px;
+    margin-top: 8px;
+    opacity: 0.7;
+  }
+
+  /* 思维导图容器 */
+  .mindmap-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  /* 核心主题 */
+  .core-node {
+    text-align: center;
+    margin: 10px auto 40px;
+    position: relative;
+  }
+  .core-node .core-box {
+    display: inline-block;
+    background: linear-gradient(135deg, #764ba2, #667eea);
+    border-radius: 20px;
+    padding: 22px 40px;
+    font-size: 22px;
+    font-weight: 800;
+    color: #fff;
+    box-shadow: 0 8px 32px rgba(102,126,234,0.5);
+    letter-spacing: 2px;
+  }
+  .core-desc {
+    color: #c0c8e8;
+    font-size: 13px;
+    margin-top: 10px;
+    opacity: 0.85;
+  }
+
+  /* 分支网格 */
+  .branches-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 24px;
+    margin-bottom: 30px;
+  }
+
+  /* 分支卡片 */
+  .branch-card {
+    background: rgba(255,255,255,0.05);
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .branch-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+  }
+  .branch-header {
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .branch-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .branch-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+  }
+  .branch-body {
+    padding: 0 20px 20px;
+  }
+
+  /* 子节点 */
+  .leaf-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .leaf-item:last-child { border-bottom: none; }
+  .leaf-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 6px;
+  }
+  .leaf-text {
+    font-size: 13.5px;
+    color: #c8d0e8;
+    line-height: 1.6;
+  }
+  .leaf-text strong {
+    color: #e8edff;
+    font-weight: 600;
+  }
+  .leaf-text .sub {
+    display: block;
+    font-size: 12px;
+    color: #8898b8;
+    margin-top: 2px;
+  }
+
+  /* 色彩主题 */
+  .c1 .branch-header { background: linear-gradient(135deg, rgba(255,107,107,0.15), rgba(255,107,107,0.05)); border-bottom: 1px solid rgba(255,107,107,0.2); }
+  .c1 .branch-icon { background: rgba(255,107,107,0.2); }
+  .c1 .leaf-dot { background: #ff6b6b; }
+
+  .c2 .branch-header { background: linear-gradient(135deg, rgba(78,205,196,0.15), rgba(78,205,196,0.05)); border-bottom: 1px solid rgba(78,205,196,0.2); }
+  .c2 .branch-icon { background: rgba(78,205,196,0.2); }
+  .c2 .leaf-dot { background: #4ecdc4; }
+
+  .c3 .branch-header { background: linear-gradient(135deg, rgba(255,190,11,0.15), rgba(255,190,11,0.05)); border-bottom: 1px solid rgba(255,190,11,0.2); }
+  .c3 .branch-icon { background: rgba(255,190,11,0.2); }
+  .c3 .leaf-dot { background: #ffbe0b; }
+
+  .c4 .branch-header { background: linear-gradient(135deg, rgba(160,100,255,0.15), rgba(160,100,255,0.05)); border-bottom: 1px solid rgba(160,100,255,0.2); }
+  .c4 .branch-icon { background: rgba(160,100,255,0.2); }
+  .c4 .leaf-dot { background: #a064ff; }
+
+  .c5 .branch-header { background: linear-gradient(135deg, rgba(72,149,239,0.15), rgba(72,149,239,0.05)); border-bottom: 1px solid rgba(72,149,239,0.2); }
+  .c5 .branch-icon { background: rgba(72,149,239,0.2); }
+  .c5 .leaf-dot { background: #4895ef; }
+
+  .c6 .branch-header { background: linear-gradient(135deg, rgba(247,147,30,0.15), rgba(247,147,30,0.05)); border-bottom: 1px solid rgba(247,147,30,0.2); }
+  .c6 .branch-icon { background: rgba(247,147,30,0.2); }
+  .c6 .leaf-dot { background: #f7931e; }
+
+  /* 金句区 */
+  .quotes-section {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+  .section-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #a0c4ff;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .quote-item {
+    background: rgba(160,196,255,0.06);
+    border-left: 3px solid #a0c4ff;
+    border-radius: 0 10px 10px 0;
+    padding: 14px 16px;
+    margin-bottom: 12px;
+    font-size: 14px;
+    color: #d8e4ff;
+    font-style: italic;
+    line-height: 1.8;
+  }
+  .quote-item:last-child { margin-bottom: 0; }
+
+  /* 行动建议 */
+  .actions-section {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+  .action-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .action-item:last-child { border-bottom: none; }
+  .action-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .action-text {
+    font-size: 14px;
+    color: #c8d8f8;
+    line-height: 1.7;
+  }
+  .action-text strong { color: #e8edff; }
+
+  /* 核心洞见 */
+  .insight-section {
+    background: linear-gradient(135deg, rgba(102,126,234,0.1), rgba(118,75,162,0.1));
+    border: 1px solid rgba(102,126,234,0.3);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+  .insight-text {
+    font-size: 15px;
+    color: #d0d8f8;
+    line-height: 1.9;
+  }
+
+  /* 页脚 */
+  .footer {
+    text-align: center;
+    padding: 30px 20px 50px;
+    color: #6070a0;
+    font-size: 12px;
+    line-height: 2;
+  }
+
+  @media (max-width: 600px) {
+    .branches-grid { grid-template-columns: 1fr; }
+    .core-box { font-size: 18px; padding: 16px 28px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="date-tag">📅 2026 · 05 · 18 &nbsp;|&nbsp; 每日一学</div>
+  <h1>人类简史</h1>
+  <div class="author">尤瓦尔·赫拉利（Yuval Noah Harari）</div>
+  <div class="subtitle">A Brief History of Humankind</div>
+</div>
+
+<div class="mindmap-container">
+
+  <!-- 核心主题 -->
+  <div class="core-node">
+    <div class="core-box">🌍 智人：如何用「虚构故事」征服世界</div>
+    <div class="core-desc">从微不足道的灵长类，到地球主宰——人类崛起的底层逻辑</div>
+  </div>
+
+  <!-- 核心洞见 -->
+  <div class="insight-section">
+    <div class="section-title">💡 核心洞见</div>
+    <div class="insight-text">
+      赫拉利用一个颠覆性命题重写了人类史：<strong>智人之所以能统治地球，并非因为更聪明或更强壮，而是因为我们是唯一能够大规模相信「共同虚构故事」的物种。</strong> 国家、货币、宗教、法律、公司——这些都是人类集体想象出来的现实。正是这种「虚构能力」，让陌生人能够合作，让帝国能够建立，让历史得以向前推进。理解这一点，是理解一切人类现象的起点。
+    </div>
+  </div>
+
+  <!-- 四大核心框架 -->
+  <div class="branches-grid">
+
+    <div class="branch-card c1">
+      <div class="branch-header">
+        <div class="branch-icon">🧬</div>
+        <div class="branch-title">认知革命（约7万年前）</div>
+      </div>
+      <div class="branch-body">
+        <div class="leaf-item">
+          <div class="leaf-dot"></div>
+          <div class="leaf-text">
+            <strong>虚构能力的诞生</strong>
+            <span class="sub">智人大脑突变，能够谈论不存在的事物——神灵、民族、法律</span>
+          </div>
+        </div>
+        <div class="leaf-item">
+          <div class="leaf-dot"></div>
+          <div class="leaf-text">
+            <strong>共同神话构建协作</strong>
+            <span class="sub">150人社群上限（邓巴数字）被打破，通过共同信仰组织数千人</span>
+          </div>
+        </div>
+        <div class="leaf-item">
+          <div class="leaf-dot"></div>
+          <div class="leaf-text">
+            <strong>取代基因进化</strong>
+            <span class="sub">文化传承速度远超基因突变，人类开始主导自己的进化方向</span>
+          </div>
+        </div>
+        <div class="leaf-item">
+          <div class="leaf-dot"></div>
+          <div class="leaf-text">
+            <strong>征服其他人类物种</strong>
+            <span class="sub">尼安德特人等智人近亲相继灭绝，智人独占地球</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="branch-card c2">
+      <div class="branch-header">
+        <div class="branch-icon">🌾</div>
+        <div class="branch-title">农业革命（约1.2万年前）</div>
+      </div>
+      <div class="branch-body">
+        <div class="leaf-item">
+          <div class="leaf-dot"></div>
+          <div class="leaf-text">
+            <strong>历史上最大的骗局？</strong>
+            <span class="sub">小麦驯化了人类，而非人类驯化了小麦——付出更多劳动，换来更差的饮食</span>
+          </div>
+        </div>
+        <div class="leaf-item">
+          <div class="leaf-dot"></div>
+          <div class="leaf-text">
+            <strong>精英阶层与剩余价值</strong>
+            <span class="sub">粮食剩余催生了贫富分化、国家、战争与文字记录</span>
+          </div>
+        </div>
+        <div class="leaf-item">
+          <div class="leaf-dot"></div>
+          <div class="leaf-text">
+            <strong>想象秩序的固化</strong>
+            <span class="sub">汉谟拉比法典、阶级制度——把人类的集体虚构写入石碑</span>
+          </div>
+        </div>
+        <div class="leaf-item">
+          <div class="leaf-dot"></div>
+          <div class="leaf-text">
+            <strong>个人幸福 vs 物种扩张</strong>
+            <span class="sub">个体过得更差，但整体人口爆炸——进化并不关心幸福</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="branch-card c3">
+      <div class="branch-header">
+        <div class="branch-icon">⚡</div>
+        <div class="branch-title">科学革命（约500年前）</div>
+      </div>
+      <div class="branch-body">
+        <div class="leaf-item">
+          <div class="leaf-dot"></div>
+          <div class="leaf-text">
+            <strong>承认无知的力量</strong>
+            <span class="sub">「我们还不知道」——这句话开启了现代科学的大门</span>
+          </div>
+        </div>
+        <div class="leaf-item">
+          <div class="leaf-dot"></div>
+          <div class="leaf-text">
+            <strong>资本主义 × 科学 × 帝国主义</strong>
+            <span class="sub">三角联动推动大航海、殖民扩张与工业革命</span>
+          </div>
+        </div>
+        <div class="leaf-item">
+          <div class="leaf-dot"></div>
+          <div class="leaf-text">
+            <strong>进步信仰取代循环史观</strong>
+            <span class="sub">人类首次相信「未来会比现在更好」，债务与信贷由此诞生</span>
+          </div>
+        </div>
+        <div class="leaf-item">
+          <div class="leaf-dot"></div>
+          <div class="leaf-text">
+            <strong>知识即权力</strong>
+            <span class="sub">欧洲用地图、统计学和解剖学统治了世界</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="branch-card c4">
+      <div class="branch-header">
+        <div class="branch-icon">💰</div>
+        <div class="branch-title">想象的秩序：货币、帝国与宗教</div>
+      </div>
+      <div class="branch-body">
+        <div class="leaf-item">
+          <div class="leaf-dot"></div>
+          <div class="leaf-text">
+            <strong>货币——最成功的虚构故事</strong>
+            <span class="sub">黄金本无价值，是「相信它有价值」创造了全球贸易网络</span>
+          </div>
+        </div>
+        <div class="leaf-item">
+          <div class="leaf-dot"></div>
+          <div class="leaf-text">
+            <strong>帝国——最有效的政治工具</strong>
+            <span class="sub">帝国扩张与文化同质化：被征服者最终接受征服者的神话</span>
+          </div>
+        </div>
+        <div class="leaf-item">
+          <div class="leaf-dot"></div>
+          <div class="leaf-text">
+            <strong>宗教——最持久的合法性来源</strong>
+            <span class="sub">将人类的秩序投射为宇宙法则，赋予苦难和不平等以意义</span>
+          </div>
+        </div>
+        <div class="leaf-item">
+          <div class="leaf-dot"></div>
+          <div class="leaf-text">
+            <strong>三者的共谋</strong>
+            <span class="sub">帝国用武力、宗教用意义、货币用利益——共同维持大规模协作</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="branch-card c5">
+      <div class="branch-header">
+        <div class="branch-icon">😊</div>
+        <div class="branch-title">幸福的终极追问</div>
+      </div>
+      <div class="branch-body">
+        <div class="leaf-item">
+          <div class="leaf-dot"></div>
+          <div class="leaf-text">
+            <strong>进步≠幸福</strong>
+            <span class="sub">物质财富、寿命延长、科技进步……人类是否比祖先更快乐？</span>
+          </div>
+        </div>
+        <div class="leaf-item">
+          <div class="leaf-dot"></div>
+          <div class="leaf-text">
+            <strong>快乐的生化基础</strong>
+            <span class="sub">幸福取决于血清素、多巴胺的主观感受，而非客观条件</span>
+          </div>
+        </div>
+        <div class="leaf-item">
+          <div class="leaf-dot"></div>
+          <div class="leaf-text">
+            <strong>意义 vs 真相</strong>
+            <span class="sub">相信虚构故事能带来幸福感——佛教的「拥抱无常」或许是另一条路</span>
+          </div>
+        </div>
+        <div class="leaf-item">
+          <div class="leaf-dot"></div>
+          <div class="leaf-text">
+            <strong>最危险的问题</strong>
+            <span class="sub">我们变得越来越像神，却不知道自己想要什么</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="branch-card c6">
+      <div class="branch-header">
+        <div class="branch-icon">🔮</div>
+        <div class="branch-title">未来展望：智人的终结？</div>
+      </div>
+      <div class="branch-body">
+        <div class="leaf-item">
+          <div class="leaf-dot"></div>
+          <div class="leaf-text">
+            <strong>生物工程改造人类</strong>
+            <span class="sub">基因编辑、脑机接口——智人正在超越自然选择的边界</span>
+          </div>
+        </div>
+        <div class="leaf-item">
+          <div class="leaf-dot"></div>
+          <div class="leaf-text">
+            <strong>超人类的诞生</strong>
+            <span class="sub">如果人类能自我设计，「我们是谁」将彻底重新定义</span>
+          </div>
+        </div>
+        <div class="leaf-item">
+          <div class="leaf-dot"></div>
+          <div class="leaf-text">
+            <strong>不满足是推动力</strong>
+            <span class="sub">智人从未满足于现状——这既是力量，也是毁灭的种子</span>
+          </div>
+        </div>
+        <div class="leaf-item">
+          <div class="leaf-dot"></div>
+          <div class="leaf-text">
+            <strong>终极问题</strong>
+            <span class="sub">「我们想要成为什么？」比「我们能成为什么？」更重要</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 金句 -->
+  <div class="quotes-section">
+    <div class="section-title">✨ 经典金句</div>
+    <div class="quote-item">「历史上，智人并没有脱颖而出是因为更聪明——而是因为他们能够大规模地合作，而合作的基础是共同的虚构。」</div>
+    <div class="quote-item">「农业革命让更多的人以更糟糕的方式存活下来。」</div>
+    <div class="quote-item">「金钱是有史以来最普遍、最高效的互信系统。」</div>
+    <div class="quote-item">「科学革命不是知识的革命，而是无知的革命——真正的起点是意识到我们还不知道。」</div>
+    <div class="quote-item">「我们比历史上任何时代的祖先都更强大，但我们的满足感并没有相应提升。我们比以往任何时候都更富裕，却并没有更快乐。」</div>
+    <div class="quote-item">「智人征服了世界，却不知道自己要做什么。」</div>
+  </div>
+
+  <!-- 行动建议 -->
+  <div class="actions-section">
+    <div class="section-title">🎯 行动建议</div>
+    <div class="action-item">
+      <div class="action-num">1</div>
+      <div class="action-text"><strong>识别你生活中的「虚构故事」</strong>：金钱、职级、品牌、国籍——哪些是你真正认同的，哪些只是集体幻觉？主动选择而非被动接受。</div>
+    </div>
+    <div class="action-item">
+      <div class="action-num">2</div>
+      <div class="action-text"><strong>审视「进步陷阱」</strong>：下次升职/买新手机前问自己：这真的让我更快乐，还是只是跑步机式的习惯化适应？</div>
+    </div>
+    <div class="action-item">
+      <div class="action-num">3</div>
+      <div class="action-text"><strong>用宏观视角解读当下新闻</strong>：任何政治事件、经济政策，都可以用「这个虚构故事在如何重塑集体认知」来分析。</div>
+    </div>
+    <div class="action-item">
+      <div class="action-num">4</div>
+      <div class="action-text"><strong>练习承认无知</strong>：科学革命的核心精神——勇于说「我不知道」，再去探索。对话中刻意留白，听比说重要。</div>
+    </div>
+    <div class="action-item">
+      <div class="action-num">5</div>
+      <div class="action-text"><strong>思考你的「意义系统」</strong>：你相信的哪些故事在给你提供意义？这些意义是否经得起赫拉利式的追问？找到真正属于自己的锚点。</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  📚 每日一学 · 2026-05-18 · 《人类简史》· 尤瓦尔·赫拉利<br>
+  智人的力量在于虚构，智人的自由在于看穿虚构
+</div>
+
+</body>
+</html>
