@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 超越自卑 · 2026-05-19</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'PingFang SC', 'Microsoft YaHei', -apple-system, sans-serif;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    min-height: 100vh;
+    color: #e0e0e0;
+    padding: 20px;
+  }
+  .header {
+    text-align: center;
+    padding: 40px 20px 30px;
+  }
+  .header .date-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 20px;
+    padding: 6px 18px;
+    font-size: 13px;
+    letter-spacing: 2px;
+    color: #b0b8d8;
+    margin-bottom: 16px;
+  }
+  .header h1 {
+    font-size: 3em;
+    font-weight: 800;
+    background: linear-gradient(135deg, #a18cd1, #fbc2eb, #84fab0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+  }
+  .header h2 {
+    font-size: 1.2em;
+    color: #9999cc;
+    font-weight: 400;
+    margin-bottom: 6px;
+  }
+  .header .author {
+    font-size: 0.95em;
+    color: #7777aa;
+  }
+  .core-insight {
+    max-width: 860px;
+    margin: 0 auto 30px;
+    background: linear-gradient(135deg, rgba(161,140,209,0.15), rgba(251,194,235,0.15));
+    border: 1px solid rgba(161,140,209,0.4);
+    border-radius: 16px;
+    padding: 28px 32px;
+    text-align: center;
+  }
+  .core-insight .label {
+    font-size: 12px;
+    letter-spacing: 3px;
+    color: #a18cd1;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .core-insight .text {
+    font-size: 1.25em;
+    line-height: 1.8;
+    color: #d8d0f0;
+    font-weight: 300;
+  }
+  .mindmap-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    padding-bottom: 20px;
+  }
+  .card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 24px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+  }
+  .card.full-width {
+    grid-column: 1 / -1;
+  }
+  .card-icon {
+    font-size: 2em;
+    margin-bottom: 10px;
+  }
+  .card h3 {
+    font-size: 1.05em;
+    font-weight: 700;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  /* Card 1 - 核心洞见 */
+  .card.insight { border-top: 3px solid #a18cd1; }
+  .card.insight h3 { color: #c4aaff; }
+  /* Card 2 - 核心框架 */
+  .card.framework { border-top: 3px solid #84fab0; }
+  .card.framework h3 { color: #84fab0; }
+  /* Card 3 - 主要知识点 */
+  .card.points { border-top: 3px solid #fbc2eb; }
+  .card.points h3 { color: #fbc2eb; }
+  /* Card 4 - 金句 */
+  .card.quotes { border-top: 3px solid #fddb92; }
+  .card.quotes h3 { color: #fddb92; }
+  /* Card 5 - 行动建议 */
+  .card.actions { border-top: 3px solid #5ee7df; }
+  .card.actions h3 { color: #5ee7df; }
+  ul { list-style: none; }
+  ul li {
+    position: relative;
+    padding: 6px 0 6px 18px;
+    font-size: 0.92em;
+    line-height: 1.6;
+    color: #c8cce8;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  ul li:last-child { border-bottom: none; }
+  ul li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    opacity: 0.5;
+  }
+  .framework-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .framework-item {
+    background: rgba(132,250,176,0.08);
+    border: 1px solid rgba(132,250,176,0.2);
+    border-radius: 10px;
+    padding: 14px;
+  }
+  .framework-item .num {
+    font-size: 0.7em;
+    color: #84fab0;
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+  }
+  .framework-item .title {
+    font-size: 1em;
+    font-weight: 700;
+    color: #c0f8dc;
+    margin-bottom: 6px;
+  }
+  .framework-item .desc {
+    font-size: 0.82em;
+    color: #99c9a8;
+    line-height: 1.5;
+  }
+  .quote-block {
+    background: rgba(253,219,146,0.07);
+    border-left: 3px solid #fddb92;
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin-bottom: 12px;
+    font-size: 0.92em;
+    color: #e8d9b0;
+    line-height: 1.7;
+    font-style: italic;
+  }
+  .quote-block:last-child { margin-bottom: 0; }
+  .action-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .action-item:last-child { border-bottom: none; }
+  .action-num {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    background: linear-gradient(135deg, #5ee7df, #b490ca);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75em;
+    font-weight: 800;
+    color: #1a1a2e;
+  }
+  .action-text {
+    font-size: 0.9em;
+    color: #b8c8d8;
+    line-height: 1.6;
+  }
+  .action-text strong {
+    color: #5ee7df;
+    display: block;
+    margin-bottom: 2px;
+  }
+  .footer {
+    text-align: center;
+    padding: 30px 20px;
+    color: #555577;
+    font-size: 0.8em;
+  }
+  @media (max-width: 700px) {
+    .mindmap-container { grid-template-columns: 1fr; }
+    .framework-grid { grid-template-columns: 1fr; }
+    .card.full-width { grid-column: 1; }
+    .header h1 { font-size: 2em; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="date-badge">📅 每日一学 · 2026-05-19</div>
+  <h1>超越自卑</h1>
+  <h2>What Life Should Mean to You</h2>
+  <div class="author">作者：阿尔弗雷德·阿德勒（Alfred Adler）| 个体心理学奠基之作</div>
+</div>
+
+<div class="core-insight">
+  <div class="label">✦ 核心洞见 ✦</div>
+  <div class="text">
+    每个人都有自卑感，它不是缺陷，而是成长的驱动力。<br>
+    人生的意义在于贡献与合作，卓越追求源于超越自卑、服务他人，<br>
+    而非逃避问题或寻求个人优越感。
+  </div>
+</div>
+
+<div class="mindmap-container">
+
+  <!-- 核心框架 -->
+  <div class="card framework full-width">
+    <div class="card-icon">🏗️</div>
+    <h3>四大核心框架</h3>
+    <div class="framework-grid">
+      <div class="framework-item">
+        <div class="num">PILLAR 01</div>
+        <div class="title">自卑感与补偿</div>
+        <div class="desc">自卑感是人类普遍体验，源于身体、社会或心理的劣势感。健康的补偿驱动成长；神经质的补偿产生权力欲或逃避。</div>
+      </div>
+      <div class="framework-item">
+        <div class="num">PILLAR 02</div>
+        <div class="title">追求卓越</div>
+        <div class="desc">所有人都在追求卓越与完美。健康的人追求"对社会有益的卓越"；不健康的人追求"个人优越感"，以压倒他人为目标。</div>
+      </div>
+      <div class="framework-item">
+        <div class="num">PILLAR 03</div>
+        <div class="title">社会兴趣（Gemeinschaftsgefühl）</div>
+        <div class="desc">心理健康的核心标志。真正的归属感与连接感，愿意为社群做贡献。自私主义是心理问题的根源，合作是人类进化的答案。</div>
+      </div>
+      <div class="framework-item">
+        <div class="num">PILLAR 04</div>
+        <div class="title">生活风格（Life Style）</div>
+        <div class="desc">每个人在5岁前形成独特的"生活风格"——对自我、他人和世界的核心信念模式。它决定我们面对人生三大任务的方式。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 主要知识点 -->
+  <div class="card points">
+    <div class="card-icon">📚</div>
+    <h3>主要知识点</h3>
+    <ul>
+      <li><strong>人生三大任务：</strong>工作、友谊与爱情，每个人都必须面对且无法逃避</li>
+      <li><strong>自卑情结 vs 自卑感：</strong>前者是病态逃避，后者是正常驱动力</li>
+      <li><strong>优越情结：</strong>以傲慢、炫耀、贬低他人来掩盖深层自卑</li>
+      <li><strong>早期记忆的力量：</strong>童年记忆揭示了一个人的生活风格与核心信念</li>
+      <li><strong>出生顺序影响：</strong>长子、次子、独子形成不同的心理特征</li>
+      <li><strong>梦的功能：</strong>梦是练习与排演，用来强化生活风格应对未来挑战</li>
+      <li><strong>问题儿童根源：</strong>溺爱与忽视是培育神经症的两大温床</li>
+      <li><strong>目的论而非决定论：</strong>人的行为由目标驱动，而非被过去决定</li>
+    </ul>
+  </div>
+
+  <!-- 金句 -->
+  <div class="card quotes">
+    <div class="card-icon">💡</div>
+    <h3>经典金句</h3>
+    <div class="quote-block">
+      "自卑感本身并不是变态的，它是人类处境改善的原因。"
+    </div>
+    <div class="quote-block">
+      "人生的意义，在于对他人产生兴趣，在于合作，在于贡献。"
+    </div>
+    <div class="quote-block">
+      "所有的失败者——神经症患者、精神病患者、罪犯、酗酒者——之所以失败，是因为他们缺乏社会兴趣。"
+    </div>
+    <div class="quote-block">
+      "过去的经历不决定你的未来，重要的是你赋予经历什么意义。"
+    </div>
+  </div>
+
+  <!-- 行动建议 -->
+  <div class="card actions full-width">
+    <div class="card-icon">🚀</div>
+    <h3>五大行动建议</h3>
+    <div class="action-item">
+      <div class="action-num">1</div>
+      <div class="action-text">
+        <strong>识别你的自卑触发点</strong>
+        记录一周内感到自卑或不安的时刻，找出背后的核心信念（"我不够好"/"我不被爱"），这是改变的第一步。
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="action-num">2</div>
+      <div class="action-text">
+        <strong>将竞争转化为贡献</strong>
+        当你想"比别人更好"时，刻意转换为"我能为这个团队/社会贡献什么？"——这是从优越情结走向社会兴趣的关键练习。
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="action-num">3</div>
+      <div class="action-text">
+        <strong>重新解读早期记忆</strong>
+        写下3个最早的童年记忆，分析其中的情绪模式。这些模式往往就是你现在生活风格的原型，理解它才能超越它。
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="action-num">4</div>
+      <div class="action-text">
+        <strong>面对人生三大任务</strong>
+        检视自己在工作、友谊、爱情三个领域是否有逃避的倾向。勇敢面对最让你回避的那个领域，从小行动开始。
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="action-num">5</div>
+      <div class="action-text">
+        <strong>培养真正的合作精神</strong>
+        每天主动做一件"纯粹为他人"的事，不求回报。这不是软弱，而是人类最强大的心理能力——社会兴趣的具体实践。
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  📖 每日一学 · 2026-05-19 · 超越自卑 · Alfred Adler<br>
+  "卓越不是踩着他人肩膀向上爬，而是与他人携手向前走。"
+</div>
+
+</body>
+</html>
