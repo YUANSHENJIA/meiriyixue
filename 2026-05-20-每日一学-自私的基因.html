@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 自私的基因</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --card: #1a1d27;
+    --card2: #20243a;
+    --accent: #7c6aff;
+    --accent2: #ff6a6a;
+    --accent3: #6affd4;
+    --accent4: #ffd06a;
+    --text: #e8eaf0;
+    --text2: #9da3b4;
+    --border: rgba(124,106,255,0.18);
+    --glow: rgba(124,106,255,0.22);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'PingFang SC', 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
+    min-height: 100vh;
+    padding: 32px 16px 60px;
+  }
+
+  /* ── Header ── */
+  .header {
+    text-align: center;
+    margin-bottom: 44px;
+  }
+  .header .tag {
+    display: inline-block;
+    background: linear-gradient(90deg, var(--accent), #a06aff);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    padding: 4px 16px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+  .header h1 {
+    font-size: clamp(26px, 5vw, 42px);
+    font-weight: 900;
+    background: linear-gradient(135deg, #fff 0%, var(--accent) 60%, var(--accent3) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+  .header .sub {
+    color: var(--text2);
+    font-size: 14px;
+    margin-bottom: 6px;
+  }
+  .header .date {
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+  }
+
+  /* ── Grid ── */
+  .grid {
+    max-width: 960px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+  }
+  .full { grid-column: 1 / -1; }
+
+  /* ── Card ── */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 26px 24px;
+    position: relative;
+    overflow: hidden;
+    transition: transform .25s, box-shadow .25s;
+  }
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px var(--glow);
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    border-radius: 18px 18px 0 0;
+  }
+  .card.purple::before { background: linear-gradient(90deg, var(--accent), #c06aff); }
+  .card.red::before    { background: linear-gradient(90deg, var(--accent2), #ffaa6a); }
+  .card.teal::before   { background: linear-gradient(90deg, var(--accent3), #6aaeff); }
+  .card.gold::before   { background: linear-gradient(90deg, var(--accent4), #ffaa6a); }
+
+  .card-icon {
+    font-size: 28px;
+    margin-bottom: 10px;
+  }
+  .card-title {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .card.purple .card-title { color: var(--accent); }
+  .card.red    .card-title { color: var(--accent2); }
+  .card.teal   .card-title { color: var(--accent3); }
+  .card.gold   .card-title { color: var(--accent4); }
+
+  /* ── Insight list ── */
+  .insight-list { list-style: none; }
+  .insight-list li {
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    font-size: 14px;
+    line-height: 1.7;
+    display: flex;
+    gap: 10px;
+  }
+  .insight-list li:last-child { border-bottom: none; }
+  .insight-list li .num {
+    flex-shrink: 0;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), #c06aff);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 800; color: #fff;
+    margin-top: 2px;
+  }
+
+  /* ── Framework boxes ── */
+  .framework-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 4px;
+  }
+  .fw-box {
+    background: var(--card2);
+    border-radius: 12px;
+    padding: 14px;
+    border: 1px solid rgba(255,255,255,0.06);
+    position: relative;
+  }
+  .fw-box .fw-num {
+    font-size: 28px;
+    font-weight: 900;
+    color: rgba(124,106,255,0.15);
+    position: absolute;
+    top: 8px; right: 12px;
+    line-height: 1;
+  }
+  .fw-box .fw-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--accent3);
+    margin-bottom: 6px;
+    letter-spacing: 1px;
+  }
+  .fw-box p { font-size: 13px; color: var(--text); line-height: 1.6; }
+
+  /* ── Knowledge tags ── */
+  .kp-list { list-style: none; }
+  .kp-list li {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 9px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    font-size: 13.5px; line-height: 1.65;
+  }
+  .kp-list li:last-child { border-bottom: none; }
+  .kp-list li::before {
+    content: '▸';
+    color: var(--accent2);
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  /* ── Quote card ── */
+  .quote-box {
+    background: linear-gradient(135deg, rgba(124,106,255,0.08), rgba(106,255,212,0.06));
+    border: 1px solid rgba(124,106,255,0.25);
+    border-radius: 14px;
+    padding: 18px 20px;
+    margin-bottom: 12px;
+    position: relative;
+  }
+  .quote-box::before {
+    content: '"';
+    position: absolute;
+    top: -8px; left: 14px;
+    font-size: 60px;
+    color: var(--accent);
+    opacity: 0.3;
+    font-family: Georgia, serif;
+    line-height: 1;
+  }
+  .quote-box p {
+    font-size: 14px;
+    line-height: 1.75;
+    color: var(--text);
+    font-style: italic;
+  }
+  .quote-box .quote-src {
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--text2);
+    text-align: right;
+  }
+
+  /* ── Action items ── */
+  .action-list { list-style: none; }
+  .action-list li {
+    display: flex; gap: 12px; align-items: flex-start;
+    padding: 11px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    font-size: 14px; line-height: 1.65;
+  }
+  .action-list li:last-child { border-bottom: none; }
+  .action-list li .step {
+    flex-shrink: 0;
+    background: linear-gradient(135deg, var(--accent4), #ffaa6a);
+    color: #1a1400;
+    font-size: 10px; font-weight: 900;
+    width: 22px; height: 22px;
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    margin-top: 1px;
+  }
+
+  /* ── Core concept ── */
+  .core-banner {
+    background: linear-gradient(135deg, rgba(124,106,255,0.15) 0%, rgba(106,255,212,0.08) 100%);
+    border: 1px solid rgba(124,106,255,0.3);
+    border-radius: 16px;
+    padding: 24px;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .core-banner .core-icon { font-size: 40px; margin-bottom: 10px; }
+  .core-banner h2 {
+    font-size: 20px; font-weight: 800;
+    background: linear-gradient(90deg, var(--accent), var(--accent3));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+  }
+  .core-banner p { color: var(--text2); font-size: 14px; line-height: 1.7; }
+
+  /* ── Footer ── */
+  .footer {
+    text-align: center;
+    margin-top: 48px;
+    color: var(--text2);
+    font-size: 12px;
+    letter-spacing: 1px;
+  }
+  .footer span { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="tag">每日一学 · 2026-05-20</div>
+  <h1>自私的基因</h1>
+  <div class="sub">The Selfish Gene · 理查德·道金斯（Richard Dawkins）· 1976</div>
+  <div class="date">进化论 · 认知底层 · 思维重塑</div>
+</div>
+
+<div class="grid">
+
+  <!-- 核心概念 Banner -->
+  <div class="full">
+    <div class="core-banner">
+      <div class="core-icon">🧬</div>
+      <h2>基因才是进化的主角，个体只是基因的"生存机器"</h2>
+      <p>道金斯将视角从物种/个体拉到基因层面，提出"基因选择论"：自然选择的核心不是个体的存活，而是基因的复制与传播。这一视角彻底颠覆了我们对利他、竞争、合作的理解，并首创"迷因（Meme）"概念，将进化逻辑延伸至文化领域。</p>
+    </div>
+  </div>
+
+  <!-- 核心洞见 -->
+  <div class="card purple full">
+    <div class="card-icon">💡</div>
+    <div class="card-title">核心洞见</div>
+    <ul class="insight-list">
+      <li>
+        <span class="num">1</span>
+        <span><strong>基因视角革命：</strong>进化的真正单位是基因，而非个体或物种。我们每个人不过是基因为延续自身而打造的"生存载体"，个体的生老病死对基因而言只是工具性结果。</span>
+      </li>
+      <li>
+        <span class="num">2</span>
+        <span><strong>"自私"的重新定义：</strong>基因层面的"自私"是指基因追求自我复制最大化，并不意味着道德意义上的自私。事实上，基因的"自私性"可以驱动个体的利他行为——帮助亲属即帮助共同基因传播（亲缘选择）。</span>
+      </li>
+      <li>
+        <span class="num">3</span>
+        <span><strong>超越遗传：迷因（Meme）的诞生：</strong>人类创造了第二种复制子——迷因，即通过模仿传播的文化单元（思想、歌曲、习俗、信念）。迷因和基因一样遵循复制、变异、选择的进化逻辑，且人类可以主动反抗基因的自私本性。</span>
+      </li>
+      <li>
+        <span class="num">4</span>
+        <span><strong>博弈与合作：</strong>看似矛盾的"自私基因"催生了合作——稳定策略（ESS）揭示在重复博弈中，"以牙还牙"式的合作策略往往击败纯粹自私策略，这解释了社会中诚信与互惠的进化起源。</span>
+      </li>
+    </ul>
+  </div>
+
+  <!-- 四大核心框架 -->
+  <div class="card teal full">
+    <div class="card-icon">🔷</div>
+    <div class="card-title">四大核心框架</div>
+    <div class="framework-grid">
+      <div class="fw-box">
+        <div class="fw-num">01</div>
+        <div class="fw-label">基因选择论</div>
+        <p>自然选择作用于基因，而非个体。基因是"不朽的"复制子，在代代相传中持续，个体是有限寿命的临时容器。理解任何行为，先问：<em>这对基因传播有什么好处？</em></p>
+      </div>
+      <div class="fw-box">
+        <div class="fw-num">02</div>
+        <div class="fw-label">亲缘选择 & 汉密顿法则</div>
+        <p>利他行为可用亲缘系数（r）解释：rB > C 时（亲缘×受益者获益 > 施惠者代价），利他行为被进化选择。亲属越近，共享基因越多，利他越值得。</p>
+      </div>
+      <div class="fw-box">
+        <div class="fw-num">03</div>
+        <div class="fw-label">进化稳定策略（ESS）</div>
+        <p>在种群中，若一种策略被大多数个体采用后，少数异策略者无法入侵，则称为ESS。"鸽鹰博弈"证明非纯暴力的混合策略往往是稳定的，合作在自私逻辑中得以涌现。</p>
+      </div>
+      <div class="fw-box">
+        <div class="fw-num">04</div>
+        <div class="fw-label">迷因进化论</div>
+        <p>文化单元（Meme）是基因之外的第二复制子：思想、技术、信仰通过模仿传播，在"文化选择"压力下演化。人类可借助迷因超越基因的生物局限，实现文化意义上的"不朽"。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 主要知识点 -->
+  <div class="card red">
+    <div class="card-icon">📌</div>
+    <div class="card-title">主要知识点</div>
+    <ul class="kp-list">
+      <li>DNA复制精确但非完美，突变产生变异；自然选择淘汰不利变体，保留有利复制子</li>
+      <li>基因不"思考"或"决策"，进化选择只是统计意义上的筛选结果</li>
+      <li>性别冲突：雄性倾向广播策略（多交配），雌性倾向质量策略（精挑细选），根源在于配子投资差异</li>
+      <li>子代确定性：母亲100%确认后代，父亲只有概率确认，这驱动了亲代投资差异的进化</li>
+      <li>"绿胡子效应"：基因可识别携带同样基因的个体并偏向合作，哪怕没有亲缘关系</li>
+      <li>互惠利他主义：非亲属间的合作通过重复博弈和记忆能力演化（我今日助你，期待你日后回报）</li>
+      <li>道金斯明确指出：理解基因的自私性，恰恰让人类有能力设计出超越它的道德文化</li>
+    </ul>
+  </div>
+
+  <!-- 金句 -->
+  <div class="card gold">
+    <div class="card-icon">✨</div>
+    <div class="card-title">金句精选</div>
+
+    <div class="quote-box">
+      <p>我们都是生存机器——机器人载体，被盲目地编写程序以保护那些被称为基因的自私分子。</p>
+      <div class="quote-src">— Richard Dawkins</div>
+    </div>
+    <div class="quote-box">
+      <p>我们生来自私，但我们有能力去抗拒基因的暴政，因为我们是唯一能够理解这种暴政的生物。</p>
+      <div class="quote-src">— Richard Dawkins</div>
+    </div>
+    <div class="quote-box">
+      <p>迷因（Meme）是文化遗传的单位，它通过模仿从一个大脑跳到另一个大脑，在传播中演化。</p>
+      <div class="quote-src">— Richard Dawkins</div>
+    </div>
+    <div class="quote-box" style="margin-bottom:0">
+      <p>如果你希望为了他人的利益而行动，不要指望基因帮你——那需要你主动去学习利他主义。</p>
+      <div class="quote-src">— Richard Dawkins</div>
+    </div>
+  </div>
+
+  <!-- 行动建议 -->
+  <div class="card purple full">
+    <div class="card-icon">🚀</div>
+    <div class="card-title">行动建议</div>
+    <ul class="action-list">
+      <li>
+        <span class="step">01</span>
+        <span><strong>换视角分析人际关系：</strong>下次感到他人"自私"时，试着用基因视角解读——对方的行为是否有进化逻辑？理解机制有助于减少道德化判断，提升共情力。</span>
+      </li>
+      <li>
+        <span class="step">02</span>
+        <span><strong>识别并设计你的"迷因"：</strong>思考你希望传播的思想或价值观——什么想法值得被复制？有意识地"打磨"和传播你的核心理念，用迷因逻辑影响他人。</span>
+      </li>
+      <li>
+        <span class="step">03</span>
+        <span><strong>在博弈中践行"以牙还牙+宽容"：</strong>在日常合作中采用ESS策略：首次合作，被背叛时立即回应，但给对方改正机会（宽容变体）。这是长期关系中最稳定的策略。</span>
+      </li>
+      <li>
+        <span class="step">04</span>
+        <span><strong>用汉密顿法则理解利他边界：</strong>评估你的利他行为：帮助谁的投入产出比最高？家人、挚友、社区……有意识分配时间与资源，而非无边界消耗自我。</span>
+      </li>
+      <li>
+        <span class="step">05</span>
+        <span><strong>主动"反抗"本能冲动：</strong>意识到短视冲动（即时享乐、规避长期代价）可能是基因"生存偏好"的遗产，用元认知觉察它，用理性和文化价值覆盖它——这才是人类进化的真正优势。</span>
+      </li>
+    </ul>
+  </div>
+
+</div>
+
+<div class="footer">
+  每日一学 · <span>2026-05-20</span> · 自私的基因 · The Selfish Gene<br>
+  <small style="opacity:.5;margin-top:6px;display:block">知识改变认知，认知改变行动</small>
+</div>
+
+</body>
+</html>
