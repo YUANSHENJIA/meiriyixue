@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 底层逻辑 · 2026-05-21</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    min-height: 100vh;
+    color: #fff;
+    padding: 20px;
+  }
+  .container { max-width: 1100px; margin: 0 auto; }
+  
+  /* 头部 */
+  .header {
+    text-align: center;
+    padding: 40px 20px 30px;
+    position: relative;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%; transform: translateX(-50%);
+    width: 60px; height: 3px;
+    background: linear-gradient(90deg, #f7971e, #ffd200);
+    border-radius: 2px;
+  }
+  .daily-badge {
+    display: inline-block;
+    background: rgba(247,151,30,0.15);
+    border: 1px solid rgba(247,151,30,0.4);
+    color: #ffd200;
+    font-size: 12px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+  }
+  .book-title {
+    font-size: 42px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #f7971e, #ffd200);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+  .book-author {
+    font-size: 16px;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 6px;
+  }
+  .book-date {
+    font-size: 13px;
+    color: rgba(255,255,255,0.35);
+  }
+  .book-slogan {
+    margin-top: 16px;
+    font-size: 17px;
+    color: rgba(255,255,255,0.8);
+    font-style: italic;
+  }
+
+  /* 核心洞见卡片 */
+  .insight-banner {
+    background: linear-gradient(135deg, rgba(247,151,30,0.2), rgba(255,210,0,0.1));
+    border: 1px solid rgba(247,151,30,0.35);
+    border-radius: 16px;
+    padding: 24px 28px;
+    margin: 24px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .insight-banner::before {
+    content: '"';
+    position: absolute;
+    top: -10px; left: 16px;
+    font-size: 100px;
+    color: rgba(247,151,30,0.1);
+    font-family: Georgia, serif;
+    line-height: 1;
+  }
+  .insight-banner h2 {
+    font-size: 13px;
+    letter-spacing: 3px;
+    color: #ffd200;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+  .insight-banner p {
+    font-size: 17px;
+    line-height: 1.8;
+    color: rgba(255,255,255,0.9);
+  }
+
+  /* 思维导图主区域 */
+  .mindmap-section { margin: 30px 0; }
+  .mindmap-section > h2 {
+    font-size: 13px;
+    letter-spacing: 3px;
+    color: #ffd200;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  /* 中心节点 */
+  .center-node {
+    background: linear-gradient(135deg, #f7971e, #ffd200);
+    color: #1a1a2e;
+    border-radius: 50px;
+    padding: 16px 32px;
+    text-align: center;
+    font-size: 22px;
+    font-weight: 800;
+    margin: 0 auto 30px;
+    width: fit-content;
+    box-shadow: 0 8px 32px rgba(247,151,30,0.4);
+  }
+
+  /* 四大模块网格 */
+  .modules-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  .module-card {
+    background: rgba(255,255,255,0.05);
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 22px 20px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .module-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    border-radius: 14px 14px 0 0;
+  }
+  .module-card.c1::before { background: linear-gradient(90deg, #667eea, #764ba2); }
+  .module-card.c2::before { background: linear-gradient(90deg, #f7971e, #ffd200); }
+  .module-card.c3::before { background: linear-gradient(90deg, #11998e, #38ef7d); }
+  .module-card.c4::before { background: linear-gradient(90deg, #ee0979, #ff6a00); }
+  
+  .module-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+    border-color: rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.08);
+  }
+  .module-icon { font-size: 28px; margin-bottom: 10px; }
+  .module-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    color: #fff;
+  }
+  .module-points { list-style: none; }
+  .module-points li {
+    font-size: 13.5px;
+    color: rgba(255,255,255,0.75);
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    line-height: 1.5;
+  }
+  .module-points li:last-child { border-bottom: none; }
+  .module-points li::before {
+    content: '▸';
+    color: #ffd200;
+    font-size: 11px;
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+
+  /* 五层逻辑层次图 */
+  .pyramid-section { margin: 30px 0; }
+  .pyramid-section > h2 {
+    font-size: 13px;
+    letter-spacing: 3px;
+    color: #ffd200;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .pyramid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+  .pyramid-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+  }
+  .pyramid-block {
+    border-radius: 10px;
+    padding: 12px 20px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+    position: relative;
+    flex-shrink: 0;
+  }
+  .py1 { background: linear-gradient(135deg, #f7971e, #ffd200); color: #1a1a2e; width: 200px; }
+  .py2 { background: linear-gradient(135deg, #667eea, #764ba2); width: 280px; }
+  .py3 { background: linear-gradient(135deg, #11998e, #38ef7d); color: #1a1a2e; width: 360px; }
+  .py4 { background: linear-gradient(135deg, #ee0979, #ff6a00); width: 440px; }
+  .py5 { background: linear-gradient(135deg, #4facfe, #00f2fe); color: #1a1a2e; width: 520px; }
+  .pyramid-label {
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+    white-space: nowrap;
+    min-width: 80px;
+  }
+  .arrow-down {
+    text-align: center;
+    font-size: 18px;
+    color: rgba(255,255,255,0.3);
+  }
+
+  /* 金句区 */
+  .quotes-section { margin: 30px 0; }
+  .quotes-section > h2 {
+    font-size: 13px;
+    letter-spacing: 3px;
+    color: #ffd200;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  .quotes-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+  .quote-card {
+    background: rgba(255,255,255,0.04);
+    border-left: 3px solid;
+    border-radius: 0 12px 12px 0;
+    padding: 16px 18px;
+  }
+  .quote-card.q1 { border-color: #667eea; }
+  .quote-card.q2 { border-color: #f7971e; }
+  .quote-card.q3 { border-color: #11998e; }
+  .quote-card.q4 { border-color: #ee0979; }
+  .quote-text {
+    font-size: 14px;
+    line-height: 1.7;
+    color: rgba(255,255,255,0.85);
+    font-style: italic;
+  }
+
+  /* 行动建议 */
+  .actions-section { margin: 30px 0; }
+  .actions-section > h2 {
+    font-size: 13px;
+    letter-spacing: 3px;
+    color: #ffd200;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  .actions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .action-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 12px;
+    padding: 16px 18px;
+    border: 1px solid rgba(255,255,255,0.07);
+  }
+  .action-num {
+    background: linear-gradient(135deg, #f7971e, #ffd200);
+    color: #1a1a2e;
+    border-radius: 50%;
+    width: 28px; height: 28px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800;
+    font-size: 13px;
+    flex-shrink: 0;
+  }
+  .action-content { flex: 1; }
+  .action-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+  .action-desc {
+    font-size: 13px;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.6;
+  }
+
+  /* 底部 */
+  .footer {
+    text-align: center;
+    padding: 30px 0 10px;
+    color: rgba(255,255,255,0.25);
+    font-size: 12px;
+    letter-spacing: 1px;
+  }
+
+  @media (max-width: 600px) {
+    .modules-grid { grid-template-columns: 1fr; }
+    .quotes-grid { grid-template-columns: 1fr; }
+    .book-title { font-size: 30px; }
+    .py1 { width: 160px; }
+    .py2 { width: 200px; }
+    .py3 { width: 240px; }
+    .py4 { width: 280px; }
+    .py5 { width: 320px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- 头部 -->
+  <div class="header">
+    <div class="daily-badge">每 日 一 学</div>
+    <div class="book-title">底层逻辑</div>
+    <div class="book-author">刘润 著</div>
+    <div class="book-date">2026 · 05 · 21</div>
+    <div class="book-slogan">看清世界的底牌，用逻辑重建认知框架</div>
+  </div>
+
+  <!-- 核心洞见 -->
+  <div class="insight-banner">
+    <h2>⚡ 核心洞见</h2>
+    <p>
+      表面现象千变万化，但驱动世界运转的底层逻辑只有少数几条。《底层逻辑》从"是非对错""思考问题""个体进化""理解他人""社会协作"五个维度，揭示人类行为与社会运转背后的基础规律——用数学和逻辑思维替代情绪和经验，才能在复杂世界中做出更好的决策。
+    </p>
+  </div>
+
+  <!-- 思维导图主区域 -->
+  <div class="mindmap-section">
+    <h2>🗺 核心框架 · 思维导图</h2>
+    <div class="center-node">底层逻辑 · 五大认知维度</div>
+
+    <div class="modules-grid">
+
+      <!-- 模块1：是非对错 -->
+      <div class="module-card c1">
+        <div class="module-icon">⚖️</div>
+        <div class="module-title">一、是非对错的底层逻辑</div>
+        <ul class="module-points">
+          <li>道德感≠正确：道德和法律都是人类协商的结果</li>
+          <li>三种立场：法学家思维（遵守规则）、经济学家思维（利益分析）、商人思维（实用主义）</li>
+          <li>公正的基础：透明、一致、可预期</li>
+          <li>人性的出发点：利己，但理性约束下可实现共赢</li>
+          <li>同理心≠放弃原则：理解≠认同</li>
+        </ul>
+      </div>
+
+      <!-- 模块2：思考问题 -->
+      <div class="module-card c2">
+        <div class="module-icon">🧠</div>
+        <div class="module-title">二、思考问题的底层逻辑</div>
+        <ul class="module-points">
+          <li>第一性原理：回溯事物的本质假设，从零开始推导</li>
+          <li>数学思维：用精确语言替代模糊描述，消除信息噪音</li>
+          <li>逻辑闭环：结论需有严密的因果链，而非类比与感觉</li>
+          <li>反事实思维：如果不这样做，会怎样？</li>
+          <li>区分"相关"与"因果"：大量决策错误源于混淆两者</li>
+        </ul>
+      </div>
+
+      <!-- 模块3：个体进化 -->
+      <div class="module-card c3">
+        <div class="module-icon">🌱</div>
+        <div class="module-title">三、个体进化的底层逻辑</div>
+        <ul class="module-points">
+          <li>人生算法：找到一件事，重复做，等待复利爆发</li>
+          <li>能力圈法则：在能力圈内做事，不断扩展边界</li>
+          <li>成长的本质：用概率思维替代成功学；做正确的事，而非追求正确的结果</li>
+          <li>知识vs信息：信息是原料，知识是提炼后的结构化认知</li>
+          <li>极端学习法：最顶级的高手只关注最核心的1%</li>
+        </ul>
+      </div>
+
+      <!-- 模块4：理解他人与社会协作 -->
+      <div class="module-card c4">
+        <div class="module-icon">🤝</div>
+        <div class="module-title">四、社会协作的底层逻辑</div>
+        <ul class="module-points">
+          <li>信任的本质：可预期的行为 + 一致性 → 信任资产</li>
+          <li>激励相容：好的制度设计让个人利益与集体利益对齐</li>
+          <li>商业的本质：创造价值，并高效传递给需要的人</li>
+          <li>权力vs影响力：影响力来自稀缺性与信息不对称</li>
+          <li>博弈思维：在重复博弈中，诚信是最优策略</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 五层底层逻辑结构 -->
+  <div class="pyramid-section">
+    <h2>🏛 五大认知维度 · 层级框架</h2>
+    <div class="pyramid">
+      <div class="pyramid-row">
+        <span class="pyramid-label" style="text-align:right">核心</span>
+        <div class="pyramid-block py1">是非对错的底层逻辑</div>
+        <span class="pyramid-label"></span>
+      </div>
+      <div class="arrow-down">↓</div>
+      <div class="pyramid-row">
+        <span class="pyramid-label" style="text-align:right">工具</span>
+        <div class="pyramid-block py2">思考问题的底层逻辑</div>
+        <span class="pyramid-label"></span>
+      </div>
+      <div class="arrow-down">↓</div>
+      <div class="pyramid-row">
+        <span class="pyramid-label" style="text-align:right">自我</span>
+        <div class="pyramid-block py3">个体进化的底层逻辑</div>
+        <span class="pyramid-label"></span>
+      </div>
+      <div class="arrow-down">↓</div>
+      <div class="pyramid-row">
+        <span class="pyramid-label" style="text-align:right">关系</span>
+        <div class="pyramid-block py4">理解他人的底层逻辑</div>
+        <span class="pyramid-label"></span>
+      </div>
+      <div class="arrow-down">↓</div>
+      <div class="pyramid-row">
+        <span class="pyramid-label" style="text-align:right">协作</span>
+        <div class="pyramid-block py5">社会运作的底层逻辑</div>
+        <span class="pyramid-label"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 金句 -->
+  <div class="quotes-section">
+    <h2>💬 核心金句</h2>
+    <div class="quotes-grid">
+      <div class="quote-card q1">
+        <div class="quote-text">
+          "所有的社会问题都可以从人性出发，找到底层逻辑。而人性，最核心的只有一条——趋利避害。"
+        </div>
+      </div>
+      <div class="quote-card q2">
+        <div class="quote-text">
+          "人生算法：找到一件你愿意用一生去做的事，然后不断重复，等待复利。"
+        </div>
+      </div>
+      <div class="quote-card q3">
+        <div class="quote-text">
+          "不要试图教会一个人某个观点，而要帮助他建立一套思考问题的方法。"
+        </div>
+      </div>
+      <div class="quote-card q4">
+        <div class="quote-text">
+          "商业的本质是创造价值，而创造价值的前提，是真正理解别人的需求，而非自我感动。"
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 行动建议 -->
+  <div class="actions-section">
+    <h2>🚀 行动建议</h2>
+    <div class="actions-list">
+      <div class="action-item">
+        <div class="action-num">1</div>
+        <div class="action-content">
+          <div class="action-title">每日"第一性原理"练习</div>
+          <div class="action-desc">遇到问题时，先问"这件事的本质假设是什么"，强迫自己从零开始推导，而不是依赖经验和惯例。</div>
+        </div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">2</div>
+        <div class="action-content">
+          <div class="action-title">区分"事实"与"观点"</div>
+          <div class="action-desc">每次阅读或交流时，主动区分对方说的是客观事实还是主观判断。养成"这是事实，还是你的观点？"的习惯。</div>
+        </div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">3</div>
+        <div class="action-content">
+          <div class="action-title">找到你的"人生算法"</div>
+          <div class="action-desc">写下一件你愿意长期坚持做、且对他人有价值的事，制定最小化可执行单元（每日30分钟），设定5年复利目标。</div>
+        </div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">4</div>
+        <div class="action-content">
+          <div class="action-title">用"激励相容"设计合作</div>
+          <div class="action-desc">在任何合作关系（员工、合伙人、家庭）中，先问：对方的利益在哪里？怎样让他的利益与共同目标对齐？</div>
+        </div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">5</div>
+        <div class="action-content">
+          <div class="action-title">建立个人"信任资产"账户</div>
+          <div class="action-desc">每次承诺必须兑现，每次兑现都是存款；每次失约都是透支。记录自己的信任行为，定期复盘是否言行一致。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 底部 -->
+  <div class="footer">
+    每日一学 · 第21期 · 2026.05.21 · 底层逻辑 · 刘润
+  </div>
+
+</div>
+</body>
+</html>
