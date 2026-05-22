@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>精要主义 · 每日一学</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    min-height: 100vh;
+    padding: 30px 20px;
+    color: #e8f4f8;
+  }
+  .container { max-width: 960px; margin: 0 auto; }
+
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding: 40px 30px;
+    background: rgba(255,255,255,0.07);
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.12);
+  }
+  .date-badge {
+    display: inline-block;
+    background: linear-gradient(90deg, #43cea2, #185a9d);
+    padding: 5px 18px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+    color: #fff;
+  }
+  .book-emoji { font-size: 60px; margin-bottom: 12px; }
+  .book-title {
+    font-size: 36px;
+    font-weight: 700;
+    background: linear-gradient(90deg, #43cea2, #a8edea);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+  }
+  .book-subtitle {
+    font-size: 15px;
+    color: rgba(200,230,240,0.75);
+    margin-bottom: 4px;
+  }
+  .book-author { font-size: 14px; color: rgba(180,220,235,0.6); }
+
+  /* Section cards */
+  .section {
+    background: rgba(255,255,255,0.07);
+    border-radius: 16px;
+    padding: 28px 30px;
+    margin-bottom: 22px;
+    border: 1px solid rgba(255,255,255,0.1);
+    backdrop-filter: blur(8px);
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .section-icon {
+    width: 42px; height: 42px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .icon-blue { background: linear-gradient(135deg, #2980b9, #6dd5fa); }
+  .icon-green { background: linear-gradient(135deg, #11998e, #38ef7d); }
+  .icon-purple { background: linear-gradient(135deg, #8e2de2, #4a00e0); }
+  .icon-orange { background: linear-gradient(135deg, #f7971e, #ffd200); }
+  .icon-red { background: linear-gradient(135deg, #cb2d3e, #ef473a); }
+
+  .section-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #e8f4f8;
+  }
+  .section-desc { font-size: 13px; color: rgba(200,230,240,0.55); }
+
+  /* Core insight */
+  .core-insight {
+    background: linear-gradient(135deg, rgba(67,206,162,0.15), rgba(24,90,157,0.15));
+    border-radius: 12px;
+    padding: 20px 24px;
+    border-left: 4px solid #43cea2;
+    font-size: 15px;
+    line-height: 1.8;
+    color: #d0edf6;
+  }
+
+  /* Framework grid */
+  .framework-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+  }
+  .framework-card {
+    background: rgba(255,255,255,0.06);
+    border-radius: 12px;
+    padding: 18px 16px;
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: transform 0.2s;
+  }
+  .framework-card:hover { transform: translateY(-3px); }
+  .framework-num {
+    font-size: 28px;
+    font-weight: 800;
+    background: linear-gradient(90deg, #43cea2, #185a9d);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .framework-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: #e0f0f8;
+    margin-bottom: 6px;
+  }
+  .framework-text { font-size: 13px; color: rgba(200,230,240,0.7); line-height: 1.6; }
+
+  /* Knowledge points */
+  .kp-list { list-style: none; }
+  .kp-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+  .kp-item:last-child { border-bottom: none; }
+  .kp-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #43cea2;
+    flex-shrink: 0;
+    margin-top: 7px;
+  }
+  .kp-content { flex: 1; }
+  .kp-title { font-size: 15px; font-weight: 600; color: #c9e8f4; margin-bottom: 4px; }
+  .kp-desc { font-size: 13px; color: rgba(180,220,235,0.65); line-height: 1.6; }
+
+  /* Quotes */
+  .quote-list { display: flex; flex-direction: column; gap: 14px; }
+  .quote-item {
+    background: rgba(255,255,255,0.05);
+    border-radius: 10px;
+    padding: 16px 20px;
+    border-left: 3px solid #ffd200;
+    font-size: 14px;
+    line-height: 1.8;
+    color: #ddf0f8;
+    font-style: italic;
+  }
+
+  /* Actions */
+  .action-list { display: flex; flex-direction: column; gap: 12px; }
+  .action-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .action-num {
+    width: 28px; height: 28px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #cb2d3e, #ef473a);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .action-text { font-size: 14px; color: #d0edf6; line-height: 1.7; }
+
+  /* Mind map */
+  .mindmap-wrapper {
+    overflow-x: auto;
+    padding: 10px 0;
+  }
+  .mindmap {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    min-width: 720px;
+  }
+  .mm-center {
+    background: linear-gradient(135deg, #11998e, #38ef7d);
+    color: #0f2027;
+    border-radius: 16px;
+    padding: 16px 22px;
+    font-size: 16px;
+    font-weight: 800;
+    text-align: center;
+    flex-shrink: 0;
+    box-shadow: 0 4px 20px rgba(56,239,125,0.3);
+  }
+  .mm-connector { width: 30px; height: 2px; background: rgba(200,240,255,0.3); flex-shrink: 0; }
+  .mm-branches { display: flex; flex-direction: column; gap: 12px; flex: 1; }
+  .mm-branch {
+    display: flex;
+    align-items: center;
+    gap: 0;
+  }
+  .mm-branch-line { width: 24px; height: 2px; background: rgba(200,240,255,0.3); flex-shrink: 0; }
+  .mm-node {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 10px;
+    padding: 8px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #d8f0fa;
+    flex-shrink: 0;
+  }
+  .mm-leaf-connector { width: 16px; height: 2px; background: rgba(200,240,255,0.2); flex-shrink: 0; }
+  .mm-leaves { display: flex; flex-direction: column; gap: 6px; }
+  .mm-leaf {
+    background: rgba(255,255,255,0.05);
+    border-radius: 8px;
+    padding: 5px 12px;
+    font-size: 12px;
+    color: rgba(200,230,240,0.75);
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 12px;
+    color: rgba(180,210,230,0.4);
+    padding-bottom: 10px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="date-badge">📅 2026 · 05 · 22 每日一学</div>
+    <div class="book-emoji">🎯</div>
+    <div class="book-title">精要主义</div>
+    <div class="book-subtitle">Essentialism: The Disciplined Pursuit of Less</div>
+    <div class="book-author">作者：Greg McKeown（格雷戈·麦吉沃恩）</div>
+  </div>
+
+  <!-- Core Insight -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-blue">💡</div>
+      <div>
+        <div class="section-title">核心洞见</div>
+        <div class="section-desc">这本书在解决什么问题？</div>
+      </div>
+    </div>
+    <div class="core-insight">
+      我们生活在一个充满选项和噪音的时代，大多数人把时间分散在无数"重要"事项上，结果什么都做了一点，却没有真正创造价值。<strong>精要主义的核心答案是：少做，但要做得更好</strong>。它不是时间管理技巧，而是一种思维操作系统的重塑——只做那件"此刻最重要的事"，并为此有意识地放弃其他所有。精要主义者不是做减法，而是在有限的精力与时间里做出最高杠杆的选择。核心主张是：<strong>如果不主动选择，别人会替你做选择</strong>。
+    </div>
+  </div>
+
+  <!-- Framework -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-green">🗂</div>
+      <div>
+        <div class="section-title">核心框架：精要主义三步循环</div>
+        <div class="section-desc">探索 → 排除 → 执行</div>
+      </div>
+    </div>
+    <div class="framework-grid">
+      <div class="framework-card">
+        <div class="framework-num">01</div>
+        <div class="framework-name">探索（Explore）</div>
+        <div class="framework-text">花时间辨别哪些事情真正重要，区分噪音与信号，停下来思考而不是立即行动</div>
+      </div>
+      <div class="framework-card">
+        <div class="framework-num">02</div>
+        <div class="framework-name">排除（Eliminate）</div>
+        <div class="framework-text">勇于拒绝不重要的事，优雅地说"不"，对不达90分的选项直接舍弃</div>
+      </div>
+      <div class="framework-card">
+        <div class="framework-num">03</div>
+        <div class="framework-name">执行（Execute）</div>
+        <div class="framework-text">去除阻力、建立缓冲、创造流程，让重要的事情变得轻松自然地完成</div>
+      </div>
+      <div class="framework-card">
+        <div class="framework-num">→</div>
+        <div class="framework-name">90分法则</div>
+        <div class="framework-text">用单一最重要标准打分，不满90分就等于"否"，避免"差不多可以"的妥协陷阱</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Knowledge Points -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-purple">📖</div>
+      <div>
+        <div class="section-title">主要知识点</div>
+        <div class="section-desc">关键概念与方法</div>
+      </div>
+    </div>
+    <ul class="kp-list">
+      <li class="kp-item">
+        <div class="kp-dot"></div>
+        <div class="kp-content">
+          <div class="kp-title">精要主义者 vs 非精要主义者</div>
+          <div class="kp-desc">非精要主义者对所有请求说"是"，精疲力竭却感觉啥都没做好；精要主义者对几乎所有请求说"不"，只把精力押注在真正重要的少数事项上，获得更深的成就感与影响力。</div>
+        </div>
+      </li>
+      <li class="kp-item">
+        <div class="kp-dot"></div>
+        <div class="kp-content">
+          <div class="kp-title">选择的力量：不是"我没有选择"，而是"我选择不去做"</div>
+          <div class="kp-desc">很多人说"我必须做这件事"，这句话本身就是在放弃选择权。精要主义者明白：选择本身是一种不可让渡的权利，放弃选择权才是真正的损失。</div>
+        </div>
+      </li>
+      <li class="kp-item">
+        <div class="kp-dot"></div>
+        <div class="kp-content">
+          <div class="kp-title">权衡取舍不是缺陷，而是现实</div>
+          <div class="kp-desc">每个选择都有代价。精要主义者不问"怎么才能两者兼得"，而是问"我愿意放弃什么来换取这个"。承认取舍本身就是一种战略清醒。</div>
+        </div>
+      </li>
+      <li class="kp-item">
+        <div class="kp-dot"></div>
+        <div class="kp-content">
+          <div class="kp-title">如何优雅地说"不"</div>
+          <div class="kp-desc">说"不"很难，但有技巧：暂缓答复（"让我查一下我的日历"）、替代方案（"这件事我帮不了，但你可以试试X"）、直接而有礼貌地拒绝。记住：拒绝一次请求，失去的只是一个机会；而说"是"，失去的是更重要事项的时间。</div>
+        </div>
+      </li>
+      <li class="kp-item">
+        <div class="kp-dot"></div>
+        <div class="kp-content">
+          <div class="kp-title">创造缓冲与去除阻力</div>
+          <div class="kp-desc">精要主义者会主动为意外情况预留缓冲时间（比如给项目加20%的时间估算），并通过流程化、习惯化让重要的事情变得轻松执行，而不是靠每次的意志力强撑。</div>
+        </div>
+      </li>
+      <li class="kp-item">
+        <div class="kp-dot"></div>
+        <div class="kp-content">
+          <div class="kp-title">停止损失：有勇气放弃错误承诺</div>
+          <div class="kp-desc">我们常常因为"已经投入了时间/钱"（沉没成本）继续做错误的事。精要主义要求：只要不符合最高标准，就要有勇气停止，哪怕之前已经投入很多。</div>
+        </div>
+      </li>
+      <li class="kp-item">
+        <div class="kp-dot"></div>
+        <div class="kp-content">
+          <div class="kp-title">玩耍、睡眠与专注时间的重要性</div>
+          <div class="kp-desc">作者强调玩耍能激发创造力和洞察力；充足睡眠是高绩效的基础；每天固定保留专注时间思考优先级，是精要主义者最重要的日常实践。</div>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Quotes -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-orange">✨</div>
+      <div>
+        <div class="section-title">金句摘录</div>
+        <div class="section-desc">值得反复咀嚼的洞见</div>
+      </div>
+    </div>
+    <div class="quote-list">
+      <div class="quote-item">「如果不主动选择，别人会替你做选择。」</div>
+      <div class="quote-item">「不是优先事项（priority）变成了复数（priorities），而是我们放弃了对它的清晰认知。」</div>
+      <div class="quote-item">「精要主义不是关于少做，而是关于做正确的事——只做少数事情，但做到极致。」</div>
+      <div class="quote-item">「如果答案不是明确的'是'，那就是'不'。」</div>
+      <div class="quote-item">「我们可以选择把精力分散在许多事情上，也可以选择把精力集中在少数重要的事情上。精要主义者的成功源于后者。」</div>
+      <div class="quote-item">「有勇气说'不'的人，才能真正说一个有力量的'是'。」</div>
+    </div>
+  </div>
+
+  <!-- Actions -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">🚀</div>
+      <div>
+        <div class="section-title">行动建议</div>
+        <div class="section-desc">从今天开始可以做的事</div>
+      </div>
+    </div>
+    <div class="action-list">
+      <div class="action-item">
+        <div class="action-num">1</div>
+        <div class="action-text"><strong>每天早晨用5分钟问自己：</strong>"今天最重要的一件事是什么？" 把答案写下来，确保这件事在你最精力充沛的时段完成。</div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">2</div>
+        <div class="action-text"><strong>用"90分法则"审查你的待办清单：</strong>给每项任务用"此事重要性"打一个1-100的分，低于90分的考虑直接删除或委托他人。</div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">3</div>
+        <div class="action-text"><strong>本周练习一次优雅地拒绝：</strong>当有新请求进来时，先问"这件事是否符合我最重要的目标"，如果不符合，用礼貌但坚定的方式拒绝。</div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">4</div>
+        <div class="action-text"><strong>清理一个"沉没成本"：</strong>找出一件你因为"已经投入太多"而继续做、但内心知道不对的事，鼓起勇气停止它。</div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">5</div>
+        <div class="action-text"><strong>每周留出2小时的"探索时间"：</strong>不看手机、不开会，只思考"什么是最重要的" ——这是精要主义者最有价值的投资之一。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mind Map -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-green">🗺</div>
+      <div>
+        <div class="section-title">思维导图概览</div>
+        <div class="section-desc">精要主义核心结构一览</div>
+      </div>
+    </div>
+    <div class="mindmap-wrapper">
+      <div class="mindmap">
+        <div class="mm-center">🎯<br>精要主义</div>
+        <div class="mm-connector"></div>
+        <div class="mm-branches">
+          <div class="mm-branch">
+            <div class="mm-branch-line"></div>
+            <div class="mm-node">核心理念</div>
+            <div class="mm-leaf-connector"></div>
+            <div class="mm-leaves">
+              <div class="mm-leaf">少即是多</div>
+              <div class="mm-leaf">主动选择</div>
+              <div class="mm-leaf">权衡取舍是现实</div>
+            </div>
+          </div>
+          <div class="mm-branch">
+            <div class="mm-branch-line"></div>
+            <div class="mm-node">三步循环</div>
+            <div class="mm-leaf-connector"></div>
+            <div class="mm-leaves">
+              <div class="mm-leaf">探索 · 辨别信号</div>
+              <div class="mm-leaf">排除 · 勇敢说不</div>
+              <div class="mm-leaf">执行 · 去除阻力</div>
+            </div>
+          </div>
+          <div class="mm-branch">
+            <div class="mm-branch-line"></div>
+            <div class="mm-node">关键工具</div>
+            <div class="mm-leaf-connector"></div>
+            <div class="mm-leaves">
+              <div class="mm-leaf">90分法则</div>
+              <div class="mm-leaf">优雅拒绝术</div>
+              <div class="mm-leaf">缓冲时间设计</div>
+            </div>
+          </div>
+          <div class="mm-branch">
+            <div class="mm-branch-line"></div>
+            <div class="mm-node">习惯支柱</div>
+            <div class="mm-leaf-connector"></div>
+            <div class="mm-leaves">
+              <div class="mm-leaf">玩耍激发洞察</div>
+              <div class="mm-leaf">睡眠保证状态</div>
+              <div class="mm-leaf">每日专注时间</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    📚 每日一学 · 2026-05-22 · 精要主义 · Essentialism · Greg McKeown
+  </div>
+
+</div>
+</body>
+</html>
