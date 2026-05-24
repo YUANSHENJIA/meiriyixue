@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 好好学习 · 成甲</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+    background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+    min-height: 100vh;
+    padding: 30px 20px;
+    color: #fff;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .header .date {
+    font-size: 13px;
+    color: #80cbc4;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .header .book-title {
+    font-size: 42px;
+    font-weight: 800;
+    background: linear-gradient(90deg, #43e97b, #38f9d7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+  }
+  .header .book-author {
+    font-size: 16px;
+    color: #b2dfdb;
+  }
+  .header .book-subtitle {
+    font-size: 14px;
+    color: #80cbc4;
+    margin-top: 6px;
+  }
+
+  .core-insight {
+    background: linear-gradient(135deg, rgba(67,233,123,0.15), rgba(56,249,215,0.1));
+    border: 1px solid rgba(67,233,123,0.4);
+    border-radius: 16px;
+    padding: 24px 28px;
+    margin-bottom: 30px;
+    max-width: 860px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .core-insight .ci-label {
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: #43e97b;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .core-insight .ci-text {
+    font-size: 18px;
+    line-height: 1.8;
+    color: #e0f7fa;
+    font-weight: 500;
+  }
+
+  .mindmap-container {
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  .section {
+    margin-bottom: 28px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding: 12px 20px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .section-header:hover { opacity: 0.85; transform: translateX(4px); }
+
+  .section-icon { font-size: 22px; }
+  .section-title { font-size: 18px; font-weight: 700; }
+  .section-toggle { margin-left: auto; font-size: 16px; transition: transform 0.3s; }
+  .section-toggle.open { transform: rotate(180deg); }
+
+  .s1 .section-header { background: linear-gradient(135deg, rgba(255,152,0,0.25), rgba(255,193,7,0.15)); border-left: 4px solid #ff9800; }
+  .s2 .section-header { background: linear-gradient(135deg, rgba(33,150,243,0.25), rgba(3,169,244,0.15)); border-left: 4px solid #2196f3; }
+  .s3 .section-header { background: linear-gradient(135deg, rgba(156,39,176,0.25), rgba(233,30,99,0.15)); border-left: 4px solid #9c27b0; }
+  .s4 .section-header { background: linear-gradient(135deg, rgba(76,175,80,0.25), rgba(139,195,74,0.15)); border-left: 4px solid #4caf50; }
+  .s5 .section-header { background: linear-gradient(135deg, rgba(244,67,54,0.25), rgba(255,87,34,0.15)); border-left: 4px solid #f44336; }
+
+  .section-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 14px;
+    padding: 0 4px;
+  }
+  .section-content.list-view {
+    grid-template-columns: 1fr;
+  }
+
+  .card {
+    background: rgba(255,255,255,0.05);
+    border-radius: 12px;
+    padding: 18px 20px;
+    border: 1px solid rgba(255,255,255,0.08);
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 2px;
+  }
+  .s1 .card::before { background: linear-gradient(90deg, #ff9800, #ffc107); }
+  .s2 .card::before { background: linear-gradient(90deg, #2196f3, #03a9f4); }
+  .s3 .card::before { background: linear-gradient(90deg, #9c27b0, #e91e63); }
+  .s4 .card::before { background: linear-gradient(90deg, #4caf50, #8bc34a); }
+  .s5 .card::before { background: linear-gradient(90deg, #f44336, #ff5722); }
+
+  .card:hover {
+    transform: translateY(-3px);
+    background: rgba(255,255,255,0.09);
+    border-color: rgba(255,255,255,0.15);
+  }
+  .card-num {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+    opacity: 0.6;
+  }
+  .card-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: #fff;
+  }
+  .card-body {
+    font-size: 13.5px;
+    line-height: 1.75;
+    color: rgba(255,255,255,0.75);
+  }
+  .card-body ul { padding-left: 16px; }
+  .card-body li { margin-bottom: 5px; }
+  .card-body strong { color: rgba(255,255,255,0.95); font-weight: 600; }
+
+  .quotes-section {
+    background: rgba(255,255,255,0.04);
+    border-radius: 16px;
+    padding: 24px 28px;
+    margin-bottom: 28px;
+    max-width: 960px;
+    margin-left: auto;
+    margin-right: auto;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .quotes-title {
+    font-size: 14px;
+    letter-spacing: 3px;
+    color: #ffd54f;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+  .quote-item {
+    padding: 16px 20px;
+    border-left: 3px solid #ffd54f;
+    margin-bottom: 14px;
+    background: rgba(255,213,79,0.06);
+    border-radius: 0 10px 10px 0;
+    font-size: 14px;
+    line-height: 1.8;
+    color: rgba(255,255,255,0.85);
+    font-style: italic;
+  }
+  .quote-item:last-child { margin-bottom: 0; }
+
+  .action-section {
+    background: linear-gradient(135deg, rgba(67,233,123,0.1), rgba(56,249,215,0.06));
+    border-radius: 16px;
+    padding: 24px 28px;
+    max-width: 960px;
+    margin: 0 auto 40px;
+    border: 1px solid rgba(67,233,123,0.2);
+  }
+  .action-title {
+    font-size: 14px;
+    letter-spacing: 3px;
+    color: #43e97b;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+  .action-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px;
+  }
+  .action-item {
+    background: rgba(67,233,123,0.08);
+    border-radius: 10px;
+    padding: 14px 16px;
+    border: 1px solid rgba(67,233,123,0.15);
+  }
+  .action-step {
+    font-size: 11px;
+    color: #43e97b;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+  }
+  .action-text {
+    font-size: 13.5px;
+    color: rgba(255,255,255,0.8);
+    line-height: 1.6;
+  }
+
+  .footer {
+    text-align: center;
+    padding: 20px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.3);
+    letter-spacing: 2px;
+  }
+
+  @media (max-width: 600px) {
+    .header .book-title { font-size: 28px; }
+    .section-content { grid-template-columns: 1fr; }
+    .action-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="date">📅 2026-05-24 · 每日一学</div>
+  <div class="book-title">好好学习</div>
+  <div class="book-author">作者：成甲</div>
+  <div class="book-subtitle">知识管理与认知升级的方法论 · 用临界知识改变命运</div>
+</div>
+
+<div class="core-insight">
+  <div class="ci-label">🎯 核心洞见</div>
+  <div class="ci-text">
+    大多数人的学习是"低水平勤奋"——读了大量书却没有改变思维和行动。真正有效的学习，不是知道更多知识，而是掌握少数能打通底层规律的<strong>临界知识</strong>（Threshold Knowledge）。用这些临界知识构建认知框架，就能以少胜多，触类旁通，实现认知的指数级跃迁。
+  </div>
+</div>
+
+<div class="mindmap-container">
+
+  <!-- 第一部分：核心框架 -->
+  <div class="section s1">
+    <div class="section-header" onclick="toggleSection(this)">
+      <span class="section-icon">🏗️</span>
+      <span class="section-title">核心框架 · 四层学习模型</span>
+      <span class="section-toggle open">▼</span>
+    </div>
+    <div class="section-content" id="s1-content">
+      <div class="card">
+        <div class="card-num">LAYER 01</div>
+        <div class="card-title">信息获取层（效率最低）</div>
+        <div class="card-body">
+          大多数人停留于此：刷资讯、读文章、背知识点。<br/>
+          <strong>问题</strong>：信息量庞大，但缺乏底层联系，很快遗忘，无法迁移应用。
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-num">LAYER 02</div>
+        <div class="card-title">方法论层（有效但有限）</div>
+        <div class="card-body">
+          学习GTD、番茄工作法等方法。<br/>
+          <strong>问题</strong>：方法有其边界条件，换场景未必适用，仍是表层知识。
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-num">LAYER 03</div>
+        <div class="card-title">临界知识层（核心突破）</div>
+        <div class="card-body">
+          掌握少数能跨领域应用的底层规律，如复利效应、系统思维、概率论。<br/>
+          <strong>优势</strong>：一通百通，解释力和预测力极强。
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-num">LAYER 04</div>
+        <div class="card-title">智慧整合层（终极目标）</div>
+        <div class="card-body">
+          将临界知识融会贯通，形成个人「思维模型库」，面对复杂问题自动调用多维框架进行综合判断。
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 第二部分：关键概念 -->
+  <div class="section s2">
+    <div class="section-header" onclick="toggleSection(this)">
+      <span class="section-icon">🧠</span>
+      <span class="section-title">主要知识点 · 核心概念解析</span>
+      <span class="section-toggle open">▼</span>
+    </div>
+    <div class="section-content">
+      <div class="card">
+        <div class="card-num">CONCEPT 01</div>
+        <div class="card-title">临界知识是什么</div>
+        <div class="card-body">
+          能够普遍解释大量现象、跨领域迁移应用的底层规律。<br/>
+          典型临界知识：
+          <ul>
+            <li>复利效应（指数增长）</li>
+            <li>概率思维与贝叶斯更新</li>
+            <li>系统思考（正负反馈环）</li>
+            <li>进化论（选择与适应）</li>
+            <li>黄金圈法则（Why→How→What）</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-num">CONCEPT 02</div>
+        <div class="card-title">学习的三个误区</div>
+        <div class="card-body">
+          <ul>
+            <li><strong>误区一</strong>：学得多 ≠ 学得好，知识量不等于认知力</li>
+            <li><strong>误区二</strong>：勤奋学习但不反思，等于低水平重复</li>
+            <li><strong>误区三</strong>：只在自己领域学习，缺乏跨界视角导致思维局限</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-num">CONCEPT 03</div>
+        <div class="card-title">反思日记：认知升级的引擎</div>
+        <div class="card-body">
+          定期反思是激活临界知识的关键工具。写反思日记不是记录事件，而是：
+          <ul>
+            <li>用知识解释当天发生的事</li>
+            <li>找出决策背后的底层假设</li>
+            <li>发现规律，不断校准认知</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-num">CONCEPT 04</div>
+        <div class="card-title">知识晶体化：建立知识体系</div>
+        <div class="card-body">
+          孤立知识点价值低。要将知识连成网络：<br/>
+          <strong>读书时</strong>：不是摘录金句，而是追问「这和我已知的什么有关？」「在什么场景可以用？」<br/>
+          晶体化的知识可以相互激活，触发新洞见。
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-num">CONCEPT 05</div>
+        <div class="card-title">刻意练习临界知识</div>
+        <div class="card-body">
+          知道≠会用。临界知识需要刻意练习：
+          <ul>
+            <li>用复利思维分析自己的职业成长</li>
+            <li>用概率思维评估每个决策风险</li>
+            <li>用系统思维识别正负反馈循环</li>
+          </ul>
+          每天找1~2个场景主动应用，形成肌肉记忆。
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-num">CONCEPT 06</div>
+        <div class="card-title">慢就是快：深度学习原则</div>
+        <div class="card-body">
+          高效学习的悖论：看起来慢的深度学习，实际上比碎片化快读走得更远。<br/>
+          一本书读透彻，比同主题100篇文章收益更大。<br/>
+          <strong>关键</strong>：减少书单，增加反思和应用密度。
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 第三部分：临界知识清单 -->
+  <div class="section s3">
+    <div class="section-header" onclick="toggleSection(this)">
+      <span class="section-icon">⚡</span>
+      <span class="section-title">核心框架 · 成甲推荐的临界知识清单</span>
+      <span class="section-toggle open">▼</span>
+    </div>
+    <div class="section-content">
+      <div class="card">
+        <div class="card-num">CK 01</div>
+        <div class="card-title">复利效应</div>
+        <div class="card-body">
+          微小的持续改进会指数级放大。<br/>
+          应用：每天进步1%，一年后是37倍；坚持写作、锻炼、存钱都遵循此规律。
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-num">CK 02</div>
+        <div class="card-title">概率与不确定性</div>
+        <div class="card-body">
+          用概率思维而非确定性思维看世界。<br/>
+          应用：做决策时评估每个选项的期望值（概率×收益），接受合理的失败。
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-num">CK 03</div>
+        <div class="card-title">黄金圈法则</div>
+        <div class="card-body">
+          Why → How → What 的思维顺序。<br/>
+          应用：做任何事先问"为什么"，厘清目的后再讨论方法和行动。
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-num">CK 04</div>
+        <div class="card-title">系统思考</div>
+        <div class="card-body">
+          任何现象背后都有正负反馈系统。<br/>
+          应用：识别系统结构，避免"头痛医头"的局部优化，从整体找杠杆点。
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-num">CK 05</div>
+        <div class="card-title">进化论思维</div>
+        <div class="card-body">
+          优胜劣汰，适应环境才能存活。<br/>
+          应用：对个人和组织，不断试错、迭代、保留有效变异是成长核心。
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 第四部分：实践方法 -->
+  <div class="section s4">
+    <div class="section-header" onclick="toggleSection(this)">
+      <span class="section-icon">🛠️</span>
+      <span class="section-title">实践方法 · 如何学以致用</span>
+      <span class="section-toggle open">▼</span>
+    </div>
+    <div class="section-content">
+      <div class="card">
+        <div class="card-num">METHOD 01</div>
+        <div class="card-title">读书三问法</div>
+        <div class="card-body">
+          每读完一章问自己：<br/>
+          <ul>
+            <li>这个观点的底层假设是什么？</li>
+            <li>这和我已知的哪些知识有联系？</li>
+            <li>我能在什么场景中立刻用上它？</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-num">METHOD 02</div>
+        <div class="card-title">每日反思日记</div>
+        <div class="card-body">
+          每天用10~15分钟记录：今天遇到了什么？背后是什么规律？下次遇到同类问题怎么处理？——用知识解释生活，才能真正内化。
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-num">METHOD 03</div>
+        <div class="card-title">建立个人知识体系</div>
+        <div class="card-body">
+          用笔记工具建立分类体系，按「临界知识类别」而非「信息来源」归档知识，定期回顾并连接不同领域的洞见，形成知识晶体网络。
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-num">METHOD 04</div>
+        <div class="card-title">刻意应用训练</div>
+        <div class="card-body">
+          每周选定一个临界知识，找3个不同场景主动套用，记录效果。比如：用「复利效应」分析习惯养成、财富积累、技能精进三个维度。
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 金句 -->
+  <div class="quotes-section">
+    <div class="quotes-title">💬 金句精选</div>
+    <div class="quote-item">
+      "我们读书少，不是因为书太多，而是因为我们精读的书太少。"
+    </div>
+    <div class="quote-item">
+      "知识的数量不重要，重要的是知识的质量和你对知识的理解深度。"
+    </div>
+    <div class="quote-item">
+      "真正的学习是改变行为的学习——如果学完一本书，你的行为没有发生任何改变，那你基本上是浪费了时间。"
+    </div>
+    <div class="quote-item">
+      "临界知识就是那些能帮你打通任督二脉的底层规律，学会一个，就能解释一片现象。"
+    </div>
+    <div class="quote-item">
+      "慢就是快：深度理解一个知识点，胜过走马观花一百个。"
+    </div>
+  </div>
+
+  <!-- 行动建议 -->
+  <div class="action-section">
+    <div class="action-title">🚀 行动建议</div>
+    <div class="action-grid">
+      <div class="action-item">
+        <div class="action-step">ACTION 01</div>
+        <div class="action-text">今天开始写反思日记，每天10分钟，用至少一个知识点解释当天发生的事</div>
+      </div>
+      <div class="action-item">
+        <div class="action-step">ACTION 02</div>
+        <div class="action-text">本周精读一本经典，用「读书三问法」边读边记笔记，不追求速度</div>
+      </div>
+      <div class="action-item">
+        <div class="action-step">ACTION 03</div>
+        <div class="action-text">选定5个临界知识（复利、概率、系统思维等），每周深度应用1个，坚持5周</div>
+      </div>
+      <div class="action-item">
+        <div class="action-step">ACTION 04</div>
+        <div class="action-text">建立个人知识库（Notion/Obsidian），按临界知识分类而非按书名或来源分类</div>
+      </div>
+      <div class="action-item">
+        <div class="action-step">ACTION 05</div>
+        <div class="action-text">每月清理书单，删掉「应该读」的书，只保留「迫切想读、会立刻应用」的书</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">每日一学 · 2026-05-24 · 好好学习 · 成甲 · 知识管理与认知升级</div>
+
+<script>
+function toggleSection(header) {
+  const toggle = header.querySelector('.section-toggle');
+  const content = header.nextElementSibling;
+  if (content.style.display === 'none') {
+    content.style.display = 'grid';
+    toggle.classList.add('open');
+  } else {
+    content.style.display = 'none';
+    toggle.classList.remove('open');
+  }
+}
+</script>
+</body>
+</html>
