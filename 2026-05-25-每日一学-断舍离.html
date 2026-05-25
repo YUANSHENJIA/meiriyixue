@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 断舍离</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --card: #1a1d2e;
+    --card2: #1e2235;
+    --accent: #7c6af7;
+    --accent2: #5eead4;
+    --accent3: #f472b6;
+    --accent4: #fb923c;
+    --accent5: #facc15;
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --border: rgba(124,106,247,0.18);
+    --glow: rgba(124,106,247,0.12);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif;
+    min-height: 100vh;
+    padding: 32px 16px 60px;
+  }
+  .header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .date-badge {
+    display: inline-block;
+    background: rgba(124,106,247,0.15);
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    padding: 4px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    letter-spacing: 2px;
+    margin-bottom: 14px;
+  }
+  .title {
+    font-size: clamp(28px,6vw,48px);
+    font-weight: 800;
+    background: linear-gradient(135deg, #7c6af7 0%, #5eead4 50%, #f472b6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+    line-height: 1.2;
+  }
+  .subtitle {
+    color: var(--muted);
+    font-size: 15px;
+    margin-bottom: 6px;
+  }
+  .author {
+    color: var(--accent2);
+    font-size: 14px;
+    opacity: 0.85;
+  }
+
+  /* 中心节点 */
+  .mind-center {
+    display: flex;
+    justify-content: center;
+    margin: 10px 0 36px;
+  }
+  .center-node {
+    background: linear-gradient(135deg, #7c6af7, #5eead4);
+    color: #fff;
+    font-size: 22px;
+    font-weight: 800;
+    padding: 22px 44px;
+    border-radius: 50px;
+    box-shadow: 0 0 40px rgba(124,106,247,0.45);
+    letter-spacing: 4px;
+  }
+
+  /* 导图网格 */
+  .mind-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    max-width: 1100px;
+    margin: 0 auto 40px;
+  }
+
+  .branch {
+    background: var(--card);
+    border-radius: 18px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .branch:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px var(--glow);
+  }
+  .branch-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+  .branch-icon {
+    font-size: 22px;
+    width: 36px;
+    text-align: center;
+  }
+  .branch-body {
+    padding: 6px 20px 20px;
+  }
+
+  /* 颜色主题 */
+  .b1 .branch-header { background: linear-gradient(90deg, rgba(124,106,247,0.25), transparent); color: #a78bfa; border-bottom: 1px solid rgba(124,106,247,0.2); }
+  .b2 .branch-header { background: linear-gradient(90deg, rgba(94,234,212,0.2), transparent); color: #5eead4; border-bottom: 1px solid rgba(94,234,212,0.15); }
+  .b3 .branch-header { background: linear-gradient(90deg, rgba(244,114,182,0.2), transparent); color: #f472b6; border-bottom: 1px solid rgba(244,114,182,0.15); }
+  .b4 .branch-header { background: linear-gradient(90deg, rgba(251,146,60,0.2), transparent); color: #fb923c; border-bottom: 1px solid rgba(251,146,60,0.15); }
+  .b5 .branch-header { background: linear-gradient(90deg, rgba(250,204,21,0.2), transparent); color: #facc15; border-bottom: 1px solid rgba(250,204,21,0.15); }
+  .b6 .branch-header { background: linear-gradient(90deg, rgba(52,211,153,0.2), transparent); color: #34d399; border-bottom: 1px solid rgba(52,211,153,0.15); }
+
+  /* 列表样式 */
+  .leaf-list { list-style: none; }
+  .leaf-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 9px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    line-height: 1.6;
+    font-size: 14px;
+    color: var(--text);
+  }
+  .leaf-list li:last-child { border-bottom: none; }
+  .leaf-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    margin-top: 7px;
+    flex-shrink: 0;
+  }
+  .b1 .leaf-dot { background: #a78bfa; }
+  .b2 .leaf-dot { background: #5eead4; }
+  .b3 .leaf-dot { background: #f472b6; }
+  .b4 .leaf-dot { background: #fb923c; }
+  .b5 .leaf-dot { background: #facc15; }
+  .b6 .leaf-dot { background: #34d399; }
+
+  /* 三大核心框架卡片 */
+  .framework-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 10px;
+  }
+  .fw-card {
+    background: var(--card2);
+    border-radius: 14px;
+    padding: 18px 14px;
+    text-align: center;
+    border: 1px solid var(--border);
+  }
+  .fw-kanji {
+    font-size: 30px;
+    font-weight: 900;
+    margin-bottom: 6px;
+  }
+  .fw-name {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: var(--text);
+  }
+  .fw-desc {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .fw1 .fw-kanji { color: #a78bfa; }
+  .fw2 .fw-kanji { color: #5eead4; }
+  .fw3 .fw-kanji { color: #f472b6; }
+
+  /* 金句 */
+  .quote-card {
+    background: linear-gradient(135deg, rgba(124,106,247,0.12), rgba(94,234,212,0.08));
+    border-left: 3px solid var(--accent);
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin: 8px 0;
+    font-style: italic;
+    font-size: 14px;
+    color: #c4b5fd;
+    line-height: 1.7;
+  }
+  .quote-card span {
+    display: block;
+    text-align: right;
+    color: var(--muted);
+    font-style: normal;
+    font-size: 12px;
+    margin-top: 6px;
+  }
+
+  /* 行动建议 */
+  .action-list { list-style: none; }
+  .action-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .action-item:last-child { border-bottom: none; }
+  .action-num {
+    background: linear-gradient(135deg, #7c6af7, #5eead4);
+    color: #fff;
+    font-weight: 800;
+    font-size: 12px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  /* 底部 */
+  .footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+
+  @media (max-width: 600px) {
+    .framework-row { grid-template-columns: 1fr; }
+    .mind-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="date-badge">2026 · 05 · 25 · 每日一学</div>
+  <div class="title">断舍离</div>
+  <div class="subtitle">《断舍离》· Danshari</div>
+  <div class="author">山下英子（Hideko Yamashita）著</div>
+</div>
+
+<div class="mind-center">
+  <div class="center-node">断 · 舍 · 离</div>
+</div>
+
+<div class="mind-grid">
+
+  <!-- 核心洞见 -->
+  <div class="branch b1">
+    <div class="branch-header">
+      <span class="branch-icon">💡</span>核心洞见
+    </div>
+    <div class="branch-body">
+      <ul class="leaf-list">
+        <li><span class="leaf-dot"></span>整理的核心不是"物品"，而是"自我"——通过对物品的取舍，重新认识并定义当下的自己</li>
+        <li><span class="leaf-dot"></span>杂乱的空间折射杂乱的内心：外在环境是内心状态的镜子</li>
+        <li><span class="leaf-dot"></span>人与物的关系是动态的，以"现在的我"为主语判断每件物品的去留</li>
+        <li><span class="leaf-dot"></span>减法哲学：不是"加入更多"，而是"去除多余"，留下真正有价值的事物</li>
+        <li><span class="leaf-dot"></span>物品自由流动才能焕发生命力，囤积是对物品和自我的双重束缚</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 三大核心框架 -->
+  <div class="branch b2">
+    <div class="branch-header">
+      <span class="branch-icon">🏗️</span>三大核心框架
+    </div>
+    <div class="branch-body">
+      <div class="framework-row">
+        <div class="fw-card fw1">
+          <div class="fw-kanji">断</div>
+          <div class="fw-name">断绝</div>
+          <div class="fw-desc">不让不需要的东西进入生活，从源头拒绝</div>
+        </div>
+        <div class="fw-card fw2">
+          <div class="fw-kanji">舍</div>
+          <div class="fw-name">舍弃</div>
+          <div class="fw-desc">清除已有的无用之物，解除执念</div>
+        </div>
+        <div class="fw-card fw3">
+          <div class="fw-kanji">离</div>
+          <div class="fw-name">脱离</div>
+          <div class="fw-desc">脱离对物质的执念，回归自在状态</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 主要知识点 -->
+  <div class="branch b3">
+    <div class="branch-header">
+      <span class="branch-icon">📚</span>主要知识点
+    </div>
+    <div class="branch-body">
+      <ul class="leaf-list">
+        <li><span class="leaf-dot"></span><strong>以"现在"为轴心：</strong>不问"这东西还能用吗"，而问"这东西现在的我需要吗"</li>
+        <li><span class="leaf-dot"></span><strong>三类人的困境：</strong>逃避现实型（不想面对家的凌乱）、执着过去型（留着旧物念旧情）、担忧未来型（囤积以防万一）</li>
+        <li><span class="leaf-dot"></span><strong>七五一法则：</strong>看不见的地方放七成满，看得见的地方放五成，展示的地方放一成</li>
+        <li><span class="leaf-dot"></span><strong>物品的三类去向：</strong>自用、赠送给需要的人、回收/处理</li>
+        <li><span class="leaf-dot"></span><strong>空间即能量：</strong>整洁的空间能提升专注力、创造力与自我效能感</li>
+        <li><span class="leaf-dot"></span><strong>扫除=冥想：</strong>整理不仅是收拾物品，更是整理思绪、觉察内心的修行</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 金句 -->
+  <div class="branch b4">
+    <div class="branch-header">
+      <span class="branch-icon">✨</span>经典金句
+    </div>
+    <div class="branch-body">
+      <div class="quote-card">
+        不是"这个东西还能用吗"，而是"这个东西，现在的我需要吗"。
+        <span>——山下英子《断舍离》</span>
+      </div>
+      <div class="quote-card">
+        物品是照见自己内心的镜子，杂乱的房间是内心混乱的折射。
+        <span>——山下英子</span>
+      </div>
+      <div class="quote-card">
+        断舍离的目的不是扔东西，而是通过扔东西，找到真正的自己。
+        <span>——山下英子</span>
+      </div>
+      <div class="quote-card">
+        自由就是时刻拥有"可以随时离开"的能力。
+        <span>——山下英子</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 行动建议 -->
+  <div class="branch b5">
+    <div class="branch-header">
+      <span class="branch-icon">🚀</span>行动建议
+    </div>
+    <div class="branch-body">
+      <ol class="action-list">
+        <li class="action-item">
+          <div class="action-num">1</div>
+          <div><strong>一日一物法：</strong>每天扔掉或送出一件闲置物品，培养"断"与"舍"的习惯，从最小行动开始</div>
+        </li>
+        <li class="action-item">
+          <div class="action-num">2</div>
+          <div><strong>入口关卡：</strong>购物前问自己"现在的我真的需要它吗"，用30秒思考代替冲动消费</div>
+        </li>
+        <li class="action-item">
+          <div class="action-num">3</div>
+          <div><strong>聚焦一隅：</strong>选择一个抽屉或一角桌面开始整理，完成后感受空间带来的心理变化</div>
+        </li>
+        <li class="action-item">
+          <div class="action-num">4</div>
+          <div><strong>数字断舍离：</strong>清理手机App、订阅邮件、社交媒体关注，减少信息过载，回归专注</div>
+        </li>
+        <li class="action-item">
+          <div class="action-num">5</div>
+          <div><strong>三问复盘：</strong>每周末问自己——①本周什么让我觉得充实？②什么消耗了我的精力？③有什么我可以放下？</div>
+        </li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- 延伸思考 -->
+  <div class="branch b6">
+    <div class="branch-header">
+      <span class="branch-icon">🌿</span>延伸思考
+    </div>
+    <div class="branch-body">
+      <ul class="leaf-list">
+        <li><span class="leaf-dot"></span><strong>断舍离 vs 极简主义：</strong>断舍离不要求极少，而是要求"恰好适合现在的自己"，更具弹性与温度</li>
+        <li><span class="leaf-dot"></span><strong>关系的断舍离：</strong>同理可用于人际关系、信息消费、时间分配——只留下滋养自己的部分</li>
+        <li><span class="leaf-dot"></span><strong>职场应用：</strong>整理工作桌面、电脑文件夹、任务清单，降低认知负荷，提升决策效率</li>
+        <li><span class="leaf-dot"></span><strong>道家哲学呼应：</strong>"为学日益，为道日损"——断舍离与《道德经》"损之又损，以至于无为"高度契合</li>
+        <li><span class="leaf-dot"></span><strong>神经科学支持：</strong>研究表明视觉混乱会持续消耗认知资源，整洁环境有助于大脑进入深度工作状态</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  每日一学 · 2026年05月25日 · 断舍离 · 山下英子<br>
+  <small style="opacity:0.5;margin-top:6px;display:block;">Through letting go, we become free.</small>
+</div>
+
+</body>
+</html>
