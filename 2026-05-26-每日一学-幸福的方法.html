@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>幸福的方法 · 思维导图</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', Arial, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+  }
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .header {
+    text-align: center;
+    padding: 40px 20px;
+    color: white;
+  }
+  .header .emoji { font-size: 64px; display: block; margin-bottom: 16px; }
+  .header h1 { font-size: 42px; font-weight: 700; margin-bottom: 8px; letter-spacing: 2px; }
+  .header .subtitle { font-size: 18px; opacity: 0.9; margin-bottom: 4px; }
+  .header .author { font-size: 15px; opacity: 0.75; }
+  .header .date { font-size: 13px; opacity: 0.6; margin-top: 8px; }
+
+  .core-insight {
+    background: rgba(255,255,255,0.95);
+    border-radius: 20px;
+    padding: 32px;
+    margin: 20px 0;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+    border-left: 6px solid #f6c90e;
+  }
+  .core-insight h2 { font-size: 20px; color: #333; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+  .core-insight p { font-size: 16px; color: #555; line-height: 1.8; }
+  .core-insight .highlight { color: #764ba2; font-weight: 600; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin: 20px 0;
+  }
+  .card {
+    background: rgba(255,255,255,0.95);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .card:hover { transform: translateY(-4px); box-shadow: 0 16px 48px rgba(0,0,0,0.18); }
+  .card h3 { font-size: 17px; color: #333; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; border-bottom: 2px solid; padding-bottom: 10px; }
+  .card ul { list-style: none; }
+  .card ul li { font-size: 14px; color: #555; padding: 6px 0; padding-left: 20px; position: relative; line-height: 1.6; }
+  .card ul li::before { content: "▸"; position: absolute; left: 0; color: inherit; font-size: 12px; top: 7px; }
+
+  .card.purple h3 { border-color: #764ba2; color: #764ba2; }
+  .card.purple ul li::before { color: #764ba2; }
+  .card.blue h3 { border-color: #3b82f6; color: #3b82f6; }
+  .card.blue ul li::before { color: #3b82f6; }
+  .card.green h3 { border-color: #10b981; color: #10b981; }
+  .card.green ul li::before { color: #10b981; }
+  .card.orange h3 { border-color: #f59e0b; color: #f59e0b; }
+  .card.orange ul li::before { color: #f59e0b; }
+  .card.pink h3 { border-color: #ec4899; color: #ec4899; }
+  .card.pink ul li::before { color: #ec4899; }
+  .card.red h3 { border-color: #ef4444; color: #ef4444; }
+  .card.red ul li::before { color: #ef4444; }
+
+  /* 四象限 HAPINESS 矩阵 */
+  .quadrant-container {
+    background: rgba(255,255,255,0.95);
+    border-radius: 20px;
+    padding: 32px;
+    margin: 20px 0;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+  }
+  .quadrant-container h2 { font-size: 20px; color: #333; margin-bottom: 20px; text-align: center; }
+  .quadrant-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .quadrant-item {
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+  }
+  .q1 { background: #fef3c7; border: 2px solid #f59e0b; }
+  .q2 { background: #d1fae5; border: 2px solid #10b981; }
+  .q3 { background: #fee2e2; border: 2px solid #ef4444; }
+  .q4 { background: #ede9fe; border: 2px solid #7c3aed; }
+  .quadrant-item .q-emoji { font-size: 36px; display: block; margin-bottom: 8px; }
+  .quadrant-item .q-title { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+  .q1 .q-title { color: #92400e; }
+  .q2 .q-title { color: #065f46; }
+  .q3 .q-title { color: #991b1b; }
+  .q4 .q-title { color: #4c1d95; }
+  .quadrant-item .q-desc { font-size: 13px; color: #666; line-height: 1.6; }
+  .quadrant-item .q-example { font-size: 12px; color: #888; margin-top: 6px; font-style: italic; }
+
+  /* 幸福方程式 */
+  .formula-container {
+    background: rgba(255,255,255,0.95);
+    border-radius: 20px;
+    padding: 32px;
+    margin: 20px 0;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+    text-align: center;
+  }
+  .formula-container h2 { font-size: 20px; color: #333; margin-bottom: 24px; }
+  .formula {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .formula-item {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border-radius: 12px;
+    padding: 16px 24px;
+    font-size: 15px;
+    font-weight: 600;
+    min-width: 120px;
+  }
+  .formula-op { font-size: 28px; color: #764ba2; font-weight: 700; }
+  .formula-desc { font-size: 14px; color: #666; line-height: 1.8; max-width: 700px; margin: 0 auto; }
+
+  /* SPIRE 模型 */
+  .spire-container {
+    background: rgba(255,255,255,0.95);
+    border-radius: 20px;
+    padding: 32px;
+    margin: 20px 0;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+  }
+  .spire-container h2 { font-size: 20px; color: #333; margin-bottom: 20px; text-align: center; }
+  .spire-list { display: flex; flex-direction: column; gap: 12px; }
+  .spire-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 16px 20px;
+    border-radius: 12px;
+    background: #f9fafb;
+    border-left: 4px solid;
+  }
+  .spire-item:nth-child(1) { border-color: #3b82f6; }
+  .spire-item:nth-child(2) { border-color: #10b981; }
+  .spire-item:nth-child(3) { border-color: #f59e0b; }
+  .spire-item:nth-child(4) { border-color: #ec4899; }
+  .spire-item:nth-child(5) { border-color: #7c3aed; }
+  .spire-letter {
+    font-size: 24px;
+    font-weight: 900;
+    min-width: 32px;
+    text-align: center;
+  }
+  .spire-item:nth-child(1) .spire-letter { color: #3b82f6; }
+  .spire-item:nth-child(2) .spire-letter { color: #10b981; }
+  .spire-item:nth-child(3) .spire-letter { color: #f59e0b; }
+  .spire-item:nth-child(4) .spire-letter { color: #ec4899; }
+  .spire-item:nth-child(5) .spire-letter { color: #7c3aed; }
+  .spire-content .spire-name { font-size: 16px; font-weight: 700; color: #333; margin-bottom: 4px; }
+  .spire-content .spire-desc { font-size: 13px; color: #666; line-height: 1.6; }
+
+  /* 金句区 */
+  .quotes-container {
+    background: rgba(255,255,255,0.95);
+    border-radius: 20px;
+    padding: 32px;
+    margin: 20px 0;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+  }
+  .quotes-container h2 { font-size: 20px; color: #333; margin-bottom: 20px; }
+  .quote-item {
+    background: linear-gradient(135deg, #f9f7ff, #f0ebff);
+    border-left: 4px solid #764ba2;
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 14px;
+    font-size: 15px;
+    color: #444;
+    line-height: 1.7;
+    font-style: italic;
+  }
+  .quote-item:last-child { margin-bottom: 0; }
+
+  /* 行动建议 */
+  .actions-container {
+    background: rgba(255,255,255,0.95);
+    border-radius: 20px;
+    padding: 32px;
+    margin: 20px 0;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+  }
+  .actions-container h2 { font-size: 20px; color: #333; margin-bottom: 20px; }
+  .action-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .action-item:last-child { border-bottom: none; }
+  .action-num {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .action-text { font-size: 14px; color: #555; line-height: 1.7; flex: 1; }
+  .action-text strong { color: #333; }
+
+  .footer {
+    text-align: center;
+    color: rgba(255,255,255,0.7);
+    padding: 30px 0;
+    font-size: 13px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <!-- 书名头部 -->
+  <div class="header">
+    <span class="emoji">😊</span>
+    <h1>幸福的方法</h1>
+    <div class="subtitle">Happier: Learn the Secrets to Daily Joy and Lasting Fulfillment</div>
+    <div class="author">塔尔·本-沙哈尔 著 · Tal Ben-Shahar</div>
+    <div class="date">每日一学 · 2026-05-26</div>
+  </div>
+
+  <!-- 核心洞见 -->
+  <div class="core-insight">
+    <h2>💡 核心洞见</h2>
+    <p>
+      幸福不是一种<span class="highlight">终点</span>，而是一段<span class="highlight">旅程</span>。真正的幸福来自于<span class="highlight">当下意义</span>与<span class="highlight">未来快乐</span>的统一——既享受当下的过程，又朝向有意义的目标。幸福感是可以<span class="highlight">学习和练习</span>的能力，积极心理学为我们提供了从情绪、身体、智识、关系、成就五大维度全面提升幸福的 <span class="highlight">SPIRE 模型</span>，让幸福成为一种生活方式。
+    </p>
+  </div>
+
+  <!-- 四象限：幸福类型矩阵 -->
+  <div class="quadrant-container">
+    <h2>🔲 核心框架：幸福四象限（当下享受 × 未来收益）</h2>
+    <div class="quadrant-grid">
+      <div class="quadrant-item q1">
+        <span class="q-emoji">🍔</span>
+        <div class="q-title">享乐主义型</div>
+        <div class="q-desc">当下享受 ✅<br>未来收益 ❌<br>只顾眼前，逃避痛苦，无视后果</div>
+        <div class="q-example">例：无节制享乐、逃避责任</div>
+      </div>
+      <div class="quadrant-item q2">
+        <span class="q-emoji">😊</span>
+        <div class="q-title">幸福型（理想）</div>
+        <div class="q-desc">当下享受 ✅<br>未来收益 ✅<br>既享受过程，又实现目标</div>
+        <div class="q-example">例：热爱并投入有意义的工作</div>
+      </div>
+      <div class="quadrant-item q3">
+        <span class="q-emoji">😞</span>
+        <div class="q-title">虚无主义型</div>
+        <div class="q-desc">当下享受 ❌<br>未来收益 ❌<br>既不享受当下，也无未来期待</div>
+        <div class="q-example">例：习得性无助、抑郁状态</div>
+      </div>
+      <div class="quadrant-item q4">
+        <span class="q-emoji">📚</span>
+        <div class="q-title">忙碌奔波型</div>
+        <div class="q-desc">当下享受 ❌<br>未来收益 ✅<br>为未来目标牺牲当下，不断追逐</div>
+        <div class="q-example">例：一旦实现目标，立刻设立新目标</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SPIRE 幸福模型 -->
+  <div class="spire-container">
+    <h2>🌟 SPIRE 幸福五维度模型</h2>
+    <div class="spire-list">
+      <div class="spire-item">
+        <div class="spire-letter">S</div>
+        <div class="spire-content">
+          <div class="spire-name">Spiritual 精神层面 · 意义与冥想</div>
+          <div class="spire-desc">寻找生命的意义与目的；通过专注当下、正念冥想提升内在平静。问自己："我正在做的事对我有意义吗？"</div>
+        </div>
+      </div>
+      <div class="spire-item">
+        <div class="spire-letter">P</div>
+        <div class="spire-content">
+          <div class="spire-name">Physical 身体层面 · 健康与恢复</div>
+          <div class="spire-desc">规律运动是天然的抗抑郁剂；充足睡眠、健康饮食是幸福的生理基础。身体与心理相互影响，不可忽视。</div>
+        </div>
+      </div>
+      <div class="spire-item">
+        <div class="spire-letter">I</div>
+        <div class="spire-content">
+          <div class="spire-name">Intellectual 智识层面 · 好奇与成长</div>
+          <div class="spire-desc">保持好奇心，持续学习和思考；用开放的心态拥抱新知识、新挑战，智识的成长本身就带来快乐。</div>
+        </div>
+      </div>
+      <div class="spire-item">
+        <div class="spire-letter">R</div>
+        <div class="spire-content">
+          <div class="spire-name">Relational 关系层面 · 连接与爱</div>
+          <div class="spire-desc">深度且真实的人际关系是幸福最强的预测因子；投资于爱情、友谊和家庭，定期花时间与亲近的人在一起。</div>
+        </div>
+      </div>
+      <div class="spire-item">
+        <div class="spire-letter">E</div>
+        <div class="spire-content">
+          <div class="spire-name">Emotional 情绪层面 · 感恩与韧性</div>
+          <div class="spire-desc">允许负面情绪存在（"允许自己成为人类"）；练习感恩，每日记录三件感激的事；培养情绪韧性与复原力。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 核心知识点 -->
+  <div class="grid">
+    <div class="card blue">
+      <h3>🎯 幸福的本质定义</h3>
+      <ul>
+        <li>幸福 = 意义（Meaning）+ 快乐（Pleasure）</li>
+        <li>不是终点，是一种<strong>存在方式</strong></li>
+        <li>幸福感有 50% 受基因影响，但另 50% 可以主动改变</li>
+        <li>外部财富对幸福的影响远低于我们预期</li>
+        <li>幸福需要主动练习，而非被动等待</li>
+      </ul>
+    </div>
+    <div class="card green">
+      <h3>🔄 忙碌奔波综合征</h3>
+      <ul>
+        <li>现代人最常见的心理模式</li>
+        <li>相信"只要……我就幸福了"是一种幻觉</li>
+        <li>实现目标后，幸福感迅速消退（享乐适应）</li>
+        <li>不断设立新目标，永远活在未来而非当下</li>
+        <li>解药：享受旅程本身，让目标成为方向而非终点</li>
+      </ul>
+    </div>
+    <div class="card orange">
+      <h3>🌱 积极心理学基础</h3>
+      <ul>
+        <li>积极心理学研究什么让人蓬勃生长，而非仅消除疾病</li>
+        <li>感恩日记：每日记录3件感恩的事，持续21天改变大脑</li>
+        <li>优势识别：利用个人优势而非弥补缺点更有效</li>
+        <li>流体验（心流）是幸福的高峰体验</li>
+        <li>学会说"感谢"，建立积极关系循环</li>
+      </ul>
+    </div>
+    <div class="card purple">
+      <h3>🧠 幸福的误区破除</h3>
+      <ul>
+        <li>误区1：成功带来幸福 → 真相：幸福促成成功</li>
+        <li>误区2：幸福是自私的 → 真相：幸福的人更慷慨利他</li>
+        <li>误区3：应该永远积极 → 真相：要接纳并处理负面情绪</li>
+        <li>误区4：改变很难 → 真相：小习惯积累带来大改变</li>
+        <li>误区5：幸福靠运气 → 真相：幸福技能可以学习</li>
+      </ul>
+    </div>
+    <div class="card pink">
+      <h3>⏱️ 时间管理与幸福</h3>
+      <ul>
+        <li>用"时间税"审视每项活动：带来意义还是消耗能量</li>
+        <li>减少无意义的义务，增加有意义的投入</li>
+        <li>正念当下：全身心投入正在做的事</li>
+        <li>为快乐和休息安排"仪式"时间</li>
+        <li>避免多任务处理，专注是幸福的基础</li>
+      </ul>
+    </div>
+    <div class="card red">
+      <h3>💞 关系与幸福</h3>
+      <ul>
+        <li>深度关系是幸福感最强的预测指标之一</li>
+        <li>无条件的爱是关系质量的核心</li>
+        <li>减少表面社交，增加深度连接</li>
+        <li>表达感谢与赞美，主动建立积极关系</li>
+        <li>允许对方真实地做自己（不控制、不改造）</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 幸福方程式 -->
+  <div class="formula-container">
+    <h2>⚡ 幸福方程式</h2>
+    <div class="formula">
+      <div class="formula-item">当下的快乐<br><small>享受过程</small></div>
+      <div class="formula-op">+</div>
+      <div class="formula-item">未来的意义<br><small>朝向目标</small></div>
+      <div class="formula-op">=</div>
+      <div class="formula-item" style="background: linear-gradient(135deg, #f6c90e, #f59e0b); color: #1a1a1a;">真正的幸福<br><small>Happier</small></div>
+    </div>
+    <p class="formula-desc">
+      幸福不是一种感觉，而是一种<strong>生活方式</strong>。当你的日常活动既让你享受过程（快乐），又让你感到有意义（价值），你就处于幸福的状态。这不需要完美，而需要<strong>方向正确 + 活在当下</strong>。
+    </p>
+  </div>
+
+  <!-- 金句 -->
+  <div class="quotes-container">
+    <h2>✨ 金句精选</h2>
+    <div class="quote-item">
+      "幸福是一段旅程，而非一个目的地。当我们为未来牺牲当下时，我们也在牺牲幸福本身。"
+    </div>
+    <div class="quote-item">
+      "快乐是快感与意义的结合。当我们的行为既令我们快乐，又让我们觉得有意义，才能获得真正的幸福。"
+    </div>
+    <div class="quote-item">
+      "学会感恩是通往幸福最短的道路。感恩让我们注意到已拥有的，而非不停追逐尚未拥有的。"
+    </div>
+    <div class="quote-item">
+      "允许自己成为人类。负面情绪不是软弱的表现，拒绝承认负面情绪，才是真正阻碍幸福的因素。"
+    </div>
+    <div class="quote-item">
+      "幸福的人不是没有问题的人，而是善于应对问题的人。韧性比快乐更能预测长期幸福。"
+    </div>
+  </div>
+
+  <!-- 行动建议 -->
+  <div class="actions-container">
+    <h2>🚀 行动建议（即刻可行）</h2>
+    <div class="action-item">
+      <div class="action-num">1</div>
+      <div class="action-text"><strong>感恩日记（每晚3件事）：</strong>睡前写下今天令你感激的3件事，不论大小。坚持21天，能显著提升幸福感和积极情绪。</div>
+    </div>
+    <div class="action-item">
+      <div class="action-num">2</div>
+      <div class="action-text"><strong>画出自己的"幸福四象限"：</strong>审视当前工作、关系、习惯，哪些落在"幸福型"？哪些是"忙碌奔波型"？有意识地调整比例。</div>
+    </div>
+    <div class="action-item">
+      <div class="action-num">3</div>
+      <div class="action-text"><strong>SPIRE 每周自检：</strong>每周问自己 SPIRE 五个维度——这周我在精神、身体、智识、关系、情绪上各做了什么滋养自己的事？</div>
+    </div>
+    <div class="action-item">
+      <div class="action-num">4</div>
+      <div class="action-text"><strong>运动20分钟：</strong>哪怕只是快步走20分钟，运动的抗抑郁效果与药物相当，且没有副作用。把运动设为每日仪式。</div>
+    </div>
+    <div class="action-item">
+      <div class="action-num">5</div>
+      <div class="action-text"><strong>允许负面情绪：</strong>当你感到沮丧或焦虑时，不要压制，而是承认它："我现在感到焦虑，这没关系。"接纳后，情绪会自然流动。</div>
+    </div>
+    <div class="action-item">
+      <div class="action-num">6</div>
+      <div class="action-text"><strong>今日选一件"意义+快乐"的事：</strong>找出一件你既有兴趣又感到有价值的事，专注投入30分钟，体验心流带来的幸福感。</div>
+    </div>
+    <div class="action-item">
+      <div class="action-num">7</div>
+      <div class="action-text"><strong>主动表达感谢：</strong>今天向一个对你重要的人，说出你对他/她的感谢与欣赏。这是建立深度关系和提升自身幸福感的双赢行动。</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    📅 每日一学 · 2026-05-26 · 《幸福的方法》· Tal Ben-Shahar<br>
+    <small>积累每一天的成长，成就更好的自己</small>
+  </div>
+</div>
+</body>
+</html>
