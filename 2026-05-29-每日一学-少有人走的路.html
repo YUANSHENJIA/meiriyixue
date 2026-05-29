@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 少有人走的路</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    min-height: 100vh;
+    color: #e0e0e0;
+    padding: 20px;
+  }
+  .header {
+    text-align: center;
+    padding: 40px 20px 30px;
+    animation: fadeInDown 0.8s ease;
+  }
+  .date-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 20px;
+    padding: 6px 18px;
+    font-size: 13px;
+    color: #a0c4ff;
+    margin-bottom: 16px;
+    letter-spacing: 1px;
+  }
+  .book-title {
+    font-size: 42px;
+    font-weight: 700;
+    background: linear-gradient(90deg, #a0c4ff, #c9b8ff, #ffd6a5);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+  }
+  .book-subtitle {
+    font-size: 16px;
+    color: #9ab0d0;
+    margin-bottom: 6px;
+  }
+  .book-author {
+    font-size: 14px;
+    color: #7a8fa6;
+  }
+  .mind-map {
+    max-width: 1100px;
+    margin: 30px auto;
+    position: relative;
+  }
+  .center-node {
+    background: linear-gradient(135deg, #7c4dff, #4a90d9);
+    border-radius: 20px;
+    padding: 24px 36px;
+    text-align: center;
+    margin: 0 auto 40px;
+    width: fit-content;
+    max-width: 400px;
+    box-shadow: 0 8px 32px rgba(124,77,255,0.4);
+    position: relative;
+    animation: pulse 3s infinite;
+  }
+  @keyframes pulse {
+    0%,100%{ box-shadow: 0 8px 32px rgba(124,77,255,0.4); }
+    50%{ box-shadow: 0 8px 48px rgba(124,77,255,0.7); }
+  }
+  .center-node h2 { font-size: 22px; color: #fff; font-weight: 700; }
+  .center-node p { font-size: 13px; color: rgba(255,255,255,0.75); margin-top: 6px; }
+  .branches {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 10px;
+  }
+  .branch {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 22px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    animation: fadeInUp 0.6s ease both;
+  }
+  .branch:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 36px rgba(0,0,0,0.3);
+  }
+  .branch:nth-child(1) { border-left: 4px solid #ff6b9d; animation-delay: 0.1s; }
+  .branch:nth-child(2) { border-left: 4px solid #a0c4ff; animation-delay: 0.2s; }
+  .branch:nth-child(3) { border-left: 4px solid #ffd6a5; animation-delay: 0.3s; }
+  .branch:nth-child(4) { border-left: 4px solid #9bf6a8; animation-delay: 0.4s; }
+  .branch:nth-child(5) { border-left: 4px solid #c9b8ff; animation-delay: 0.5s; }
+  .branch:nth-child(6) { border-left: 4px solid #ffb3b3; animation-delay: 0.6s; }
+  .branch-title {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .branch-icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .b1 .branch-icon { background: rgba(255,107,157,0.2); }
+  .b2 .branch-icon { background: rgba(160,196,255,0.2); }
+  .b3 .branch-icon { background: rgba(255,214,165,0.2); }
+  .b4 .branch-icon { background: rgba(155,246,168,0.2); }
+  .b5 .branch-icon { background: rgba(201,184,255,0.2); }
+  .b6 .branch-icon { background: rgba(255,179,179,0.2); }
+  .leaf-list { list-style: none; padding: 0; }
+  .leaf-list li {
+    padding: 7px 0 7px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    font-size: 14px;
+    color: #c8d8e8;
+    line-height: 1.6;
+    position: relative;
+  }
+  .leaf-list li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: rgba(255,255,255,0.3);
+    font-size: 11px;
+    top: 9px;
+  }
+  .leaf-list li:last-child { border-bottom: none; }
+  .leaf-list li strong { color: #e8f0ff; }
+  .quote-section {
+    max-width: 1100px;
+    margin: 24px auto;
+    background: linear-gradient(135deg, rgba(124,77,255,0.15), rgba(74,144,217,0.15));
+    border: 1px solid rgba(124,77,255,0.3);
+    border-radius: 16px;
+    padding: 30px;
+    animation: fadeInUp 0.6s ease 0.7s both;
+  }
+  .quote-section h3 {
+    font-size: 16px;
+    color: #c9b8ff;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .quote-item {
+    padding: 14px 20px;
+    margin: 10px 0;
+    background: rgba(255,255,255,0.04);
+    border-radius: 10px;
+    border-left: 3px solid #c9b8ff;
+    font-size: 15px;
+    font-style: italic;
+    color: #dde8f8;
+    line-height: 1.7;
+  }
+  .action-section {
+    max-width: 1100px;
+    margin: 24px auto;
+    background: rgba(155,246,168,0.06);
+    border: 1px solid rgba(155,246,168,0.2);
+    border-radius: 16px;
+    padding: 30px;
+    animation: fadeInUp 0.6s ease 0.8s both;
+  }
+  .action-section h3 {
+    font-size: 16px;
+    color: #9bf6a8;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .action-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 14px;
+  }
+  .action-card {
+    background: rgba(155,246,168,0.08);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+  }
+  .action-number {
+    width: 28px; height: 28px;
+    background: rgba(155,246,168,0.2);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    color: #9bf6a8;
+    font-weight: 700;
+    margin: 0 auto 10px;
+  }
+  .action-card p {
+    font-size: 13px;
+    color: #c0d8c8;
+    line-height: 1.6;
+  }
+  .footer {
+    text-align: center;
+    padding: 30px 20px;
+    color: #5a7a9a;
+    font-size: 13px;
+    animation: fadeIn 1s ease 1s both;
+  }
+  @keyframes fadeInDown { from { opacity:0; transform:translateY(-20px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes fadeInUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+
+  @media (max-width: 700px) {
+    .branches { grid-template-columns: 1fr; }
+    .book-title { font-size: 28px; }
+    .action-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="date-badge">📅 2026年05月29日 · 每日一学</div>
+  <div class="book-title">少有人走的路</div>
+  <div class="book-subtitle">The Road Less Traveled</div>
+  <div class="book-author">作者：M. Scott Peck（派克医生）</div>
+</div>
+
+<div class="mind-map">
+  <div class="center-node">
+    <h2>🌿 少有人走的路</h2>
+    <p>心智成熟的旅程 · 爱、自律与恩典</p>
+  </div>
+
+  <div class="branches">
+
+    <!-- 核心洞见 -->
+    <div class="branch b1">
+      <div class="branch-title">
+        <div class="branch-icon">💡</div>
+        <span style="color:#ff6b9d">核心洞见</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>人生苦难是成长的起点</strong>：接受"人生苦难重重"是心智成熟的第一步，逃避只会加深痛苦</li>
+        <li><strong>自律是爱的外在表现</strong>：真正的爱不是感觉，而是以行动促进自我与他人成长的意志力</li>
+        <li><strong>心智成熟是终身旅程</strong>：不存在一劳永逸的成熟，成长贯穿一生</li>
+        <li><strong>恩典是神秘的馈赠</strong>：那些超越理性的成长助力，来自生命内在的神圣力量</li>
+      </ul>
+    </div>
+
+    <!-- 四大核心框架 -->
+    <div class="branch b2">
+      <div class="branch-title">
+        <div class="branch-icon">🧭</div>
+        <span style="color:#a0c4ff">四大支柱框架</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>第一支柱：自律</strong> — 克服困难、推迟满足、承担责任、保持忠诚</li>
+        <li><strong>第二支柱：爱</strong> — 真爱是扩展自我边界的意愿，而非单纯依恋或迷恋</li>
+        <li><strong>第三支柱：成长与宗教</strong> — 每人心中都有世界观（"宗教"），需要不断更新</li>
+        <li><strong>第四支柱：恩典</strong> — 神秘力量推动我们超越自我、走向成熟</li>
+      </ul>
+    </div>
+
+    <!-- 自律的四个原则 -->
+    <div class="branch b3">
+      <div class="branch-title">
+        <div class="branch-icon">⚙️</div>
+        <span style="color:#ffd6a5">自律的四个工具</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>推迟满足感</strong>：先苦后甜，不回避痛苦，按优先次序生活</li>
+        <li><strong>承担责任</strong>：主动承担问题的责任，而非将其归咎于他人</li>
+        <li><strong>忠于事实</strong>：不断修正世界观，诚实面对现实而非自我欺骗</li>
+        <li><strong>保持平衡</strong>：在灵活与原则间取得平衡，懂得适时放弃旧有模式</li>
+      </ul>
+    </div>
+
+    <!-- 爱的本质 -->
+    <div class="branch b4">
+      <div class="branch-title">
+        <div class="branch-icon">❤️</div>
+        <span style="color:#9bf6a8">爱的真正含义</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>爱 ≠ 依赖</strong>：过度依赖对方不是爱，是消极性依赖</li>
+        <li><strong>爱需要独立自我</strong>：真爱发生在两个完整个体之间，而非互相填补空虚</li>
+        <li><strong>坠入爱河≠爱</strong>：最初的迷恋是自我边界短暂消融的幻觉，不可持续</li>
+        <li><strong>爱是行动与意志</strong>：爱是一个动词，是持续选择、付出与滋养的过程</li>
+        <li><strong>自爱是他爱的前提</strong>：无法真正爱自己的人，也无法真正爱他人</li>
+      </ul>
+    </div>
+
+    <!-- 心智成熟的障碍 -->
+    <div class="branch b5">
+      <div class="branch-title">
+        <div class="branch-icon">🚧</div>
+        <span style="color:#c9b8ff">心智成熟的常见障碍</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>回避苦难</strong>：用神经症、性格失调来逃避面对自我</li>
+        <li><strong>懒惰</strong>：派克认为懒惰是一切罪恶的根源，是对成长的抵制</li>
+        <li><strong>固化世界观</strong>：不愿更新信念、拒绝修正旧有认知</li>
+        <li><strong>转移责任</strong>：把问题推给环境与他人，放弃主动选择的力量</li>
+        <li><strong>过度自我控制</strong>：极度压制情绪也是一种失衡，阻碍真实体验</li>
+      </ul>
+    </div>
+
+    <!-- 恩典与神秘力量 -->
+    <div class="branch b6">
+      <div class="branch-title">
+        <div class="branch-icon">✨</div>
+        <span style="color:#ffb3b3">恩典与无意识成长</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>超越理性的馈赠</strong>：人常常在未知情况下被神秘力量推向成熟</li>
+        <li><strong>梦境与直觉</strong>：潜意识比意识更了解我们，值得倾听与尊重</li>
+        <li><strong>阻力即信号</strong>：当我们抗拒成长时，往往是恩典在敲门</li>
+        <li><strong>微小奇迹</strong>：日常生活中处处有指引，关键在于保持开放与觉知</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<!-- 金句 -->
+<div class="quote-section">
+  <h3>💬 核心金句</h3>
+  <div class="quote-item">"人生苦难重重。这是个伟大的真理，是世界上最伟大的真理之一。"</div>
+  <div class="quote-item">"自律，是解决人生问题最主要的工具，也是消除人生痛苦最重要的方法。"</div>
+  <div class="quote-item">"爱，是为了促进自己和他人心智成熟，而具有的一种自我完善的意愿。"</div>
+  <div class="quote-item">"不能自我感知，不能了解自我，就无法实现真正的爱与自由。"</div>
+  <div class="quote-item">"真正的爱，是行动，而非感觉。它要求我们在不舒适时仍选择付出。"</div>
+</div>
+
+<!-- 行动建议 -->
+<div class="action-section">
+  <h3>🎯 五条行动建议</h3>
+  <div class="action-grid">
+    <div class="action-card">
+      <div class="action-number">1</div>
+      <p>每天做一件你<strong>想拖延但重要</strong>的事，践行推迟满足感</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">2</div>
+      <p>遇到问题时先问："<strong>我能为此负什么责任？</strong>"而非找借口</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">3</div>
+      <p>每周检视一个你长期持有的信念，评估<strong>它是否还符合现实</strong></p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">4</div>
+      <p>在关系中练习<strong>真实的关注</strong>：放下手机，全然倾听对方</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">5</div>
+      <p>留出安静时间，<strong>倾听梦境与直觉</strong>，记录内心的微弱信号</p>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <p>📚 每日一学 · 少有人走的路 · 2026年05月29日</p>
+  <p style="margin-top:6px">心智成熟是终身旅程，自律与爱是最坚实的同行者</p>
+</div>
+
+</body>
+</html>
