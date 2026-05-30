@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 思维的囚徒 | 2026-05-30</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'PingFang SC', 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+    min-height: 100vh;
+    color: #e0e0f0;
+    overflow-x: hidden;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    padding: 50px 20px 30px;
+    position: relative;
+  }
+  .date-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 20px;
+    padding: 6px 20px;
+    font-size: 13px;
+    color: #b0b8e0;
+    margin-bottom: 16px;
+    letter-spacing: 1px;
+  }
+  .book-title {
+    font-size: 42px;
+    font-weight: 800;
+    background: linear-gradient(90deg, #a78bfa, #60a5fa, #34d399);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+    line-height: 1.2;
+  }
+  .book-subtitle {
+    font-size: 16px;
+    color: #94a3b8;
+    margin-bottom: 8px;
+  }
+  .book-author {
+    font-size: 14px;
+    color: #7c8db5;
+  }
+
+  /* Core Insight Banner */
+  .core-banner {
+    max-width: 860px;
+    margin: 30px auto;
+    padding: 0 20px;
+  }
+  .core-insight {
+    background: linear-gradient(135deg, rgba(167,139,250,0.15), rgba(96,165,250,0.1));
+    border: 1px solid rgba(167,139,250,0.4);
+    border-radius: 20px;
+    padding: 28px 36px;
+    text-align: center;
+  }
+  .core-insight .label {
+    font-size: 12px;
+    color: #a78bfa;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .core-insight .text {
+    font-size: 22px;
+    font-weight: 700;
+    color: #e2e8f0;
+    line-height: 1.6;
+  }
+  .core-insight .sub {
+    margin-top: 12px;
+    font-size: 14px;
+    color: #94a3b8;
+    line-height: 1.7;
+  }
+
+  /* Mind Map Grid */
+  .mindmap {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 20px 20px 60px;
+  }
+  .section-title {
+    text-align: center;
+    font-size: 13px;
+    color: #7c8db5;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 30px;
+  }
+
+  /* Framework - center node */
+  .center-node {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .center-circle {
+    display: inline-block;
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #7c3aed, #4f46e5);
+    box-shadow: 0 0 40px rgba(124,58,237,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin: 0 auto;
+  }
+  .center-circle .emoji { font-size: 36px; }
+  .center-circle .text { font-size: 15px; font-weight: 700; color: white; margin-top: 6px; }
+
+  /* Framework branches */
+  .branches {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+  .branch {
+    background: rgba(255,255,255,0.05);
+    border-radius: 16px;
+    padding: 22px 20px;
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .branch::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    border-radius: 16px 16px 0 0;
+  }
+  .branch.purple::before { background: linear-gradient(90deg, #7c3aed, #a78bfa); }
+  .branch.blue::before { background: linear-gradient(90deg, #2563eb, #60a5fa); }
+  .branch.teal::before { background: linear-gradient(90deg, #0d9488, #34d399); }
+  .branch.orange::before { background: linear-gradient(90deg, #ea580c, #fb923c); }
+  .branch.pink::before { background: linear-gradient(90deg, #be185d, #f472b6); }
+  .branch.indigo::before { background: linear-gradient(90deg, #4338ca, #818cf8); }
+
+  .branch:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+  }
+  .branch-icon { font-size: 28px; margin-bottom: 10px; }
+  .branch-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #e2e8f0;
+    margin-bottom: 10px;
+  }
+  .branch-points {
+    list-style: none;
+    padding: 0;
+  }
+  .branch-points li {
+    font-size: 13px;
+    color: #94a3b8;
+    padding: 4px 0;
+    padding-left: 14px;
+    position: relative;
+    line-height: 1.6;
+  }
+  .branch-points li::before {
+    content: '·';
+    position: absolute;
+    left: 4px;
+    color: #7c8db5;
+  }
+
+  /* Key Points */
+  .key-points {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+  .kp-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    padding: 20px 22px;
+  }
+  .kp-num {
+    font-size: 32px;
+    font-weight: 900;
+    color: rgba(167,139,250,0.3);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .kp-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #c4b5fd;
+    margin-bottom: 8px;
+  }
+  .kp-text {
+    font-size: 13px;
+    color: #94a3b8;
+    line-height: 1.7;
+  }
+
+  /* Quotes */
+  .quotes-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+  .quote-card {
+    background: linear-gradient(135deg, rgba(124,58,237,0.1), rgba(79,70,229,0.08));
+    border: 1px solid rgba(167,139,250,0.25);
+    border-radius: 14px;
+    padding: 22px;
+    position: relative;
+  }
+  .quote-mark {
+    font-size: 56px;
+    color: rgba(167,139,250,0.2);
+    line-height: 1;
+    font-family: Georgia, serif;
+    position: absolute;
+    top: 8px; left: 16px;
+  }
+  .quote-text {
+    font-size: 14px;
+    color: #c4b5fd;
+    line-height: 1.8;
+    padding-top: 20px;
+    font-style: italic;
+  }
+  .quote-source {
+    margin-top: 10px;
+    font-size: 12px;
+    color: #7c8db5;
+    text-align: right;
+  }
+
+  /* Actions */
+  .actions-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 40px;
+  }
+  .action-card {
+    background: linear-gradient(135deg, rgba(52,211,153,0.08), rgba(16,185,129,0.05));
+    border: 1px solid rgba(52,211,153,0.2);
+    border-radius: 14px;
+    padding: 18px;
+    text-align: center;
+  }
+  .action-step {
+    display: inline-block;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(52,211,153,0.2);
+    color: #34d399;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 28px;
+    margin-bottom: 10px;
+  }
+  .action-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #6ee7b7;
+    margin-bottom: 6px;
+  }
+  .action-text {
+    font-size: 12px;
+    color: #6b7280;
+    line-height: 1.6;
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 30px 20px;
+    color: #4b5563;
+    font-size: 12px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .branches { grid-template-columns: repeat(2, 1fr); }
+    .key-points { grid-template-columns: 1fr; }
+    .quotes-grid { grid-template-columns: 1fr; }
+    .actions-list { grid-template-columns: 1fr; }
+    .book-title { font-size: 30px; }
+  }
+  @media (max-width: 480px) {
+    .branches { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <div class="date-badge">📅 2026 · 05 · 30 · 每日一学</div>
+  <div class="book-title">思维的囚徒</div>
+  <div class="book-subtitle">Prisoners of Our Thoughts</div>
+  <div class="book-author">作者：Alex Pattakos &amp; Elaine Dundon | 基于弗兰克尔意义疗法</div>
+</div>
+
+<!-- Core Insight -->
+<div class="core-banner">
+  <div class="core-insight">
+    <div class="label">核心洞见 · Core Insight</div>
+    <div class="text">我们无法选择外部发生的事，但我们永远拥有选择如何回应的自由</div>
+    <div class="sub">人类最后一种自由——在任何环境中选择自己态度的自由——是任何外力都无法剥夺的。当我们不再是思维的囚徒，才能真正活出意义。</div>
+  </div>
+</div>
+
+<!-- Mind Map -->
+<div class="mindmap">
+
+  <!-- Framework Section -->
+  <div class="section-title">◆ 七大核心原则 · Seven Core Principles</div>
+
+  <div class="branches">
+    <div class="branch purple">
+      <div class="branch-icon">🧭</div>
+      <div class="branch-title">原则一：自由选择回应</div>
+      <ul class="branch-points">
+        <li>刺激与反应之间存在空间</li>
+        <li>这个空间是我们的力量所在</li>
+        <li>练习"暂停—选择"而非自动反应</li>
+        <li>任何处境都有选择的余地</li>
+      </ul>
+    </div>
+    <div class="branch blue">
+      <div class="branch-icon">✨</div>
+      <div class="branch-title">原则二：发现生命意义</div>
+      <ul class="branch-points">
+        <li>意义不是被找到的，而是被创造的</li>
+        <li>工作、爱与苦难都是意义的来源</li>
+        <li>每个当下都蕴含独特的意义召唤</li>
+        <li>意义感是心理韧性的最强基础</li>
+      </ul>
+    </div>
+    <div class="branch teal">
+      <div class="branch-icon">🎯</div>
+      <div class="branch-title">原则三：专注当下</div>
+      <ul class="branch-points">
+        <li>把注意力放在此刻能做的事</li>
+        <li>避免"未来焦虑"与"过去执念"</li>
+        <li>活在当下是对抗无意义感的解药</li>
+        <li>正念与弗兰克尔哲学的融合</li>
+      </ul>
+    </div>
+    <div class="branch orange">
+      <div class="branch-icon">🔄</div>
+      <div class="branch-title">原则四：超然观察自我</div>
+      <ul class="branch-points">
+        <li>用"观察者视角"看待自己的思维</li>
+        <li>幽默是超然自我的有力工具</li>
+        <li>与思维保持距离而非陷入其中</li>
+        <li>打破自动化思维模式的枷锁</li>
+      </ul>
+    </div>
+    <div class="branch pink">
+      <div class="branch-icon">🌱</div>
+      <div class="branch-title">原则五：转换视角</div>
+      <ul class="branch-points">
+        <li>痛苦是无法改变的吗？选择态度</li>
+        <li>每一种困境都含有潜在的礼物</li>
+        <li>重新定义"失败"与"限制"</li>
+        <li>创伤后成长的认知路径</li>
+      </ul>
+    </div>
+    <div class="branch indigo">
+      <div class="branch-icon">🤝</div>
+      <div class="branch-title">原则六：超越自我</div>
+      <ul class="branch-points">
+        <li>意义往往来自关注他人而非自我</li>
+        <li>利他与奉献是人类幸福的核心</li>
+        <li>服务感比成就感更持久</li>
+        <li>工作中寻找对他人的贡献</li>
+      </ul>
+    </div>
+    <div class="branch purple" style="grid-column: 1 / -1; max-width: 340px; margin: 0 auto;">
+      <div class="branch-icon">💎</div>
+      <div class="branch-title">原则七：活出真实自我</div>
+      <ul class="branch-points">
+        <li>对自己真诚是最高形式的勇气</li>
+        <li>拒绝社会角色对自我的囚禁</li>
+        <li>真实性是持久幸福的前提</li>
+        <li>你的价值观即你的指南针</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Key Points -->
+  <div class="section-title">◆ 主要知识点 · Key Concepts</div>
+  <div class="key-points">
+    <div class="kp-card">
+      <div class="kp-num">01</div>
+      <div class="kp-title">思维囚笼的形成机制</div>
+      <div class="kp-text">我们的思维模式往往在童年、文化和经历中被"编程"，形成自动化的反应回路。大多数人以为自己在自由选择，实际上只是在执行大脑的自动程序——这正是"思维的囚徒"的含义。</div>
+    </div>
+    <div class="kp-card">
+      <div class="kp-num">02</div>
+      <div class="kp-title">弗兰克尔的"第三种自由"</div>
+      <div class="kp-text">维克多·弗兰克尔在纳粹集中营中发现：外部的一切可以被剥夺，但"选择自己态度"的自由永远属于自己。这是人类最后也是最重要的一种自由，是《思维的囚徒》整本书的哲学基础。</div>
+    </div>
+    <div class="kp-card">
+      <div class="kp-num">03</div>
+      <div class="kp-title">意义疗法（Logotherapy）</div>
+      <div class="kp-text">弗兰克尔创立的心理治疗流派，认为人的首要驱动力是"寻求意义"而非弗洛伊德的"寻求快乐"或阿德勒的"寻求权力"。本书将其转化为可在日常职场和生活中应用的实践框架。</div>
+    </div>
+    <div class="kp-card">
+      <div class="kp-num">04</div>
+      <div class="kp-title">职场意义危机</div>
+      <div class="kp-text">大量职场人士处于"存在性真空"——感觉工作毫无意义、随波逐流。本书揭示，这种空虚感并非来自工作本身，而是来自我们与工作关系的断裂。重建意义连接是解决方案。</div>
+    </div>
+    <div class="kp-card">
+      <div class="kp-num">05</div>
+      <div class="kp-title">苦难的三种意义来源</div>
+      <div class="kp-text">弗兰克尔指出意义可来自：①创造价值（创作、行动）；②体验价值（爱、美、真理）；③态度价值（面对无法改变的苦难时选择的姿态）。其中态度价值是最深层的，也是任何人都能获取的。</div>
+    </div>
+    <div class="kp-card">
+      <div class="kp-num">06</div>
+      <div class="kp-title">矛盾意向法与幽默</div>
+      <div class="kp-text">弗兰克尔的治疗技术：对所恐惧的事物故意"意向"它，以幽默感打破焦虑的恶性循环。在日常中，这意味着学会用超然的眼光、甚至笑声来对待自己的困境，而非深陷其中。</div>
+    </div>
+  </div>
+
+  <!-- Quotes -->
+  <div class="section-title">◆ 金句精选 · Golden Quotes</div>
+  <div class="quotes-grid">
+    <div class="quote-card">
+      <div class="quote-mark">"</div>
+      <div class="quote-text">在刺激与回应之间，存在一个空间。在那个空间里，是我们选择回应的自由与力量。在我们的回应中，蕴含着我们的成长与幸福。</div>
+      <div class="quote-source">—— 弗兰克尔（Viktor Frankl）</div>
+    </div>
+    <div class="quote-card">
+      <div class="quote-mark">"</div>
+      <div class="quote-text">生命不是一个问题，需要我们去解决；而是一个现实，需要我们去体验。成为思维的主人，而不是它的囚徒。</div>
+      <div class="quote-source">—— Alex Pattakos</div>
+    </div>
+    <div class="quote-card">
+      <div class="quote-mark">"</div>
+      <div class="quote-text">人不只是存在，还要决定自己是什么样的存在。人拥有选择自己成为谁的自由。</div>
+      <div class="quote-source">—— 弗兰克尔</div>
+    </div>
+    <div class="quote-card">
+      <div class="quote-mark">"</div>
+      <div class="quote-text">不要问生命的意义是什么——生命在问你。你对生命的回答，就是你的意义。</div>
+      <div class="quote-source">—— 《思维的囚徒》</div>
+    </div>
+  </div>
+
+  <!-- Actions -->
+  <div class="section-title">◆ 行动建议 · Action Steps</div>
+  <div class="actions-list">
+    <div class="action-card">
+      <div class="action-step">1</div>
+      <div class="action-title">每日"暂停练习"</div>
+      <div class="action-text">遇到触发情绪的事件时，刻意停顿3秒，问自己："我现在有哪些选择？"培养"刺激→空间→回应"的习惯。</div>
+    </div>
+    <div class="action-card">
+      <div class="action-step">2</div>
+      <div class="action-title">意义日记</div>
+      <div class="action-text">每晚写下今天的一件事：它对我/他人有何意义？哪怕是微小的服务与贡献，也值得记录。积累意义感。</div>
+    </div>
+    <div class="action-card">
+      <div class="action-step">3</div>
+      <div class="action-title">重构工作叙事</div>
+      <div class="action-text">把"我不得不做这件事"换成"我选择做这件事，因为……"。找到哪怕一个真实的意义理由，改变与工作的关系。</div>
+    </div>
+    <div class="action-card">
+      <div class="action-step">4</div>
+      <div class="action-title">超然视角练习</div>
+      <div class="action-text">当陷入负面思维时，想象自己是"观察者"在看这个场景的自己。可以加入幽默：这个场景如果拍成电影会是喜剧还是悲剧？</div>
+    </div>
+    <div class="action-card">
+      <div class="action-step">5</div>
+      <div class="action-title">七原则周练</div>
+      <div class="action-text">每周选择书中一个原则作为"本周主题"，有意识地在日常中实践它，七周完成一个完整周期。</div>
+    </div>
+    <div class="action-card">
+      <div class="action-step">6</div>
+      <div class="action-title">苦难意义转化</div>
+      <div class="action-text">面对当下的困境，问自己："如果这件痛苦的事有一个礼物，它会是什么？"不是否认痛苦，而是在其中寻找成长契机。</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  <p>📚 每日一学 · 2026-05-30 | 《思维的囚徒》 · Alex Pattakos &amp; Elaine Dundon</p>
+  <p style="margin-top:6px;">基于弗兰克尔意义疗法 · 成为思维的主人，而不是它的囚徒</p>
+</div>
+
+</body>
+</html>
