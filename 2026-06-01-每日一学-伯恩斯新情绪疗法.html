@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 伯恩斯新情绪疗法</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    min-height: 100vh;
+    padding: 30px 20px;
+    color: #e0e6ed;
+  }
+  .header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .date-badge {
+    display: inline-block;
+    background: rgba(100, 180, 255, 0.15);
+    border: 1px solid rgba(100, 180, 255, 0.3);
+    color: #64b4ff;
+    padding: 6px 18px;
+    border-radius: 20px;
+    font-size: 13px;
+    margin-bottom: 14px;
+    letter-spacing: 1px;
+  }
+  .header h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    background: linear-gradient(90deg, #64b4ff, #a78bfa, #f472b6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+  }
+  .header .subtitle {
+    font-size: 1rem;
+    color: #94a3b8;
+  }
+  .header .author {
+    font-size: 0.9rem;
+    color: #64b4ff;
+    margin-top: 6px;
+  }
+
+  /* 核心洞见 */
+  .insight-box {
+    background: linear-gradient(135deg, rgba(100, 180, 255, 0.12), rgba(167, 139, 250, 0.08));
+    border: 1px solid rgba(100, 180, 255, 0.25);
+    border-radius: 16px;
+    padding: 24px 28px;
+    margin-bottom: 28px;
+    position: relative;
+    overflow: hidden;
+  }
+  .insight-box::before {
+    content: '💡';
+    position: absolute;
+    right: 20px;
+    top: 16px;
+    font-size: 2rem;
+    opacity: 0.3;
+  }
+  .section-title {
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: #64b4ff;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .insight-text {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #e2e8f0;
+  }
+
+  /* 思维导图主体 */
+  .mindmap-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 28px;
+  }
+  .card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 14px;
+    padding: 20px 22px;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+  }
+  .card-title {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card-title .emoji {
+    font-size: 1.3rem;
+  }
+  .card-blue { border-left: 3px solid #64b4ff; }
+  .card-purple { border-left: 3px solid #a78bfa; }
+  .card-green { border-left: 3px solid #34d399; }
+  .card-orange { border-left: 3px solid #fb923c; }
+  .card-pink { border-left: 3px solid #f472b6; }
+
+  /* 四要素网格 */
+  .grid-2x2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+  .grid-item {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+  }
+  .grid-item .num {
+    font-size: 1.8rem;
+    font-weight: 800;
+    background: linear-gradient(90deg, #64b4ff, #a78bfa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .grid-item .label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #e2e8f0;
+    margin: 4px 0;
+  }
+  .grid-item .desc {
+    font-size: 0.78rem;
+    color: #94a3b8;
+    line-height: 1.5;
+  }
+
+  /* 列表样式 */
+  .point-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .point-list li {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: #cbd5e1;
+  }
+  .point-list li .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #64b4ff;
+    flex-shrink: 0;
+    margin-top: 7px;
+  }
+  .point-list li strong {
+    color: #e2e8f0;
+  }
+
+  /* 金句 */
+  .quote-box {
+    background: linear-gradient(135deg, rgba(167, 139, 250, 0.12), rgba(244, 114, 182, 0.08));
+    border: 1px solid rgba(167, 139, 250, 0.25);
+    border-radius: 14px;
+    padding: 20px 24px;
+    margin-bottom: 28px;
+  }
+  .quote-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .quote-list li {
+    font-size: 0.95rem;
+    color: #e2e8f0;
+    line-height: 1.7;
+    padding-left: 18px;
+    position: relative;
+    font-style: italic;
+  }
+  .quote-list li::before {
+    content: '"';
+    position: absolute;
+    left: 0;
+    top: -4px;
+    font-size: 1.8rem;
+    color: #a78bfa;
+    font-style: normal;
+    line-height: 1;
+  }
+
+  /* 行动建议 */
+  .action-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .action-item {
+    background: rgba(52, 211, 153, 0.06);
+    border: 1px solid rgba(52, 211, 153, 0.2);
+    border-radius: 12px;
+    padding: 14px 16px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .action-item .icon {
+    font-size: 1.2rem;
+    flex-shrink: 0;
+  }
+  .action-item .text {
+    font-size: 0.85rem;
+    color: #cbd5e1;
+    line-height: 1.5;
+  }
+  .action-item .text strong {
+    display: block;
+    color: #34d399;
+    font-size: 0.82rem;
+    margin-bottom: 3px;
+  }
+
+  /* 认知扭曲表格 */
+  .distort-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  .distort-item {
+    background: rgba(251, 146, 60, 0.07);
+    border: 1px solid rgba(251, 146, 60, 0.2);
+    border-radius: 10px;
+    padding: 12px 14px;
+  }
+  .distort-item .d-name {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #fb923c;
+    margin-bottom: 4px;
+  }
+  .distort-item .d-desc {
+    font-size: 0.77rem;
+    color: #94a3b8;
+    line-height: 1.4;
+  }
+
+  /* footer */
+  .footer {
+    text-align: center;
+    padding: 20px;
+    color: #475569;
+    font-size: 0.8rem;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    margin-top: 10px;
+  }
+
+  @media (max-width: 500px) {
+    .grid-2x2 { grid-template-columns: 1fr; }
+    .action-grid { grid-template-columns: 1fr; }
+    .distort-grid { grid-template-columns: 1fr; }
+    .header h1 { font-size: 1.6rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="date-badge">📅 2026 · 06 · 01 · 每日一学</div>
+  <h1>伯恩斯新情绪疗法</h1>
+  <div class="subtitle">Feeling Good: The New Mood Therapy</div>
+  <div class="author">✍️ 戴维·伯恩斯（David D. Burns）</div>
+</div>
+
+<!-- 核心洞见 -->
+<div class="insight-box">
+  <div class="section-title">🔍 核心洞见</div>
+  <div class="insight-text">
+    情绪不是由事件本身引发的，而是由你对事件的<strong style="color:#64b4ff">解读与想法</strong>决定的。
+    改变扭曲的思维模式，就能改变情绪，走出抑郁、焦虑与低落。
+    这不是正向思维——这是<strong style="color:#a78bfa">认知行为疗法（CBT）</strong>的核心：
+    <em>用理性、准确的思考替代自动化的歪曲思维，实现真正的情绪自愈。</em>
+  </div>
+</div>
+
+<!-- 核心框架：CBT三角 -->
+<div class="card card-blue">
+  <div class="card-title"><span class="emoji">🧠</span> 核心框架：认知行为三角</div>
+  <div class="grid-2x2" style="margin:0;">
+    <div class="grid-item">
+      <div class="num">T</div>
+      <div class="label">Thoughts 想法</div>
+      <div class="desc">自动化的负面思维是情绪的根源，而非外部事件</div>
+    </div>
+    <div class="grid-item">
+      <div class="num">E</div>
+      <div class="label">Emotions 情绪</div>
+      <div class="desc">抑郁、焦虑、愤怒等情绪由扭曲的认知驱动</div>
+    </div>
+    <div class="grid-item">
+      <div class="num">B</div>
+      <div class="label">Behaviors 行为</div>
+      <div class="desc">拖延、回避、发泄等行为反过来强化负面想法</div>
+    </div>
+    <div class="grid-item">
+      <div class="num">↺</div>
+      <div class="label">打破循环</div>
+      <div class="desc">识别→挑战→替换扭曲思维，循环就能被打断</div>
+    </div>
+  </div>
+</div>
+
+<!-- 十大认知扭曲 -->
+<div class="card card-orange">
+  <div class="card-title"><span class="emoji">⚠️</span> 十大认知扭曲（Cognitive Distortions）</div>
+  <div class="distort-grid">
+    <div class="distort-item">
+      <div class="d-name">① 全或无思维</div>
+      <div class="d-desc">非黑即白，容不下灰色地带。"我必须完美，否则就是失败"</div>
+    </div>
+    <div class="distort-item">
+      <div class="d-name">② 过度泛化</div>
+      <div class="d-desc">一次失败="永远失败"。"总是""从来"是信号词</div>
+    </div>
+    <div class="distort-item">
+      <div class="d-name">③ 心理过滤</div>
+      <div class="d-desc">只关注负面细节，忽略所有积极证据</div>
+    </div>
+    <div class="distort-item">
+      <div class="d-name">④ 否定正面</div>
+      <div class="d-desc">把好事归因于运气，把赞美认为是客套话</div>
+    </div>
+    <div class="distort-item">
+      <div class="d-name">⑤ 乱贴标签</div>
+      <div class="d-desc">用极端词汇定义自己："我是个废物/失败者"</div>
+    </div>
+    <div class="distort-item">
+      <div class="d-name">⑥ 放大/缩小</div>
+      <div class="d-desc">夸大缺点，缩小优点——"双目镜技巧的滥用"</div>
+    </div>
+    <div class="distort-item">
+      <div class="d-name">⑦ 情绪化推理</div>
+      <div class="d-desc">"我感觉很蠢，所以我一定很蠢"——感觉≠事实</div>
+    </div>
+    <div class="distort-item">
+      <div class="d-name">⑧ 应该陈述</div>
+      <div class="d-desc">用"应该"鞭打自己，制造内疚、愤怒与挫败</div>
+    </div>
+    <div class="distort-item">
+      <div class="d-name">⑨ 跳到结论</div>
+      <div class="d-desc">读心术（猜测他人想法）+ 算命术（预测灾难）</div>
+    </div>
+    <div class="distort-item">
+      <div class="d-name">⑩ 个人化</div>
+      <div class="d-desc">把外部事件归咎于自身，过度承担他人的责任</div>
+    </div>
+  </div>
+</div>
+
+<!-- 主要知识点 -->
+<div class="card card-purple">
+  <div class="card-title"><span class="emoji">📚</span> 主要知识点</div>
+  <ul class="point-list">
+    <li><span class="dot"></span><div><strong>双栏技术（Double Column Technique）：</strong>左栏写自动化负面想法，右栏写理性回应。通过书写外化思维，用逻辑击败扭曲</div></li>
+    <li><span class="dot"></span><div><strong>行动激活（Behavioral Activation）：</strong>抑郁使人退缩，而行动本身能改变情绪。从最小行动开始，打破"不想动→更抑郁"的螺旋</div></li>
+    <li><span class="dot"></span><div><strong>反拖延法：</strong>把任务拆成最小步骤，评估完成前后的实际满意度——你会发现预期的痛苦往往被高估</div></li>
+    <li><span class="dot"></span><div><strong>成本收益分析：</strong>对每个信念或行为做理性评估——相信这个想法对你有多少好处？代价是什么？</div></li>
+    <li><span class="dot"></span><div><strong>愤怒的处理：</strong>愤怒来自"应该"和"不公平"的想法。换位思考+移情能有效降低愤怒强度</div></li>
+    <li><span class="dot"></span><div><strong>自尊≠成就：</strong>真正的自尊不依赖于外部成就、他人认可或完美表现，而是无条件接纳自我存在的价值</div></li>
+    <li><span class="dot"></span><div><strong>完美主义的代价：</strong>完美主义不是高标准，而是扭曲的思维——它用"要么全对要么全错"杀死创造力与勇气</div></li>
+  </ul>
+</div>
+
+<!-- 金句 -->
+<div class="quote-box">
+  <div class="section-title" style="color:#a78bfa;">✨ 金句</div>
+  <ul class="quote-list">
+    <li>情绪并不能反映现实，它只是你对现实的解释——而解释是可以改变的。</li>
+    <li>你的感受不是由外部世界决定的，而是由你看待世界的方式决定的。</li>
+    <li>完美主义是所有抑郁症的沃土，因为完美在现实中并不存在。</li>
+    <li>不要用感受来推断事实。感觉很糟，不代表情况真的很糟。</li>
+    <li>行动先于动力，而非动力先于行动——等着"感觉想做"，你会等很久。</li>
+  </ul>
+</div>
+
+<!-- 行动建议 -->
+<div class="section-title" style="padding:0 4px 10px; color:#34d399;">✅ 行动建议</div>
+<div class="action-grid">
+  <div class="action-item">
+    <span class="icon">📓</span>
+    <div class="text">
+      <strong>每日情绪日记</strong>
+      记录一件让你情绪波动的事，写下当时的自动化想法，用双栏技术进行理性反驳
+    </div>
+  </div>
+  <div class="action-item">
+    <span class="icon">🔍</span>
+    <div class="text">
+      <strong>识别你的惯用扭曲</strong>
+      对照十大认知扭曲，找出自己最常陷入的2-3种，专项练习识别与替换
+    </div>
+  </div>
+  <div class="action-item">
+    <span class="icon">🚀</span>
+    <div class="text">
+      <strong>5分钟启动法</strong>
+      对拖延的任务承诺只做5分钟，记录开始前后的动力分值——大多数时候会发现继续很容易
+    </div>
+  </div>
+  <div class="action-item">
+    <span class="icon">💬</span>
+    <div class="text">
+      <strong>把"应该"换成"希望"</strong>
+      每次想说"我应该/必须"，改成"我希望/我选择"，感受情绪强度的变化
+    </div>
+  </div>
+  <div class="action-item">
+    <span class="icon">🧪</span>
+    <div class="text">
+      <strong>进行成本收益分析</strong>
+      对让你痛苦的信念问：相信它有什么好处？代价是什么？理性评分后决定是否保留
+    </div>
+  </div>
+  <div class="action-item">
+    <span class="icon">🤝</span>
+    <div class="text">
+      <strong>练习无条件自我接纳</strong>
+      每天找一件自己"不够好"但仍值得被善待的证据，逐渐与成就解绑建立自尊
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  📖 每日一学 · 2026年6月1日 · 伯恩斯新情绪疗法 · David D. Burns<br>
+  <span style="color:#334155;">用认知行为疗法，重塑你与情绪的关系</span>
+</div>
+
+</body>
+</html>
