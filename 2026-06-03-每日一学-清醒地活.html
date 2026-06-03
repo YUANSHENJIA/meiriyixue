@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 清醒地活</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'PingFang SC', 'Microsoft YaHei', 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    min-height: 100vh;
+    color: #fff;
+    padding: 20px;
+  }
+  .header {
+    text-align: center;
+    padding: 40px 20px 30px;
+    position: relative;
+  }
+  .header .date-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 20px;
+    padding: 6px 18px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 16px;
+    letter-spacing: 1px;
+  }
+  .header h1 {
+    font-size: 2.8em;
+    font-weight: 800;
+    background: linear-gradient(90deg, #00d2ff, #3a7bd5, #00d2ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+  }
+  .header .subtitle {
+    font-size: 1em;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 2px;
+  }
+  .header .author {
+    margin-top: 12px;
+    font-size: 0.9em;
+    color: rgba(255,255,255,0.45);
+  }
+
+  .mindmap-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 0;
+  }
+
+  .core-insight {
+    background: linear-gradient(135deg, rgba(0,210,255,0.2), rgba(58,123,213,0.12));
+    border: 1px solid rgba(0,210,255,0.45);
+    border-radius: 20px;
+    padding: 28px 32px;
+    margin-bottom: 30px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .core-insight::before {
+    content: '💡';
+    font-size: 2.5em;
+    display: block;
+    margin-bottom: 12px;
+  }
+  .core-insight h2 {
+    font-size: 1.05em;
+    color: #00d2ff;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .core-insight p {
+    font-size: 1.2em;
+    line-height: 1.9;
+    color: rgba(255,255,255,0.9);
+    font-weight: 500;
+  }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+  .grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+  @media (max-width: 768px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .header h1 { font-size: 2em; }
+  }
+
+  .card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 16px;
+    padding: 24px;
+    backdrop-filter: blur(10px);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+  }
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+  .card-icon { font-size: 1.5em; }
+  .card-title {
+    font-size: 1em;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,0.9);
+  }
+
+  .framework-card { border-color: rgba(59,130,246,0.5); background: rgba(59,130,246,0.1); }
+  .framework-card .card-title { color: #60a5fa; }
+  .framework-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding: 14px 16px;
+    background: rgba(59,130,246,0.1);
+    border-radius: 10px;
+    border-left: 3px solid #3b82f6;
+  }
+  .framework-num {
+    font-size: 1.3em;
+    font-weight: 900;
+    color: #60a5fa;
+    min-width: 30px;
+    flex-shrink: 0;
+  }
+  .framework-content h4 { color: #93c5fd; font-size: 0.95em; margin-bottom: 4px; }
+  .framework-content p { color: rgba(255,255,255,0.65); font-size: 0.85em; line-height: 1.5; }
+
+  .knowledge-card { border-color: rgba(16,185,129,0.4); background: rgba(16,185,129,0.08); }
+  .knowledge-card .card-title { color: #34d399; }
+  .knowledge-item {
+    padding: 12px 14px;
+    margin-bottom: 10px;
+    background: rgba(16,185,129,0.1);
+    border-radius: 8px;
+    border-left: 3px solid #10b981;
+  }
+  .knowledge-item h4 { color: #6ee7b7; font-size: 0.9em; margin-bottom: 4px; }
+  .knowledge-item p { color: rgba(255,255,255,0.6); font-size: 0.82em; line-height: 1.55; }
+
+  .practice-card { border-color: rgba(245,158,11,0.4); background: rgba(245,158,11,0.08); }
+  .practice-card .card-title { color: #fbbf24; }
+  .practice-item {
+    padding: 12px 14px;
+    margin-bottom: 10px;
+    background: rgba(245,158,11,0.1);
+    border-radius: 8px;
+    border-left: 3px solid #f59e0b;
+  }
+  .practice-item h4 { color: #fcd34d; font-size: 0.9em; margin-bottom: 4px; }
+  .practice-item p { color: rgba(255,255,255,0.6); font-size: 0.82em; line-height: 1.55; }
+
+  .quotes-section {
+    margin-bottom: 20px;
+  }
+  .quote-card {
+    background: linear-gradient(135deg, rgba(0,210,255,0.15), rgba(58,123,213,0.12));
+    border: 1px solid rgba(0,210,255,0.35);
+    border-radius: 16px;
+    padding: 24px 28px;
+    margin-bottom: 14px;
+    position: relative;
+  }
+  .quote-card::before {
+    content: '"';
+    font-size: 5em;
+    position: absolute;
+    top: -10px;
+    left: 16px;
+    color: rgba(0,210,255,0.25);
+    line-height: 1;
+    font-family: Georgia, serif;
+  }
+  .quote-text {
+    font-size: 1.05em;
+    color: rgba(255,255,255,0.88);
+    line-height: 1.8;
+    font-style: italic;
+    padding-left: 20px;
+    margin-bottom: 8px;
+  }
+  .quote-source { color: #7dd3fc; font-size: 0.82em; padding-left: 20px; }
+
+  .action-section {
+    background: linear-gradient(135deg, rgba(16,185,129,0.15), rgba(5,150,105,0.1));
+    border: 1px solid rgba(16,185,129,0.4);
+    border-radius: 16px;
+    padding: 28px;
+    margin-bottom: 20px;
+  }
+  .action-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .action-header h2 { color: #34d399; font-size: 1em; letter-spacing: 2px; }
+  .action-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 16px;
+    padding: 14px 16px;
+    background: rgba(16,185,129,0.08);
+    border-radius: 10px;
+  }
+  .action-step {
+    background: #059669;
+    color: white;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.85em;
+    flex-shrink: 0;
+  }
+  .action-content h4 { color: #6ee7b7; font-size: 0.92em; margin-bottom: 4px; }
+  .action-content p { color: rgba(255,255,255,0.65); font-size: 0.85em; line-height: 1.5; }
+
+  .footer {
+    text-align: center;
+    padding: 24px;
+    color: rgba(255,255,255,0.3);
+    font-size: 0.82em;
+    letter-spacing: 1px;
+  }
+
+  .section-label {
+    font-size: 0.78em;
+    letter-spacing: 3px;
+    color: rgba(255,255,255,0.35);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    margin-top: 6px;
+    padding-left: 4px;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="date-badge">📅 2026 · 06 · 03 &nbsp;&nbsp;每日一学</div>
+  <h1>清醒地活</h1>
+  <div class="subtitle">The Untethered Soul · 超越自我的旅程</div>
+  <div class="author">作者：Michael A. Singer &nbsp;|&nbsp; 豆瓣评分 8.6</div>
+</div>
+
+<div class="mindmap-container">
+
+  <!-- 核心洞见 -->
+  <div class="core-insight">
+    <h2>核心洞见</h2>
+    <p>你不是你头脑中的那个声音。真正的自由，不是让内心安静下来，而是意识到——你是在"听"那个声音的人，而非那个声音本身。当你学会以观察者的身份安住于意识深处，外在的一切波动都无法真正撼动你。清醒，就是不再被自己的念头牵着走。</p>
+  </div>
+
+  <!-- 核心框架 -->
+  <div class="section-label">⬡ 核心框架</div>
+  <div class="card framework-card" style="margin-bottom:20px;">
+    <div class="card-header">
+      <span class="card-icon">🧩</span>
+      <span class="card-title">觉醒五步法</span>
+    </div>
+    <div class="grid-2" style="margin-bottom:0;">
+      <div class="framework-item">
+        <span class="framework-num">01</span>
+        <div class="framework-content">
+          <h4>听见内心的声音（The Voice）</h4>
+          <p>识别头脑中喋喋不休的自言自语。它不是你——它是你的室友，一个从未停歇的评论员。第一步不是让它闭嘴，而是意识到它只是一个声音。</p>
+        </div>
+      </div>
+      <div class="framework-item">
+        <span class="framework-num">02</span>
+        <div class="framework-content">
+          <h4>做内在的觉知者（The Observer）</h4>
+          <p>退后一步，成为意识本身——那个看着念头生灭、情绪起伏而安然不动的"见证者"。你不是你的思想，你是觉知思想的存在。</p>
+        </div>
+      </div>
+      <div class="framework-item">
+        <span class="framework-num">03</span>
+        <div class="framework-content">
+          <h4>释放堵塞的能量（Energy Blocks）</h4>
+          <p>未处理的情绪和创伤会在体内形成能量堵塞。当你不再逃避不舒服的感受，而是允许它流经你，堵塞就会自然消散。</p>
+        </div>
+      </div>
+      <div class="framework-item">
+        <span class="framework-num">04</span>
+        <div class="framework-content">
+          <h4>放下——无条件的臣服（Surrender）</h4>
+          <p>不再与事实对抗。发生的一切都已发生，抗拒只会制造痛苦。"放下"不是放弃，是不再用意志力去扭曲现实。</p>
+        </div>
+      </div>
+      <div class="framework-item" style="grid-column: 1 / -1;">
+        <span class="framework-num">05</span>
+        <div class="framework-content">
+          <h4>活出无条件的快乐（Unconditional Happiness）</h4>
+          <p>真正的快乐不依赖任何外部条件。当你学会在任何处境中保持内心的开放，你便触及了灵魂的本来状态——平静、自由、充满爱。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 主要知识点 -->
+  <div class="section-label">⬡ 主要知识点</div>
+  <div class="grid-2" style="margin-bottom:20px;">
+    <div class="card knowledge-card">
+      <div class="card-header">
+        <span class="card-icon">🧘</span>
+        <span class="card-title">核心概念解析</span>
+      </div>
+      <div class="knowledge-item">
+        <h4>👤 内在室友（Inner Roommate）</h4>
+        <p>你的大脑像一个24小时不停播的电台。关键不是关掉它，而是意识到：你是在"收听"它的人。当你能笑着对内心噪音说"它又开始了"，你就自由了。</p>
+      </div>
+      <div class="knowledge-item">
+        <h4>🫀 保持心的开放（Stay Open）</h4>
+        <p>痛苦来临时，人的本能是"关闭"内心以自我保护。但Singer指出：关闭心门才是痛苦的根源。保持开放，让一切流经你而不滞留。</p>
+      </div>
+      <div class="knowledge-item">
+        <h4>⚡ 能量堵塞与情绪释放</h4>
+        <p>未处理的情绪不会自动消失，它们以"堵塞"的形式储存在能量体中。当你愿意全然感受而不逃跑，堵塞就会在几分钟内消散。</p>
+      </div>
+      <div class="knowledge-item">
+        <h4>🏠 意识居所（Seat of Self）</h4>
+        <p>真正的"你"不在头脑中，而在更深的地方——意识本身。想象你的觉知可以退到身体后方，看着"前面"的念头来来去去。</p>
+      </div>
+    </div>
+    <div class="card knowledge-card">
+      <div class="card-header">
+        <span class="card-icon">🛠️</span>
+        <span class="card-title">实践与误区</span>
+      </div>
+      <div class="knowledge-item">
+        <h4>🌊 感受即释放（Feel to Heal）</h4>
+        <p>不是分析、理解、合理化——是纯粹地"感受"。愤怒来临时不压抑不发泄，只是让那股能量在身体里流过去。感受完了，它就走了。</p>
+      </div>
+      <div class="knowledge-item">
+        <h4>🧹 每天清空内心垃圾</h4>
+        <p>就像每天洗澡清洁身体，内心也需要每日清理。每天花10分钟静坐，观察念头生灭而不参与其中，这就是心灵的日常维护。</p>
+      </div>
+      <div class="knowledge-item">
+        <h4>⚠️ 常见的灵性逃避</h4>
+        <p>用"我要放下"来逃避真实情感、用冥想对抗情绪、用"大爱"压抑愤怒——这些都是披着灵性外衣的逃避，并非真正的清醒。</p>
+      </div>
+      <div class="knowledge-item">
+        <h4>🌅 死亡作为老师</h4>
+        <p>Singer建议每天提醒自己：你会死去。不是出于悲观，而是死亡的意识让你珍惜当下，放下不必要的执着。真正活着的人，是每天都准备好死去的人。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 三类核心练习 -->
+  <div class="section-label">⬡ 三类核心练习</div>
+  <div class="grid-3" style="margin-bottom:20px;">
+    <div class="card practice-card">
+      <div class="card-header">
+        <span class="card-icon">🎯</span>
+        <span class="card-title">觉知练习</span>
+      </div>
+      <div class="practice-item">
+        <h4>念头标注法</h4>
+        <p>每当发现自己在想事情，在心里标注"想"，然后回到呼吸。不评判，只是标注。</p>
+      </div>
+      <div class="practice-item">
+        <h4>背靠椅子练习</h4>
+        <p>想象意识是一束光，让它从头部退后到脑后上方，看着"前面的自己"在思考。体会"我是观看者"的感觉。</p>
+      </div>
+      <div class="practice-item">
+        <h4>日常觉知触发器</h4>
+        <p>选一个日常动作（如开门、喝水），每次做时提醒自己："此时此刻，我是醒着的吗？"</p>
+      </div>
+    </div>
+    <div class="card practice-card">
+      <div class="card-header">
+        <span class="card-icon">💫</span>
+        <span class="card-title">释放练习</span>
+      </div>
+      <div class="practice-item">
+        <h4>身体扫描释放</h4>
+        <p>闭眼从头到脚扫描，发现紧张的部位不去改变它，只是把注意力温柔地放在那里，让它自然松开。</p>
+      </div>
+      <div class="practice-item">
+        <h4>情绪冲浪</h4>
+        <p>强烈情绪来临时不压制不行动，想象是在冲浪——骑在情绪的能量上，感受它的升起、高峰和自然消退。</p>
+      </div>
+      <div class="practice-item">
+        <h4>日记倾倒法</h4>
+        <p>每天写15分钟，把所有在脑中盘旋的想法倒出来，不停笔不修改。写完即"卸载"。</p>
+      </div>
+    </div>
+    <div class="card practice-card">
+      <div class="card-header">
+        <span class="card-icon">🕊️</span>
+        <span class="card-title">臣服练习</span>
+      </div>
+      <div class="practice-item">
+        <h4>"是"的练习</h4>
+        <p>对于任何已经发生的事，在心里说"是"。不是喜欢它，是承认它已经发生了。放下与现实对抗的意志力。</p>
+      </div>
+      <div class="practice-item">
+        <h4>死亡冥想</h4>
+        <p>每天早上花30秒提醒自己：今天可能是最后一天。如果真是这样，你今天会如何度过？让死亡成为生命力的源泉。</p>
+      </div>
+      <div class="practice-item">
+        <h4>无条件的快乐挑战</h4>
+        <p>选一天作为"无条件快乐日"——无论发生什么，都保持内心的开放和愉悦。你会发现：快乐可以不依赖于任何条件。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 金句 -->
+  <div class="section-label">⬡ 经典金句</div>
+  <div class="quotes-section">
+    <div class="quote-card">
+      <p class="quote-text">你的想法和情绪不是你，它们只是你在体验的东西。你是一个正在体验思想和情感的意识体。</p>
+      <p class="quote-source">—— Michael A. Singer，《清醒地活》</p>
+    </div>
+    <div class="quote-card">
+      <p class="quote-text">当你闭上眼睛睡觉时，你的问题还活着吗？不，只有你在想它们的时候，它们才存在。这意味着你的问题是由你的想法创造出来的。</p>
+      <p class="quote-source">—— Michael A. Singer</p>
+    </div>
+    <div class="quote-card">
+      <p class="quote-text">真正的灵性成长不是你在什么环境中可以保持平静，而是你在最具挑战性的环境中依然能保持内心的开放。</p>
+      <p class="quote-source">—— 《清醒地活》核心教导</p>
+    </div>
+    <div class="quote-card">
+      <p class="quote-text">你只有一个选择：要么放下，要么不放下。放下就是自由，不放下就是束缚。没有中间地带。</p>
+      <p class="quote-source">—— Michael A. Singer</p>
+    </div>
+  </div>
+
+  <!-- 行动建议 -->
+  <div class="action-section">
+    <div class="action-header">
+      <span style="font-size:1.5em;">🚀</span>
+      <h2>5条可立即执行的行动建议</h2>
+    </div>
+    <div class="action-item">
+      <div class="action-step">1</div>
+      <div class="action-content">
+        <h4>今天做一次"听内心声音"的观察练习</h4>
+        <p>安静坐5分钟，只是听——像一个旁听者那样听你的大脑在说什么。不评判、不回嘴、不试图让它闭嘴。你很快会发现：那个声音不是你。</p>
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="action-step">2</div>
+      <div class="action-content">
+        <h4>下次不舒服时，不逃跑——感受它3分钟</h4>
+        <p>当你感到烦躁、焦虑、愤怒时，下意识地告诉自己不转移注意力。就感受它3分钟，观察它在身体里的位置、形状和变化，看着它自然消退。</p>
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="action-step">3</div>
+      <div class="action-content">
+        <h4>选今天发生的三件事，练习说"是"</h4>
+        <p>不管是你喜欢的还是不喜欢的，在心里说："是的，这已经发生了。"不是认同它，是承认现实。感受这种"不抵抗"带来的轻松。</p>
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="action-step">4</div>
+      <div class="action-content">
+        <h4>建立每日"卸载"仪式——15分钟意识流日记</h4>
+        <p>每天睡前花15分钟，用纸笔（非手机）把所有盘旋的念头写下来。不停顿、不回看、不修改。写完即合上，告诉大脑："今天就到这里。"</p>
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="action-step">5</div>
+      <div class="action-content">
+        <h4>明天起床问自己一个问题："我会死，今天我要怎么活？"</h4>
+        <p>这不是消极的提醒，而是让死亡的意识为你注入现在。它会帮你过滤掉那些不值得浪费生命的琐事，聚焦真正重要的事情。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    📚 每日一学 · 2026-06-03 · 《清醒地活》· Michael A. Singer<br>
+    <span style="font-size:0.9em;margin-top:6px;display:block;">自由不是想法的消失，而是意识到你不是那个想法</span>
+  </div>
+
+</div>
+</body>
+</html>
