@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 坚毅 — Grit</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'PingFang SC','Microsoft YaHei','Helvetica Neue',sans-serif;background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);min-height:100vh;color:#e0e0e0;overflow-x:hidden}
+  .container{max-width:960px;margin:0 auto;padding:40px 20px}
+  .header{text-align:center;margin-bottom:50px;animation:fadeInDown 1s ease}
+  .header .date{font-size:14px;color:#a0c4ff;letter-spacing:3px;margin-bottom:12px}
+  .header h1{font-size:42px;font-weight:800;background:linear-gradient(90deg,#f6d365,#fda085,#f6d365);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+  .header .subtitle{font-size:18px;color:#b0b8d1;font-weight:300;letter-spacing:1px}
+  .header .author{font-size:15px;color:#8892b0;margin-top:6px;font-style:italic}
+
+  .mind-map{position:relative}
+  .center-node{background:linear-gradient(135deg,#f6d365,#fda085);color:#1a1a2e;text-align:center;padding:28px 36px;border-radius:20px;font-size:24px;font-weight:800;margin:0 auto 40px;width:fit-content;box-shadow:0 10px 40px rgba(253,160,133,0.35);animation:fadeInScale 0.8s ease;position:relative}
+  .center-node::after{content:'';position:absolute;bottom:-20px;left:50%;transform:translateX(-50%);width:2px;height:20px;background:rgba(253,160,133,0.5)}
+
+  .branch{margin-bottom:32px;animation:fadeInUp 0.6s ease both;position:relative}
+  .branch:nth-child(2){animation-delay:0.1s}.branch:nth-child(3){animation-delay:0.2s}.branch:nth-child(4){animation-delay:0.3s}.branch:nth-child(5){animation-delay:0.4s}.branch:nth-child(6){animation-delay:0.5s}
+
+  .branch-header{display:flex;align-items:center;gap:12px;margin-bottom:14px;padding:14px 22px;border-radius:14px;cursor:pointer;transition:all 0.3s ease}
+  .branch-header:hover{transform:translateX(6px)}
+  .branch-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+  .branch-title{font-size:19px;font-weight:700;letter-spacing:0.5px}
+  .branch-line{width:2px;height:18px;margin-left:30px;background:rgba(255,255,255,0.1)}
+
+  .leaves{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;padding-left:50px}
+  .leaf{background:rgba(255,255,255,0.06);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px 18px;font-size:14.5px;line-height:1.7;transition:all 0.3s ease;position:relative}
+  .leaf:hover{background:rgba(255,255,255,0.1);transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,0.2)}
+  .leaf::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;border-radius:3px 0 0 3px}
+
+  .b1 .branch-header{background:rgba(255,107,107,0.12)}.b1 .branch-icon{background:rgba(255,107,107,0.2)}.b1 .branch-title{color:#ff6b6b}.b1 .leaf::before{background:#ff6b6b}
+  .b2 .branch-header{background:rgba(78,205,196,0.12)}.b2 .branch-icon{background:rgba(78,205,196,0.2)}.b2 .branch-title{color:#4ecdc4}.b2 .leaf::before{background:#4ecdc4}
+  .b3 .branch-header{background:rgba(150,130,255,0.12)}.b3 .branch-icon{background:rgba(150,130,255,0.2)}.b3 .branch-title{color:#9682ff}.b3 .leaf::before{background:#9682ff}
+  .b4 .branch-header{background:rgba(255,200,87,0.12)}.b4 .branch-icon{background:rgba(255,200,87,0.2)}.b4 .branch-title{color:#ffc857}.b4 .leaf::before{background:#ffc857}
+  .b5 .branch-header{background:rgba(0,210,211,0.12)}.b5 .branch-icon{background:rgba(0,210,211,0.2)}.b5 .branch-title{color:#00d2d3}.b5 .leaf::before{background:#00d2d3}
+
+  .quote-section{margin-top:50px;text-align:center;animation:fadeIn 1.2s ease both;animation-delay:0.6s}
+  .quote-mark{font-size:64px;color:rgba(253,160,133,0.3);line-height:1;font-family:Georgia,serif}
+  .quote-text{font-size:20px;line-height:1.8;color:#e8d5b7;max-width:640px;margin:0 auto;padding:0 20px;font-style:italic}
+  .quote-author{font-size:14px;color:#8892b0;margin-top:12px}
+
+  .footer{text-align:center;margin-top:60px;padding:30px 0;border-top:1px solid rgba(255,255,255,0.06);font-size:13px;color:#555}
+
+  @keyframes fadeInDown{from{opacity:0;transform:translateY(-30px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes fadeInScale{from{opacity:0;transform:scale(0.8)}to{opacity:1;transform:scale(1)}}
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+  @media(max-width:600px){
+    .header h1{font-size:28px}.leaves{padding-left:20px;grid-template-columns:1fr}.center-node{font-size:20px;padding:20px 28px}
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="date">2026-06-04 · 每日一学</div>
+    <h1>坚 毅</h1>
+    <div class="subtitle">Grit: The Power of Passion and Perseverance</div>
+    <div class="author">Angela Duckworth 安杰拉·达克沃思</div>
+  </div>
+
+  <div class="mind-map">
+    <div class="center-node">🏔️ 坚毅 = 激情 + 坚持不懈</div>
+
+    <!-- 核心洞见 -->
+    <div class="branch b1">
+      <div class="branch-header">
+        <div class="branch-icon">💡</div>
+        <div class="branch-title">核心洞见</div>
+      </div>
+      <div class="branch-line"></div>
+      <div class="leaves">
+        <div class="leaf">天赋≠成就：决定卓越的不是天赋，而是持久的激情与日复一日的努力</div>
+        <div class="leaf">坚毅公式：成就 = 努力 × 天赋，而努力出现两次——先靠努力获得技能，再靠努力将技能转化为成就</div>
+        <div class="leaf">成长型思维链：坚毅者的信念链为"我能够改变"→"努力有用"→"我不放弃"</div>
+        <div class="leaf">长期主义的复利：每天微小的进步在时间维度上产生指数级差距</div>
+      </div>
+    </div>
+
+    <!-- 核心框架 -->
+    <div class="branch b2">
+      <div class="branch-header">
+        <div class="branch-icon">🏗️</div>
+        <div class="branch-title">坚毅成长四阶段框架</div>
+      </div>
+      <div class="branch-line"></div>
+      <div class="leaves">
+        <div class="leaf"><b>① 兴趣（Interest）</b>：探索与发现——广泛尝试，找到让你内心燃起火焰的方向</div>
+        <div class="leaf"><b>② 练习（Practice）</b>：刻意练习——在舒适区之外反复打磨，追求"今天比昨天好一点"</div>
+        <div class="leaf"><b>③ 目的（Purpose）</b>：连接意义——将个人热情与超越自我的使命对接</div>
+        <div class="leaf"><b>④ 希望（Hope）</b>：永不放弃——跌倒后站起来，把失败视为信息而非终点</div>
+      </div>
+    </div>
+
+    <!-- 主要知识点 -->
+    <div class="branch b3">
+      <div class="branch-header">
+        <div class="branch-icon">🧠</div>
+        <div class="branch-title">主要知识点</div>
+      </div>
+      <div class="branch-line"></div>
+      <div class="leaves">
+        <div class="leaf"><b>天赋的陷阱</b>：过度强调天赋会让人在困难面前更易放弃——"我不够聪明" vs "我还需要更多练习"</div>
+        <div class="leaf"><b>一万小时的真相</b>：不是重复10000小时，而是10000小时的刻意练习——有目标、有反馈、有调整</div>
+        <div class="leaf"><b>目标层级理论</b>：顶层人生哲学→中长期目标→短期目标→当日行动，上下对齐才产生持久动力</div>
+        <div class="leaf"><b>坚毅量表</b>：可通过自评量表测量，两大维度——激情分（是否持久专注）和坚持分（是否迎难而上）</div>
+        <div class="leaf"><b>环境与坚毅</b>：家庭、教练、组织文化对坚毅的培养至关重要——"硬道理"+"无条件支持"是最优组合</div>
+        <div class="leaf"><b>西点军校研究</b>：预测谁能完成野兽训练营的最佳指标不是智商、不是体能，而是坚毅分数</div>
+      </div>
+    </div>
+
+    <!-- 金句 -->
+    <div class="branch b4">
+      <div class="branch-header">
+        <div class="branch-icon">✨</div>
+        <div class="branch-title">金句</div>
+      </div>
+      <div class="branch-line"></div>
+      <div class="leaves">
+        <div class="leaf">"我们的潜力是一回事，我们用它做了什么是另一回事。"</div>
+        <div class="leaf">"坚毅不是永远不倒，而是每次跌倒后都重新站起来。"</div>
+        <div class="leaf">"没有努力，天赋只是未兑现的承诺；加上努力，天赋变成现实的技能。"</div>
+        <div class="leaf">"伟大不是瞬间降临的，而是持续奋斗的结果。"</div>
+        <div class="leaf">"对所做的事保持激情，就是在最黑暗的时刻也不放弃的理由。"</div>
+      </div>
+    </div>
+
+    <!-- 行动建议 -->
+    <div class="branch b5">
+      <div class="branch-header">
+        <div class="branch-icon">🎯</div>
+        <div class="branch-title">行动建议</div>
+      </div>
+      <div class="branch-line"></div>
+      <div class="leaves">
+        <div class="leaf"><b>① 发现兴趣</b>：每周尝试一件从未做过的新事，记录你的能量和专注度变化，找到"心流触发器"</div>
+        <div class="leaf"><b>② 刻意练习法</b>：每天设定一个"刚好超出能力边界"的小目标，全神贯注15-25分钟，然后复盘</div>
+        <div class="leaf"><b>③ 连接目的</b>：写下你做的事如何让他人受益，每周反思一次"我的工作如何让世界变好了一点点"</div>
+        <div class="leaf"><b>④ 培养希望</b>：遇到挫折时，用"暂时还没"替代"我做不到"——困难是暂时的，能力是可成长的</div>
+        <div class="leaf"><b>⑤ 坚毅日记</b>：每天记录"今天我坚持做了什么"和"明天我想进步什么"，6周后回顾成长轨迹</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="quote-section">
+    <div class="quote-mark">"</div>
+    <div class="quote-text">坚毅比天赋更接近成功的本质。不是因为坚毅者不累，而是他们找到了让自己站起来的理由。</div>
+    <div class="quote-author">— 安杰拉·达克沃思《坚毅》</div>
+  </div>
+
+  <div class="footer">每日一学 · 2026-06-04 · 坚毅 Grit</div>
+</div>
+</body>
+</html>
