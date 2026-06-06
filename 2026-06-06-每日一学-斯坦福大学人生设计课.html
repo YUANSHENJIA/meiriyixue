@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 - 斯坦福大学人生设计课</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --card-bg: #1e293b;
+    --text: #e2e8f0;
+    --text-secondary: #94a3b8;
+    --accent: #38bdf8;
+    --accent2: #a78bfa;
+    --accent3: #34d399;
+    --accent4: #f472b6;
+    --border: #334155;
+    --tag-bg: #1e3a5f;
+    --tag-text: #7dd3fc;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    min-height: 100vh;
+    padding: 20px;
+  }
+  .container { max-width: 1000px; margin: 0 auto; }
+
+  .header {
+    text-align: center;
+    padding: 40px 20px 30px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 30px;
+  }
+  .header .date {
+    font-size: 14px; color: var(--text-secondary);
+    letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px;
+  }
+  .header h1 {
+    font-size: 36px; font-weight: 800;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .header .subtitle {
+    font-size: 16px; color: var(--text-secondary); margin-top: 6px;
+  }
+
+  .core-insight {
+    background: linear-gradient(135deg, #1e293b 0%, #1a2332 100%);
+    border: 1px solid var(--border);
+    border-radius: 16px; padding: 32px; margin-bottom: 28px;
+    position: relative; overflow: hidden;
+  }
+  .core-insight::before {
+    content: ''; position: absolute; top: 0; left: 0;
+    width: 4px; height: 100%;
+    background: linear-gradient(180deg, var(--accent), var(--accent2));
+    border-radius: 4px 0 0 4px;
+  }
+  .section-label {
+    font-size: 13px; font-weight: 700; letter-spacing: 2px;
+    color: var(--accent); text-transform: uppercase; margin-bottom: 12px;
+  }
+  .core-insight p {
+    font-size: 18px; font-weight: 500; color: #f1f5f9;
+  }
+
+  .framework {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px; margin-bottom: 28px;
+  }
+  .framework-card {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 12px; padding: 24px;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+  .framework-card:hover {
+    transform: translateY(-2px); border-color: var(--accent);
+  }
+  .framework-card .icon { font-size: 28px; margin-bottom: 10px; }
+  .framework-card h3 {
+    font-size: 18px; font-weight: 700; margin-bottom: 8px; color: var(--accent);
+  }
+  .framework-card p {
+    font-size: 14px; color: var(--text-secondary); line-height: 1.6;
+  }
+
+  .section-title {
+    font-size: 20px; font-weight: 700; margin-bottom: 20px;
+    color: #f1f5f9; display: flex; align-items: center; gap: 10px;
+  }
+  .section-title::before {
+    content: ''; width: 8px; height: 8px;
+    background: var(--accent); border-radius: 50%;
+  }
+
+  .keypoints { display: grid; gap: 14px; margin-bottom: 28px; }
+  .keypoint {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 10px; padding: 20px 24px;
+    display: flex; gap: 16px; align-items: flex-start;
+  }
+  .keypoint-num {
+    flex-shrink: 0; width: 36px; height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 15px; color: #0f172a;
+  }
+  .keypoint-content h4 {
+    font-size: 16px; font-weight: 700; margin-bottom: 4px; color: #f1f5f9;
+  }
+  .keypoint-content p { font-size: 14px; color: var(--text-secondary); }
+
+  .quotes { margin-bottom: 28px; }
+  .quote-card {
+    background: var(--card-bg); border-left: 4px solid var(--accent2);
+    border-radius: 0 10px 10px 0; padding: 20px 24px; margin-bottom: 12px;
+  }
+  .quote-card p {
+    font-size: 16px; font-style: italic; color: #e2e8f0; line-height: 1.8;
+  }
+  .quote-card .author {
+    font-size: 13px; color: var(--accent2); margin-top: 8px; font-style: normal;
+  }
+
+  .actions { margin-bottom: 28px; }
+  .action-card {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 10px; padding: 20px 24px; margin-bottom: 10px;
+    position: relative; padding-left: 48px;
+  }
+  .action-card::before {
+    content: '\2713'; position: absolute; left: 18px; top: 19px;
+    font-size: 16px; font-weight: 700; color: var(--accent3);
+  }
+  .action-card p { font-size: 14px; color: var(--text-secondary); }
+
+  .tree-visual {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 16px; padding: 32px; margin-bottom: 28px; overflow-x: auto;
+  }
+  .tree-visual h3 { font-size: 16px; color: var(--accent); margin-bottom: 20px; }
+  .tree-node { display: flex; align-items: center; gap: 12px; padding: 8px 0; }
+  .tree-line {
+    border-left: 2px solid var(--accent); padding-left: 24px; margin-left: 12px;
+  }
+  .tree-tag {
+    background: var(--tag-bg); color: var(--tag-text);
+    font-size: 12px; padding: 3px 10px; border-radius: 12px; font-weight: 600;
+  }
+  .tree-tag.pink { background: #3d1d3d; color: #f9a8d4; }
+  .tree-tag.green { background: #1a3d2f; color: #6ee7b7; }
+  .tree-tag.purple { background: #2d1f4e; color: #c4b5fd; }
+
+  .footer {
+    text-align: center; padding: 24px; border-top: 1px solid var(--border);
+    margin-top: 20px; color: var(--text-secondary); font-size: 13px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="date">2026年6月6日 · 每日一学</div>
+    <h1>斯坦福大学人生设计课</h1>
+    <div class="subtitle">Designing Your Life — Bill Burnett &amp; Dave Evans</div>
+  </div>
+
+  <div class="core-insight">
+    <div class="section-label">核心洞见</div>
+    <p>人生不是一道需要被「解决」的工程题，而是一道可以被反复「原型」的设计题。你不必找到那个唯一正确的答案，只需要持续迭代、测试和调整，像设计师一样创造多种可能的人生版本。</p>
+  </div>
+
+  <div class="section-title">五种核心心态</div>
+  <div class="framework">
+    <div class="framework-card">
+      <div class="icon">🔍</div>
+      <h3>保持好奇</h3>
+      <p>对世界和自己保持开放和探究的态度，好奇心是人生设计的起点，它带你发现那些被忽视的可能性。</p>
+    </div>
+    <div class="framework-card">
+      <div class="icon">🚀</div>
+      <h3>偏向行动</h3>
+      <p>与其无尽思考，不如快速行动。用小步试探代替大跃进，在行动中获得真实反馈而非停留在想象。</p>
+    </div>
+    <div class="framework-card">
+      <div class="icon">🔄</div>
+      <h3>重新定义问题</h3>
+      <p>很多人生困境来自于错误的问题设定。学会「重构」——把"我该怎么办"变成"有哪些可能性值得探索"。</p>
+    </div>
+    <div class="framework-card">
+      <div class="icon">👁</div>
+      <h3>觉察过程</h3>
+      <p>关注你在做什么、什么时候感到投入和充实。好时光日志是你的数据来源，看见才能改变。</p>
+    </div>
+    <div class="framework-card">
+      <div class="icon">🤝</div>
+      <h3>深度协作</h3>
+      <p>你不需要独自设计人生。寻求导师、伙伴和社群的支持，原型对话是最高效的设计工具之一。</p>
+    </div>
+  </div>
+
+  <div class="tree-visual">
+    <h3>🧠 思维导图 —— 人生设计四步法</h3>
+    <div class="tree-node">
+      <span style="font-weight:700;font-size:18px;color:#38bdf8;">🎯 人生设计工具箱</span>
+    </div>
+    <div class="tree-line">
+      <div class="tree-node">
+        <span class="tree-tag">步骤1</span>
+        <span style="font-size:15px;font-weight:600;">评估现状：画出你的仪表盘</span>
+      </div>
+      <div class="tree-line" style="margin-left:20px;">
+        <div class="tree-node"><span style="color:#94a3b8;">→ 健康 / 工作 / 娱乐 / 爱 四个维度</span></div>
+        <div class="tree-node"><span style="color:#94a3b8;">→ 好时光日志：记录能量与投入度</span></div>
+        <div class="tree-node"><span style="color:#94a3b8;">→ 识别「重力问题」vs「锚定问题」</span></div>
+      </div>
+      <div class="tree-node">
+        <span class="tree-tag pink">步骤2</span>
+        <span style="font-size:15px;font-weight:600;">建立指南针：工作观 + 人生观</span>
+      </div>
+      <div class="tree-line" style="margin-left:20px;">
+        <div class="tree-node"><span style="color:#94a3b8;">→ 工作观：你为何工作？工作意味着什么？</span></div>
+        <div class="tree-node"><span style="color:#94a3b8;">→ 人生观：什么让生活有价值？</span></div>
+        <div class="tree-node"><span style="color:#94a3b8;">→ 二者交汇处 = 你的核心驱动力</span></div>
+      </div>
+      <div class="tree-node">
+        <span class="tree-tag green">步骤3</span>
+        <span style="font-size:15px;font-weight:600;">奥德赛计划：设计三种人生</span>
+      </div>
+      <div class="tree-line" style="margin-left:20px;">
+        <div class="tree-node"><span style="color:#94a3b8;">→ 计划A：你已经在做的事（升级版）</span></div>
+        <div class="tree-node"><span style="color:#94a3b8;">→ 计划B：如果A不能做，你会做什么</span></div>
+        <div class="tree-node"><span style="color:#94a3b8;">→ 计划C：不考虑金钱和形象，你真正想做什么</span></div>
+      </div>
+      <div class="tree-node">
+        <span class="tree-tag purple">步骤4</span>
+        <span style="font-size:15px;font-weight:600;">原型测试：低成本验证</span>
+      </div>
+      <div class="tree-line" style="margin-left:20px;">
+        <div class="tree-node"><span style="color:#94a3b8;">→ 原型对话：找正在做那件事的人聊天</span></div>
+        <div class="tree-node"><span style="color:#94a3b8;">→ 原型体验：短时间试水（实习/项目/志愿）</span></div>
+        <div class="tree-node"><span style="color:#94a3b8;">→ 快速失败 → 学习 → 迭代</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title">主要知识点</div>
+  <div class="keypoints">
+    <div class="keypoint">
+      <div class="keypoint-num">1</div>
+      <div class="keypoint-content">
+        <h4>区分重力问题与锚定问题</h4>
+        <p>重力问题是无法改变的现实（如重力、市场规律），接受它而不是对抗它。锚定问题是你可以影响的，但需要你放下原有假设重新定义。</p>
+      </div>
+    </div>
+    <div class="keypoint">
+      <div class="keypoint-num">2</div>
+      <div class="keypoint-content">
+        <h4>好时光日志：用数据认识自己</h4>
+        <p>每天记录自己在做什么、投入程度和能量水平。数据不会说谎——你的「心流」状态在哪里，你真正的热情就在哪里。</p>
+      </div>
+    </div>
+    <div class="keypoint">
+      <div class="keypoint-num">3</div>
+      <div class="keypoint-content">
+        <h4>奥德赛计划：人生不只一条路</h4>
+        <p>为未来五年设计三个完全不同的人生版本。不是选一个，而是让它们同时存在——这会从根本上改变你对「选择」的理解，从焦虑转向好奇。</p>
+      </div>
+    </div>
+    <div class="keypoint">
+      <div class="keypoint-num">4</div>
+      <div class="keypoint-content">
+        <h4>原型对话 > 头脑想象</h4>
+        <p>与其闭门想象某个职业/生活方式是什么样，不如直接去找正在做那件事的人聊天。一次半小时的对话胜过一百小时的猜测。</p>
+      </div>
+    </div>
+    <div class="keypoint">
+      <div class="keypoint-num">5</div>
+      <div class="keypoint-content">
+        <h4>失败免疫：把失败变成燃料</h4>
+        <p>失败不是设计漏洞，而是设计过程的必然组成部分。对失败进行分类（低级错误/弱点/成长机会），从中提取洞察，快速迭代。</p>
+      </div>
+    </div>
+    <div class="keypoint">
+      <div class="keypoint-num">6</div>
+      <div class="keypoint-content">
+        <h4>选择四步法：收集、缩小、选择、放手</h4>
+        <p>过度选择导致瘫痪。收集足够选项 → 缩小到3-5个 → 用直觉选择 → 然后放手不再回头。后悔是选择的毒药。</p>
+      </div>
+    </div>
+    <div class="keypoint">
+      <div class="keypoint-num">7</div>
+      <div class="keypoint-content">
+        <h4>人生没有「最优解」</h4>
+        <p>传统思维要你找到「最好的路」。设计思维告诉你：通往幸福的路有很多条，重点不是选对，而是选一条然后把它走成对的。</p>
+      </div>
+    </div>
+    <div class="keypoint">
+      <div class="keypoint-num">8</div>
+      <div class="keypoint-content">
+        <h4>社群共创：你无法独自设计人生</h4>
+        <p>他人的视角、反馈和共鸣是设计过程中不可替代的输入。建立一个「人生设计团队」——一群能给你真实反馈的伙伴。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title">金句</div>
+  <div class="quotes">
+    <div class="quote-card">
+      <p>"真正的幸福源于设计一种有意义的人生，而不是找到一份好工作。"</p>
+      <div class="author">—— Bill Burnett &amp; Dave Evans</div>
+    </div>
+    <div class="quote-card">
+      <p>"你不是在设计'那个'完美人生，你是在设计'一个'值得一活的人生。"</p>
+      <div class="author">—— Bill Burnett</div>
+    </div>
+    <div class="quote-card">
+      <p>"如果你无法解决一个问题，那很可能是因为你问错了问题。"</p>
+      <div class="author">—— Dave Evans</div>
+    </div>
+    <div class="quote-card">
+      <p>"成年后的幸福感，很大程度上来自于你是否在创造——而不是在消遣。"</p>
+      <div class="author">—— Designing Your Life</div>
+    </div>
+  </div>
+
+  <div class="section-title">行动建议</div>
+  <div class="actions">
+    <div class="action-card">
+      <p><strong>本周行动1：</strong>画一张「人生仪表盘」。给健康、工作、娱乐、爱四个维度各打0-10分，看看哪里失衡。不必立刻行动，先看见。</p>
+    </div>
+    <div class="action-card">
+      <p><strong>本周行动2：</strong>开始三天「好时光日志」。记录每天的主要活动，标记投入度和能量水平，找出你真正的「心流区」。</p>
+    </div>
+    <div class="action-card">
+      <p><strong>本周行动3：</strong>写一份「工作观」和「人生观」的初稿。工作观：你为何工作？人生观：什么让生活有价值？寻找二者的交汇点。</p>
+    </div>
+    <div class="action-card">
+      <p><strong>本月行动4：</strong>尝试一次「原型对话」。找一个你好奇的职业领域，约一位从业者喝咖啡，倾听真实的日常——不是面试，是好奇。</p>
+    </div>
+    <div class="action-card">
+      <p><strong>本月行动5：</strong>画出你的三张「奥德赛计划」草图。不为选择，只为看见——看见人生原来有这么多条可能的、值得走的路。</p>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>每日一学 · 2026年6月6日 · 斯坦福大学人生设计课</p>
+    <p style="margin-top:4px;">Designing Your Life by Bill Burnett &amp; Dave Evans</p>
+  </div>
+
+</div>
+</body>
+</html>
