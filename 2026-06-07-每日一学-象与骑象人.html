@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 - 象与骑象人</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --card-bg: #1e293b;
+    --text: #e2e8f0;
+    --text-secondary: #94a3b8;
+    --accent: #f59e0b;
+    --accent2: #8b5cf6;
+    --accent3: #10b981;
+    --accent4: #ec4899;
+    --border: #334155;
+    --tag-bg: #1e3a5f;
+    --tag-text: #7dd3fc;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    min-height: 100vh;
+    padding: 20px;
+  }
+  .container { max-width: 1000px; margin: 0 auto; }
+
+  .header {
+    text-align: center;
+    padding: 40px 20px 30px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 30px;
+  }
+  .header .date {
+    font-size: 14px; color: var(--text-secondary);
+    letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px;
+  }
+  .header h1 {
+    font-size: 36px; font-weight: 800;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .header .subtitle {
+    font-size: 16px; color: var(--text-secondary); margin-top: 6px;
+  }
+
+  .core-insight {
+    background: linear-gradient(135deg, rgba(245,158,11,0.1), rgba(139,92,246,0.1));
+    border: 1px solid rgba(245,158,11,0.3);
+    border-radius: 16px; padding: 28px; margin-bottom: 30px;
+  }
+  .core-insight h2 {
+    font-size: 20px; color: var(--accent); margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .core-insight p { font-size: 15px; color: var(--text); line-height: 1.8; }
+
+  .section { margin-bottom: 28px; }
+  .section-title {
+    font-size: 18px; font-weight: 700; margin-bottom: 16px;
+    padding-left: 14px; border-left: 3px solid var(--accent2);
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  .framework {
+    background: var(--card-bg); border-radius: 12px; padding: 24px;
+    margin-bottom: 16px; border: 1px solid var(--border);
+  }
+  .framework h3 {
+    font-size: 16px; color: var(--accent2); margin-bottom: 12px;
+  }
+  .framework-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 10px 0; border-bottom: 1px solid rgba(51,65,85,0.5);
+  }
+  .framework-item:last-child { border-bottom: none; }
+  .framework-item .icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+  .framework-item .label { font-weight: 600; color: var(--text); font-size: 14px; }
+  .framework-item .desc { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
+
+  .mind-map {
+    background: var(--card-bg); border-radius: 16px; padding: 30px;
+    border: 1px solid var(--border); margin-bottom: 16px;
+    position: relative; overflow: hidden;
+  }
+  .mind-map::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent3), var(--accent4));
+  }
+
+  .center-node {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: white; text-align: center; padding: 16px 28px;
+    border-radius: 50px; font-size: 18px; font-weight: 700;
+    margin: 0 auto 30px; display: inline-block;
+    max-width: 90%; position: relative; left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .branches { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .branch {
+    background: rgba(30,41,59,0.8); border-radius: 12px; padding: 18px;
+    border: 1px solid var(--border); transition: transform 0.2s;
+  }
+  .branch:hover { transform: translateY(-2px); }
+  .branch-title {
+    font-size: 15px; font-weight: 700; margin-bottom: 10px;
+    padding-bottom: 8px; border-bottom: 2px solid;
+  }
+  .branch:nth-child(1) .branch-title { border-color: var(--accent); color: var(--accent); }
+  .branch:nth-child(2) .branch-title { border-color: var(--accent2); color: var(--accent2); }
+  .branch:nth-child(3) .branch-title { border-color: var(--accent3); color: var(--accent3); }
+  .branch:nth-child(4) .branch-title { border-color: var(--accent4); color: var(--accent4); }
+  .branch:nth-child(5) .branch-title { border-color: var(--accent); color: var(--accent); }
+  .branch:nth-child(6) .branch-title { border-color: var(--accent2); color: var(--accent2); }
+
+  .leaf {
+    font-size: 13px; color: var(--text-secondary);
+    padding: 4px 0 4px 16px; position: relative;
+  }
+  .leaf::before {
+    content: ''; position: absolute; left: 0; top: 12px;
+    width: 8px; height: 2px; background: var(--text-secondary);
+  }
+
+  .knowledge-grid {
+    display: grid; grid-template-columns: 1fr; gap: 12px;
+  }
+  .knowledge-item {
+    background: var(--card-bg); border-radius: 10px; padding: 18px 20px;
+    border-left: 4px solid var(--accent3); border: 1px solid var(--border);
+    border-left: 4px solid var(--accent3);
+  }
+  .knowledge-item h4 {
+    font-size: 14px; color: var(--accent3); margin-bottom: 6px;
+  }
+  .knowledge-item p { font-size: 13px; color: var(--text-secondary); }
+
+  .quotes-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .quote-card {
+    background: var(--card-bg); border-radius: 10px; padding: 18px;
+    border: 1px solid var(--border); position: relative;
+  }
+  .quote-card::before {
+    content: '\201C'; position: absolute; top: 8px; left: 14px;
+    font-size: 32px; color: rgba(245,158,11,0.3); font-family: Georgia, serif;
+  }
+  .quote-card p { font-size: 13px; color: var(--text); padding-left: 8px; font-style: italic; }
+  .quote-card .source { font-size: 11px; color: var(--text-secondary); margin-top: 8px; text-align: right; }
+
+  .actions-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .action-item {
+    background: var(--card-bg); border-radius: 10px; padding: 16px;
+    border: 1px solid var(--border); display: flex; align-items: flex-start; gap: 10px;
+  }
+  .action-num {
+    background: linear-gradient(135deg, var(--accent), var(--accent4));
+    color: white; width: 24px; height: 24px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; flex-shrink: 0;
+  }
+  .action-text { font-size: 13px; color: var(--text); }
+  .action-text strong { color: var(--accent); }
+
+  .tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .tag {
+    background: var(--tag-bg); color: var(--tag-text);
+    padding: 4px 12px; border-radius: 20px; font-size: 12px;
+  }
+
+  .footer {
+    text-align: center; padding: 30px 0 20px;
+    border-top: 1px solid var(--border); margin-top: 30px;
+    color: var(--text-secondary); font-size: 13px;
+  }
+
+  @media (max-width: 600px) {
+    .branches, .quotes-grid, .actions-list { grid-template-columns: 1fr; }
+    .header h1 { font-size: 26px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="date">2026年6月7日</div>
+    <h1>象与骑象人</h1>
+    <div class="subtitle">The Happiness Hypothesis — Jonathan Haidt（乔纳森·海特）</div>
+    <div class="tag-row" style="justify-content:center; margin-top:12px;">
+      <span class="tag">心理学</span>
+      <span class="tag">哲学</span>
+      <span class="tag">幸福科学</span>
+      <span class="tag">认知升级</span>
+    </div>
+  </div>
+
+  <!-- 核心洞见 -->
+  <div class="core-insight">
+    <h2>💡 核心洞见</h2>
+    <p>人的心理就像一头<strong>大象</strong>和一个<strong>骑象人</strong>：大象代表自动化的、情绪化的、直觉性的系统（快速、强大但不擅长长远规划），骑象人代表有意识的、理性的、控制性的系统（能思考长远但力量有限）。<strong>幸福的关键不是让骑象人征服大象，而是让两者协作</strong>。改变的关键在于训练大象，而非用意志力对抗它。</p>
+  </div>
+
+  <!-- 思维导图 -->
+  <div class="section">
+    <div class="section-title">🗺️ 全书思维导图</div>
+    <div class="mind-map">
+      <div class="center-node">象与骑象人 · 幸福的古老智慧与现代科学</div>
+      <div class="branches">
+        <div class="branch">
+          <div class="branch-title">🐘 心理的两重性</div>
+          <div class="leaf">控制加工 vs 自动加工</div>
+          <div class="leaf">左脑（解释器）vs 右脑（感知器）</div>
+          <div class="leaf">身体与心灵的连接</div>
+          <div class="leaf">大象先行，骑象人跟随</div>
+        </div>
+        <div class="branch">
+          <div class="branch-title">🤝 人际关系的法则</div>
+          <div class="leaf">互惠律：以牙还牙的天性</div>
+          <div class="leaf">归因偏差：我们看到的尽是别人的缺点</div>
+          <div class="leaf">敌意与虚伪的心理学根源</div>
+          <div class="leaf">黄金法则：以己度人的道德直觉</div>
+        </div>
+        <div class="branch">
+          <div class="branch-title">😊 幸福的三个公式</div>
+          <div class="leaf">幸福 = 基因设定值 + 生活条件 + 自主活动</div>
+          <div class="leaf">享乐适应：物质幸福的边际递减</div>
+          <div class="leaf">voluntary activities 是唯一可控变量</div>
+          <div class="leaf">提升幸福：找到契合自身优势的活动</div>
+        </div>
+        <div class="branch">
+          <div class="branch-title">❤️ 爱与依恋</div>
+          <div class="leaf">依恋理论：安全感是爱的基石</div>
+          <div class="leaf">激情爱 → 伴侣爱 的转化</div>
+          <div class="leaf">承诺 + 共同目标 = 持久亲密</div>
+          <div class="leaf">欧米伽-3脂肪酸对情感健康的帮助</div>
+        </div>
+        <div class="branch">
+          <div class="branch-title">💪 逆境的意义</div>
+          <div class="leaf">创伤后成长（Adversarial Growth）</div>
+          <div class="leaf">适度逆境比无逆境更有利</div>
+          <div class="leaf"> Nietzsche："杀不死我的使我更强大"</div>
+          <div class="leaf">自我的本质：叙事能力赋予逆境意义</div>
+        </div>
+        <div class="branch">
+          <div class="branch-title">🌟 德性与超越</div>
+          <div class="leaf">德性伦理学：培养品格优于遵守规则</div>
+          <div class="leaf">仰高峰体验（Haidt的"提升感"）</div>
+          <div class="leaf">跨文化道德基础：关怀、公平、忠诚、权威、圣洁</div>
+          <div class="leaf">超越自我的意义感来自"之间"</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 核心框架 -->
+  <div class="section">
+    <div class="section-title">📐 核心框架：幸福的十个假设</div>
+    <div class="framework">
+      <div class="framework-item">
+        <div class="icon">1️⃣</div>
+        <div>
+          <div class="label">分裂的自我</div>
+          <div class="desc">人的心理由大象（直觉/情感）和骑象人（理性/意识）两部分构成，理解这一分裂是自我提升的起点</div>
+        </div>
+      </div>
+      <div class="framework-item">
+        <div class="icon">2️⃣</div>
+        <div>
+          <div class="label">改变心灵的方法</div>
+          <div class="desc">仅靠理性说服不够，通过冥想、认知疗法、百忧解三条路径重新调整大脑回路</div>
+        </div>
+      </div>
+      <div class="framework-item">
+        <div class="icon">3️⃣</div>
+        <div>
+          <div class="label">互惠与公正</div>
+          <div class="desc">人类天生具有互惠本能，道德判断更多来自直觉而非推理</div>
+        </div>
+      </div>
+      <div class="framework-item">
+        <div class="icon">4️⃣</div>
+        <div>
+          <div class="label">我们天生善于看到别人的缺点</div>
+          <div class="desc">自以为是人性的一部分，"稻草人谬误"和"天真的现实主义"解释了群体冲突</div>
+        </div>
+      </div>
+      <div class="framework-item">
+        <div class="icon">5️⃣</div>
+        <div>
+          <div class="label">幸福的追求</div>
+          <div class="desc">幸福 = 基因设定值(S) + 生活条件(C) + 自主活动(V)，V是最可调节的部分</div>
+        </div>
+      </div>
+      <div class="framework-item">
+        <div class="icon">6️⃣</div>
+        <div>
+          <div class="label">爱与依恋</div>
+          <div class="desc">安全型依恋是心理健康的基石，爱是两个人互为"瑜伽垫"的伸展过程</div>
+        </div>
+      </div>
+      <div class="framework-item">
+        <div class="icon">7️⃣</div>
+        <div>
+          <div class="label">逆境的价值</div>
+          <div class="desc">适度创伤促进"逆境成长"，关键在于赋予事件叙事意义</div>
+        </div>
+      </div>
+      <div class="framework-item">
+        <div class="icon">8️⃣</div>
+        <div>
+          <div class="label">德性的魅力</div>
+          <div class="desc">美德不是负担而是通往幸福之路，德性伦理学认为培养品格比遵守规则更重要</div>
+        </div>
+      </div>
+      <div class="framework-item">
+        <div class="icon">9️⃣</div>
+        <div>
+          <div class="label">神圣与超越</div>
+          <div class="desc">人类有超越自我的需求，"提升感"（elevation）是道德升华的体验</div>
+        </div>
+      </div>
+      <div class="framework-item">
+        <div class="icon">🔟</div>
+        <div>
+          <div class="label">幸福来自"之间"</div>
+          <div class="desc">真正的幸福存在于关系之中——与他人的连接、有意义的工作和超越自我的目标</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 核心知识点 -->
+  <div class="section">
+    <div class="section-title">📝 核心知识点</div>
+    <div class="knowledge-grid">
+      <div class="knowledge-item">
+        <h4>大象优先原则</h4>
+        <p>情绪和直觉系统（大象）先于理性系统（骑象人）做出反应。我们往往是"先感受，再思考"。真正的改变需要先影响大象，而非单纯依靠理性分析。</p>
+      </div>
+      <div class="knowledge-item">
+        <h4>认知失调与自我辩护</h4>
+        <p>当行为与信念冲突时，人会改变信念来合理化行为，而非改变行为。这是自我保护的天性，也解释了为什么人们明知有害却拒绝改变。</p>
+      </div>
+      <div class="knowledge-item">
+        <h4>享乐适应（Hedonic Adaptation）</h4>
+        <p>人对持续的正面或负面事件会逐渐适应，幸福感回归基线水平。升职加薪带来的快乐通常不超过半年。这意味着追求物质收益的幸福感回报有限。</p>
+      </div>
+      <div class="knowledge-item">
+        <h4>优势-活动契合理论</h4>
+        <p>只有当你从事与自身性格优势相匹配的"自主活动"时，才能持续获得深层次的满足感。了解自己的核心优势，然后围绕它设计生活。</p>
+      </div>
+      <div class="knowledge-item">
+        <h4>创伤后成长（Adversarial Growth）</h4>
+        <p>经历适度逆境的人往往比从未经历困难的人更坚韧、更感恩、更有人生深度。"那些杀不死你的，会使你更强大"有科学依据。</p>
+      </div>
+      <div class="knowledge-item">
+        <h4>道德直觉主义</h4>
+        <p>道德判断主要由直觉驱动，理性只是事后为直觉找理由的"律师"。这颠覆了"人是理性道德主体"的传统观念，对理解社会分歧至关重要。</p>
+      </div>
+      <div class="knowledge-item">
+        <h4>提升感（Elevation）</h4>
+        <p>看到他人展现美德时产生的温暖、向上涌动的情感。它会激发模仿善行的欲望，是社会道德传播的机制，也是个人超越自我的体验。</p>
+      </div>
+      <div class="knowledge-item">
+        <h4>幸福来自"之间"</h4>
+        <p>Virtue + Connection + Meaning。幸福不在于个体的内在状态，而在于个体与超越自我的事物之间的连接——关系、目标、信仰体系。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 金句 -->
+  <div class="section">
+    <div class="section-title">✨ 金句精选</div>
+    <div class="quotes-grid">
+      <div class="quote-card">
+        <p>人生就像骑象人骑在一头大象上。如果骑象人和大象意见不一致，骑象人赢不了。他唯一能做的就是帮助大象走向正确的方向。</p>
+        <div class="source">— 核心隐喻</div>
+      </div>
+      <div class="quote-card">
+        <p>幸福的公式是：H = S + C + V。你无法改变S（基因设定值），C（外部条件）的影响有限，唯一可持续调节的是V（自主选择的活动）。</p>
+        <div class="source">— 幸福假设</div>
+      </div>
+      <div class="quote-card">
+        <p>我们不是先推理再行动的理性动物，而是先行动再找理由的合理化动物。</p>
+        <div class="source">— 认知失调</div>
+      </div>
+      <div class="quote-card">
+        <p>人们关于如何过好生活的最好建议，都来自2500年前。现代科学只是在不断证实这些古老的智慧。</p>
+        <div class="source">— 古今对话</div>
+      </div>
+      <div class="quote-card">
+        <p>逆境是不可避免的，但受苦是可选的。你能否从逆境中成长，取决于你如何讲述自己的故事。</p>
+        <div class="source">— 叙事的力量</div>
+      </div>
+      <div class="quote-card">
+        <p>爱的本质不是找到一个完美的人，而是用完美的眼光去欣赏一个不完美的人。</p>
+        <div class="source">— 爱与依恋</div>
+      </div>
+      <div class="quote-card">
+        <p>如果你想改变你自己，不要去对抗你的天性。相反，去理解它、善待它，然后巧妙地引导它。</p>
+        <div class="source">— 改变的艺术</div>
+      </div>
+      <div class="quote-card">
+        <p>幸福不是你直接追求就能得到的东西，它是你致力于比自我更大的事物时，自然而然产生的副产品。</p>
+        <div class="source">— 幸福来自"之间"</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 行动建议 -->
+  <div class="section">
+    <div class="section-title">🎯 行动建议</div>
+    <div class="actions-list">
+      <div class="action-item">
+        <div class="action-num">1</div>
+        <div class="action-text"><strong>认识你的大象</strong>：遇到情绪冲动时，先不急着用理性压制，而是观察它、理解它。问问自己"大象想要什么？"</div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">2</div>
+        <div class="action-text"><strong>找到你的优势活动</strong>：用VIA性格优势测试找出自己的5大核心优势，每天至少在一个活动中运用它们</div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">3</div>
+        <div class="action-text"><strong>培养冥想习惯</strong>：每天10分钟正念冥想，这是海特验证的"重新布线大象"三条路径之一</div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">4</div>
+        <div class="action-text"><strong>书写逆境叙事</strong>：遭遇困难时，花15分钟写下这段经历如何塑造了现在的你，找到其中的成长意义</div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">5</div>
+        <div class="action-text"><strong>投资关系而非物质</strong>：将更多时间精力投入到深度关系中，研究表明关系质量是长期幸福感最强的预测因子</div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">6</div>
+        <div class="action-text"><strong>追求"提升感"</strong>：主动接触真善美的内容（传记、纪录片、志愿服务），定期体验道德升华带来的正面情感</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    每日一学 · 2026年6月7日 · 《象与骑象人》<br>
+    用古老智慧照亮现代生活
+  </div>
+</div>
+</body>
+</html>
