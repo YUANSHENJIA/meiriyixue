@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 - 终身成长</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --card-bg: #1e293b;
+    --text: #e2e8f0;
+    --text-secondary: #94a3b8;
+    --accent: #f59e0b;
+    --accent2: #8b5cf6;
+    --accent3: #10b981;
+    --accent4: #ec4899;
+    --border: #334155;
+    --tag-bg: #1e3a5f;
+    --tag-text: #7dd3fc;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    min-height: 100vh;
+    padding: 20px;
+  }
+  .container { max-width: 1000px; margin: 0 auto; }
+
+  .header {
+    text-align: center;
+    padding: 40px 20px 30px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 30px;
+  }
+  .header .date {
+    font-size: 14px; color: var(--text-secondary);
+    letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px;
+  }
+  .header h1 {
+    font-size: 36px; font-weight: 800;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .header .subtitle {
+    font-size: 16px; color: var(--text-secondary); margin-top: 6px;
+  }
+
+  .core-insight {
+    background: linear-gradient(135deg, rgba(245,158,11,0.1), rgba(139,92,246,0.1));
+    border: 1px solid rgba(245,158,11,0.3);
+    border-radius: 16px; padding: 28px; margin-bottom: 30px;
+  }
+  .core-insight h2 {
+    font-size: 20px; color: var(--accent); margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .core-insight p { font-size: 15px; color: var(--text); line-height: 1.8; }
+
+  .section { margin-bottom: 28px; }
+  .section-title {
+    font-size: 18px; font-weight: 700; margin-bottom: 16px;
+    padding-left: 14px; border-left: 3px solid var(--accent2);
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  .framework {
+    background: var(--card-bg); border-radius: 12px; padding: 24px;
+    margin-bottom: 16px; border: 1px solid var(--border);
+  }
+  .framework h3 {
+    font-size: 16px; color: var(--accent2); margin-bottom: 12px;
+  }
+  .framework-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 10px 0; border-bottom: 1px solid rgba(51,65,85,0.5);
+  }
+  .framework-item:last-child { border-bottom: none; }
+  .framework-item .icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+  .framework-item .label { font-weight: 600; color: var(--text); font-size: 14px; }
+  .framework-item .desc { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
+
+  .mind-map {
+    background: var(--card-bg); border-radius: 16px; padding: 30px;
+    border: 1px solid var(--border); margin-bottom: 16px;
+    position: relative; overflow: hidden;
+  }
+  .mind-map::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent3), var(--accent4));
+  }
+
+  .center-node {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: white; text-align: center; padding: 16px 28px;
+    border-radius: 50px; font-size: 18px; font-weight: 700;
+    margin: 0 auto 30px; display: inline-block;
+    max-width: 90%; position: relative; left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .branches { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .branch {
+    background: rgba(30,41,59,0.8); border-radius: 12px; padding: 18px;
+    border: 1px solid var(--border); transition: transform 0.2s;
+  }
+  .branch:hover { transform: translateY(-2px); }
+  .branch-title {
+    font-size: 15px; font-weight: 700; margin-bottom: 10px;
+    padding-bottom: 8px; border-bottom: 2px solid;
+  }
+  .branch:nth-child(1) .branch-title { border-color: var(--accent); color: var(--accent); }
+  .branch:nth-child(2) .branch-title { border-color: var(--accent2); color: var(--accent2); }
+  .branch:nth-child(3) .branch-title { border-color: var(--accent3); color: var(--accent3); }
+  .branch:nth-child(4) .branch-title { border-color: var(--accent4); color: var(--accent4); }
+  .branch:nth-child(5) .branch-title { border-color: var(--accent); color: var(--accent); }
+  .branch:nth-child(6) .branch-title { border-color: var(--accent2); color: var(--accent2); }
+
+  .leaf {
+    font-size: 13px; color: var(--text-secondary);
+    padding: 4px 0 4px 16px; position: relative;
+  }
+  .leaf::before {
+    content: ''; position: absolute; left: 0; top: 12px;
+    width: 8px; height: 2px; background: var(--text-secondary);
+  }
+
+  .knowledge-grid {
+    display: grid; grid-template-columns: 1fr; gap: 12px;
+  }
+  .knowledge-item {
+    background: var(--card-bg); border-radius: 10px; padding: 18px 20px;
+    border-left: 4px solid var(--accent3); border: 1px solid var(--border);
+    border-left: 4px solid var(--accent3);
+  }
+  .knowledge-item h4 {
+    font-size: 14px; color: var(--accent3); margin-bottom: 6px;
+  }
+  .knowledge-item p { font-size: 13px; color: var(--text-secondary); }
+
+  .quotes-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .quote-card {
+    background: var(--card-bg); border-radius: 10px; padding: 18px;
+    border: 1px solid var(--border); position: relative;
+  }
+  .quote-card::before {
+    content: '\201C'; position: absolute; top: 8px; left: 14px;
+    font-size: 32px; color: rgba(245,158,11,0.3); font-family: Georgia, serif;
+  }
+  .quote-card p { font-size: 13px; color: var(--text); padding-left: 8px; font-style: italic; }
+  .quote-card .source { font-size: 11px; color: var(--text-secondary); margin-top: 8px; text-align: right; }
+
+  .actions-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .action-item {
+    background: var(--card-bg); border-radius: 10px; padding: 16px;
+    border: 1px solid var(--border); display: flex; align-items: flex-start; gap: 10px;
+  }
+  .action-num {
+    background: linear-gradient(135deg, var(--accent), var(--accent4));
+    color: white; width: 24px; height: 24px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; flex-shrink: 0;
+  }
+  .action-text { font-size: 13px; color: var(--text); }
+  .action-text strong { color: var(--accent); }
+
+  .tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .tag {
+    background: var(--tag-bg); color: var(--tag-text);
+    padding: 4px 12px; border-radius: 20px; font-size: 12px;
+  }
+
+  .footer {
+    text-align: center; padding: 30px 0 20px;
+    border-top: 1px solid var(--border); margin-top: 30px;
+    color: var(--text-secondary); font-size: 13px;
+  }
+
+  @media (max-width: 600px) {
+    .branches, .quotes-grid, .actions-list { grid-template-columns: 1fr; }
+    .header h1 { font-size: 26px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="date">2026年6月8日</div>
+    <h1>终身成长</h1>
+    <div class="subtitle">Mindset: The New Psychology of Success — Carol S. Dweck（卡罗尔·德韦克）</div>
+    <div class="tag-row" style="justify-content:center; margin-top:12px;">
+      <span class="tag">心理学</span>
+      <span class="tag">思维模式</span>
+      <span class="tag">自我发展</span>
+      <span class="tag">教育</span>
+    </div>
+  </div>
+
+  <!-- 核心洞见 -->
+  <div class="core-insight">
+    <h2>💡 核心洞见</h2>
+    <p>人与人之间的根本差异，不在于天赋和智力，而在于<strong>思维模式</strong>。固定型思维认为能力是天生的、不可改变的，因此害怕失败、回避挑战；成长型思维相信能力可以通过努力和学习不断发展，因此拥抱挑战、从失败中汲取养分。<strong>你相信什么，决定了你成为什么。</strong>思维模式不是性格特质，而是一种信念选择——而选择，永远可以改变。</p>
+  </div>
+
+  <!-- 思维导图 -->
+  <div class="section">
+    <div class="section-title">🗺️ 全书思维导图</div>
+    <div class="mind-map">
+      <div class="center-node">终身成长 · 重新定义成功的思维模式</div>
+      <div class="branches">
+        <div class="branch">
+          <div class="branch-title">🔒 固定型思维</div>
+          <div class="leaf">能力是固定的、天生的</div>
+          <div class="leaf">失败 = 我不行（对自我的否定）</div>
+          <div class="leaf">回避挑战，害怕暴露不足</div>
+          <div class="leaf">忽视负面反馈，拒绝学习</div>
+        </div>
+        <div class="branch">
+          <div class="branch-title">🌱 成长型思维</div>
+          <div class="leaf">能力可以通过努力发展</div>
+          <div class="leaf">失败 = 我还没学会（对过程的反馈）</div>
+          <div class="leaf">拥抱挑战，视困难为成长机会</div>
+          <div class="leaf">从批评中学习，从他人成功中汲取灵感</div>
+        </div>
+        <div class="branch">
+          <div class="branch-title">🏫 教育与教养</div>
+          <div class="leaf">夸努力而非夸天赋</div>
+          <div class="leaf">"还没"的力量：Not Yet > Failed</div>
+          <div class="leaf">设立成长型标准而非完美标准</div>
+          <div class="leaf">教师/父母的思维模式直接影响孩子</div>
+        </div>
+        <div class="branch">
+          <div class="branch-title">🏆 体育与商业</div>
+          <div class="leaf">迈克尔·乔丹：被裁后的成长故事</div>
+          <div class="leaf">杰克·韦尔奇：倾听与培养 vs 天才文化</div>
+          <div class="leaf">安然事件：天才文化的灾难</div>
+          <div class="leaf">成长型领导力：赋能团队而非证明自己</div>
+        </div>
+        <div class="branch">
+          <div class="branch-title">❤️ 人际关系</div>
+          <div class="leaf">固定型：伴侣应完美契合我</div>
+          <div class="leaf">成长型：关系需要共同经营与成长</div>
+          <div class="leaf">害羞不是缺陷，社交能力可以锻炼</div>
+          <div class="leaf">施暴者与受害者都有思维模式问题</div>
+        </div>
+        <div class="branch">
+          <div class="branch-title">🛤️ 改变的路径</div>
+          <div class="leaf">第一步：接纳内心的固定型声音</div>
+          <div class="leaf">第二步：意识到你有选择</div>
+          <div class="leaf">第三步：用成长型声音回应</div>
+          <div class="leaf">第四步：采取成长型行动</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 核心框架 -->
+  <div class="section">
+    <div class="section-title">📐 核心框架：两种思维模式的四维对比</div>
+    <div class="framework">
+      <div class="framework-item">
+        <div class="icon">1️⃣</div>
+        <div>
+          <div class="label">面对挑战</div>
+          <div class="desc">固定型：回避挑战，害怕失败暴露自己"不够好" → 成长型：主动迎接挑战，因为挑战本身就是成长的机会</div>
+        </div>
+      </div>
+      <div class="framework-item">
+        <div class="icon">2️⃣</div>
+        <div>
+          <div class="label">面对障碍</div>
+          <div class="desc">固定型：遇到阻碍就放弃，认定"我不行" → 成长型：坚持寻找策略，把障碍当作需要解决的问题</div>
+        </div>
+      </div>
+      <div class="framework-item">
+        <div class="icon">3️⃣</div>
+        <div>
+          <div class="label">面对努力</div>
+          <div class="desc">固定型：认为需要努力意味着没有天赋 → 成长型：认为努力是通向精通的必经之路</div>
+        </div>
+      </div>
+      <div class="framework-item">
+        <div class="icon">4️⃣</div>
+        <div>
+          <div class="label">面对批评与他人成功</div>
+          <div class="desc">固定型：视批评为人身攻击，嫉妒他人成功 → 成长型：从批评中学习，从他人成功中获得启发和灵感</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 核心知识点 -->
+  <div class="section">
+    <div class="section-title">📝 核心知识点</div>
+    <div class="knowledge-grid">
+      <div class="knowledge-item">
+        <h4>思维模式的本质：对能力的信念</h4>
+        <p>思维模式不是性格类型，而是你对"能力从何而来"这个问题的回答。它是一种信念系统，决定了你如何看待自己、如何解释经历、如何做出选择。最关键的是：它可以选择和改变。</p>
+      </div>
+      <div class="knowledge-item">
+        <h4>天才文化的陷阱</h4>
+        <p>当组织把"天赋"放在"努力"之上，就会形成"天才文化"：员工不敢承认错误、不愿合作、害怕被揭穿"不够聪明"。安然公司的崩溃正是天才文化的极端案例——每个人都在证明自己是天才，没有人愿意面对问题。</p>
+      </div>
+      <div class="knowledge-item">
+        <h4>"还没"的力量</h4>
+        <p>德韦克在芝加哥一所高中发现：当学生考试没通过时，得到的成绩不是"不及格"，而是"还没通过"。这一个词的差异改变了学生对待失败的态度——它暗示失败是暂时的、是可以改变的状态，而非终局判决。</p>
+      </div>
+      <div class="knowledge-item">
+        <h4>表扬的毒副作用</h4>
+        <p>对孩子说"你真聪明"（夸天赋）会强化固定型思维，让他们在后续任务中选择更简单的题目以维持"聪明"的形象；而说"你真努力"（夸过程）会强化成长型思维，让他们愿意挑战更难的题目。</p>
+      </div>
+      <div class="knowledge-item">
+        <h4>冒名顶替综合征的思维根源</h4>
+        <p>固定型思维者更容易经历冒名顶替综合征——因为相信能力是固定的，任何一次成功都感觉像是"运气好"，任何一次失败都像"露馅了"。成长型思维者则没有这种困扰，因为成功是努力的结果，失败是学习的起点。</p>
+      </div>
+      <div class="knowledge-item">
+        <h4>意志力不是性格，而是策略</h4>
+        <p>固定型思维把"缺乏意志力"归因为性格缺陷，导致自我否定。成长型思维则认为意志力是可以训练和培养的技能，就像肌肉一样越练越强，关键在于采用正确的策略而非依赖自我批判。</p>
+      </div>
+      <div class="knowledge-item">
+        <h4>成长型思维不等于"只要努力就行"</h4>
+        <p>德韦克特别强调：成长型思维不是盲目乐观或"只要努力就够了"。真正的成长型思维是：尝试多种策略、向他人学习、寻求反馈、不断调整——努力的方向和方法与努力本身同样重要。</p>
+      </div>
+      <div class="knowledge-item">
+        <h4>改变的四步法</h4>
+        <p>① 接纳——承认内心有固定型思维的声音；② 觉察——注意到它在什么时候出现；③ 对话——用成长型声音回应它；④ 行动——按照成长型思维的方式去行动。改变不是一次性事件，而是一个持续的过程。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 金句 -->
+  <div class="section">
+    <div class="section-title">✨ 金句精选</div>
+    <div class="quotes-grid">
+      <div class="quote-card">
+        <p>你对于自身能力的信念，深刻地影响了你的人生走向。相信自己的能力可以发展，你就走上了完全不同的道路。</p>
+        <div class="source">— 核心命题</div>
+      </div>
+      <div class="quote-card">
+        <p>为什么浪费时间一再证明自己的伟大，而不是去享受你正在做的事情？看到自己成长，比证明自己聪明要令人满足得多。</p>
+        <div class="source">— 固定型的代价</div>
+      </div>
+      <div class="quote-card">
+        <p>在成长型思维中，失败不是一个标签——"我是个失败者"，而是一个动作——"我失败了"。它只是一个事件，而不是你的身份。</p>
+        <div class="source">— 重新定义失败</div>
+      </div>
+      <div class="quote-card">
+        <p>天才不是上帝赐予的礼物，而是通过巨大的努力发展出来的能力。每一个杰出的成就背后，都是漫长而艰苦的练习。</p>
+        <div class="source">— 努力的力量</div>
+      </div>
+      <div class="quote-card">
+        <p>当你进入成长型思维，你就进入了一个全新的世界。在这个世界里，改变和成长是可能的，你的努力和策略真的可以带来进步。</p>
+        <div class="source">— 新的可能</div>
+      </div>
+      <div class="quote-card">
+        <p>我们可以通过教导人们关于思维模式的知识，来改变他们的生活。仅仅知道有两种思维模式，就能让你做出不同的选择。</p>
+        <div class="source">— 觉察即改变</div>
+      </div>
+      <div class="quote-card">
+        <p>关系不是两个完美的人恰好相遇，而是两个不完美的人共同选择成长。每一段好关系都需要修炼。</p>
+        <div class="source">— 关系的成长</div>
+      </div>
+      <div class="quote-card">
+        <p>成功的意义在于尽你所能去学习和成长，而不是去证明你有多聪明。前者给你持续的动力，后者只会给你无尽的压力。</p>
+        <div class="source">— 重新定义成功</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 行动建议 -->
+  <div class="section">
+    <div class="section-title">🎯 行动建议</div>
+    <div class="actions-list">
+      <div class="action-item">
+        <div class="action-num">1</div>
+        <div class="action-text"><strong>觉察固定型声音</strong>：当你听到内心说"我不行""我不是这块料"时，停下来，给这个声音贴标签——"这是固定型思维在说话"</div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">2</div>
+        <div class="action-text"><strong>用"还没"替换"不能"</strong>：把"我做不了这件事"改成"我还没学会这件事"，把"我不擅长"改成"我正在学习"</div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">3</div>
+        <div class="action-text"><strong>改变表扬方式</strong>：对自己和他人，夸过程不夸天赋——"你用了很好的策略"比"你真聪明"更有力量</div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">4</div>
+        <div class="action-text"><strong>重新定义失败</strong>：每次失败后写下三点——我学到了什么？下次我可以尝试什么不同的策略？这个经历让我在哪方面变得更强？</div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">5</div>
+        <div class="action-text"><strong>主动寻找"刻意不适"</strong>：每周做一件超出舒适区的事——学习新技能、公开演讲、请教不熟悉的人——让大脑习惯"正在成长"的感觉</div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">6</div>
+        <div class="action-text"><strong>建立成长日记</strong>：每天记录一个"今天我通过努力进步了"的例子，哪怕很微小。用具体事实对抗"我不行"的叙事</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    每日一学 · 2026年6月8日 · 《终身成长》<br>
+    你相信什么，决定了你成为什么
+  </div>
+</div>
+</body>
+</html>
