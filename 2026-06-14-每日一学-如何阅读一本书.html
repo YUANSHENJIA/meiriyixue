@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 - 如何阅读一本书</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --card-bg: #1e293b;
+    --text: #e2e8f0;
+    --text-secondary: #94a3b8;
+    --accent: #f59e0b;
+    --accent2: #8b5cf6;
+    --accent3: #10b981;
+    --accent4: #ec4899;
+    --border: #334155;
+    --tag-bg: #1e3a5f;
+    --tag-text: #7dd3fc;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    min-height: 100vh;
+    padding: 20px;
+  }
+  .container { max-width: 1000px; margin: 0 auto; }
+
+  .header {
+    text-align: center;
+    padding: 40px 20px 30px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 30px;
+  }
+  .header .date {
+    font-size: 14px; color: var(--text-secondary);
+    letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px;
+  }
+  .header h1 {
+    font-size: 36px; font-weight: 800;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .header .subtitle {
+    font-size: 16px; color: var(--text-secondary); margin-top: 6px;
+  }
+
+  .core-insight {
+    background: linear-gradient(135deg, rgba(245,158,11,0.1), rgba(139,92,246,0.1));
+    border: 1px solid rgba(245,158,11,0.3);
+    border-radius: 16px; padding: 28px; margin-bottom: 30px;
+  }
+  .core-insight h2 {
+    font-size: 20px; color: var(--accent); margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .core-insight p { font-size: 15px; color: var(--text); line-height: 1.8; }
+
+  .section { margin-bottom: 28px; }
+  .section-title {
+    font-size: 18px; font-weight: 700; margin-bottom: 16px;
+    padding-left: 14px; border-left: 3px solid var(--accent2);
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  .framework {
+    background: var(--card-bg); border-radius: 12px; padding: 24px;
+    margin-bottom: 16px; border: 1px solid var(--border);
+  }
+  .framework h3 {
+    font-size: 16px; color: var(--accent2); margin-bottom: 12px;
+  }
+  .framework-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 10px 0; border-bottom: 1px solid rgba(51,65,85,0.5);
+  }
+  .framework-item:last-child { border-bottom: none; }
+  .framework-item .icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+  .framework-item .label { font-weight: 600; color: var(--text); font-size: 14px; }
+  .framework-item .desc { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
+
+  .mind-map {
+    background: var(--card-bg); border-radius: 16px; padding: 30px;
+    border: 1px solid var(--border); margin-bottom: 16px;
+    position: relative; overflow: hidden;
+  }
+  .mind-map::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent3), var(--accent4));
+  }
+
+  .center-node {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: white; text-align: center; padding: 16px 28px;
+    border-radius: 50px; font-size: 18px; font-weight: 700;
+    margin: 0 auto 30px; display: inline-block;
+    max-width: 90%; position: relative; left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .branches { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .branch {
+    background: rgba(30,41,59,0.8); border-radius: 12px; padding: 18px;
+    border: 1px solid var(--border); transition: transform 0.2s;
+  }
+  .branch:hover { transform: translateY(-2px); }
+  .branch-title {
+    font-size: 15px; font-weight: 700; margin-bottom: 10px;
+    padding-bottom: 8px; border-bottom: 2px solid;
+  }
+  .branch:nth-child(1) .branch-title { border-color: var(--accent); color: var(--accent); }
+  .branch:nth-child(2) .branch-title { border-color: var(--accent2); color: var(--accent2); }
+  .branch:nth-child(3) .branch-title { border-color: var(--accent3); color: var(--accent3); }
+  .branch:nth-child(4) .branch-title { border-color: var(--accent4); color: var(--accent4); }
+  .branch:nth-child(5) .branch-title { border-color: var(--accent); color: var(--accent); }
+  .branch:nth-child(6) .branch-title { border-color: var(--accent2); color: var(--accent2); }
+  .branch:nth-child(7) .branch-title { border-color: var(--accent3); color: var(--accent3); }
+
+  .leaf {
+    font-size: 13px; color: var(--text-secondary);
+    padding: 4px 0 4px 16px; position: relative;
+  }
+  .leaf::before {
+    content: ''; position: absolute; left: 0; top: 12px;
+    width: 8px; height: 2px; background: var(--text-secondary);
+  }
+
+  .knowledge-grid {
+    display: grid; grid-template-columns: 1fr; gap: 12px;
+  }
+  .knowledge-item {
+    background: var(--card-bg); border-radius: 10px; padding: 18px 20px;
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent3);
+  }
+  .knowledge-item h4 {
+    font-size: 14px; color: var(--accent3); margin-bottom: 6px;
+  }
+  .knowledge-item p { font-size: 13px; color: var(--text-secondary); }
+
+  .quotes-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .quote-card {
+    background: var(--card-bg); border-radius: 10px; padding: 18px;
+    border: 1px solid var(--border); position: relative;
+  }
+  .quote-card::before {
+    content: '\201C'; position: absolute; top: 8px; left: 14px;
+    font-size: 32px; color: rgba(245,158,11,0.3); font-family: Georgia, serif;
+  }
+  .quote-card p { font-size: 13px; color: var(--text); padding-left: 8px; font-style: italic; }
+  .quote-card .source { font-size: 11px; color: var(--text-secondary); margin-top: 8px; text-align: right; }
+
+  .actions-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .action-item {
+    background: var(--card-bg); border-radius: 10px; padding: 16px;
+    border: 1px solid var(--border); display: flex; align-items: flex-start; gap: 10px;
+  }
+  .action-num {
+    background: linear-gradient(135deg, var(--accent), var(--accent4));
+    color: white; width: 24px; height: 24px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; flex-shrink: 0;
+  }
+  .action-text { font-size: 13px; color: var(--text); }
+  .action-text strong { color: var(--accent); }
+
+  .tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .tag {
+    background: var(--tag-bg); color: var(--tag-text);
+    padding: 4px 12px; border-radius: 20px; font-size: 12px;
+  }
+
+  .footer {
+    text-align: center; padding: 30px 0 20px;
+    border-top: 1px solid var(--border); margin-top: 30px;
+    color: var(--text-secondary); font-size: 13px;
+  }
+
+  @media (max-width: 600px) {
+    .branches, .quotes-grid, .actions-list { grid-template-columns: 1fr; }
+    .header h1 { font-size: 26px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="date">2026年6月14日</div>
+    <h1>如何阅读一本书</h1>
+    <div class="subtitle">How to Read a Book — Mortimer J. Adler & Charles Van Doren</div>
+    <div class="tag-row" style="justify-content:center; margin-top:12px;">
+      <span class="tag">阅读</span>
+      <span class="tag">学习力</span>
+      <span class="tag">元认知</span>
+      <span class="tag">思维</span>
+    </div>
+  </div>
+
+  <!-- 核心洞见 -->
+  <div class="core-insight">
+    <h2>💡 核心洞见</h2>
+    <p>这是一本关于"阅读的阅读"的书——它要回答的根本问题不是"读什么书"，而是"<strong>你真的会读书吗？</strong>"。作者艾德勒提出了一个令人警醒的事实：大多数人毕业后就不再进步，不是因为他们停止学习了，而是因为他们<strong>用读报纸的方式去读经典</strong>。读懂一本好书，需要主动的、消耗心力的努力，需要在阅读时不断提出问题、找出答案、做出判断。真正的阅读，是读者与作者之间一场跨越时空的<strong>对话</strong>——读者必须主动在场，主动思考，主动质疑，否则书页上的文字对你永远只是文字，而不会变成你的一部分。</p>
+  </div>
+
+  <!-- 思维导图 -->
+  <div class="section">
+    <div class="section-title">🗺️ 全书思维导图</div>
+    <div class="mind-map">
+      <div class="center-node">如何阅读一本书 · 让每一本书都真正属于你</div>
+      <div class="branches">
+        <div class="branch">
+          <div class="branch-title">📚 阅读的四个层次</div>
+          <div class="leaf">基础阅读：识字，能读懂字面</div>
+          <div class="leaf">检视阅读：有限时间内判断值不值得读</div>
+          <div class="leaf">分析阅读：完整咀嚼一本书，咀嚼前别吞咽</div>
+          <div class="leaf">主题阅读：跨多本书比较，建构自己的理解</div>
+        </div>
+        <div class="branch">
+          <div class="branch-title">🔍 检视阅读的两大任务</div>
+          <div class="leaf">有系统地略读：书名、序、目录、摘要</div>
+          <div class="leaf">粗浅地通读：头尾、关键章节、反复出现的词</div>
+          <div class="leaf">目标：15-20分钟判断"这是什么书"</div>
+          <div class="leaf">回答四个问题：主题、结构、归类、价值</div>
+        </div>
+        <div class="branch">
+          <div class="branch-title">🧠 分析阅读的三个阶段</div>
+          <div class="leaf">第一阶段：找出一本书在谈什么（骨架）</div>
+          <div class="leaf">第二阶段：诠释作者的主张与论证</div>
+          <div class="leaf">第三阶段：公正评价，同意或反对</div>
+          <div class="leaf">用单一句子说出整本书的主旨</div>
+        </div>
+        <div class="branch">
+          <div class="branch-title">❓ 主动阅读的四个核心问题</div>
+          <div class="leaf">整体来说，这本书在谈什么？</div>
+          <div class="leaf">作者细部说了什么，怎么说的？</div>
+          <div class="leaf">这本书说得有道理吗？全部还是部分？</div>
+          <div class="leaf">这本书跟我有什么关系？</div>
+        </div>
+        <div class="branch">
+          <div class="branch-title">📝 做笔记的方法</div>
+          <div class="leaf">画底线：重要的句子</div>
+          <div class="leaf">画括号：重要段落</div>
+          <div class="leaf">星号：最精彩的论述</div>
+          <div class="leaf">空白处编号：论点顺序</div>
+          <div class="leaf">页边空白：自己的问题和回答</div>
+        </div>
+        <div class="branch">
+          <div class="branch-title">📖 不同读物的读法</div>
+          <div class="leaf">实用书：理解规则，思考应用</div>
+          <div class="leaf">想象文学：不要抗拒、不要找主旨、完整阅读</div>
+          <div class="leaf">历史书：双重视角（作者+现代读者）</div>
+          <div class="leaf">科学/数学：理解术语，亲自演算</div>
+          <div class="leaf">哲学书：直接面对核心问题</div>
+        </div>
+        <div class="branch">
+          <div class="branch-title">🌐 主题阅读的五个步骤</div>
+          <div class="leaf">找到相关章节，建立共识词汇</div>
+          <div class="leaf">带引作者与你达成共识</div>
+          <div class="leaf">厘清问题，构建中立的主旨</div>
+          <div class="leaf">界定议题，正反观点并存</div>
+          <div class="leaf">分析讨论，得出自己的结论</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 核心框架 -->
+  <div class="section">
+    <div class="section-title">📐 核心框架：阅读的四个层次</div>
+    <div class="framework">
+      <div class="framework-item">
+        <div class="icon">1️⃣</div>
+        <div>
+          <div class="label">基础阅读（Elementary Reading）</div>
+          <div class="desc">最基本的识字阅读能力。大多数受过基础教育的人都已具备。能读懂字面、知道每个句子的字面意思，但这是远远不够的起点</div>
+        </div>
+      </div>
+      <div class="framework-item">
+        <div class="icon">2️⃣</div>
+        <div>
+          <div class="label">检视阅读（Inspectional Reading）</div>
+          <div class="desc">在有限时间内系统化略读一本书——通过书名、目录、序言、关键章节快速判断"这是什么书、值不值得读"。时间紧迫时，先做这一层</div>
+        </div>
+      </div>
+      <div class="framework-item">
+        <div class="icon">3️⃣</div>
+        <div>
+          <div class="label">分析阅读（Analytical Reading）</div>
+          <div class="desc">完整地、咀嚼式地读一本书。找骨架、理逻辑、评判断。这是大多数人"从未真正做过"却以为自己做过的事——也是本书最核心的部分</div>
+        </div>
+      </div>
+      <div class="framework-item">
+        <div class="icon">4️⃣</div>
+        <div>
+          <div class="label">主题阅读（Syntopical Reading）</div>
+          <div class="desc">阅读的最高层次：围绕一个主题读多本书，建立跨书比较、提出你自己的综合见解。从"读者"变成"研究者"</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 核心知识点 -->
+  <div class="section">
+    <div class="section-title">📝 核心知识点</div>
+    <div class="knowledge-grid">
+      <div class="knowledge-item">
+        <h4>一个残忍的真相：大多数人"读书"却没"阅读"</h4>
+        <p>艾德勒指出：许多所谓"读完了一百本非虚构书"的人，充其量只是用"基础阅读"层次去碰了一百本书的表面。读得多但想得少，读书就退化成一种表演性的动作。真正改变你的，是少数几本被你"分析阅读"过、与你对话过的书。</p>
+      </div>
+      <div class="knowledge-item">
+        <h4>阅读就是一场"侦探游戏"</h4>
+        <p>一个好的读者就像侦探一样工作：作者留下了线索（论据、案例、定义），你要主动去拼凑、追踪、检验。被动地接受每一句"看起来对"的话，不是阅读，是被催眠。主动的怀疑、提问、推断，才是阅读的姿态。</p>
+      </div>
+      <div class="knowledge-item">
+        <h4>找出一本书的"骨架"</h4>
+        <p>分析阅读的第一步，是把一本书的骨架（structure）抽出来。试着：① 用一句话说出整本书的主旨；② 列出主要部分（不超过七个），并说明它们如何依序展开；③ 找出作者要解决的问题。每本书都是一座房子，先看到梁柱结构，再看家具摆设。</p>
+      </div>
+      <div class="knowledge-item">
+        <h4>和作者"达成共识"而不是"反驳"</h4>
+        <p>在批评之前，先完整理解作者说了什么。作者用的关键词是什么意思？核心命题是什么？支撑的论据是什么？许多人批评一本书，其实批评的是自己想象出来的版本。先与作者"达成共识"，才有资格说"我不同意你"。</p>
+      </div>
+      <div class="knowledge-item">
+        <h4>三种做笔记的方法，让书真正属于你</h4>
+        <p>① 结构笔记：记录书的结构（写作前用）；② 概念笔记：记录自己的问题与思考（阅读中用）；③ 辩证笔记：跨多本书记录（主题阅读用）。一本没做笔记读过的书，对你而言只是"经过"了；做笔记的书，才是你"走过"的书。</p>
+      </div>
+      <div class="knowledge-item">
+        <h4>主题阅读的真正威力：从作者到问题</h4>
+        <p>主题阅读不是"读很多本书"，而是"围绕一个你自己的问题去读"。你不再是任何一个作者的学生，而是把一群作者召集到圆桌前，让他们彼此辩论，而你——作为主持人——寻找最有力的答案。这是治学、决策、深度思考的核心方法。</p>
+      </div>
+      <div class="knowledge-item">
+        <h4>读实用书的关键：问"我该怎么做"</h4>
+        <p>读实用书（《原则》《影响力》《深度工作》等）的目的不是理解作者，而是理解规则、找出行动、解决自己的问题。如果读完一本讲"如何阅读"的书，阅读能力没有提升，那这本书对你就是无效的。实用书的价值，取决于你在生活里用上了多少。</p>
+      </div>
+      <div class="knowledge-item">
+        <h4>读想象文学：放空自己</h4>
+        <p>读小说、读诗、读戏剧——不要"找主旨"、不要"评论优劣"、不要"在页边写下批评"。想象文学是体验的艺术，不是论证的艺术。完全地进入故事、完全地感受，是阅读想象文学唯一正确的方式。你不审判一场梦。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 金句 -->
+  <div class="section">
+    <div class="section-title">✨ 金句精选</div>
+    <div class="quotes-grid">
+      <div class="quote-card">
+        <p>一本书就像一座房子。你不会在还不了解整体结构之前就去判断它的好坏；你不会在弄清楚门在哪里、墙在哪里、梁在哪里之前，就搬进家具。</p>
+        <div class="source">— 阅读的结构</div>
+      </div>
+      <div class="quote-card">
+        <p>所谓阅读，就是和一位不在场的作者对话。你不能只是点头同意，你必须反复问：你说的是什么意思？你为什么这么说？你这样说有证据吗？</p>
+        <div class="source">— 阅读即对话</div>
+      </div>
+      <div class="quote-card">
+        <p>一个人如果说他读过一百本非虚构书，但没改变任何想法、做任何事，那他和没读过没什么两样。真正的阅读，必然会改变你。</p>
+        <div class="source">— 改变即阅读</div>
+      </div>
+      <div class="quote-card">
+        <p>主动的读者会向作者提出四个问题，整本书就是为了回答这四个问题而存在的——整体说什么、细节怎么说、说得对吗、和我有关吗。</p>
+        <div class="source">— 四个问题</div>
+      </div>
+      <div class="quote-card">
+        <p>你买了一本书，但你不拥有它——直到你用自己的语言，在书页上写下你的批注。书的价值，不在于拥有，而在于使用。</p>
+        <div class="source">— 拥有即使用</div>
+      </div>
+      <div class="quote-card">
+        <p>一本书最好的读者，是那种一开始想骂作者愚蠢、中途发现可能是自己没读懂、最后承认作者确实比自己想得更深的人。</p>
+        <div class="source">— 诚实的阅读</div>
+      </div>
+      <div class="quote-card">
+        <p>读一本好书的唯一目的，是让自己比读之前更聪明一点。读一本烂书的最坏结果，是浪费了本可以读好书的时间。</p>
+        <div class="source">— 时间即生命</div>
+      </div>
+      <div class="quote-card">
+        <p>主题阅读的真正主角不是你读的那几本书，而是你心中那个悬而未决的问题。书只是问题的回答者之一——而你，是最终的裁判。</p>
+        <div class="source">— 你即中心</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 行动建议 -->
+  <div class="section">
+    <div class="section-title">🎯 行动建议</div>
+    <div class="actions-list">
+      <div class="action-item">
+        <div class="action-num">1</div>
+        <div class="action-text"><strong>建立"检视阅读"习惯</strong>：每次拿到一本新书，先花15-20分钟通读：看封面、看序言、看目录、看后记——回答"这书的主题是什么、结构是什么、属于什么领域、值不值得深入读"。如果答案是"暂时不值得"，果断放下</div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">2</div>
+        <div class="action-text"><strong>用单句说主旨</strong>：每读完一本非虚构书，要求自己用一句话写出它的核心主旨。如果说不出来，说明你还没真正读懂。把句子写下来，三个月后回看——这就是你和书之间真正的对话记录</div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">3</div>
+        <div class="action-text"><strong>读时必带四问</strong>：每读一章，问自己：作者在这一章谈什么？怎么谈的？他说得对吗？这和我有什么关系？把这四个问题写在便利贴上，贴在你正在读的书上</div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">4</div>
+        <div class="action-text"><strong>做"重读"而不是"多读"</strong>：与其一年读50本书匆匆掠过，不如选3-5本经典，每本精读+做笔记+三个月后重读。一本被你读过三遍的书，胜过十本被你翻过一遍的书</div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">5</div>
+        <div class="action-text"><strong>尝试一次主题阅读</strong>：选一个你关心的问题（如"如何培养深度思考""如何过有意义的生活"），找3-5本相关的书，每本只读与你的问题相关的章节，然后写一份你自己的"主题阅读报告"——这会彻底改变你"读书"的方式</div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">6</div>
+        <div class="action-text"><strong>用输出倒逼输入</strong>：每读完一本分析阅读级别的书，写一篇1500-3000字的读书笔记，发到Notion或公众号。写不出来的部分，就是你没读懂的部分。写作，是阅读最严格的检验</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    每日一学 · 2026年6月14日 · 《如何阅读一本书》<br>
+    读书是一辈子的事——前提是你真的在读
+  </div>
+</div>
+</body>
+</html>
