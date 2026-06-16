@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 - 助推</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --card-bg: #1e293b;
+    --text: #e2e8f0;
+    --text-secondary: #94a3b8;
+    --accent: #f59e0b;
+    --accent2: #8b5cf6;
+    --accent3: #10b981;
+    --accent4: #ec4899;
+    --border: #334155;
+    --tag-bg: #1e3a5f;
+    --tag-text: #7dd3fc;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    min-height: 100vh;
+    padding: 20px;
+  }
+  .container { max-width: 1000px; margin: 0 auto; }
+
+  .header {
+    text-align: center;
+    padding: 40px 20px 30px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 30px;
+  }
+  .header .date {
+    font-size: 14px; color: var(--text-secondary);
+    letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px;
+  }
+  .header h1 {
+    font-size: 36px; font-weight: 800;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .header .subtitle {
+    font-size: 16px; color: var(--text-secondary); margin-top: 6px;
+  }
+
+  .core-insight {
+    background: linear-gradient(135deg, rgba(245,158,11,0.1), rgba(139,92,246,0.1));
+    border: 1px solid rgba(245,158,11,0.3);
+    border-radius: 16px; padding: 28px; margin-bottom: 30px;
+  }
+  .core-insight h2 {
+    font-size: 20px; color: var(--accent); margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .core-insight p { font-size: 15px; color: var(--text); line-height: 1.8; }
+
+  .section { margin-bottom: 28px; }
+  .section-title {
+    font-size: 18px; font-weight: 700; margin-bottom: 16px;
+    padding-left: 14px; border-left: 3px solid var(--accent2);
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  .framework {
+    background: var(--card-bg); border-radius: 12px; padding: 24px;
+    margin-bottom: 16px; border: 1px solid var(--border);
+  }
+  .framework h3 {
+    font-size: 16px; color: var(--accent2); margin-bottom: 12px;
+  }
+  .framework-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 10px 0; border-bottom: 1px solid rgba(51,65,85,0.5);
+  }
+  .framework-item:last-child { border-bottom: none; }
+  .framework-item .icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+  .framework-item .label { font-weight: 600; color: var(--text); font-size: 14px; }
+  .framework-item .desc { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
+
+  .mind-map {
+    background: var(--card-bg); border-radius: 16px; padding: 30px;
+    border: 1px solid var(--border); margin-bottom: 16px;
+    position: relative; overflow: hidden;
+  }
+  .mind-map::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent3), var(--accent4));
+  }
+
+  .center-node {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: white; text-align: center; padding: 16px 28px;
+    border-radius: 50px; font-size: 18px; font-weight: 700;
+    margin: 0 auto 30px; display: inline-block;
+    max-width: 90%; position: relative; left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .branches { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .branch {
+    background: rgba(30,41,59,0.8); border-radius: 12px; padding: 18px;
+    border: 1px solid var(--border); transition: transform 0.2s;
+  }
+  .branch:hover { transform: translateY(-2px); }
+  .branch-title {
+    font-size: 15px; font-weight: 700; margin-bottom: 10px;
+    padding-bottom: 8px; border-bottom: 2px solid;
+  }
+  .branch:nth-child(1) .branch-title { border-color: var(--accent); color: var(--accent); }
+  .branch:nth-child(2) .branch-title { border-color: var(--accent2); color: var(--accent2); }
+  .branch:nth-child(3) .branch-title { border-color: var(--accent3); color: var(--accent3); }
+  .branch:nth-child(4) .branch-title { border-color: var(--accent4); color: var(--accent4); }
+  .branch:nth-child(5) .branch-title { border-color: var(--accent); color: var(--accent); }
+  .branch:nth-child(6) .branch-title { border-color: var(--accent2); color: var(--accent2); }
+  .branch:nth-child(7) .branch-title { border-color: var(--accent3); color: var(--accent3); }
+
+  .leaf {
+    font-size: 13px; color: var(--text-secondary);
+    padding: 4px 0 4px 16px; position: relative;
+  }
+  .leaf::before {
+    content: ''; position: absolute; left: 0; top: 12px;
+    width: 8px; height: 2px; background: var(--text-secondary);
+  }
+
+  .knowledge-grid {
+    display: grid; grid-template-columns: 1fr; gap: 12px;
+  }
+  .knowledge-item {
+    background: var(--card-bg); border-radius: 10px; padding: 18px 20px;
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent3);
+  }
+  .knowledge-item h4 {
+    font-size: 14px; color: var(--accent3); margin-bottom: 6px;
+  }
+  .knowledge-item p { font-size: 13px; color: var(--text-secondary); }
+
+  .quotes-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .quote-card {
+    background: var(--card-bg); border-radius: 10px; padding: 18px;
+    border: 1px solid var(--border); position: relative;
+  }
+  .quote-card::before {
+    content: '\201C'; position: absolute; top: 8px; left: 14px;
+    font-size: 32px; color: rgba(245,158,11,0.3); font-family: Georgia, serif;
+  }
+  .quote-card p { font-size: 13px; color: var(--text); padding-left: 8px; font-style: italic; }
+  .quote-card .source { font-size: 11px; color: var(--text-secondary); margin-top: 8px; text-align: right; }
+
+  .actions-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .action-item {
+    background: var(--card-bg); border-radius: 10px; padding: 16px;
+    border: 1px solid var(--border); display: flex; align-items: flex-start; gap: 10px;
+  }
+  .action-num {
+    background: linear-gradient(135deg, var(--accent), var(--accent4));
+    color: white; width: 24px; height: 24px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; flex-shrink: 0;
+  }
+  .action-text { font-size: 13px; color: var(--text); }
+  .action-text strong { color: var(--accent); }
+
+  .tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .tag {
+    background: var(--tag-bg); color: var(--tag-text);
+    padding: 4px 12px; border-radius: 20px; font-size: 12px;
+  }
+
+  .footer {
+    text-align: center; padding: 30px 0 20px;
+    border-top: 1px solid var(--border); margin-top: 30px;
+    color: var(--text-secondary); font-size: 13px;
+  }
+
+  @media (max-width: 600px) {
+    .branches, .quotes-grid, .actions-list { grid-template-columns: 1fr; }
+    .header h1 { font-size: 26px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="date">2026年6月16日</div>
+    <h1>助推</h1>
+    <div class="subtitle">Nudge: Improving Decisions About Health, Wealth, and Happiness — Richard H. Thaler & Cass R. Sunstein</div>
+    <div class="tag-row" style="justify-content:center; margin-top:12px;">
+      <span class="tag">行为经济学</span>
+      <span class="tag">决策科学</span>
+      <span class="tag">选择架构</span>
+      <span class="tag">自由家长主义</span>
+    </div>
+  </div>
+
+  <!-- 核心洞见 -->
+  <div class="core-insight">
+    <h2>💡 核心洞见</h2>
+    <p>人类并非教科书里的理性经济人（Econs），而是充满系统性认知偏差的"普通人"（Humans）——我们受锚定效应、损失厌恶、现状偏见等影响，做出的选择远非最优。<strong>助推（Nudge）的核心洞察在于：改变选择呈现的方式，就能改变选择本身。</strong>好的选择架构像一条温柔的溪流，不是堵死你的路，而是在岔路口放一块石头，让你自然地流向更好的方向。助推不是命令，而是设计——不剥夺自由，只优化环境。</p>
+  </div>
+
+  <!-- 思维导图 -->
+  <div class="section">
+    <div class="section-title">🗺️ 全书思维导图</div>
+    <div class="mind-map">
+      <div class="center-node">助推 · 用温柔的设计引导更好的选择</div>
+      <div class="branches">
+        <div class="branch">
+          <div class="branch-title">🧠 Humans ≠ Econs</div>
+          <div class="leaf">人类有系统性认知偏差，不是理性计算器</div>
+          <div class="leaf">锚定效应：初始参照点锁定后续判断</div>
+          <div class="leaf">损失厌恶：失去的痛感约为得到快感的2倍</div>
+          <div class="leaf">可得性启发：用最易想到的例子判断概率</div>
+        </div>
+        <div class="branch">
+          <div class="branch-title">🏗️ 选择架构</div>
+          <div class="leaf">选择呈现的方式决定选择的结果</div>
+          <div class="leaf">默认选项：人们倾向接受预设值</div>
+          <div class="leaf">选项排列：首尾位置获得更多注意力</div>
+          <div class="leaf">反馈设计：及时告知选择后果</div>
+        </div>
+        <div class="branch">
+          <div class="branch-title">📌 NUDGES框架</div>
+          <div class="leaf">iNcentives：设计合理的激励结构</div>
+          <div class="leaf">Understanding mappings：让后果可感知</div>
+          <div class="leaf">Defaults：善用默认选项的力量</div>
+          <div class="leaf">Give feedback & Expect error</div>
+        </div>
+        <div class="branch">
+          <div class="branch-title">⚖️ 自由家长主义</div>
+          <div class="leaf">保留自由选择权，不禁止任何选项</div>
+          <div class="leaf">同时引导人们走向更好结果</div>
+          <div class="leaf">"助推"与"命令"的根本区别</div>
+          <div class="leaf">拒绝助推者可随时转向其他选项</div>
+        </div>
+        <div class="branch">
+          <div class="branch-title">👥 社会性助推</div>
+          <div class="leaf">人们做什么，很大程度上取决于别人在做什么</div>
+          <div class="leaf">群体规范比个人意志更有力</div>
+          <div class="leaf">公开承诺：社会压力变成正向动力</div>
+          <div class="leaf">"大多数人都在这样做"比说教更有效</div>
+        </div>
+        <div class="branch">
+          <div class="branch-title">🎯 实践领域</div>
+          <div class="leaf">储蓄：自动 enrollment 助推退休金</div>
+          <div class="leaf">健康：默认选项助推器官捐献</div>
+          <div class="leaf">消费：简化选择助推理性购买</div>
+          <div class="leaf">环境：信息透明助推节能减排</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 核心框架 -->
+  <div class="section">
+    <div class="section-title">📐 NUDGES 六要素框架</div>
+    <div class="framework">
+      <h3>助推的六大设计原则</h3>
+      <div class="framework-item">
+        <div class="icon">💰</div>
+        <div><div class="label">iNcentives（激励）</div><div class="desc">设计合理的激励结构——金钱、社会、内在激励的不同作用力，确保正确的激励指向正确的行为。</div></div>
+      </div>
+      <div class="framework-item">
+        <div class="icon">🗺️</div>
+        <div><div class="label">Understanding mappings（理解映射）</div><div class="desc">让选择的后果变得可感知——用直观方式呈现复杂信息，帮助人们看清不同选择的真实影响。</div></div>
+      </div>
+      <div class="framework-item">
+        <div class="icon">⚙️</div>
+        <div><div class="label">Defaults（默认选项）</div><div class="desc">利用人们倾向保留默认的心理——将最优选项设为预设，因为大多数人不会主动修改。</div></div>
+      </div>
+      <div class="framework-item">
+        <div class="icon">📢</div>
+        <div><div class="label">Give feedback（提供反馈）</div><div class="desc">及时告知人们他们做得怎样——好的反馈系统让错误可被发现，让进步可被感受。</div></div>
+      </div>
+      <div class="framework-item">
+        <div class="icon">🛡️</div>
+        <div><div class="label">Expect error（预期错误）</div><div class="desc">好的设计应该预见人的失误——不是责怪人犯错，而是设计容错机制，让系统在出错时仍能运作。</div></div>
+      </div>
+      <div class="framework-item">
+        <div class="icon">📋</div>
+        <div><div class="label">Structure complex choices（结构化复杂选择）</div><div class="desc">当选项太多时，帮助人们简化——通过分类、排序、分步呈现等方式降低选择过载。</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 主要知识点 -->
+  <div class="section">
+    <div class="section-title">📚 主要知识点</div>
+    <div class="knowledge-grid">
+      <div class="knowledge-item">
+        <h4>1. 默认选项的力量</h4>
+        <p>人们强烈倾向于接受预先设定的选项——无论默认是什么，大多数人都不会去修改它。器官捐献率在默认同意的国家高达90%以上，而在默认不同意的地方仅15%左右。这不是道德差异，而是默认设置差异。</p>
+      </div>
+      <div class="knowledge-item">
+        <h4>2. 锚定效应</h4>
+        <p>最初的参照点深刻地影响后续判断——即使锚点是随机给出的。谈判中的第一个数字、商店里的"原价"标签、邻居的消费水平，都是锚。锚一旦植入，你就很难完全摆脱它的引力。</p>
+      </div>
+      <div class="knowledge-item">
+        <h4>3. 可得性启发式</div>
+        <p>我们用最容易想到的例子来判断某件事的概率——最近发生的、媒体大肆报道的、亲身经历过的事件，会显得比实际更常见。这解释了为什么人们高估空难概率、低估心脏病风险。</p>
+      </div>
+      <div class="knowledge-item">
+        <h4>4. 损失厌恶</h4>
+        <p>失去100元的痛苦，大约等于得到200元的快乐——损失的痛感约为同等收益快感的两倍。这让人们过度规避风险，宁可放弃可能的大赢，也不愿承受可能的小输。</p>
+      </div>
+      <div class="knowledge-item">
+        <h4>5. 现状偏见与选择过载</h4>
+        <p>人们偏好维持现状不变，且选项过多时反而更难做决定。401(k)计划提供的基金选项越多，参与率反而越低——选择过载让人干脆放弃选择。</p>
+      </div>
+      <div class="knowledge-item">
+        <h4>6. 社会性助推与启动效应</h4>
+        <p>知道"大多数人都在这样做"比任何说教更有力——社会规范是超级助推器。而微妙的暗示（启动效应）可以在不知不觉中影响行为：看到健康食品的图片后，你更可能选择沙拉而非汉堡。</p>
+      </div>
+      <div class="knowledge-item">
+        <h4>7. 心理账户</h4>
+        <p>人们根据钱的来源和用途区别对待——工资钱谨慎花，奖金钱随意花；赌场赢的钱"不算钱"，信用卡刷的"不是真支出"。心理账户让你在不该花钱的地方花钱，在该花钱的地方省钱。</p>
+      </div>
+      <div class="knowledge-item">
+        <h4>8. 反馈与容错设计</h4>
+        <p>好的系统应该预见人的错误并给出及时反馈——处方药瓶盖的"儿童安全锁"其实是"成人困难锁"，更好的设计是透明的剂量提示。反馈越快、越清晰，选择就越可能被修正。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 金句 -->
+  <div class="section">
+    <div class="section-title">✨ 金句</div>
+    <div class="quotes-grid">
+      <div class="quote-card">
+        <p>助推是选择架构中任何不以禁止选项或显著改变经济激励的方式，可预测地改变人们行为的方面。</p>
+        <div class="source">— Thaler & Sunstein</div>
+      </div>
+      <div class="quote-card">
+        <p>如果你想让人们做出更好的选择，你必须理解他们实际上是如何做决策的。</p>
+        <div class="source">— Thaler & Sunstein</div>
+      </div>
+      <div class="quote-card">
+        <p>人类不是经济人，如果你按照经济人的方式去设计系统，你就会在帮助人类这件事上失败。</p>
+        <div class="source">— Thaler & Sunstein</div>
+      </div>
+      <div class="quote-card">
+        <p>看似微不足道的小细节，可能对人们的行为产生巨大影响。</p>
+        <div class="source">— Thaler & Sunstein</div>
+      </div>
+      <div class="quote-card">
+        <p>抵制助推的第一道防线，是反向的助推。</p>
+        <div class="source">— Thaler & Sunstein</div>
+      </div>
+      <div class="quote-card">
+        <p>好的选择架构师就像好的设计师——他们不会强迫你走某条路，但会确保最自然的路恰好是最好的路。</p>
+        <div class="source">— Thaler & Sunstein</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 行动建议 -->
+  <div class="section">
+    <div class="section-title">🚀 行动建议</div>
+    <div class="actions-list">
+      <div class="action-item">
+        <div class="action-num">1</div>
+        <div class="action-text"><strong>优化你的默认设置</strong> — 把你期望的行为设为默认：自动储蓄、默认健康饮食选项、默认早起闹钟。让好选择成为"不需要做决定"的选择。</div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">2</div>
+        <div class="action-text"><strong>使用承诺装置</strong> — 预先承诺未来的行为：公开宣布目标、设置自动转账、用"stickK"类平台锁定承诺。用今天的决定锁住明天的行为。</div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">3</div>
+        <div class="action-text"><strong>设计你的选择环境</strong> — 重构日常选择架构：把好书放在床头、把零食锁在柜子里、把手机放到另一个房间。让好选项更显眼、更易选。</div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">4</div>
+        <div class="action-text"><strong>建立反馈系统</strong> — 为重要决策设置及时反馈：记账App实时显示支出、运动手环即时记录步数、每周复盘清单。看得见的反馈才能修正看不见的偏差。</div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">5</div>
+        <div class="action-text"><strong>精简选择</strong> — 在容易决策疲劳的领域，主动减少可选项：穿衣3件轮换、每周固定菜单、购物清单替代现场浏览。少即是多。</div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">6</div>
+        <div class="action-text"><strong>利用社会证明</strong> — 与你想要效仿的人在一起：加入读书社群而非闲聊群、用群体行为助推自己。知道自己"不是唯一这样做的人"，让坚持变得更容易。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    每日一学 · 2026年6月16日 · 助推<br>
+    Richard H. Thaler & Cass R. Sunstein · Nudge: Improving Decisions About Health, Wealth, and Happiness
+  </div>
+
+</div>
+</body>
+</html>
