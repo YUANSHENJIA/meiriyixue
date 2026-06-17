@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 - 稀缺</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --card-bg: #1e293b;
+    --text: #e2e8f0;
+    --text-secondary: #94a3b8;
+    --accent: #f59e0b;
+    --accent2: #8b5cf6;
+    --accent3: #10b981;
+    --accent4: #ec4899;
+    --border: #334155;
+    --tag-bg: #1e3a5f;
+    --tag-text: #7dd3fc;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    min-height: 100vh;
+    padding: 20px;
+  }
+  .container { max-width: 1000px; margin: 0 auto; }
+
+  .header {
+    text-align: center;
+    padding: 40px 20px 30px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 30px;
+  }
+  .header .date {
+    font-size: 14px; color: var(--text-secondary);
+    letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px;
+  }
+  .header h1 {
+    font-size: 36px; font-weight: 800;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .header .subtitle {
+    font-size: 16px; color: var(--text-secondary); margin-top: 6px;
+  }
+
+  .core-insight {
+    background: linear-gradient(135deg, rgba(245,158,11,0.1), rgba(139,92,246,0.1));
+    border: 1px solid rgba(245,158,11,0.3);
+    border-radius: 16px; padding: 28px; margin-bottom: 30px;
+  }
+  .core-insight h2 {
+    font-size: 20px; color: var(--accent); margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .core-insight p { font-size: 15px; color: var(--text); line-height: 1.8; }
+
+  .section { margin-bottom: 28px; }
+  .section-title {
+    font-size: 18px; font-weight: 700; margin-bottom: 16px;
+    padding-left: 14px; border-left: 3px solid var(--accent2);
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  .framework {
+    background: var(--card-bg); border-radius: 12px; padding: 24px;
+    margin-bottom: 16px; border: 1px solid var(--border);
+  }
+  .framework h3 {
+    font-size: 16px; color: var(--accent2); margin-bottom: 12px;
+  }
+  .framework-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 10px 0; border-bottom: 1px solid rgba(51,65,85,0.5);
+  }
+  .framework-item:last-child { border-bottom: none; }
+  .framework-item .icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+  .framework-item .label { font-weight: 600; color: var(--text); font-size: 14px; }
+  .framework-item .desc { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
+
+  .mind-map {
+    background: var(--card-bg); border-radius: 16px; padding: 30px;
+    border: 1px solid var(--border); margin-bottom: 16px;
+    position: relative; overflow: hidden;
+  }
+  .mind-map::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent3), var(--accent4));
+  }
+
+  .center-node {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: white; text-align: center; padding: 16px 28px;
+    border-radius: 50px; font-size: 18px; font-weight: 700;
+    margin: 0 auto 30px; display: inline-block;
+    max-width: 90%; position: relative; left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .branches { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .branch {
+    background: rgba(30,41,59,0.8); border-radius: 12px; padding: 18px;
+    border: 1px solid var(--border); transition: transform 0.2s;
+  }
+  .branch:hover { transform: translateY(-2px); }
+  .branch-title {
+    font-size: 15px; font-weight: 700; margin-bottom: 10px;
+    padding-bottom: 8px; border-bottom: 2px solid;
+  }
+  .branch:nth-child(1) .branch-title { border-color: var(--accent); color: var(--accent); }
+  .branch:nth-child(2) .branch-title { border-color: var(--accent2); color: var(--accent2); }
+  .branch:nth-child(3) .branch-title { border-color: var(--accent3); color: var(--accent3); }
+  .branch:nth-child(4) .branch-title { border-color: var(--accent4); color: var(--accent4); }
+  .branch:nth-child(5) .branch-title { border-color: var(--accent); color: var(--accent); }
+  .branch:nth-child(6) .branch-title { border-color: var(--accent2); color: var(--accent2); }
+  .branch:nth-child(7) .branch-title { border-color: var(--accent3); color: var(--accent3); }
+
+  .leaf {
+    font-size: 13px; color: var(--text-secondary);
+    padding: 4px 0 4px 16px; position: relative;
+  }
+  .leaf::before {
+    content: ''; position: absolute; left: 0; top: 12px;
+    width: 8px; height: 2px; background: var(--text-secondary);
+  }
+
+  .knowledge-grid {
+    display: grid; grid-template-columns: 1fr; gap: 12px;
+  }
+  .knowledge-item {
+    background: var(--card-bg); border-radius: 10px; padding: 18px 20px;
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent3);
+  }
+  .knowledge-item h4 {
+    font-size: 14px; color: var(--accent3); margin-bottom: 6px;
+  }
+  .knowledge-item p { font-size: 13px; color: var(--text-secondary); }
+
+  .quotes-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .quote-card {
+    background: var(--card-bg); border-radius: 10px; padding: 18px;
+    border: 1px solid var(--border); position: relative;
+  }
+  .quote-card::before {
+    content: '\201C'; position: absolute; top: 8px; left: 14px;
+    font-size: 32px; color: rgba(245,158,11,0.3); font-family: Georgia, serif;
+  }
+  .quote-card p { font-size: 13px; color: var(--text); padding-left: 8px; font-style: italic; }
+  .quote-card .source { font-size: 11px; color: var(--text-secondary); margin-top: 8px; text-align: right; }
+
+  .actions-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .action-item {
+    background: var(--card-bg); border-radius: 10px; padding: 16px;
+    border: 1px solid var(--border); display: flex; align-items: flex-start; gap: 10px;
+  }
+  .action-num {
+    background: linear-gradient(135deg, var(--accent), var(--accent4));
+    color: white; width: 24px; height: 24px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; flex-shrink: 0;
+  }
+  .action-text { font-size: 13px; color: var(--text); }
+  .action-text strong { color: var(--accent); }
+
+  .tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .tag {
+    background: var(--tag-bg); color: var(--tag-text);
+    padding: 4px 12px; border-radius: 20px; font-size: 12px;
+  }
+
+  .footer {
+    text-align: center; padding: 30px 0 20px;
+    border-top: 1px solid var(--border); margin-top: 30px;
+    color: var(--text-secondary); font-size: 13px;
+  }
+
+  @media (max-width: 600px) {
+    .branches, .quotes-grid, .actions-list { grid-template-columns: 1fr; }
+    .header h1 { font-size: 26px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="date">2026年6月17日</div>
+    <h1>稀缺</h1>
+    <div class="subtitle">Scarcity: Why Having Too Little Means So Much — Sendhil Mullainathan & Eldar Shafir</div>
+    <div class="tag-row" style="justify-content:center; margin-top:12px;">
+      <span class="tag">行为经济学</span>
+      <span class="tag">认知心理学</span>
+      <span class="tag">贫困研究</span>
+      <span class="tag">时间管理</span>
+    </div>
+  </div>
+
+  <!-- 核心洞见 -->
+  <div class="core-insight">
+    <h2>💡 核心洞见</h2>
+    <p>稀缺并不仅仅是资源的缺乏——它更是一种<strong>心态</strong>，一种会俘获大脑、改变思维方式的强大力量。当你缺少时间、金钱或社交关系时，稀缺会自动占据你的注意力，让你在短期内变得高效专注,但代价是产生"管窥效应"——视野变窄，只看到眼前紧迫的事，忽略那些重要但不紧急的事。<strong>稀缺真正的代价不是物质匮乏本身，而是它带来的"带宽负担"：它会降低你的认知能力和自控力，让你变得更笨、更冲动，从而陷入"稀缺陷阱"——越忙越焦虑，越穷越短视，越孤独越不敢社交。</strong>破解之道在于：主动构建"余闲"——不是奢侈，而是抗风险的缓冲。</p>
+  </div>
+
+  <!-- 思维导图 -->
+  <div class="section">
+    <div class="section-title">🗺️ 全书思维导图</div>
+    <div class="mind-map">
+      <div class="center-node">稀缺 · 我们是如何陷入贫穷与忙碌的</div>
+      <div class="branches">
+        <div class="branch">
+          <div class="branch-title">🧠 稀缺心态</div>
+          <div class="leaf">稀缺是一种"拥有少于需要"的主观感受</div>
+          <div class="leaf">它会自动俘获注意力，无论你愿不愿意</div>
+          <div class="leaf">稀缺心态在所有资源领域通用——金钱、时间、社交</div>
+          <div class="leaf">关键洞见：穷人和忙人的大脑工作方式惊人相似</div>
+        </div>
+        <div class="branch">
+          <div class="branch-title">🔭 管窥效应</div>
+          <div class="leaf">稀缺让你专注于当下最紧迫的事</div>
+          <div class="leaf">好处：短期内获得"专注红利"</div>
+          <div class="leaf">代价：忽略"管子"外的重要事务</div>
+          <div class="leaf">消防员死于未系安全带——因为救火紧急</div>
+        </div>
+        <div class="branch">
+          <div class="branch-title">💻 带宽负担</div>
+          <div class="leaf">稀缺占用大量心智资源（带宽）</div>
+          <div class="leaf">相当于降低13分智商——等于一整夜没睡</div>
+          <div class="leaf">导致自我控制力下降</div>
+          <div class="leaf">不是穷人更笨，而是贫困占用了带宽</div>
+        </div>
+        <div class="branch">
+          <div class="branch-title">🔄 借用与稀缺陷阱</div>
+          <div class="leaf">稀缺让人借未来的资源解决当前问题</div>
+          <div class="leaf">发薪日贷款、熬夜赶工、拖延</div>
+          <div class="leaf">短期解决、长期恶化——往复循环</div>
+          <div class="leaf">稀缺陷阱：越缺越借，越借越缺</div>
+        </div>
+        <div class="branch">
+          <div class="branch-title">🎈 余闲的重要性</div>
+          <div class="leaf">余闲是有多余资源时的那种宽松感</div>
+          <div class="leaf">不是浪费——是抗风险的缓冲垫</div>
+          <div class="leaf">没有余闲的人一次意外就可能崩盘</div>
+          <div class="leaf">余闲让你能从容应对——小故障不会连锁大崩溃</div>
+        </div>
+        <div class="branch">
+          <div class="branch-title">⚖️ 权衡思维</div>
+          <div class="leaf">手头宽裕时，你不需要在每个决定上权衡</div>
+          <div class="leaf">稀缺让每个选择都变成艰难的取舍</div>
+          <div class="leaf">权衡本身消耗心智带宽</div>
+          <div class="leaf">减少权衡=保护带宽=更好的决策</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 核心框架 -->
+  <div class="section">
+    <div class="section-title">📐 SCARCE 六大核心框架</div>
+    <div class="framework">
+      <h3>稀缺运转的六个关键机制</h3>
+      <div class="framework-item">
+        <div class="icon">🎯</div>
+        <div><div class="label">Scarcity captures mind（稀缺俘获大脑）</div><div class="desc">无论你愿不愿意，缺少什么你就会想什么。饥饿的人满脑子都是食物——不是意志力问题，是大脑自动机制。</div></div>
+      </div>
+      <div class="framework-item">
+        <div class="icon">🔍</div>
+        <div><div class="label">Concentrate on the urgent（专注红利与代价）</div><div class="desc">稀缺带来"专注红利"——截止日期前的效率爆发。但同时产生"管窥"，让你只看得到管子里的事，忽视管外重要的长期事务。</div></div>
+      </div>
+      <div class="framework-item">
+        <div class="icon">🧮</div>
+        <div><div class="label">Attentional bandwidth tax（带宽税）</div><div class="desc">稀缺会持续消耗你的认知资源，降低流体智力和执行控制力。这解释了为什么穷人和忙人会做出"愚蠢"的决定——不是人蠢，是带宽被占用了。</div></div>
+      </div>
+      <div class="framework-item">
+        <div class="icon">🔄</div>
+        <div><div class="label">Re-borrowing cycle（借用循环）</div><div class="desc">稀缺状态下，人们倾向"借用"未来的资源——刷信用卡、熬夜赶工、牺牲睡眠。借款解决当下，但利息让明天更难。最终掉入越缺越借的稀缺陷阱。</div></div>
+      </div>
+      <div class="framework-item">
+        <div class="icon">🪂</div>
+        <div><div class="label">Capacity absent without slack（余闲的作用）</div><div class="desc">余闲不是多余的，而是必需的——它吸收意外冲击，防止小问题变大灾难。没有余闲的舱室，一颗螺丝松动就可能让整个飞机坠毁。</div></div>
+      </div>
+      <div class="framework-item">
+        <div class="icon">🎛️</div>
+        <div><div class="label">Enable by design（设计破局）</div><div class="desc">单靠意志力对抗稀缺心态是徒劳的。真正的解决方案是改变环境：自动储蓄、固定日程、预设默认。让容错机制代替完美自律。</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 主要知识点 -->
+  <div class="section">
+    <div class="section-title">📚 主要知识点</div>
+    <div class="knowledge-grid">
+      <div class="knowledge-item">
+        <h4>1. 稀缺心态的核心实验</h4>
+        <p>作者在印度蔗农中做了经典研究：收割前（贫穷时）蔗农的智商测试比收割后（富裕时）低13分——相当于一整夜没睡或轻度酒精中毒的效果。同一批人，有钱时就聪明，没钱时就变笨。不是穷人更笨，而是贫困本身在消耗认知资源。</p>
+      </div>
+      <div class="knowledge-item">
+        <h4>2. 专注红利的双面性</h4>
+        <p>截止日期前的效率爆发是真实的——会议前最后半小时产出往往比前两个小时还多。但专注红利是刀尖上跳舞的回报：你同时失去了通观全局的视野。就像隧道里的车灯，照得亮前方几米，却看不见出口在哪里。</p>
+      </div>
+      <div class="knowledge-item">
+        <h4>3. 带宽：隐藏的心理资源税</h4>
+        <p>带宽包括两种能力：认知能力（流体智力）和执行控制力（自控）。稀缺会持续地对这两种能力征税。一个为房租发愁的人，不是"不够自律"——他的自控带宽已经被金钱焦虑占满了。</p>
+      </div>
+      <div class="knowledge-item">
+        <h4>4. 借用行为的恶性循环</h4>
+        <p>当稀缺降临，人们会"借用"——借用明天的钱（信用卡）、借用明天的精力（熬夜）、借用明天的社交资本（对家人发脾气）。每次借用都需要偿还利息：不仅是金钱的利息，还有精力的利息、信任的利息。最终债权人就是你自己未来的生活。</p>
+      </div>
+      <div class="knowledge-item">
+        <h4>5. 余闲：奢侈还是必需？</h4>
+        <p>装满的行李箱没有余闲——每件东西都要精心摆放，一次意外的购物就会让你崩溃。而有空余空间的行李箱则轻松得多。生活也是如此：日程排满的人一个突发会议就完蛋；钱包见底的人一次意外的修车费就陷入债务。余闲不是浪费，是必要的缓冲区。</p>
+      </div>
+      <div class="knowledge-item">
+        <h4>6. 权衡思维：稀缺的隐藏成本</h4>
+        <p>富人买东西不需要权衡——喜欢就买。穷人每一笔支出都在权衡：买了这个就不能买那个。这种持续的权衡本身就在消耗心智带宽，使得剩下的决策能力更少。</p>
+      </div>
+      <div class="knowledge-item">
+        <h4>7. 打包与预设：破解稀缺的设计策略</h4>
+        <p>将关键行为"打包"成默认选项——自动储蓄计划让穷人不用每次纠结要不要存钱；固定日程让忙人不用每天重新规划时间。好的设计让行为自动发生，不需要消耗宝贵的带宽。</p>
+      </div>
+      <div class="knowledge-item">
+        <h4>8. 稀缺的通用性</h4>
+        <p>金钱稀缺和时间稀缺在大脑中的工作机制完全一样。孤独的人对社交线索过度敏感（时间匮乏者对时间同样敏感），导致社交表现反而更差——越孤独越不会社交。所有类型的稀缺都遵循同一套心理机制。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 金句 -->
+  <div class="section">
+    <div class="section-title">✨ 金句</div>
+    <div class="quotes-grid">
+      <div class="quote-card">
+        <p>稀缺不仅仅是一种不愉快的物理状况，更是一种心态。它俘获大脑，改变我们思考的方式。</p>
+        <div class="source">— Mullainathan & Shafir</div>
+      </div>
+      <div class="quote-card">
+        <p>带宽就是你的心智容量。当你被稀缺俘获时，你的带宽就被占用了——你变得更笨、更冲动。</p>
+        <div class="source">— Mullainathan & Shafir</div>
+      </div>
+      <div class="quote-card">
+        <p>管窥让我们专注于眼前，却让我们忘记那些重要但不紧急的事——而正是这些事最终决定了我们的命运。</p>
+        <div class="source">— Mullainathan & Shafir</div>
+      </div>
+      <div class="quote-card">
+        <p>贫穷本身就是在收一种心理税。不是穷人做出了糟糕的决定，而是糟糕的决定恰好发生在带宽被占用的人身上。</p>
+        <div class="source">— Mullainathan & Shafir</div>
+      </div>
+      <div class="quote-card">
+        <p>余闲不是浪费。当你剩下太少空间时，一个偶然的颠簸就可能导致整个舱室坍塌。</p>
+        <div class="source">— Mullainathan & Shafir</div>
+      </div>
+      <div class="quote-card">
+        <p>失败不是成功之母——成功才是。从稀缺陷阱中脱身的第一步，是给自己一次成功的喘息。</p>
+        <div class="source">— Mullainathan & Shafir</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 行动建议 -->
+  <div class="section">
+    <div class="section-title">🚀 行动建议</div>
+    <div class="actions-list">
+      <div class="action-item">
+        <div class="action-num">1</div>
+        <div class="action-text"><strong>给生活留余闲</strong> — 日程不要排满，留出至少20%的空闲时段；钱包不要见底，设立"安全线余额"（比如不低于月支出的三倍）。余闲不是奢侈，是你应对不确定性的保险。</div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">2</div>
+        <div class="action-text"><strong>将重要事务打包为默认</strong> — 设置自动储蓄（发薪日自动转账）、自动提醒（每周运动日固定闹钟）、自动扣款（账单自动支付）。不要让稀缺心态替你做重要的长期决定。</div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">3</div>
+        <div class="action-text"><strong>识别并打断借用循环</strong> — 当你发现自己在"借明天的时间"（熬夜）或"借下个月的钱"（冲动消费），停下来问：这是在还利息还是本金？一次打断，就可能中止螺旋。</div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">4</div>
+        <div class="action-text"><strong>保护你的带宽</strong> — 把简单的决定外包或自动化（固定早餐菜单、时间块管理）；当重要决策需要做时，确保自己不是精疲力尽的状态。带宽是你的稀缺资源——像保护银行账户一样保护它。</div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">5</div>
+        <div class="action-text"><strong>从成功开始建立飞轮</strong> — 从小而确定的成功开始——先还清最小的一笔债，先完成一件拖了很久的小事。一次成功的喘息会释放带宽，让你有资源去解决更大的问题。</div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">6</div>
+        <div class="action-text"><strong>拓宽你的管子</strong> — 定期（每周一次）跳出日常琐事，用一小时做"全局审视"：未来三个月最重要的三件事是什么？有没有正在被管窥忽略的重要事务？管子的宽度决定了你生命的宽度。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    每日一学 · 2026年6月17日 · 稀缺<br>
+    Sendhil Mullainathan & Eldar Shafir · Scarcity: Why Having Too Little Means So Much
+  </div>
+
+</div>
+</body>
+</html>
