@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 - 幸福的陷阱</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --card-bg: #1e293b;
+    --text: #e2e8f0;
+    --text-secondary: #94a3b8;
+    --accent: #f59e0b;
+    --accent2: #8b5cf6;
+    --accent3: #10b981;
+    --accent4: #ec4899;
+    --border: #334155;
+    --tag-bg: #1e3a5f;
+    --tag-text: #7dd3fc;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    min-height: 100vh;
+    padding: 20px;
+  }
+  .container { max-width: 1000px; margin: 0 auto; }
+
+  .header {
+    text-align: center;
+    padding: 40px 20px 30px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 30px;
+  }
+  .header .date {
+    font-size: 14px; color: var(--text-secondary);
+    letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px;
+  }
+  .header h1 {
+    font-size: 36px; font-weight: 800;
+    background: linear-gradient(135deg, var(--accent), var(--accent3));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .header .subtitle {
+    font-size: 16px; color: var(--text-secondary); margin-top: 6px;
+  }
+
+  .core-insight {
+    background: linear-gradient(135deg, rgba(245,158,11,0.1), rgba(16,185,129,0.1));
+    border: 1px solid rgba(245,158,11,0.3);
+    border-radius: 16px; padding: 28px; margin-bottom: 30px;
+  }
+  .core-insight h2 {
+    font-size: 20px; color: var(--accent); margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .core-insight p { font-size: 15px; color: var(--text); line-height: 1.8; }
+
+  .section { margin-bottom: 28px; }
+  .section-title {
+    font-size: 18px; font-weight: 700; margin-bottom: 16px;
+    padding-left: 14px; border-left: 3px solid var(--accent3);
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  .framework {
+    background: var(--card-bg); border-radius: 12px; padding: 24px;
+    margin-bottom: 16px; border: 1px solid var(--border);
+  }
+  .framework h3 {
+    font-size: 16px; color: var(--accent3); margin-bottom: 12px;
+  }
+  .framework-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 10px 0; border-bottom: 1px solid rgba(51,65,85,0.5);
+  }
+  .framework-item:last-child { border-bottom: none; }
+  .framework-item .icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+  .framework-item .label { font-weight: 600; color: var(--text); font-size: 14px; }
+  .framework-item .desc { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
+
+  .mind-map {
+    background: var(--card-bg); border-radius: 16px; padding: 30px;
+    border: 1px solid var(--border); margin-bottom: 16px;
+    position: relative; overflow: hidden;
+  }
+  .mind-map::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent3), var(--accent2), var(--accent4));
+  }
+
+  .center-node {
+    background: linear-gradient(135deg, var(--accent), var(--accent3));
+    color: white; text-align: center; padding: 16px 28px;
+    border-radius: 50px; font-size: 18px; font-weight: 700;
+    margin: 0 auto 30px; display: inline-block;
+    max-width: 90%; position: relative; left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .branches { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .branch {
+    background: rgba(30,41,59,0.8); border-radius: 12px; padding: 18px;
+    border: 1px solid var(--border); transition: transform 0.2s;
+  }
+  .branch:hover { transform: translateY(-2px); }
+  .branch-title {
+    font-size: 15px; font-weight: 700; margin-bottom: 10px;
+    padding-bottom: 8px; border-bottom: 2px solid;
+  }
+  .branch:nth-child(1) .branch-title { border-color: var(--accent); color: var(--accent); }
+  .branch:nth-child(2) .branch-title { border-color: var(--accent3); color: var(--accent3); }
+  .branch:nth-child(3) .branch-title { border-color: var(--accent2); color: var(--accent2); }
+  .branch:nth-child(4) .branch-title { border-color: var(--accent4); color: var(--accent4); }
+  .branch:nth-child(5) .branch-title { border-color: var(--accent); color: var(--accent); }
+  .branch:nth-child(6) .branch-title { border-color: var(--accent3); color: var(--accent3); }
+  .branch:nth-child(7) .branch-title { border-color: var(--accent2); color: var(--accent2); }
+
+  .leaf {
+    font-size: 13px; color: var(--text-secondary);
+    padding: 4px 0 4px 16px; position: relative;
+  }
+  .leaf::before {
+    content: ''; position: absolute; left: 0; top: 12px;
+    width: 8px; height: 2px; background: var(--text-secondary);
+  }
+
+  .knowledge-grid {
+    display: grid; grid-template-columns: 1fr; gap: 12px;
+  }
+  .knowledge-item {
+    background: var(--card-bg); border-radius: 10px; padding: 18px 20px;
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent2);
+  }
+  .knowledge-item h4 {
+    font-size: 14px; color: var(--accent2); margin-bottom: 6px;
+  }
+  .knowledge-item p { font-size: 13px; color: var(--text-secondary); }
+
+  .quotes-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .quote-card {
+    background: var(--card-bg); border-radius: 10px; padding: 18px;
+    border: 1px solid var(--border); position: relative;
+  }
+  .quote-card::before {
+    content: '\201C'; position: absolute; top: 8px; left: 14px;
+    font-size: 32px; color: rgba(245,158,11,0.3); font-family: Georgia, serif;
+  }
+  .quote-card p { font-size: 13px; color: var(--text); padding-left: 8px; font-style: italic; }
+  .quote-card .source { font-size: 11px; color: var(--text-secondary); margin-top: 8px; text-align: right; }
+
+  .actions-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .action-item {
+    background: var(--card-bg); border-radius: 10px; padding: 16px;
+    border: 1px solid var(--border); display: flex; align-items: flex-start; gap: 10px;
+  }
+  .action-num {
+    background: linear-gradient(135deg, var(--accent), var(--accent3));
+    color: white; width: 24px; height: 24px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; flex-shrink: 0;
+  }
+  .action-text { font-size: 13px; color: var(--text); }
+  .action-text strong { color: var(--accent); }
+
+  .tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .tag {
+    background: var(--tag-bg); color: var(--tag-text);
+    padding: 4px 12px; border-radius: 20px; font-size: 12px;
+  }
+
+  .footer {
+    text-align: center; padding: 30px 0 20px;
+    border-top: 1px solid var(--border); margin-top: 30px;
+    color: var(--text-secondary); font-size: 13px;
+  }
+
+  @media (max-width: 600px) {
+    .branches, .quotes-grid, .actions-list { grid-template-columns: 1fr; }
+    .header h1 { font-size: 26px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="date">2026年6月25日</div>
+    <h1>幸福的陷阱</h1>
+    <div class="subtitle">The Happiness Trap — Russ Harris</div>
+    <div class="tag-row" style="justify-content:center; margin-top:12px;">
+      <span class="tag">ACT接纳承诺疗法</span>
+      <span class="tag">正念</span>
+      <span class="tag">情绪管理</span>
+      <span class="tag">心理灵活性</span>
+    </div>
+  </div>
+
+  <!-- 核心洞见 -->
+  <div class="core-insight">
+    <h2>💡 核心洞见</h2>
+    <p>我们越是执着地追求"幸福"，反而越是把自己推进痛苦的陷阱。<strong>Russ Harris</strong> 一针见血地指出：人类大脑天生就有一套"消极偏见"机制——它为了生存进化出来，却被现代人错用为"判断生活好坏的标尺"。正常人的大脑每天会产生成千上万个消极想法，而我们却误以为"不焦虑=幸福"、"不痛苦=成功"。于是我们陷入了一个死循环：<strong>越想消除负面情绪→情绪越强→越觉得自己失败→更想消除</strong>。这本书教你走出陷阱的关键——不是"得到幸福"，而是<strong>"建立心理灵活性"</strong>：全然接纳内心的痛苦，同时仍然选择去做真正有意义的事。幸福不是目的地，而是你朝着价值方向行动时的副产品。</p>
+  </div>
+
+  <!-- 思维导图 -->
+  <div class="section">
+    <div class="section-title">🗺️ 全书思维导图</div>
+    <div class="mind-map">
+      <div class="center-node">幸福的陷阱 · 越追求幸福 越远离幸福</div>
+      <div class="branches">
+        <div class="branch">
+          <div class="branch-title">🧠 大脑的消极偏见</div>
+          <div class="leaf">进化遗留：大脑优先关注威胁和危险</div>
+          <div class="leaf">每天产生60000个想法，其中80%是消极的</div>
+          <div class="leaf">消极≠不正常，消极=大脑的默认模式</div>
+          <div class="leaf">我们错把"大脑的警报"当成"现实的真相"</div>
+        </div>
+        <div class="branch">
+          <div class="branch-title">🪤 幸福陷阱的形成</div>
+          <div class="leaf">4大错误信念：幸福是常态、不幸福=缺陷、必须消除负面、必须控制想法</div>
+          <div class="leaf">"幸福"被商业化包装成可购买的商品</div>
+          <div class="leaf">社交媒体加剧"别人都比我幸福"的错觉</div>
+          <div class="leaf">挣扎开关：越挣扎越陷得深</div>
+        </div>
+        <div class="branch">
+          <div class="branch-title">🎯 ACT六大核心原则</div>
+          <div class="leaf">接纳：允许痛苦存在，不与它对抗</div>
+          <div class="leaf">认知解离：从想法中退后一步，看清它</div>
+          <div class="leaf">关注当下：锚定于此刻而非头脑的故事</div>
+          <div class="leaf">自我观察：你是观察者，不是被观察的内容</div>
+          <div class="leaf">价值澄清：找到真正重要的方向</div>
+          <div class="leaf">承诺行动：用行动走向价值</div>
+        </div>
+        <div class="branch">
+          <div class="branch-title">🛠️ 解离技巧（DEFLATE）</div>
+          <div class="leaf">D：想法归类（这只是大脑在说话）</div>
+          <div class="leaf">E：唱歌说出来（荒谬化想法）</div>
+          <div class="leaf">F：给它打分（与想法保持距离）</div>
+          <div class="leaf">L：谢谢你大脑（温柔拒绝）</div>
+          <div class="leaf">A：叫它名字（"焦虑先生又来了"）</div>
+          <div class="leaf">T：拿它写诗（玩转文字）</div>
+          <div class="leaf">E：电脑屏幕比喻（想法是屏幕上的字）</div>
+        </div>
+        <div class="branch">
+          <div class="branch-title">🌱 接纳 vs 放弃</div>
+          <div class="leaf">接纳≠认命：接纳"我有痛苦"，而非"我活该痛苦"</div>
+          <div class="leaf">接纳是主动选择：愿意体验痛苦以追求价值</div>
+          <div class="leaf">"快乐"和"有意义"是两条不同的路</div>
+          <div class="leaf">真正幸福的人不是没有痛苦，而是有方向</div>
+        </div>
+        <div class="branch">
+          <div class="branch-title">🧭 价值观与行动</div>
+          <div class="leaf">价值是"想成为什么样的人"，目标是"做什么"</div>
+          <div class="leaf">价值不可达成，只可活出来</div>
+          <div class="leaf">承诺行动=无论感觉如何都按价值前行</div>
+          <div class="leaf">每天问：今天我按价值活了吗？</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 核心框架 -->
+  <div class="section">
+    <div class="section-title">📐 六大核心框架</div>
+    <div class="framework">
+      <h3>ACT 接纳承诺疗法：心理灵活性的六大支柱</h3>
+      <div class="framework-item">
+        <div class="icon">🌊</div>
+        <div><div class="label">接纳（Acceptance）：与痛苦共处</div><div class="desc">痛苦是人生不可分割的一部分。接纳不是认命、不是喜欢、不是忍受，而是主动"愿意"体验痛苦以追求真正重要的东西。当你不再为"我不能再痛苦"而挣扎时，痛苦反而失去了控制你的力量。</div></div>
+      </div>
+      <div class="framework-item">
+        <div class="icon">💭</div>
+        <div><div class="label">认知解离（Cognitive Defusion）：跳出想法的牢笼</div><div class="desc">你不是你的想法。想法只是大脑产生的语言和图像，不等于事实。认知解离就是学会"看见"想法而非"陷入"想法。当一个想法来临时，你能说"我注意到我有一个想法——我不够好"，而非"我真的不够好"。</div></div>
+      </div>
+      <div class="framework-item">
+        <div class="icon">⏰</div>
+        <div><div class="label">关注当下（Present Moment Awareness）：锚定此刻</div><div class="desc">痛苦很大一部分来自对过去的反刍和对未来的焦虑。关注当下就是把注意力温柔地拉回此刻——你正在做的、看到的、听到的、感觉到的。当你的脚真正踩在地面上，过去和未来就不再是牢笼。</div></div>
+      </div>
+      <div class="framework-item">
+        <div class="icon">🪞</div>
+        <div><div class="label">自我观察（Self-as-Context）：观察者视角</div><div class="desc">你不是你的想法、情绪、身体、角色、过去。你是那个能"看着这一切"的空间——观察者自我。无论你经历什么，核心的"你"永远完整、不变、不会破碎。理解这一点，痛苦就只是云飘过天空。</div></div>
+      </div>
+      <div class="framework-item">
+        <div class="icon">🧭</div>
+        <div><div class="label">价值澄清（Values）：找到你的方向</div><div class="desc">价值不是目标，而是你"想成为什么样的人"、"想活出什么样的生命"。价值在你心中，不在终点站。一旦清晰，你的每一天都成为"按价值而活"的练习，而非"达成某个目标后再说"。</div></div>
+      </div>
+      <div class="framework-item">
+        <div class="icon">🚀</div>
+        <div><div class="label">承诺行动（Committed Action）：迈出有效步伐</div><div class="desc">心理灵活性的最终体现：无论感觉如何，仍然按价值行动。承诺行动不是"感觉好了再做"，而是"带着痛苦仍去做"。今天就迈出一小步，让你的行动和你的价值对齐。</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 主要知识点 -->
+  <div class="section">
+    <div class="section-title">📚 主要知识点</div>
+    <div class="knowledge-grid">
+      <div class="knowledge-item">
+        <h4>1. 大脑的"消极偏见"是正常的</h4>
+        <p>研究显示：人类每天会产生大约 60000 个想法，其中约 80% 是消极的。这不是你的错，这是大脑为了生存进化出来的机制。它原本是为了让我们避开危险，但在现代社会，它变成了"焦虑机器"。理解这一点是走出陷阱的第一步：<strong>消极想法不等于现实，更不等于你的本质</strong>。</p>
+      </div>
+      <div class="knowledge-item">
+        <h4>2. 幸福陷阱的4大错误信念</h4>
+        <p>Russ Harris 总结了让我们掉入陷阱的4个核心信念：(1) 幸福是人类的常态；(2) 不幸福说明我有问题；(3) 为了幸福我必须消除负面情绪；(4) 我应该能控制自己的想法。这4个信念让我们越是追求幸福，越是陷入自我批评和挫败感。</p>
+      </div>
+      <div class="knowledge-item">
+        <h4>3. "挣扎开关"模型</h4>
+        <p>痛苦是人生的一个常数，但"挣扎"是可变量。想象你手掌里有一只蜘蛛：你越挣扎、越想甩开它，它抓得越紧、扎得越深——直到你停下来摊开手掌，它就自己走了。<strong>痛苦的本质不是痛苦本身，而是你与它的"挣扎"</strong>。停止挣扎，痛苦就只是痛苦。</p>
+      </div>
+      <div class="knowledge-item">
+        <h4>4. 接纳≠忍受≠喜欢</h4>
+        <p>"接纳"这个词经常被误解。它不是"认命"，不是"我喜欢痛苦"，不是"我忍受痛苦"——它是一种主动的"愿意"：我愿意体验这种痛苦以换取真正重要的东西。这种"愿意"不是软弱，而是最强大的勇气，因为它意味着你不再被痛苦控制。</p>
+      </div>
+      <div class="knowledge-item">
+        <h4>5. 价值 vs 目标</h4>
+        <p>目标是有终点的（如：结婚、升职、买房），价值是没有终点的（如：成为一个有爱的人、一个持续成长的人）。一旦你达成目标，它就不再是价值；价值是每天都可以"活出来"的方向。Russ Harris 强调：<strong>你无法"完成"价值，你只能每时每刻活出价值</strong>。</p>
+      </div>
+      <div class="knowledge-item">
+        <h4>6. 电脑屏幕隐喻：想法只是文字</h4>
+        <p>把大脑想象成一个屏幕：屏幕上的文字是想法、画面是记忆。文字来来去去，但屏幕本身永远完好无损。你痛苦时，可以想象那些伤害性的想法只是屏幕上的字——它们来来去去，但它们不是屏幕本身，也<strong>不是坐在屏幕前的你</strong>。看着它们、不与之争论、不服从它们的指令。</p>
+      </div>
+      <div class="knowledge-item">
+        <h4>7. 幸福的真正定义</h4>
+        <p>Russ Harris 重新定义了幸福：<strong>幸福不是一种持续的快乐状态，而是一种"心理灵活性"</strong>——你能在痛苦中仍然选择去爱、去工作、去连接、去创造。真正幸福的人不是没有痛苦的人，而是带着痛苦仍然在价值方向上前行的人。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 金句 -->
+  <div class="section">
+    <div class="section-title">✨ 金句摘录</div>
+    <div class="quotes-grid">
+      <div class="quote-card">
+        <p>痛苦是人生不可避免的一部分，但挣扎是可选择的。</p>
+        <div class="source">—— Russ Harris</div>
+      </div>
+      <div class="quote-card">
+        <p>你不是你的想法——你只是拥有想法的人。</p>
+        <div class="source">—— ACT 认知解离核心理念</div>
+      </div>
+      <div class="quote-card">
+        <p>越想感到幸福，就越难感到幸福。越想远离痛苦，痛苦就越紧追不舍。</p>
+        <div class="source">—— 幸福陷阱悖论</div>
+      </div>
+      <div class="quote-card">
+        <p>接纳并不意味着你喜欢痛苦，而是意味着你愿意体验它以换取更重要的东西。</p>
+        <div class="source">—— 关于接纳的本质</div>
+      </div>
+      <div class="quote-card">
+        <p>价值是心中的指南针，目标是你要走的路。没有指南针，走再远也到不了想去的地方。</p>
+        <div class="source">—— 价值与目标的区别</div>
+      </div>
+      <div class="quote-card">
+        <p>观察者永远不会被它所观察的事物摧毁。无论你内心发生什么，那个"看"着它的你，永远完整。</p>
+        <div class="source">—— 关于自我观察</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 行动建议 -->
+  <div class="section">
+    <div class="section-title">🎯 行动建议</div>
+    <div class="actions-list">
+      <div class="action-item">
+        <div class="action-num">1</div>
+        <div class="action-text"><strong>练习"想法归类"</strong>：每次出现一个消极想法时，温和地标注它——"这是'我不够好'的想法"或"这是'未来会失败'的想法"。把"我"和"想法"分开看，<strong>你不是想法本身，你只是想到了它</strong>。</div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">2</div>
+        <div class="action-text"><strong>5-10分钟正念呼吸</strong>：每天找一个安静时刻，闭眼关注呼吸。当思绪飘走时，温柔地把它拉回来。这不是要"清空大脑"，而是练习"看着思绪来去而不追随"。这就是<strong>关注当下</strong>的肌肉训练。</div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">3</div>
+        <div class="action-text"><strong>写下你的3个核心价值</strong>：不是"我想得到什么"，而是"我想成为什么样的人"。例如：爱、成长、贡献、勇气、连接、创造、好奇……写下来贴在显眼处，每天问自己："今天我按这些价值活了吗？"</div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">4</div>
+        <div class="action-text"><strong>"挣扎开关"实验</strong>：下次感到焦虑或痛苦时，主动问自己："我现在在和什么挣扎？"然后想象自己<strong>摊开手掌，让挣扎的冲动离开</strong>。看看焦虑的强度有没有变化——通常会下降。</div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">5</div>
+        <div class="action-text"><strong>用"唱歌"打破反刍循环</strong>：当你陷入同一个消极想法时，把它配上生日快乐歌的旋律唱出来。荒谬感会瞬间打破想法的"严肃性"——这是<strong>认知解离</strong>最有效的小技巧之一。</div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">6</div>
+        <div class="action-text"><strong>做一个"价值行动"</strong>：本周选一件能体现你核心价值的小事去做——给朋友写一封真诚的信、帮陌生人一个忙、读一本你一直想读的书。<strong>不为了"快乐"去做，只为"这就是我想成为的人"</strong>。感受价值在行动中显形。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    每日一学 · 2026年6月25日 · 第44天<br>
+    幸福的陷阱：越追求幸福 越远离幸福 · Russ Harris
+  </div>
+
+</div>
+</body>
+</html>
