@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 - 社会心理学</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --card-bg: #1e293b;
+    --text: #e2e8f0;
+    --text-secondary: #94a3b8;
+    --accent: #f59e0b;
+    --accent2: #8b5cf6;
+    --accent3: #10b981;
+    --accent4: #ec4899;
+    --border: #334155;
+    --tag-bg: #1e3a5f;
+    --tag-text: #7dd3fc;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    min-height: 100vh;
+    padding: 20px;
+  }
+  .container { max-width: 1000px; margin: 0 auto; }
+
+  .header {
+    text-align: center;
+    padding: 40px 20px 30px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 30px;
+  }
+  .header .date {
+    font-size: 14px; color: var(--text-secondary);
+    letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px;
+  }
+  .header h1 {
+    font-size: 36px; font-weight: 800;
+    background: linear-gradient(135deg, var(--accent), var(--accent3));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .header .subtitle {
+    font-size: 16px; color: var(--text-secondary); margin-top: 6px;
+  }
+
+  .core-insight {
+    background: linear-gradient(135deg, rgba(245,158,11,0.1), rgba(16,185,129,0.1));
+    border: 1px solid rgba(245,158,11,0.3);
+    border-radius: 16px; padding: 28px; margin-bottom: 30px;
+  }
+  .core-insight h2 {
+    font-size: 20px; color: var(--accent); margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .core-insight p { font-size: 15px; color: var(--text); line-height: 1.8; }
+
+  .section { margin-bottom: 28px; }
+  .section-title {
+    font-size: 18px; font-weight: 700; margin-bottom: 16px;
+    padding-left: 14px; border-left: 3px solid var(--accent3);
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  .framework {
+    background: var(--card-bg); border-radius: 12px; padding: 24px;
+    margin-bottom: 16px; border: 1px solid var(--border);
+  }
+  .framework h3 {
+    font-size: 16px; color: var(--accent3); margin-bottom: 12px;
+  }
+  .framework-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 10px 0; border-bottom: 1px solid rgba(51,65,85,0.5);
+  }
+  .framework-item:last-child { border-bottom: none; }
+  .framework-item .icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+  .framework-item .label { font-weight: 600; color: var(--text); font-size: 14px; }
+  .framework-item .desc { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
+
+  .mind-map {
+    background: var(--card-bg); border-radius: 16px; padding: 30px;
+    border: 1px solid var(--border); margin-bottom: 16px;
+    position: relative; overflow: hidden;
+  }
+  .mind-map::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent3), var(--accent2), var(--accent4));
+  }
+
+  .center-node {
+    background: linear-gradient(135deg, var(--accent), var(--accent3));
+    color: white; text-align: center; padding: 16px 28px;
+    border-radius: 50px; font-size: 18px; font-weight: 700;
+    margin: 0 auto 30px; display: inline-block;
+    max-width: 90%; position: relative; left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .branches { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .branch {
+    background: rgba(30,41,59,0.8); border-radius: 12px; padding: 18px;
+    border: 1px solid var(--border); transition: transform 0.2s;
+  }
+  .branch:hover { transform: translateY(-2px); }
+  .branch-title {
+    font-size: 15px; font-weight: 700; margin-bottom: 10px;
+    padding-bottom: 8px; border-bottom: 2px solid;
+  }
+  .branch:nth-child(1) .branch-title { border-color: var(--accent); color: var(--accent); }
+  .branch:nth-child(2) .branch-title { border-color: var(--accent3); color: var(--accent3); }
+  .branch:nth-child(3) .branch-title { border-color: var(--accent2); color: var(--accent2); }
+  .branch:nth-child(4) .branch-title { border-color: var(--accent4); color: var(--accent4); }
+  .branch:nth-child(5) .branch-title { border-color: var(--accent); color: var(--accent); }
+  .branch:nth-child(6) .branch-title { border-color: var(--accent3); color: var(--accent3); }
+  .branch:nth-child(7) .branch-title { border-color: var(--accent2); color: var(--accent2); }
+
+  .leaf {
+    font-size: 13px; color: var(--text-secondary);
+    padding: 4px 0 4px 16px; position: relative;
+  }
+  .leaf::before {
+    content: ''; position: absolute; left: 0; top: 12px;
+    width: 8px; height: 2px; background: var(--text-secondary);
+  }
+
+  .knowledge-grid {
+    display: grid; grid-template-columns: 1fr; gap: 12px;
+  }
+  .knowledge-item {
+    background: var(--card-bg); border-radius: 10px; padding: 18px 20px;
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent2);
+  }
+  .knowledge-item h4 {
+    font-size: 14px; color: var(--accent2); margin-bottom: 6px;
+  }
+  .knowledge-item p { font-size: 13px; color: var(--text-secondary); }
+
+  .quotes-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .quote-card {
+    background: var(--card-bg); border-radius: 10px; padding: 18px;
+    border: 1px solid var(--border); position: relative;
+  }
+  .quote-card::before {
+    content: '\201C'; position: absolute; top: 8px; left: 14px;
+    font-size: 32px; color: rgba(245,158,11,0.3); font-family: Georgia, serif;
+  }
+  .quote-card p { font-size: 13px; color: var(--text); padding-left: 8px; font-style: italic; }
+  .quote-card .source { font-size: 11px; color: var(--text-secondary); margin-top: 8px; text-align: right; }
+
+  .actions-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .action-item {
+    background: var(--card-bg); border-radius: 10px; padding: 16px;
+    border: 1px solid var(--border); display: flex; align-items: flex-start; gap: 10px;
+  }
+  .action-num {
+    background: linear-gradient(135deg, var(--accent), var(--accent3));
+    color: white; width: 24px; height: 24px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; flex-shrink: 0;
+  }
+  .action-text { font-size: 13px; color: var(--text); }
+  .action-text strong { color: var(--accent); }
+
+  .tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .tag {
+    background: var(--tag-bg); color: var(--tag-text);
+    padding: 4px 12px; border-radius: 20px; font-size: 12px;
+  }
+
+  .footer {
+    text-align: center; padding: 30px 0 20px;
+    border-top: 1px solid var(--border); margin-top: 30px;
+    color: var(--text-secondary); font-size: 13px;
+  }
+
+  @media (max-width: 600px) {
+    .branches, .quotes-grid, .actions-list { grid-template-columns: 1fr; }
+    .header h1 { font-size: 26px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="date">2026年6月27日</div>
+    <h1>社会心理学</h1>
+    <div class="subtitle">Social Psychology — 戴维·迈尔斯（David G. Myers）</div>
+    <div class="tag-row" style="justify-content:center; margin-top:12px;">
+      <span class="tag">社会思维</span>
+      <span class="tag">社会影响</span>
+      <span class="tag">社会关系</span>
+      <span class="tag">自我认知</span>
+    </div>
+  </div>
+
+  <!-- 核心洞见 -->
+  <div class="core-insight">
+    <h2>💡 核心洞见</h2>
+    <p>我们以为自己理性、独立、清醒，但<strong>社会心理学揭示了一个令人不安的真相：我们远比想象中更容易被情境和他人影响。</strong>戴维·迈尔斯的这部经典教科书，汇聚了过去一个世纪社会心理学的全部重大发现，回答了一个根本问题：<strong>社会情境如何塑造我们的思维、情感和行为？</strong>核心洞见是——<strong>人不是孤岛，我们的大脑是"社会脑"</strong>：我们的态度受行为影响而非先于行为、我们对他人行为的归因系统性地高估个人而低估情境、我们在群体中会做出独自绝不可能做的事、我们以为自己是"好人"所以会做好事——但更可能的是因为做了好事才觉得自己是"好人"。社会心理学的终极礼物是：<strong>当你理解了情境的力量，你就获得了挣脱无形社会枷锁的钥匙。</strong></p>
+  </div>
+
+  <!-- 思维导图 -->
+  <div class="section">
+    <div class="section-title">🗺️ 全书思维导图</div>
+    <div class="mind-map">
+      <div class="center-node">社会心理学 · 在情境中理解人</div>
+      <div class="branches">
+        <div class="branch">
+          <div class="branch-title">🧠 社会思维：我们如何认知自己和他人</div>
+          <div class="leaf">自我概念：我是谁——自我图式、社会比较、文化塑造</div>
+          <div class="leaf">自我服务偏差：把成功归因于自己，失败归因于环境</div>
+          <div class="leaf">归因理论：我们如何解释他人行为</div>
+          <div class="leaf">基本归因错误：高估个人因素，低估情境因素</div>
+          <div class="leaf">态度与行为：行为常常先于态度——"做了才信"</div>
+        </div>
+        <div class="branch">
+          <div class="branch-title">🌊 社会影响：他人如何塑造我们</div>
+          <div class="leaf">从众：阿什实验——在明确的物理现实中屈从于群体判断</div>
+          <div class="leaf">服从：米尔格拉姆实验——普通人也可以在权威命令下施加致命电击</div>
+          <div class="leaf">说服：中心路径（理性）vs 外周路径（感性）</div>
+          <div class="leaf">群体影响：社会助长、社会懈怠、去个体化</div>
+          <div class="leaf">群体极化：群体讨论让观点变得更极端</div>
+          <div class="leaf">群体思维：追求共识压倒了对备选方案的审慎评估</div>
+        </div>
+        <div class="branch">
+          <div class="branch-title">❤️ 社会关系：偏见、攻击与吸引</div>
+          <div class="leaf">偏见的根源：社会不平等、内群体偏差、刻板印象威胁</div>
+          <div class="leaf">攻击的来源：挫折-攻击假说、社会学习、媒体暴力</div>
+          <div class="leaf">吸引法则：接近性、相似性、互惠性、外貌吸引力</div>
+          <div class="leaf">爱与亲密：激情之爱 vs 伴侣之爱、依恋理论</div>
+          <div class="leaf">利他主义：旁观者效应——人越多，越可能没人帮忙</div>
+          <div class="leaf">冲突与和解：囚徒困境、共同目标（超级目标）消解敌意</div>
+        </div>
+        <div class="branch">
+          <div class="branch-title">🪞 认知失调：当行为与信念冲突时</div>
+          <div class="leaf">费斯廷格提出：当态度和行为不一致时，会产生不适感</div>
+          <div class="leaf">解决方式：改变行为，或改变态度（后者更常见）</div>
+          <div class="leaf">理由不足效应：外部理由越少，越倾向于内心合理化为"我本来就愿意"</div>
+          <div class="leaf">决策后失调：做出选择后会夸大所选的优势、贬低未选的</div>
+          <div class="leaf">努力正当化：为某个目标付出越多，越觉得它有价值</div>
+        </div>
+        <div class="branch">
+          <div class="branch-title">🔄 自我实现的预言与信念的力量</div>
+          <div class="leaf">信念会创造现实：老师认为某个学生更聪明→更多关注→真的更优秀</div>
+          <div class="leaf">行为确认：我们对他人的预期会引导他们的行为符合预期</div>
+          <div class="leaf">刻板印象威胁：担心"印证负面刻板印象"这件事本身就会影响表现</div>
+          <div class="leaf">控制点：内部控制点强的人更成功、更健康、更幸福</div>
+          <div class="leaf">习得性无助：反复失败后放弃努力——这是"学来的"</div>
+        </div>
+        <div class="branch">
+          <div class="branch-title">🔬 社会心理学研究方法</div>
+          <div class="leaf">相关研究：揭示变量间的关联，但不能确定因果关系</div>
+          <div class="leaf">实验研究：控制变量，随机分配，确定因果</div>
+          <div class="leaf">现场研究：在真实世界中检验理论</div>
+          <div class="leaf">事后聪明偏差："我早就知道"——知道结果后高估自己的预测能力</div>
+          <div class="leaf">理论 vs 常识：社会心理学的价值在于用数据检验"常识"</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 核心框架 -->
+  <div class="section">
+    <div class="section-title">📐 核心框架：社会心理学四大领域</div>
+    <div class="framework">
+      <h3>理解人类行为和社会互动的四大支柱</h3>
+      <div class="framework-item">
+        <div class="icon">🧠</div>
+        <div><div class="label">社会思维（Social Thinking）：我们如何知觉自我与他人</div><div class="desc">包含自我概念、自尊、自我服务偏差、社会信念与判断、态度与行为的关系。核心发现：我们并不如自己想象的那样了解自己——我们的态度常常跟随行为，而非引导行为；我们对自己行为的归因充满偏见，对他人行为的归因同样充满偏见。理解社会思维就是理解"我们为什么这样想"的底层逻辑。</div></div>
+      </div>
+      <div class="framework-item">
+        <div class="icon">🌊</div>
+        <div><div class="label">社会影响（Social Influence）：文化与从众的压力</div><div class="desc">包含从众、服从、说服、群体影响。核心发现：情境的力量远超我们的直觉——斯坦福监狱实验、米尔格拉姆电击实验、阿什线条实验反复证明，普通人在特定情境压力下可以做出极其偏离常态的行为。这些力量不是"邪恶者的专属"，而是每个人——包括你和我——都无法免疫的。理解社会影响就是理解"我们为什么这样做"的情境机制。</div></div>
+      </div>
+      <div class="framework-item">
+        <div class="icon">❤️</div>
+        <div><div class="label">社会关系（Social Relations）：偏见、攻击、吸引与利他</div><div class="desc">包含偏见与歧视、攻击性行为、吸引力与亲密关系、利他主义与亲社会行为、冲突与和解。核心发现：爱与恨、助人与伤害，这些最深刻的人类行为都有其社会心理机制——旁观者效应、单纯曝光效应、内群体偏差、挫折-攻击假说。理解社会关系就是理解"我们之间发生了什么"的互动规律。</div></div>
+      </div>
+      <div class="framework-item">
+        <div class="icon">🔬</div>
+        <div><div class="label">社会心理学应用（Applications）：从理论到生活</div><div class="desc">社会心理学不只是实验室里的发现，它同样深刻地应用于临床治疗（归因风格与抑郁）、司法领域（目击者证词的不可靠性）、健康行为（社会支持对健康的影响）、环保行为（如何说服人们做出可持续选择）等。理解社会心理学的应用就是理解"学这些有什么用"的实践答案。</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 主要知识点 -->
+  <div class="section">
+    <div class="section-title">📚 主要知识点</div>
+    <div class="knowledge-grid">
+      <div class="knowledge-item">
+        <h4>1. 基本归因错误（Fundamental Attribution Error）</h4>
+        <p>当我们观察他人的行为时，我们系统性地<strong>高估人格因素、低估情境因素</strong>。别人迟到了——"他真不靠谱"（人格归因）；我迟到了——"今天路太堵了"（情境归因）。反之，当我们从自己的视角看世界时，情境是全部可见的；而从别人的视角看，我们只看见行为本身。这就是为什么理解一个人远比看起来复杂。</p>
+      </div>
+      <div class="knowledge-item">
+        <h4>2. 认知失调理论（Cognitive Dissonance）</h4>
+        <p>列昂·费斯廷格的这一理论被称为"社会心理学最伟大的理论之一"。当我们的态度和行为冲突时，我们感到不适，于是会主动调整——而且<strong>调整态度比调整行为容易得多</strong>。经典的"1美元vs20美元"实验证明：当外部理由薄弱（只给1美元就说了违心的话）时，人们反而更倾向于改变内心态度（"其实我说的也没那么违心"），因为需要为行为找到合理化解释。</p>
+      </div>
+      <div class="knowledge-item">
+        <h4>3. 米尔格拉姆服从实验的震撼启示</h4>
+        <p>1963年，米尔格拉姆让"老师"对"学生"施加电击惩罚（实际上是演员）。65%的参与者在一名穿白大褂的权威人士的平静指示下，施加了致命电压。这个发现震惊世界：<strong>服从权威不是少数邪恶者的特征，而是普通人的正常反应。</strong>当责任被"转移"给权威、受害者被"去人性化"、行动从小的请求逐步升级，任何人都可能跨越道德的边界。</p>
+      </div>
+      <div class="knowledge-item">
+        <h4>4. 旁观者效应（Bystander Effect）</h4>
+        <p>1964年Kitty Genovese谋杀案推动了这一研究：<strong>目击者越多，每个人提供帮助的可能性反而越低。</strong>这不是冷漠，而是"责任扩散"——每个人都以为"别人会做的"。此外还有"评价恐惧"：害怕自己帮得不对而出丑。理解旁观者效应后，你可以反其道而行之：如果需要帮助，指定一个人（"穿红衣服的你，请帮我打120"），而非向人群呼救。</p>
+      </div>
+      <div class="knowledge-item">
+        <h4>5. 自我服务偏差（Self-Serving Bias）</h4>
+        <p>我们倾向于把成功归因于自己的能力和努力，把失败归因于外部环境和坏运气。考试考好了——"我聪明"；考砸了——"题目太偏"。这种偏差保护了自尊，但也阻碍了从失败中学习。<strong>承认"我可能错了"是心理成熟的标志。</strong>迈尔斯指出，适度乐观的幻觉对心理健康有益，但过度自我服务会损害人际关系和决策质量。</p>
+      </div>
+      <div class="knowledge-item">
+        <h4>6. 群体极化与群体思维</h4>
+        <p>当志同道合的人聚在一起讨论，他们的观点不是趋向中庸，而是<strong>变得更极端</strong>——这就是群体极化。而群体思维（Groupthink）是指追求一致的压力使群体无法批判性地评估备选方案——猪湾入侵、挑战者号爆炸都与此有关。破解之道：指定"唱反调者"、领导者不在讨论开始表态、分组独立讨论。</p>
+      </div>
+      <div class="knowledge-item">
+        <h4>7. 幸福的社会心理学</h4>
+        <p>什么让人幸福？研究给出了明确的答案：<strong>不是金钱（超过基本需求后）、不是教育程度、不是年轻貌美，而是亲密的人际关系、有意义的工作与目标、以及一种"内部控制点"的感觉</strong>——感到自己对生活有掌控权。社会心理学还发现了"适应水平现象"：无论获得多大的好事（中彩票）或坏事（瘫痪），人们都会逐渐适应并回到基线幸福水平。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 金句 -->
+  <div class="section">
+    <div class="section-title">💬 金句精选</div>
+    <div class="quotes-grid">
+      <div class="quote-card">
+        <p>没有什么比一个好的理论更加实用。</p>
+        <div class="source">—— 库尔特·勒温（Kurt Lewin）</div>
+      </div>
+      <div class="quote-card">
+        <p>我们最珍贵的自由，是在刺激与反应之间的那个空隙中，我们有选择如何回应的自由。</p>
+        <div class="source">—— 维克多·弗兰克尔，被迈尔斯在书中引用</div>
+      </div>
+      <div class="quote-card">
+        <p>人不是被事情本身所困扰，而是被他们对事情的看法所困扰。</p>
+        <div class="source">—— 爱比克泰德，社会心理学核心理念</div>
+      </div>
+      <div class="quote-card">
+        <p>与其说人是理性的动物，不如说人是寻求合理化的动物。</p>
+        <div class="source">—— 认知失调理论的精髓概括</div>
+      </div>
+      <div class="quote-card">
+        <p>态度如同一件外衣，穿上它是为了给内心的行为一个体面的解释。</p>
+        <div class="source">—— 行为塑造态度的社会心理学洞察</div>
+      </div>
+      <div class="quote-card">
+        <p>情境的力量足以让好人做坏事，也让坏人做好事。</p>
+        <div class="source">—— 社会心理学最核心的教训</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 行动建议 -->
+  <div class="section">
+    <div class="section-title">🎯 行动建议</div>
+    <div class="actions-list">
+      <div class="action-item">
+        <div class="action-num">1</div>
+        <div class="action-text"><strong>练习情境归因：</strong>当你想对别人的行为下"人品"判断时，暂停一下，列出至少3个可能的情境解释。你会发现世界比你想象的更复杂，也更有善意。</div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">2</div>
+        <div class="action-text"><strong>主动认知失调觉察：</strong>当你为某个决定找出一堆理由时，问自己："我是真的相信这个决定好，还是在为自己的行为找合理化解释？"诚实回答，你就赢了一半。</div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">3</div>
+        <div class="action-text"><strong>打破旁观者效应：</strong>需要帮助时，不要对人群喊话，指定一个人——"穿蓝色衣服的你，请帮我打120"。这样做能让责任从分散变为聚焦，大大提高获助概率。</div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">4</div>
+        <div class="action-text"><strong>设计防从众"防火墙"：</strong>在做重要决策前，先独立写下自己的判断，再参与群体讨论。这能减少信息性从众——让你在讨论前先拥有一个"锚点"。</div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">5</div>
+        <div class="action-text"><strong>警惕群体思维：</strong>如果你是团队的领导者，永远最后一个发表意见。主动邀请不同的、甚至反对的观点，创造一个"唱反调是受欢迎的"的团队文化。</div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">6</div>
+        <div class="action-text"><strong>投资人际关系：</strong>社会心理学最清晰的发现之一是——幸福的核心是关系质量。每天做一件小事强化一段关系：一条温暖的微信、一次用心的倾听、一个具体的赞美。</div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">7</div>
+        <div class="action-text"><strong>用行为塑造态度：</strong>不想去健身房？先穿上运动鞋走出门。态度会跟随行为而改变——做了才会想，而不是想了才去做。这是认知失调理论给我们的最实用工具。</div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">8</div>
+        <div class="action-text"><strong>培养内部控制点：</strong>每天写下3件你主动选择并完成的事情（而非被动发生的）。这会强化"我对生活有掌控"的感觉，而控制点是预测幸福、健康和成功的强大因子。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>📖 每日一学 · 2026年6月27日 · 《社会心理学》戴维·迈尔斯</p>
+    <p style="margin-top:6px;">理解情境，就是理解人性；理解人性，就是理解自己。</p>
+  </div>
+
+</div>
+</body>
+</html>
