@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 - 枪炮、病菌与钢铁</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --card-bg: #1e293b;
+    --text: #e2e8f0;
+    --text-secondary: #94a3b8;
+    --accent: #f59e0b;
+    --accent2: #8b5cf6;
+    --accent3: #10b981;
+    --accent4: #ec4899;
+    --border: #334155;
+    --tag-bg: #1e3a5f;
+    --tag-text: #7dd3fc;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    min-height: 100vh;
+    padding: 20px;
+  }
+  .container { max-width: 1000px; margin: 0 auto; }
+
+  .header {
+    text-align: center;
+    padding: 40px 20px 30px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 30px;
+  }
+  .header .date {
+    font-size: 14px; color: var(--text-secondary);
+    letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px;
+  }
+  .header h1 {
+    font-size: 36px; font-weight: 800;
+    background: linear-gradient(135deg, var(--accent), var(--accent3));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .header .subtitle {
+    font-size: 16px; color: var(--text-secondary); margin-top: 6px;
+  }
+
+  .core-insight {
+    background: linear-gradient(135deg, rgba(245,158,11,0.1), rgba(16,185,129,0.1));
+    border: 1px solid rgba(245,158,11,0.3);
+    border-radius: 16px; padding: 28px; margin-bottom: 30px;
+  }
+  .core-insight h2 {
+    font-size: 20px; color: var(--accent); margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .core-insight p { font-size: 15px; color: var(--text); line-height: 1.8; }
+
+  .section { margin-bottom: 28px; }
+  .section-title {
+    font-size: 18px; font-weight: 700; margin-bottom: 16px;
+    padding-left: 14px; border-left: 3px solid var(--accent3);
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  .framework {
+    background: var(--card-bg); border-radius: 12px; padding: 24px;
+    margin-bottom: 16px; border: 1px solid var(--border);
+  }
+  .framework h3 {
+    font-size: 16px; color: var(--accent3); margin-bottom: 12px;
+  }
+  .framework-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 10px 0; border-bottom: 1px solid rgba(51,65,85,0.5);
+  }
+  .framework-item:last-child { border-bottom: none; }
+  .framework-item .icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+  .framework-item .label { font-weight: 600; color: var(--text); font-size: 14px; }
+  .framework-item .desc { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
+
+  .mind-map {
+    background: var(--card-bg); border-radius: 16px; padding: 30px;
+    border: 1px solid var(--border); margin-bottom: 16px;
+    position: relative; overflow: hidden;
+  }
+  .mind-map::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent3), var(--accent2), var(--accent4));
+  }
+
+  .center-node {
+    background: linear-gradient(135deg, var(--accent), var(--accent3));
+    color: white; text-align: center; padding: 16px 28px;
+    border-radius: 50px; font-size: 18px; font-weight: 700;
+    margin: 0 auto 30px; display: inline-block;
+    max-width: 90%; position: relative; left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .branches { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .branch {
+    background: rgba(30,41,59,0.8); border-radius: 12px; padding: 18px;
+    border: 1px solid var(--border); transition: transform 0.2s;
+  }
+  .branch:hover { transform: translateY(-2px); }
+  .branch-title {
+    font-size: 15px; font-weight: 700; margin-bottom: 10px;
+    padding-bottom: 8px; border-bottom: 2px solid;
+  }
+  .branch:nth-child(1) .branch-title { border-color: var(--accent); color: var(--accent); }
+  .branch:nth-child(2) .branch-title { border-color: var(--accent3); color: var(--accent3); }
+  .branch:nth-child(3) .branch-title { border-color: var(--accent2); color: var(--accent2); }
+  .branch:nth-child(4) .branch-title { border-color: var(--accent4); color: var(--accent4); }
+  .branch:nth-child(5) .branch-title { border-color: var(--accent); color: var(--accent); }
+  .branch:nth-child(6) .branch-title { border-color: var(--accent3); color: var(--accent3); }
+  .branch:nth-child(7) .branch-title { border-color: var(--accent2); color: var(--accent2); }
+
+  .leaf {
+    font-size: 13px; color: var(--text-secondary);
+    padding: 4px 0 4px 16px; position: relative;
+  }
+  .leaf::before {
+    content: ''; position: absolute; left: 0; top: 12px;
+    width: 8px; height: 2px; background: var(--text-secondary);
+  }
+
+  .knowledge-grid {
+    display: grid; grid-template-columns: 1fr; gap: 12px;
+  }
+  .knowledge-item {
+    background: var(--card-bg); border-radius: 10px; padding: 18px 20px;
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent2);
+  }
+  .knowledge-item h4 {
+    font-size: 14px; color: var(--accent2); margin-bottom: 6px;
+  }
+  .knowledge-item p { font-size: 13px; color: var(--text-secondary); }
+
+  .quotes-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .quote-card {
+    background: var(--card-bg); border-radius: 10px; padding: 18px;
+    border: 1px solid var(--border); position: relative;
+  }
+  .quote-card::before {
+    content: '\201C'; position: absolute; top: 8px; left: 14px;
+    font-size: 32px; color: rgba(245,158,11,0.3); font-family: Georgia, serif;
+  }
+  .quote-card p { font-size: 13px; color: var(--text); padding-left: 8px; font-style: italic; }
+  .quote-card .source { font-size: 11px; color: var(--text-secondary); margin-top: 8px; text-align: right; }
+
+  .actions-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .action-item {
+    background: var(--card-bg); border-radius: 10px; padding: 16px;
+    border: 1px solid var(--border); display: flex; align-items: flex-start; gap: 10px;
+  }
+  .action-num {
+    background: linear-gradient(135deg, var(--accent), var(--accent3));
+    color: white; width: 24px; height: 24px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; flex-shrink: 0;
+  }
+  .action-text { font-size: 13px; color: var(--text); }
+  .action-text strong { color: var(--accent); }
+
+  .tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .tag {
+    background: var(--tag-bg); color: var(--tag-text);
+    padding: 4px 12px; border-radius: 20px; font-size: 12px;
+  }
+
+  .footer {
+    text-align: center; padding: 30px 0 20px;
+    border-top: 1px solid var(--border); margin-top: 30px;
+    color: var(--text-secondary); font-size: 13px;
+  }
+
+  @media (max-width: 600px) {
+    .branches, .quotes-grid, .actions-list { grid-template-columns: 1fr; }
+    .header h1 { font-size: 26px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="date">2026年6月28日</div>
+    <h1>枪炮、病菌与钢铁</h1>
+    <div class="subtitle">Guns, Germs, and Steel — 贾雷德·戴蒙德（Jared Diamond）</div>
+    <div class="tag-row" style="justify-content:center; margin-top:12px;">
+      <span class="tag">人类史</span>
+      <span class="tag">文明差异</span>
+      <span class="tag">地理决定论</span>
+      <span class="tag">底层逻辑</span>
+    </div>
+  </div>
+
+  <!-- 核心洞见 -->
+  <div class="core-insight">
+    <h2>💡 核心洞见</h2>
+    <p>1997年，一个叫亚力的新几内亚人向戴蒙德抛出了一个简单却致命的问题：<strong>"为什么你们白人制造了那么多货物送到我们新几内亚，而我们黑人几乎没有为自己制造过任何货物？"</strong>这个问题困扰了戴蒙德 30 年，最终凝结成这本普利策奖巨著。戴蒙德的回答是——<strong>这不是人种之间的智力差异，而是大陆轴线方向、可驯化动植物的分布、病菌的演化路径，这些"地理禀赋"在 13000 年前就决定了谁会拥有枪炮、病菌和钢铁。</strong>核心洞见有三：第一，各大陆文明发展的差异，<strong>根因在地理与生态，不在人种本身</strong>；第二，<strong>农业的出现是文明分水岭</strong>，而农业能否出现，取决于当地有没有合适的野生动植物；第三，<strong>病菌是欧洲征服美洲的秘密武器</strong>——95% 的印第安人死于天花和麻疹，而非死于刀剑。这本书给人的最大启发是：<strong>用"终极原因"和"近因"的区别看问题，看清哪些是"因为 A 所以 B"（近因），哪些是"为什么会有 A"（终极原因）——这才是深度思考的真正入口。</strong></p>
+  </div>
+
+  <!-- 思维导图 -->
+  <div class="section">
+    <div class="section-title">🗺️ 全书思维导图</div>
+    <div class="mind-map">
+      <div class="center-node">枪炮、病菌与钢铁 · 理解文明差异的底层逻辑</div>
+      <div class="branches">
+        <div class="branch">
+          <div class="branch-title">🌍 亚力之问：为什么是欧亚大陆？</div>
+          <div class="leaf">1972 年新几内亚政治家亚力在海滩的提问</div>
+          <div class="leaf">戴蒙德的 30 年求索：从生物学、历史、地理寻求答案</div>
+          <div class="leaf">白人 ≠ 智力优势；地理禀赋才是决定性变量</div>
+          <div class="leaf">反驳种族主义解释：智商测试的跨文化可比性存疑</div>
+          <div class="leaf">核心方法论：终极原因 vs 近因</div>
+        </div>
+        <div class="branch">
+          <div class="branch-title">🌾 农业起源：文明的真正起点</div>
+          <div class="leaf">为什么是农业而不是狩猎采集？——人口压力 + 食物生产效率</div>
+          <div class="leaf">新月沃地、中国、墨西哥等八大农业起源中心</div>
+          <div class="leaf">"安娜·卡列尼娜原则"：可驯化的动植物必须满足六大条件</div>
+          <div class="leaf">大型哺乳动物：欧亚大陆 13 种，美洲 1 种，澳洲 0 种</div>
+          <div class="leaf">粮食剩余 → 城市 → 文字 → 国家 → 军队</div>
+          <div class="leaf">农业是"对人类的诅咒"：劳作更辛苦、饮食更单调、疾病更易传播</div>
+        </div>
+        <div class="branch">
+          <div class="branch-title">🦠 病菌：被忽视的征服者</div>
+          <div class="leaf">天花、麻疹、流感、疟疾——从动物传染病演化而来</div>
+          <div class="leaf">农业让人类与牲畜长期接触 = 病菌的天然培养皿</div>
+          <div class="leaf">欧亚大陆的稠密人口 + 牲畜多样性 = 病菌的"练兵场"</div>
+          <div class="leaf">美洲、澳洲原住民缺乏演化抵抗力，遭遇毁灭性打击</div>
+          <div class="leaf">哥伦布交换：旧大陆的病菌带走了新大陆 95% 的人口</div>
+          <div class="leaf">不是枪炮，而是病菌——这是欧洲征服美洲的关键</div>
+        </div>
+        <div class="branch">
+          <div class="branch-title">🧭 大陆轴线：被忽略的几何学</div>
+          <div class="leaf">欧亚大陆是东西向轴线：同纬度作物可横向扩散</div>
+          <div class="leaf">美洲、非洲是南北向轴线：作物难以跨越气候带</div>
+          <div class="leaf">结果：欧亚的农业、文字、技术、车轮传播更快更远</div>
+          <div class="leaf">相同纬度的相似气候，意味着作物不需要重新驯化</div>
+          <div class="leaf">一个"大陆的命运"很大程度上被它的主轴方向锁死</div>
+        </div>
+        <div class="branch">
+          <div class="branch-title">✍️ 文字与科技：信息载体的胜利</div>
+          <div class="leaf">文字最初只用于记账（美索不达米亚的泥板）</div>
+          <div class="leaf">中国独立发明文字系统——因农业与国家治理需要</div>
+          <div class="leaf">从口语到文字 = 知识的可积累、可传递、可纠错</div>
+          <div class="leaf">科技不是"天才的偶然发明"，而是"若干代人的累积"</div>
+          <div class="leaf">欧亚先发 → 人口更多 → 发明者更多 → 累积更快</div>
+          <div class="leaf">发明 ≠ 采纳，邻近社会之间的技术传播是关键</div>
+        </div>
+        <div class="branch">
+          <div class="branch-title">🏛️ 国家与社会：组织的力量</div>
+          <div class="leaf">中央集权 vs 部落制：前者更利于战争和大规模工程</div>
+          <div class="leaf">西班牙征服印加帝国：168 人 vs 600 万的悬殊对比</div>
+          <div class="leaf">中央集权根源于农业剩余的集中管理需要</div>
+          <div class="leaf">瘟疫、人口崩溃 → 中央权力真空 → 难以抵抗入侵</div>
+          <div class="leaf">宗教与意识形态：人类群体合作规模的扩展器</div>
+        </div>
+        <div class="branch">
+          <div class="branch-title">🔬 戴蒙德的方法论启示</div>
+          <div class="leaf">历史学 + 地理学 + 生物学 + 人类学的跨学科融合</div>
+          <div class="leaf">"终极原因"思维：不停在"为什么"上追问 5 个层次</div>
+          <div class="leaf">比较研究法：把不同大陆当作"自然实验"对照</div>
+          <div class="leaf">反常识叙事：拒绝把"成功"归因于种族或文化优越</div>
+          <div class="leaf">结构性的解释 > 戏剧性的解释：长时段、深层次的因果</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 核心框架 -->
+  <div class="section">
+    <div class="section-title">📐 核心框架：文明差异的因果链</div>
+    <div class="framework">
+      <h3>从地理到国家——戴蒙德的因果链条</h3>
+      <div class="framework-item">
+        <div class="icon">🌍</div>
+        <div><div class="label">第一环：大陆禀赋（地理 + 生物地理）</div><div class="desc">大陆轴线方向、气候带的多样性、野生动植物的"可驯化潜力"，这些在冰河时期结束后就已经基本确定。新月沃地之所以成为农业摇篮，是因为那里聚集了最多的野生小麦、大麦、绵羊、山羊；美洲则缺乏可驯化的大型哺乳动物。这是最深层的"终极原因"。</div></div>
+      </div>
+      <div class="framework-item">
+        <div class="icon">🌾</div>
+        <div><div class="label">第二环：粮食生产（农业出现）</div><div class="desc">农业的出现是文明分水岭。它让少数人生产出养活多数人的食物，让"专业化"成为可能——工匠、士兵、祭司、官僚从此可以脱离田间劳作。可驯化的动植物越多、越多样，农业就越早独立出现并向周围扩散。</div></div>
+      </div>
+      <div class="framework-item">
+        <div class="icon">🦠</div>
+        <div><div class="label">第三环：病菌演化（致命的副产品）</div><div class="desc">农业把人与牲畜拴在了一起，给了病菌跳跃到人体的机会。欧亚大陆因为驯养牲畜最多最密，人口也最稠密，病菌演化得最凶猛。欧洲人带着这些"老朋友"来到美洲，95% 的原住民死于他们从未见过的疾病。这不是天意，是生态学的必然。</div></div>
+      </div>
+      <div class="framework-item">
+        <div class="icon">🔤</div>
+        <div><div class="label">第四环：技术、文字、中央集权（文明的果实）</div><div class="desc">粮食剩余 → 文字（记账与治理）→ 金属冶炼（农业与战争需要）→ 中央集权国家（管理大规模人口）→ 专业化军队（抵抗入侵或发动征服）。这是一个正反馈循环：粮食越多 → 人口越多 → 病菌越多 → 国家越强 → 技术越先进。</div></div>
+      </div>
+      <div class="framework-item">
+        <div class="icon">⚔️</div>
+        <div><div class="label">第五环：征服与全球化（历史的近因）</div><div class="desc">当所有前四环的积累完成，欧亚大陆手持枪炮、披着对病菌的免疫力、向美洲和澳洲发动征服。戴蒙德把这种"近因"——具体的历史事件、政治决策——和"终极原因"——地理禀赋、生物多样性——明确区分开来。理解二者，胜过读十本历史教科书。</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 主要知识点 -->
+  <div class="section">
+    <div class="section-title">📚 主要知识点</div>
+    <div class="knowledge-grid">
+      <div class="knowledge-item">
+        <h4>1. "安娜·卡列尼娜原则"与可驯化动植物</h4>
+        <p>戴蒙德借托尔斯泰的话来概括驯化条件：<strong>"幸福的动植物驯化都是相似的，不幸的各有各的不幸。"</strong>一种动植物要被驯化，必须同时满足六大条件：营养价值高、生长速度快、繁殖周期短、温顺不具攻击性、不易受惊逃逸、社交结构有等级便于人类管理。地球上 148 种大型陆生哺乳动物中，只有 14 种满足这些条件——而这 14 种里有 13 种恰好在欧亚大陆。</p>
+      </div>
+      <div class="knowledge-item">
+        <h4>2. 大陆轴线的隐性作用</h4>
+        <p>为什么中国发明了火药却没能征服世界，而葡萄牙人却能用大炮轰开明朝的国门？一个关键差异是<strong>大陆轴线方向</strong>。欧亚大陆东西向延伸，同纬度的气候、植被、可驯化物种可以横向扩散；美洲、非洲南北向，气候带差异大，技术传播要跨越地理屏障。中国在 1405 年的郑和下西洋之后突然停止航海，一个深层原因正是"南北向大陆"带来的统一中央集权对沿海贸易集团的压制。</p>
+      </div>
+      <div class="knowledge-item">
+        <h4>3. 病菌的隐形军队</h4>
+        <p>1519 年科尔特斯带着 600 人登陆墨西哥，2 年后征服了拥有数百万人口的阿兹特克帝国。直接战斗死伤只是少数，<strong>真正杀死 95% 印第安人的是天花、麻疹、流感、伤寒</strong>。欧亚人长期与牲畜共生，已经对这些病菌有部分免疫力；美洲人在 1492 年之前从未接触过这些"老朋友"，于是几乎整个文明在几十年内崩溃。戴蒙德称之为"我们从未意识到的征服者"。</p>
+      </div>
+      <div class="knowledge-item">
+        <h4>4. 农业的双面性：祝福还是诅咒？</h4>
+        <p>农业的出现常常被叙述为"文明的曙光"，戴蒙德却指出<strong>农业其实是"人类历史上最大的错误"</strong>。农业让人类工作时间更长（狩猎采集者每天 6-8 小时，农民日出而作日落而息）、饮食更单调（玉米农容易营养不良）、疾病更多（人口密集 + 粪口传播 = 流行病）、社会更不平等（剩余粮食的集中）。这并不意味着我们应该回到狩猎采集社会——文明已是不可逆的事实——但要警觉技术"进步"的代价。</p>
+      </div>
+      <div class="knowledge-item">
+        <h4>5. 终极原因 vs 近因</h4>
+        <p>戴蒙德最宝贵的方法论遗产是<strong>区分"近因"和"终极原因"</strong>。近因（proximate cause）是"发生了什么"——比如"西班牙人 1521 年征服了阿兹特克"；终极原因（ultimate cause）是"为什么会这样"——比如"为什么是西班牙人征服了阿兹特克，而不是相反？因为欧亚大陆有更早的农业、更强的病菌免疫力、更高效的国家组织"。日常思考中，我们常常满足于近因；真正的深度思考，必须追问"为什么"直到答案无法再问为止。</p>
+      </div>
+      <div class="knowledge-item">
+        <h4>6. 中国为什么没有率先工业化？</h4>
+        <p>这是一个戴蒙德着重分析的案例。中国在 1400 年前几乎在所有方面都领先欧洲——火药、指南针、印刷术、中央集权、人口。然而<strong>欧洲在 1800 年完成了工业化，中国却没有</strong>。戴蒙德给出的解释包括：地理上欧洲列国并立，竞争激烈，失败国家可以"逃跑"重起炉灶；中国中央集权太强，<strong>一次皇帝决策失误（明成祖朱棣终止郑和下西洋、清朝海禁）就让整个文明熄火</strong>；欧洲连接地中海与大西洋的沿海贸易区形成了商人阶层与国王博弈的空间。地理 + 政治结构 + 历史偶然，叠加产生的结果。</p>
+      </div>
+      <div class="knowledge-item">
+        <h4>7. 个人成长的"地理隐喻"</h4>
+        <p>把戴蒙德的视角迁移到个人：<strong>你今天的处境，很大程度上不是你"选"的，而是你出生、成长、遭遇的"地理"早就塑造的</strong>。原生家庭、童年教育、关键事件、所在城市、行业周期——这些都是"终极原因"。理解这一点不是为了认命，而是为了：① 减少对自己和他人的苛责（很多差距不是智力或勤奋的差距，是起点的差距）；② 看清自己手里"近因"层面的杠杆——那些此刻就能改变的小变量；③ 在为下一代"选择更好的地理"时更有方向感。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 金句 -->
+  <div class="section">
+    <div class="section-title">💬 金句精选</div>
+    <div class="quotes-grid">
+      <div class="quote-card">
+        <p>不同民族的历史遵循不同的道路前进，其原因是民族环境的差异，而不是民族自身在生物学上的差异。</p>
+        <div class="source">—— 贾雷德·戴蒙德，全书核心命题</div>
+      </div>
+      <div class="quote-card">
+        <p>幸福的驯化动植物都是相似的，不幸的各有各的不幸。</p>
+        <div class="source">—— "安娜·卡列尼娜原则"用于生物学</div>
+      </div>
+      <div class="quote-card">
+        <p>农业的出现是迄今人类历史上犯下的最大错误。</p>
+        <div class="source">—— 戴蒙德对"农业革命"的颠覆性评价</div>
+      </div>
+      <div class="quote-card">
+        <p>病菌是欧洲征服美洲的隐形武器。</p>
+        <div class="source">—— 95% 的原住民死于天花和麻疹</div>
+      </div>
+      <div class="quote-card">
+        <p>历史并不"必然"——它受一系列可识别的因果链影响，可以被理解、被分析、被反向推演。</p>
+        <div class="source">—— 戴蒙德的方法论宣言</div>
+      </div>
+      <div class="quote-card">
+        <p>你不需要去相信那些已经存在的解释。你可以去寻找那些更接近终极原因的解释。</p>
+        <div class="source">—— 戴蒙德对"近因解释"泛滥的批评</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 行动建议 -->
+  <div class="section">
+    <div class="section-title">🎯 行动建议</div>
+    <div class="actions-list">
+      <div class="action-item">
+        <div class="action-num">1</div>
+        <div class="action-text"><strong>训练"终极原因"思维：</strong>本周遇到任何"为什么"问题，连续追问 5 次"为什么"——从近因一直追到无法再问。例如"为什么我收入不高" → "为什么在这家公司" → "为什么选择这个城市" → "为什么这个城市这种行业" → "为什么没早做别的选择" → 看见自己真正的"地理"。</div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">2</div>
+        <div class="action-text"><strong>绘制自己的"大陆轴线"：</strong>列出过去 5 年的重大决策（职业、关系、城市、消费），问自己：哪些是横向（同维度切换，容易迁移技能）？哪些是纵向（跨维度切换，需要重新积累）？横向切换的回报高、风险低；纵向切换初期很痛但长期收益大。</div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">3</div>
+        <div class="action-text"><strong>警惕"近因叙事"陷阱：</strong>刷到"某 90 后年入百万"的爆款，先问"这是近因故事还是终极原因？"。绝大多数爆款只讲近因（勤奋、聪明、敢拼），不讲终极原因（家庭背景、行业风口、关键贵人）。识别近因叙事 = 避免被焦虑和自卑反复收割。</div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">4</div>
+        <div class="action-text"><strong>减少对他人的"基本归因错误"：</strong>当身边的人做出让你不解的决定时，停止"他人格有问题"的判断，<strong>代之以"他的'地理'是什么？"</strong>他为什么选择这份工作而不是那个？他的家庭、他所处的行业、他过去的经历可能让你看见一个完全不同的合理人。</div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">5</div>
+        <div class="action-text"><strong>选择你的"可驯化物种"：</strong>戴蒙德用"可驯化的动植物"决定文明的命运，类比个人：<strong>你应该找到属于自己的"小麦"和"绵羊"——那些值得长期投入的领域和关系。</strong>不是所有方向都值得努力，挑出满足 6 大条件（高价值、长积累、温顺可塑、不易枯竭、社交性、有市场）的事，然后做 10 年。</div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">6</div>
+        <div class="action-text"><strong>阅读补充书单：</strong>想继续深入可读：戴蒙德《崩溃》（社会为何会失败）、《第三种黑猩猩》（人类演化）、《枪炮、病菌与钢铁》续作《历史的教训》（与 Will Durant 同名书不同）；贾雷德·戴蒙德的所有著作都贯彻"长时段 + 跨学科"的方法。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>每日一学 · 2026-06-28 · 枪炮、病菌与钢铁</p>
+  </div>
+
+</div>
+</body>
+</html>
