@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日一学 · 习惯的力量</title>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-light: #e0e7ff;
+            --secondary: #14b8a6;
+            --accent: #f59e0b;
+            --dark: #1e293b;
+            --text: #334155;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(99, 102, 241, 0.1);
+            margin-bottom: 30px;
+        }
+        .date { color: #64748b; font-size: 14px; letter-spacing: 2px; margin-bottom: 10px; }
+        h1 { color: var(--dark); font-size: 2.5rem; margin-bottom: 8px; }
+        .author { color: var(--primary); font-size: 1.1rem; font-weight: 500; }
+        .subtitle { color: #64748b; margin-top: 12px; font-size: 1rem; }
+        .mindmap {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+            overflow-x: auto;
+        }
+        .node {
+            position: relative;
+            padding: 12px 18px;
+            border-radius: 12px;
+            display: inline-block;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        .node:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.12); }
+        .root-node { background: var(--primary); color: white; font-size: 1.3rem; }
+        .branch-node { background: var(--primary-light); color: var(--primary); font-size: 1.1rem; }
+        .leaf-node { background: #f1f5f9; color: var(--text); font-size: 0.95rem; font-weight: 500; }
+        .tree { display: flex; justify-content: center; align-items: flex-start; min-width: 900px; }
+        .root { display: flex; flex-direction: column; align-items: center; }
+        .branches { display: flex; gap: 30px; margin-top: 40px; justify-content: center; }
+        .branch { display: flex; flex-direction: column; align-items: center; width: 220px; }
+        .children { display: flex; flex-direction: column; gap: 12px; margin-top: 25px; align-items: center; }
+        .connector { width: 2px; height: 25px; background: #cbd5e1; }
+        .branch-connector { width: 100%; height: 2px; background: #cbd5e1; position: absolute; top: -21px; left: 50%; transform: translateX(-50%); }
+        .branch-wrapper { position: relative; }
+        .summary {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 40px;
+            margin-top: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .summary h2 { color: var(--primary); margin-bottom: 20px; font-size: 1.5rem; }
+        .summary h3 { color: var(--dark); margin: 20px 0 10px; font-size: 1.1rem; }
+        .summary p { line-height: 1.8; margin-bottom: 12px; }
+        .quote {
+            border-left: 4px solid var(--accent);
+            background: #fffbeb;
+            padding: 16px 20px;
+            border-radius: 0 12px 12px 0;
+            margin: 16px 0;
+            font-style: italic;
+            color: #92400e;
+        }
+        .action-list { list-style: none; }
+        .action-list li {
+            padding: 10px 0 10px 32px;
+            position: relative;
+            line-height: 1.7;
+        }
+        .action-list li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--secondary);
+            font-weight: bold;
+        }
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+        @media (max-width: 768px) {
+            h1 { font-size: 1.8rem; }
+            .tree { transform: scale(0.7); transform-origin: top center; }
+            .branches { gap: 15px; }
+            .branch { width: 160px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="date">2026-07-05 · 每日一学</div>
+            <h1>习惯的力量</h1>
+            <div class="author">查尔斯·都希格 (Charles Duhigg)</div>
+            <div class="subtitle">理解习惯如何运作，才能重写人生的底层代码</div>
+        </header>
+
+        <section class="mindmap">
+            <div class="tree">
+                <div class="root">
+                    <div class="node root-node">习惯的力量</div>
+                    <div class="connector"></div>
+                    <div class="branches">
+                        <div class="branch">
+                            <div class="node branch-node">习惯回路</div>
+                            <div class="connector"></div>
+                            <div class="children">
+                                <div class="node leaf-node">暗示 Cue</div>
+                                <div class="node leaf-node">惯常行为 Routine</div>
+                                <div class="node leaf-node">奖赏 Reward</div>
+                                <div class="node leaf-node">渴求 Craving</div>
+                            </div>
+                        </div>
+                        <div class="branch">
+                            <div class="node branch-node">黄金法则</div>
+                            <div class="connector"></div>
+                            <div class="children">
+                                <div class="node leaf-node">保留暗示</div>
+                                <div class="node leaf-node">保留奖赏</div>
+                                <div class="node leaf-node">替换行为</div>
+                                <div class="node leaf-node">习惯不可消除</div>
+                            </div>
+                        </div>
+                        <div class="branch">
+                            <div class="node branch-node">核心习惯</div>
+                            <div class="connector"></div>
+                            <div class="children">
+                                <div class="node leaf-node">引发连锁反应</div>
+                                <div class="node leaf-node">小胜利带来信心</div>
+                                <div class="node leaf-node">重塑自我认同</div>
+                                <div class="node leaf-node">运动/早起/记录</div>
+                            </div>
+                        </div>
+                        <div class="branch">
+                            <div class="node branch-node">意志力与信念</div>
+                            <div class="connector"></div>
+                            <div class="children">
+                                <div class="node leaf-node">意志力是有限资源</div>
+                                <div class="node leaf-node">通过练习增强</div>
+                                <div class="node leaf-node">制度化的力量</div>
+                                <div class="node leaf-node">危机促成改变</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="summary">
+            <h2>核心内容摘要</h2>
+            
+            <h3>核心洞见</h3>
+            <p>习惯并非单纯的自律问题，而是大脑自动化的节能机制。理解「习惯回路」的运作原理，我们可以用科学方法重写行为，而不是依赖意志力硬撑。习惯不会消失，但可以被替代和重塑。</p>
+            
+            <h3>四要素 / 核心框架</h3>
+            <p><strong>1. 暗示（Cue）：</strong>触发习惯的信号，可能是时间、地点、情绪、他人或既有行为。</p>
+            <p><strong>2. 惯常行为（Routine）：</strong>习惯的具体行为本身，是改变的核心切入点。</p>
+            <p><strong>3. 奖赏（Reward）：</strong>行为带来的满足感，是习惯持续的动力来源。</p>
+            <p><strong>4. 渴求（Craving）：</strong>对奖赏的期待，驱动人在暗示出现后自动执行行为。</p>
+            
+            <h3>主要知识点</h3>
+            <p>• 改变习惯的黄金法则：保留暗示和奖赏，只替换中间的惯常行为。</p>
+            <p>• 核心习惯具有杠杆效应，一个关键习惯的建立会带动其他生活领域正向改变。</p>
+            <p>• 意志力像肌肉，会疲劳也会变强；通过培养习惯和制度化的决策减少消耗。</p>
+            <p>• 组织习惯和社会运动同样遵循习惯回路，改变需要可见的暗示、共享的奖赏和集体信念。</p>
+            
+            <div class="quote">
+                "改变习惯不是靠强制自己，而是靠理解习惯。一旦你明白了习惯回路，你就掌握了改变任何习惯的钥匙。"
+            </div>
+            
+            <h3>行动建议</h3>
+            <ul class="action-list">
+                <li>找出一个想改变的习惯，写下它的暗示、惯常行为和奖赏分别是什么。</li>
+                <li>设计一个替代行为：在相同的暗示和奖赏之间，插入一个更健康的行为。</li>
+                <li>培养一个核心习惯，例如每天早起、运动或写日记，让它成为撬动其他改变的支点。</li>
+                <li>记录习惯执行情况，至少坚持 21 天，观察渴求是否从旧行为转移到新行为。</li>
+                <li>当意志力薄弱时，提前用制度和环境减少决策消耗，而非依赖临场发挥。</li>
+            </ul>
+        </section>
+
+        <footer>
+            <p>每日一学 · 2026-07-05 · 习惯的力量</p>
+        </footer>
+    </div>
+</body>
+</html>
