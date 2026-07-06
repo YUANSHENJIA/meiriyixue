@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日一学 · 优秀到不能被忽视</title>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-light: #e0e7ff;
+            --secondary: #14b8a6;
+            --accent: #f59e0b;
+            --dark: #1e293b;
+            --text: #334155;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(99, 102, 241, 0.1);
+            margin-bottom: 30px;
+        }
+        .date { color: #64748b; font-size: 14px; letter-spacing: 2px; margin-bottom: 10px; }
+        h1 { color: var(--dark); font-size: 2.5rem; margin-bottom: 8px; }
+        .author { color: var(--primary); font-size: 1.1rem; font-weight: 500; }
+        .subtitle { color: #64748b; margin-top: 12px; font-size: 1rem; }
+        .mindmap {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+            overflow-x: auto;
+        }
+        .node {
+            position: relative;
+            padding: 12px 18px;
+            border-radius: 12px;
+            display: inline-block;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        .node:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.12); }
+        .root-node { background: var(--primary); color: white; font-size: 1.3rem; }
+        .branch-node { background: var(--primary-light); color: var(--primary); font-size: 1.1rem; }
+        .leaf-node { background: #f1f5f9; color: var(--text); font-size: 0.95rem; font-weight: 500; }
+        .tree { display: flex; justify-content: center; align-items: flex-start; min-width: 900px; }
+        .root { display: flex; flex-direction: column; align-items: center; }
+        .branches { display: flex; gap: 30px; margin-top: 40px; justify-content: center; }
+        .branch { display: flex; flex-direction: column; align-items: center; width: 220px; }
+        .children { display: flex; flex-direction: column; gap: 12px; margin-top: 25px; align-items: center; }
+        .connector { width: 2px; height: 25px; background: #cbd5e1; }
+        .branch-connector { width: 100%; height: 2px; background: #cbd5e1; position: absolute; top: -21px; left: 50%; transform: translateX(-50%); }
+        .branch-wrapper { position: relative; }
+        .summary {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 40px;
+            margin-top: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .summary h2 { color: var(--primary); margin-bottom: 20px; font-size: 1.5rem; }
+        .summary h3 { color: var(--dark); margin: 20px 0 10px; font-size: 1.1rem; }
+        .summary p { line-height: 1.8; margin-bottom: 12px; }
+        .quote {
+            border-left: 4px solid var(--accent);
+            background: #fffbeb;
+            padding: 16px 20px;
+            border-radius: 0 12px 12px 0;
+            margin: 16px 0;
+            font-style: italic;
+            color: #92400e;
+        }
+        .action-list { list-style: none; }
+        .action-list li {
+            padding: 10px 0 10px 32px;
+            position: relative;
+            line-height: 1.7;
+        }
+        .action-list li::before {
+            content: "\2192";
+            position: absolute;
+            left: 0;
+            color: var(--secondary);
+            font-weight: bold;
+        }
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+        @media (max-width: 768px) {
+            h1 { font-size: 1.8rem; }
+            .tree { transform: scale(0.7); transform-origin: top center; }
+            .branches { gap: 15px; }
+            .branch { width: 160px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="date">2026-07-06 \u00b7 每日一学</div>
+            <h1>优秀到不能被忽视</h1>
+            <div class="author">卡尔·纽波特 (Cal Newport)</div>
+            <div class="subtitle">技能先于激情，用工匠思维打造不可替代的职业竞争力</div>
+        </header>
+
+        <section class="mindmap">
+            <div class="tree">
+                <div class="root">
+                    <div class="node root-node">优秀到不能被忽视</div>
+                    <div class="connector"></div>
+                    <div class="branches">
+                        <div class="branch">
+                            <div class="node branch-node">工匠思维</div>
+                            <div class="connector"></div>
+                            <div class="children">
+                                <div class="node leaf-node">关注你能给世界什么</div>
+                                <div class="node leaf-node">刻意练习磨炼技能</div>
+                                <div class="node leaf-node">追求质量而非激情</div>
+                                <div class="node leaf-node">容忍不适与挣扎</div>
+                            </div>
+                        </div>
+                        <div class="branch">
+                            <div class="node branch-node">职业资本</div>
+                            <div class="connector"></div>
+                            <div class="children">
+                                <div class="node leaf-node">稀缺且宝贵的技能</div>
+                                <div class="node leaf-node">积累是通往自由的阶梯</div>
+                                <div class="node leaf-node">不可替代性 = 影响力</div>
+                                <div class="node leaf-node">刻意练习 > 重复劳动</div>
+                            </div>
+                        </div>
+                        <div class="branch">
+                            <div class="node branch-node">控制力陷阱</div>
+                            <div class="connector"></div>
+                            <div class="children">
+                                <div class="node leaf-node">第一陷阱：资本不足</div>
+                                <div class="node leaf-node">第二陷阱：资本充足被劝留</div>
+                                <div class="node leaf-node">财务可行性法则</div>
+                                <div class="node leaf-node">控制力需资本做支撑</div>
+                            </div>
+                        </div>
+                        <div class="branch">
+                            <div class="node branch-node">使命感</div>
+                            <div class="connector"></div>
+                            <div class="children">
+                                <div class="node leaf-node">使命需要资本做杠杆</div>
+                                <div class="node leaf-node">小赌注策略探索方向</div>
+                                <div class="node leaf-node">使命是精通后的涌现</div>
+                                <div class="node leaf-node">不要提前设定使命</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="summary">
+            <h2>核心内容摘要</h2>
+
+            <h3>核心洞见</h3>
+            <p>"追随你的激情"是危险的职业建议。真正优秀的职业不是从激情开始的，而是从积累稀缺且宝贵的技能开始的。当你变得足够优秀以至于别人无法忽视你时，激情、控制力和使命感会自然涌现——这就是「工匠思维」的力量。</p>
+
+            <h3>四要素 / 核心框架</h3>
+            <p><strong>1. 工匠思维（Craftsman Mindset）：</strong>关注你能给世界提供什么价值，而非世界能给你什么回报。用刻意练习不断打磨技能，追求卓越的质量。</p>
+            <p><strong>2. 职业资本（Career Capital）：</strong>稀缺且宝贵的技能是你在职场中获取影响力、自主权和使命感的筹码。没有资本，一切追求都是空谈。</p>
+            <p><strong>3. 控制力陷阱（Control Trap）：</strong>追求工作自主权需要足够的职业资本做支撑。资本不足时追求控制力会失败；资本充足时，又可能被组织挽留而无法脱身。</p>
+            <p><strong>4. 使命感（Mission）：</strong>真正的使命感不是一开始就有的，而是在精通某一领域后自然涌现的。用「小赌注」策略逐步探索，而非一步到位。</p>
+
+            <h3>主要知识点</h3>
+            <p>\u2022 激情假说是危险的：大多数人的激情并不对应可行的职业路径，过早追随激情容易导致频繁跳槽和迷茫。</p>
+            <p>\u2022 工匠思维 vs 激情思维：前者关注产出价值，后者关注获取满足，长期来看工匠思维更可持续。</p>
+            <p>\u2022 刻意练习原则应用于职业发展：走出舒适区、寻求反馈、专注于薄弱环节的突破。</p>
+            <p>\u2022 职业资本的三条获取路径：稀缺技能、稀缺组合、稀缺创意——至少掌握一种。</p>
+            <p>\u2022 财务可行性法则：当你想追求更多自主权时，先验证有人愿意为你做的事付费。</p>
+            <p>\u2022 使命感不是起点而是结果：先精通技能，使命感会在你成为领域专家后自然浮现。</p>
+
+            <div class="quote">
+                "不要追随你的激情，而要让它追随你——先变得优秀到不能被忽视。"
+            </div>
+            <div class="quote">
+                "工匠思维关注你能给世界什么；激情思维关注世界能给你什么。前者才是伟大职业的基石。"
+            </div>
+
+            <h3>行动建议</h3>
+            <ul class="action-list">
+                <li>停止寻找"完美职业激情"，转而审视你当前工作中可以积累的稀缺技能。</li>
+                <li>将刻意练习融入日常工作：主动挑战超出当前能力范围的任务，寻求高质量反馈。</li>
+                <li>识别你的职业资本——你拥有的哪些技能是稀缺且宝贵的？哪些还需要补充？</li>
+                <li>当你想追求更大自主权时，先用财务可行性法则验证：有人愿意为此付费吗？</li>
+                <li>用小赌注策略探索使命感：做小型实验项目，而不是赌上全部辞职创业。</li>
+                <li>专注于一个领域做到极致，让使命感在你精通之后自然涌现，而非提前设定。</li>
+            </ul>
+        </section>
+
+        <footer>
+            <p>每日一学 \u00b7 2026-07-06 \u00b7 优秀到不能被忽视</p>
+        </footer>
+    </div>
+</body>
+</html>
