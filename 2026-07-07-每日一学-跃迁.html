@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日一学 · 跃迁</title>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-light: #e0e7ff;
+            --secondary: #14b8a6;
+            --accent: #f59e0b;
+            --dark: #1e293b;
+            --text: #334155;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(99, 102, 241, 0.1);
+            margin-bottom: 30px;
+        }
+        .date { color: #64748b; font-size: 14px; letter-spacing: 2px; margin-bottom: 10px; }
+        h1 { color: var(--dark); font-size: 2.5rem; margin-bottom: 8px; }
+        .author { color: var(--primary); font-size: 1.1rem; font-weight: 500; }
+        .subtitle { color: #64748b; margin-top: 12px; font-size: 1rem; }
+        .mindmap {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+            overflow-x: auto;
+        }
+        .node {
+            position: relative;
+            padding: 12px 18px;
+            border-radius: 12px;
+            display: inline-block;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        .node:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.12); }
+        .root-node { background: var(--primary); color: white; font-size: 1.3rem; }
+        .branch-node { background: var(--primary-light); color: var(--primary); font-size: 1.1rem; }
+        .leaf-node { background: #f1f5f9; color: var(--text); font-size: 0.95rem; font-weight: 500; }
+        .tree { display: flex; justify-content: center; align-items: flex-start; min-width: 900px; }
+        .root { display: flex; flex-direction: column; align-items: center; }
+        .branches { display: flex; gap: 30px; margin-top: 40px; justify-content: center; }
+        .branch { display: flex; flex-direction: column; align-items: center; width: 220px; }
+        .children { display: flex; flex-direction: column; gap: 12px; margin-top: 25px; align-items: center; }
+        .connector { width: 2px; height: 25px; background: #cbd5e1; }
+        .branch-connector { width: 100%; height: 2px; background: #cbd5e1; position: absolute; top: -21px; left: 50%; transform: translateX(-50%); }
+        .branch-wrapper { position: relative; }
+        .summary {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 40px;
+            margin-top: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .summary h2 { color: var(--primary); margin-bottom: 20px; font-size: 1.5rem; }
+        .summary h3 { color: var(--dark); margin: 20px 0 10px; font-size: 1.1rem; }
+        .summary p { line-height: 1.8; margin-bottom: 12px; }
+        .quote {
+            border-left: 4px solid var(--accent);
+            background: #fffbeb;
+            padding: 16px 20px;
+            border-radius: 0 12px 12px 0;
+            margin: 16px 0;
+            font-style: italic;
+            color: #92400e;
+        }
+        .action-list { list-style: none; }
+        .action-list li {
+            padding: 10px 0 10px 32px;
+            position: relative;
+            line-height: 1.7;
+        }
+        .action-list li::before {
+            content: "\2192";
+            position: absolute;
+            left: 0;
+            color: var(--secondary);
+            font-weight: bold;
+        }
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+        @media (max-width: 768px) {
+            h1 { font-size: 1.8rem; }
+            .tree { transform: scale(0.7); transform-origin: top center; }
+            .branches { gap: 15px; }
+            .branch { width: 160px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="date">2026-07-07 · 每日一学</div>
+            <h1>跃迁：成为高手的技术</h1>
+            <div class="author">古 典</div>
+            <div class="subtitle">利用规律放大努力，用更少力气获得更大成果</div>
+        </header>
+
+        <section class="mindmap">
+            <div class="tree">
+                <div class="root">
+                    <div class="node root-node">跃迁</div>
+                    <div class="connector"></div>
+                    <div class="branches">
+                        <div class="branch">
+                            <div class="node branch-node">高手的暗箱</div>
+                            <div class="connector"></div>
+                            <div class="children">
+                                <div class="node leaf-node">时代特征：信息变多、思考变浅</div>
+                                <div class="node leaf-node">外包大脑：专注高价值</div>
+                                <div class="node leaf-node">联机学习：交换中增值</div>
+                                <div class="node leaf-node">放大器：让努力成倍放大</div>
+                            </div>
+                        </div>
+                        <div class="branch">
+                            <div class="node branch-node">高价值区与头部</div>
+                            <div class="connector"></div>
+                            <div class="children">
+                                <div class="node leaf-node">头部效应：第一名拿走大部分</div>
+                                <div class="node leaf-node">高价值区：热爱×擅长×需求</div>
+                                <div class="node leaf-node">从最小单元做起做到第一</div>
+                                <div class="node leaf-node">先入圈子，再成头部</div>
+                            </div>
+                        </div>
+                        <div class="branch">
+                            <div class="node branch-node">破局·系统思考</div>
+                            <div class="connector"></div>
+                            <div class="children">
+                                <div class="node leaf-node">回路：正/负反馈循环</div>
+                                <div class="node leaf-node">层级：在更高层解决</div>
+                                <div class="node leaf-node">破局点：抓关键节点</div>
+                                <div class="node leaf-node">看全：系统视角非单点</div>
+                            </div>
+                        </div>
+                        <div class="branch">
+                            <div class="node branch-node">内在修炼</div>
+                            <div class="connector"></div>
+                            <div class="children">
+                                <div class="node leaf-node">看远：长期主义</div>
+                                <div class="node leaf-node">看全：系统思考</div>
+                                <div class="node leaf-node">看透：抓住本质</div>
+                                <div class="node leaf-node">善良：做对世界有益的事</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="summary">
+            <h2>核心内容摘要</h2>
+
+            <h3>核心洞见</h3>
+            <p>在信息爆炸、机会遍地的时代，比"更努力"更重要的，是"利用规律放大努力"。跃迁不是投机取巧，而是看清高价值区、占领头部、用系统思维破局，并以内心的长远与专注作为底层支撑——让一份努力产生复利式的指数回报。高手之所以是高手，是因为把自己活成了一个"杠杆"。</p>
+
+            <h3>四要素 / 核心框架</h3>
+            <p><strong>1. 高手的暗箱（利用规律放大努力）：</strong>时代给了普通人前所未有的"杠杆"——联机学习、外包大脑、借助技术与趋势，让一份努力产生十倍效果。关键不是更拼命，而是换一种努力的方式。</p>
+            <p><strong>2. 高价值区与头部效应（站位比努力重要）：</strong>在一个幂律分布的世界里，与其在非高价值区拼命，不如先找到"你热爱的 × 你擅长的 × 社会需要的"交集，然后在一个小领域做到头部。第一名获得的资源远超第二名，呈非线性回报。</p>
+            <p><strong>3. 破局——系统思考（升维解决问题）：</strong>很多问题靠"更努力"解决不了，必须升维到系统层面。识别回路（增强/调节）、看清层级、找到破局点，才能四两拨千斤，而非硬扛。</p>
+            <p><strong>4. 内在修炼（跃迁的底座）：</strong>看远（长期主义）、看全（系统视角）、看透（抓住本质）、善良（做对世界有益的事）。没有内在定力，所有的技巧都会变成焦虑的加速器。</p>
+
+            <h3>主要知识点</h3>
+            <p>• 联机学习：读牛人的书 → 用自己的知识跟他们对话 → 与同侪交换观点，知识在交换中增值（区别于闭门造车的"单机学习"）。</p>
+            <p>• 高价值区定位：热情、天赋、社会需求三圈交集；不在高价值区，再努力也是低回报。</p>
+            <p>• 头部效应：幂律分布下，同一领域第一名获得的关注、资源和回报远超第二名，非线性放大。</p>
+            <p>• 系统思考三要件：回路（增强/调节回路）、层级（在更高层级解决问题）、线性（单点努力的局限）。</p>
+            <p>• 破局点：系统中对结果有杠杆作用的关键节点；找到它，才能以最小代价撬动整体。</p>
+            <p>• 复利思维：持续做有积累、能产生正反馈回路的事，时间会替你放大成果。</p>
+
+            <div class="quote">
+                "处处有机会，就等于处处没机会。"
+            </div>
+            <div class="quote">
+                "所谓高手，就是把自己活成一个杠杆。"
+            </div>
+            <div class="quote">
+                "今天的时代，信息变多，思考变浅；机会变多，注意力变少。"
+            </div>
+
+            <h3>行动建议</h3>
+            <ul class="action-list">
+                <li>列出你的"三圈交集"：热爱、擅长、社会需要，准确定位你的高价值区。</li>
+                <li>选一个你能影响的最小领域，专注做到第一（本地头部），而不是在红海里平庸地努力。</li>
+                <li>实践联机学习：用具体问题驱动阅读，每周输出一篇笔记，与同侪交换观点。</li>
+                <li>画出你的"正反馈回路"（如：读书→思考→写作→影响力），持续往回路里投入时间和注意力。</li>
+                <li>用系统视角审视卡住的问题：是该升一层、换回路、还是找破局点？而不是一味硬扛。</li>
+                <li>做有复利的事，拒绝"虚假忙碌"——把时间投在能持续增值、长期受益的地方。</li>
+            </ul>
+        </section>
+
+        <footer>
+            <p>每日一学 · 2026-07-07 · 跃迁：成为高手的技术</p>
+        </footer>
+    </div>
+</body>
+</html>
