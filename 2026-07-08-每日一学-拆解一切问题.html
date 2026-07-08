@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 拆解一切问题</title>
+<style>
+  :root{
+    --bg:#0f1220; --panel:#171b2e; --panel2:#1f2540; --line:#2c3358;
+    --txt:#e8ecff; --sub:#a7afd6; --accent:#7c8cff; --accent2:#37d0a6;
+    --gold:#ffcf5c; --warn:#ff8a8a; --c1:#7c8cff; --c2:#37d0a6; --c3:#ff9f6b; --c4:#c98bff; --c5:#5cc8ff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    background:radial-gradient(1200px 600px at 50% -10%,#1b2240 0,transparent 60%),var(--bg);
+    background-color:var(--bg); color:var(--txt); line-height:1.7; padding:0 0 60px;
+  }
+  header{
+    text-align:center; padding:46px 20px 30px;
+    background:linear-gradient(135deg,rgba(124,140,255,.18),rgba(55,208,166,.12));
+    border-bottom:1px solid var(--line);
+  }
+  header .badge{display:inline-block;font-size:13px;letter-spacing:2px;color:var(--accent2);
+    border:1px solid var(--accent2);border-radius:30px;padding:4px 16px;margin-bottom:14px}
+  header h1{font-size:34px;font-weight:800;letter-spacing:1px}
+  header .meta{margin-top:10px;color:var(--sub);font-size:14px}
+  header .meta b{color:var(--gold)}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 18px}
+  section{margin-top:34px}
+  .sec-title{display:flex;align-items:center;gap:10px;font-size:20px;font-weight:700;margin-bottom:16px}
+  .sec-title .dot{width:10px;height:10px;border-radius:50%;background:var(--accent)}
+  .sec-title .bar{width:4px;height:22px;border-radius:3px;background:linear-gradient(var(--accent),var(--accent2))}
+
+  /* ===== Mind map ===== */
+  .mm{display:flex;gap:0;align-items:stretch;flex-wrap:nowrap;overflow-x:auto;padding:10px 2px 18px}
+  .mm-root{flex:0 0 150px;display:flex;align-items:center;justify-content:center}
+  .mm-root .node{
+    background:linear-gradient(135deg,var(--accent),var(--c4));
+    color:#0d1020;font-weight:800;font-size:17px;text-align:center;border-radius:16px;
+    padding:18px 14px;box-shadow:0 10px 30px rgba(124,140,255,.35);min-width:130px;
+  }
+  .mm-branches{flex:1 1 auto;display:flex;flex-direction:column;gap:14px;padding-left:26px;position:relative;border-left:2px dashed var(--line)}
+  .branch{background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden;transition:.25s}
+  .branch:hover{border-color:var(--accent)}
+  .branch-head{display:flex;align-items:center;gap:12px;padding:13px 16px;cursor:pointer;user-select:none}
+  .branch-head .ic{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex:0 0 34px}
+  .branch-head .t{font-weight:700;font-size:16px;flex:1}
+  .branch-head .cnt{font-size:12px;color:var(--sub);background:var(--panel2);padding:2px 10px;border-radius:20px}
+  .branch-head .arrow{transition:.25s;color:var(--sub)}
+  .branch.open .branch-head .arrow{transform:rotate(90deg)}
+  .branch-body{max-height:0;overflow:hidden;transition:max-height .3s ease}
+  .branch.open .branch-body{max-height:800px}
+  .branch-body ul{list-style:none;padding:4px 16px 16px 26px}
+  .branch-body li{position:relative;padding:7px 0 7px 18px;color:var(--sub);font-size:14.5px;border-bottom:1px dashed rgba(255,255,255,.05)}
+  .branch-body li:last-child{border-bottom:none}
+  .branch-body li::before{content:"";position:absolute;left:0;top:15px;width:7px;height:7px;border-radius:50%;background:var(--accent)}
+  .branch-body li b{color:var(--txt)}
+  .k1 .ic{background:rgba(124,140,255,.2)} .k2 .ic{background:rgba(55,208,166,.2)}
+  .k3 .ic{background:rgba(255,159,107,.2)} .k4 .ic{background:rgba(201,139,255,.2)} .k5 .ic{background:rgba(92,200,255,.2)}
+
+  /* ===== Cards ===== */
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+  .card h3{font-size:15px;margin-bottom:8px;color:var(--accent2)}
+  .card p{color:var(--sub);font-size:14px}
+  .step{display:flex;gap:14px;align-items:flex-start;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:12px}
+  .step .num{flex:0 0 40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;color:#0d1020}
+  .step:nth-child(1) .num{background:var(--c1)} .step:nth-child(2) .num{background:var(--c2)}
+  .step:nth-child(3) .num{background:var(--c3)} .step:nth-child(4) .num{background:var(--c4)}
+  .step h3{font-size:16px;margin-bottom:4px}
+  .step p{color:var(--sub);font-size:14px}
+
+  .quotes{display:grid;gap:14px}
+  .quote{position:relative;background:linear-gradient(135deg,rgba(255,207,92,.1),rgba(255,138,138,.06));
+    border:1px solid rgba(255,207,92,.3);border-left:4px solid var(--gold);border-radius:12px;padding:16px 20px;font-size:16px}
+  .quote span{display:block;margin-top:8px;color:var(--gold);font-size:13px;text-align:right}
+
+  .actions{counter-reset:a}
+  .actions li{list-style:none;position:relative;padding:12px 16px 12px 52px;background:var(--panel);border:1px solid var(--line);border-radius:12px;margin-bottom:10px;color:var(--txt);font-size:14.5px}
+  .actions li::before{counter-increment:a;content:counter(a);position:absolute;left:14px;top:50%;transform:translateY(-50%);
+    width:26px;height:26px;border-radius:50%;background:linear-gradient(var(--accent),var(--accent2));color:#0d1020;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:13px}
+  .actions li b{color:var(--accent2)}
+
+  footer{text-align:center;color:var(--sub);font-size:13px;margin-top:46px;padding-top:20px;border-top:1px solid var(--line)}
+  .hint{text-align:center;color:var(--sub);font-size:12.5px;margin-top:10px}
+  @media(max-width:720px){.mm{flex-direction:column}.mm-root{flex:0 0 auto;justify-content:flex-start}.mm-branches{border-left:none;padding-left:0;padding-top:14px;border-top:2px dashed var(--line)}}
+</style>
+</head>
+<body>
+<header>
+  <div class="badge">每日一学 · 2026-07-08</div>
+  <h1>拆解一切问题</h1>
+  <div class="meta">作者：<b>横田尚哉</b> ｜ 分类：<b>思维方法 · 问题解决</b> ｜ 关键词：假设思考 · 化整为零 · 消元法</div>
+</header>
+
+<div class="wrap">
+
+  <!-- ===== 思维导图 ===== -->
+  <section>
+    <div class="sec-title"><span class="bar"></span><span class="dot"></span>思维导图</div>
+    <div class="mm">
+      <div class="mm-root"><div class="node">拆解<br>一切问题</div></div>
+      <div class="mm-branches">
+
+        <div class="branch open k1">
+          <div class="branch-head" onclick="this.parentNode.classList.toggle('open')">
+            <div class="ic">💡</div><div class="t">核心思想</div>
+            <div class="cnt">1 条</div><div class="arrow">▶</div>
+          </div>
+          <div class="branch-body"><ul>
+            <li><b>解决问题的本质不是“找到答案”，而是“拆解问题”。</b>把模糊、庞大、无从下手的大问题，拆成小而清晰、可逐个击破的小问题，难度会断崖式下降。</li>
+          </ul></div>
+        </div>
+
+        <div class="branch open k2">
+          <div class="branch-head" onclick="this.parentNode.classList.toggle('open')">
+            <div class="ic">🧩</div><div class="t">四步核心框架</div>
+            <div class="cnt">4 步</div><div class="arrow">▶</div>
+          </div>
+          <div class="branch-body"><ul>
+            <li><b>① 锁定问题</b>：写清“理想状态 − 现状”的差距，用 WHW 区分真/伪问题。</li>
+            <li><b>② 化整为零</b>：把大问题拆成 3-5 个小问题，越细越暴露瓶颈。</li>
+            <li><b>③ 假设思考</b>：信息不全就先建假设，给“能执行的方案”快速试错。</li>
+            <li><b>④ 消元法 / 打桩</b>：用二八法则定位关键障碍，像打桩一样逐个击破。</li>
+          </ul></div>
+        </div>
+
+        <div class="branch open k3">
+          <div class="branch-head" onclick="this.parentNode.classList.toggle('open')">
+            <div class="ic">📚</div><div class="t">主要知识点</div>
+            <div class="cnt">8 个</div><div class="arrow">▶</div>
+          </div>
+          <div class="branch-body"><ul>
+            <li><b>问题 = 理想状态 − 现状</b>（差距即问题）</li>
+            <li>假设性思考 vs 验证性思考</li>
+            <li>化整为零：分解降难、暴露真问题</li>
+            <li>二八法则 / 关键少数</li>
+            <li>数字思维：用量化定义问题</li>
+            <li>5 Why 追问本质</li>
+            <li>PDCA 行动循环</li>
+            <li>先完成再完美（对抗完美主义）</li>
+          </ul></div>
+        </div>
+
+        <div class="branch open k4">
+          <div class="branch-head" onclick="this.parentNode.classList.toggle('open')">
+            <div class="ic">✨</div><div class="t">金句</div>
+            <div class="cnt">5 句</div><div class="arrow">▶</div>
+          </div>
+          <div class="branch-body"><ul>
+            <li>解决问题的关键，不是找到正确答案，而是先拆解问题。</li>
+            <li>在信息不齐全时建立假设，比在信息齐全后动手更重要。</li>
+            <li>大问题之所以难，是因为它太大；拆小了，就不可怕了。</li>
+            <li>打桩不是乱打，而是先找到最该打的那根桩。</li>
+            <li>完美主义是行动最大的敌人——先完成，再完美。</li>
+          </ul></div>
+        </div>
+
+        <div class="branch open k5">
+          <div class="branch-head" onclick="this.parentNode.classList.toggle('open')">
+            <div class="ic">✅</div><div class="t">行动建议</div>
+            <div class="cnt">5 条</div><div class="arrow">▶</div>
+          </div>
+          <div class="branch-body"><ul>
+            <li>遇事先写“理想状态”和“现状”，用一句话量化差距。</li>
+            <li>把问题拆成 3-5 个小问题，列成清单逐个解决。</li>
+            <li>不求完美方案，先给可执行假设，48 小时内验证。</li>
+            <li>用二八法则定位关键瓶颈，集中资源打掉它。</li>
+            <li>每晚复盘：今天消除了哪根“桩”？明天打哪根？</li>
+          </ul></div>
+        </div>
+
+      </div>
+    </div>
+    <div class="hint">点击任意分支标题可展开 / 收起 ▾</div>
+  </section>
+
+  <!-- ===== 核心洞见 ===== -->
+  <section>
+    <div class="sec-title"><span class="bar"></span><span class="dot"></span>核心洞见</div>
+    <div class="card" style="border-left:4px solid var(--accent2)">
+      <p>我们面对的绝大多数难题，并不是“难在找不到答案”，而是“难在问题本身太大、太模糊、太无从下手”。《拆解一切问题》给出的破局之道非常朴素却极其有力：<b style="color:var(--txt)">不要试图一次性解决大问题，而是把它拆成能解决的小问题。</b></p>
+      <p style="margin-top:10px">书里最反直觉的一点，是强调“<b style="color:var(--txt)">假设性思考</b>”——在信息还不齐全时，就先建立一个可执行的假设，然后快速行动、快速验证。大多数人卡住，是因为在等“完美数据”和“完美方案”，而高手已经在试错中逼近答案。配合“化整为零”的拆解与“打桩式”的逐个击破，任何看似庞大的问题都会变得可管理。</p>
+    </div>
+  </section>
+
+  <!-- ===== 四要素 / 核心框架 ===== -->
+  <section>
+    <div class="sec-title"><span class="bar"></span><span class="dot"></span>四步核心框架</div>
+    <div class="step"><div class="num">1</div><div><h3>锁定问题 · 定义差距</h3><p>问题 = 理想状态 − 现状。用 WHW（What/Why/How）把“真正的问题”写清楚，先区分“真问题”和“伪问题”，避免在错的方向上努力。</p></div></div>
+    <div class="step"><div class="num">2</div><div><h3>化整为零 · 拆解</h3><p>把大问题拆成 3-5 个可解决的小问题。拆得越细，单点难度越低，行动门槛越小，隐藏的真正瓶颈也越容易被暴露出来。</p></div></div>
+    <div class="step"><div class="num">3</div><div><h3>假设思考 · 试错</h3><p>不追求“先想清楚再动手”。信息不全时就先建假设，给一个能立刻执行的方案，用最短路径验证，边做边修正（PDCA）。</p></div></div>
+    <div class="step"><div class="num">4</div><div><h3>消元法 · 打桩破局</h3><p>像在田里打桩一样，用二八法则找到最关键的障碍（“最该打的那根桩”），集中火力逐个击破，每打完一根就向目标前进一格。</p></div></div>
+  </section>
+
+  <!-- ===== 主要知识点 ===== -->
+  <section>
+    <div class="sec-title"><span class="bar"></span><span class="dot"></span>主要知识点</div>
+    <div class="grid">
+      <div class="card"><h3>差距即问题</h3><p>“理想状态 − 现状”之间的落差，就是问题的全部。先写清两端，问题自然浮现。</p></div>
+      <div class="card"><h3>假设性思考</h3><p>与“验证性思考”相对：不等证据齐全，先假设再验证，行动速度决定解决速度。</p></div>
+      <div class="card"><h3>化整为零</h3><p>分解不仅降低难度，更能暴露关键瓶颈——小问题比大问题诚实。</p></div>
+      <div class="card"><h3>二八法则</h3><p>80% 的结果来自 20% 的原因。锁定“关键少数”再发力，事半功倍。</p></div>
+      <div class="card"><h3>数字思维</h3><p>用可量化的指标定义问题，模糊的焦虑才会变成可管理的任务。</p></div>
+      <div class="card"><h3>5 Why</h3><p>连续追问五个“为什么”，穿透表象，触达问题的本质根因。</p></div>
+      <div class="card"><h3>PDCA 循环</h3><p>计划—执行—检查—调整。让假设在迭代中不断逼近正确答案。</p></div>
+      <div class="card"><h3>先完成再完美</h3><p>完美主义是行动的最大敌人。完成度 1 > 完美度 0，先动起来再修正。</p></div>
+    </div>
+  </section>
+
+  <!-- ===== 金句 ===== -->
+  <section>
+    <div class="sec-title"><span class="bar"></span><span class="dot"></span>金句</div>
+    <div class="quotes">
+      <div class="quote">解决问题的关键，不是找到正确答案，而是先拆解问题。<span>—— 拆解一切问题</span></div>
+      <div class="quote">在信息不齐全时建立假设，比在信息齐全后动手更重要。<span>—— 拆解一切问题</span></div>
+      <div class="quote">大问题之所以难，是因为它太大；拆小了，就不可怕了。<span>—— 拆解一切问题</span></div>
+      <div class="quote">打桩不是乱打，而是先找到最该打的那根桩。<span>—— 拆解一切问题</span></div>
+      <div class="quote">完美主义是行动最大的敌人——先完成，再完美。<span>—— 拆解一切问题</span></div>
+    </div>
+  </section>
+
+  <!-- ===== 行动建议 ===== -->
+  <section>
+    <div class="sec-title"><span class="bar"></span><span class="dot"></span>行动建议</div>
+    <ol class="actions">
+      <li>下次遇到难题，先分别写下 <b>“理想状态”</b> 和 <b>“现状”</b>，用一句话量化两者的差距。</li>
+      <li>把大问题拆成 <b>3-5 个</b> 小问题，列成清单，逐个安排到本周解决。</li>
+      <li>不追求完美方案，先给一个 <b>可执行的假设</b>，并在 <b>48 小时内</b> 动手验证。</li>
+      <li>用 <b>二八法则</b> 定位关键瓶颈，把主要资源压在“最该打的那根桩”上。</li>
+      <li>每晚 3 分钟复盘：<b>今天消除了哪根“桩”？明天打哪根？</b> 让拆解成为习惯。</li>
+    </ol>
+  </section>
+
+  <footer>每日一学 · 个人成长思维书单 ｜ 2026-07-08《拆解一切问题》｜ 用拆解，把不可能变成可行动</footer>
+</div>
+</body>
+</html>
