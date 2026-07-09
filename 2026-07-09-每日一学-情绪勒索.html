@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 情绪勒索</title>
+<style>
+  :root{
+    --bg:#0f1220; --panel:#171b2e; --panel2:#1f2540; --line:#2c3358;
+    --txt:#e8ecff; --sub:#a7afd6; --accent:#7c8cff; --accent2:#37d0a6;
+    --gold:#ffcf5c; --warn:#ff8a8a; --c1:#7c8cff; --c2:#37d0a6; --c3:#ff9f6b; --c4:#c98bff; --c5:#5cc8ff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    background:radial-gradient(1200px 600px at 50% -10%,#1b2240 0,transparent 60%),var(--bg);
+    background-color:var(--bg); color:var(--txt); line-height:1.7; padding:0 0 60px;
+  }
+  header{
+    text-align:center; padding:46px 20px 30px;
+    background:linear-gradient(135deg,rgba(124,140,255,.18),rgba(55,208,166,.12));
+    border-bottom:1px solid var(--line);
+  }
+  header .badge{display:inline-block;font-size:13px;letter-spacing:2px;color:var(--accent2);
+    border:1px solid var(--accent2);border-radius:30px;padding:4px 16px;margin-bottom:14px}
+  header h1{font-size:34px;font-weight:800;letter-spacing:1px}
+  header .meta{margin-top:10px;color:var(--sub);font-size:14px}
+  header .meta b{color:var(--gold)}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 18px}
+  section{margin-top:34px}
+  .sec-title{display:flex;align-items:center;gap:10px;font-size:20px;font-weight:700;margin-bottom:16px}
+  .sec-title .dot{width:10px;height:10px;border-radius:50%;background:var(--accent)}
+  .sec-title .bar{width:4px;height:22px;border-radius:3px;background:linear-gradient(var(--accent),var(--accent2))}
+
+  /* ===== Mind map ===== */
+  .mm{display:flex;gap:0;align-items:stretch;flex-wrap:nowrap;overflow-x:auto;padding:10px 2px 18px}
+  .mm-root{flex:0 0 150px;display:flex;align-items:center;justify-content:center}
+  .mm-root .node{
+    background:linear-gradient(135deg,var(--accent),var(--c4));
+    color:#0d1020;font-weight:800;font-size:17px;text-align:center;border-radius:16px;
+    padding:18px 14px;box-shadow:0 10px 30px rgba(124,140,255,.35);min-width:130px;
+  }
+  .mm-branches{flex:1 1 auto;display:flex;flex-direction:column;gap:14px;padding-left:26px;position:relative;border-left:2px dashed var(--line)}
+  .branch{background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden;transition:.25s}
+  .branch:hover{border-color:var(--accent)}
+  .branch-head{display:flex;align-items:center;gap:12px;padding:13px 16px;cursor:pointer;user-select:none}
+  .branch-head .ic{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex:0 0 34px}
+  .branch-head .t{font-weight:700;font-size:16px;flex:1}
+  .branch-head .cnt{font-size:12px;color:var(--sub);background:var(--panel2);padding:2px 10px;border-radius:20px}
+  .branch-head .arrow{transition:.25s;color:var(--sub)}
+  .branch.open .branch-head .arrow{transform:rotate(90deg)}
+  .branch-body{max-height:0;overflow:hidden;transition:max-height .3s ease}
+  .branch.open .branch-body{max-height:800px}
+  .branch-body ul{list-style:none;padding:4px 16px 16px 26px}
+  .branch-body li{position:relative;padding:7px 0 7px 18px;color:var(--sub);font-size:14.5px;border-bottom:1px dashed rgba(255,255,255,.05)}
+  .branch-body li:last-child{border-bottom:none}
+  .branch-body li::before{content:"";position:absolute;left:0;top:15px;width:7px;height:7px;border-radius:50%;background:var(--accent)}
+  .branch-body li b{color:var(--txt)}
+  .k1 .ic{background:rgba(124,140,255,.2)} .k2 .ic{background:rgba(55,208,166,.2)}
+  .k3 .ic{background:rgba(255,159,107,.2)} .k4 .ic{background:rgba(201,139,255,.2)} .k5 .ic{background:rgba(92,200,255,.2)}
+
+  /* ===== Cards ===== */
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+  .card h3{font-size:15px;margin-bottom:8px;color:var(--accent2)}
+  .card p{color:var(--sub);font-size:14px}
+  .step{display:flex;gap:14px;align-items:flex-start;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:12px}
+  .step .num{flex:0 0 40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;color:#0d1020}
+  .step:nth-child(1) .num{background:var(--c1)} .step:nth-child(2) .num{background:var(--c2)}
+  .step:nth-child(3) .num{background:var(--c3)} .step:nth-child(4) .num{background:var(--c4)}
+  .step h3{font-size:16px;margin-bottom:4px}
+  .step p{color:var(--sub);font-size:14px}
+
+  .quotes{display:grid;gap:14px}
+  .quote{position:relative;background:linear-gradient(135deg,rgba(255,207,92,.1),rgba(255,138,138,.06));
+    border:1px solid rgba(255,207,92,.3);border-left:4px solid var(--gold);border-radius:12px;padding:16px 20px;font-size:16px}
+  .quote span{display:block;margin-top:8px;color:var(--gold);font-size:13px;text-align:right}
+
+  .actions{counter-reset:a}
+  .actions li{list-style:none;position:relative;padding:12px 16px 12px 52px;background:var(--panel);border:1px solid var(--line);border-radius:12px;margin-bottom:10px;color:var(--txt);font-size:14.5px}
+  .actions li::before{counter-increment:a;content:counter(a);position:absolute;left:14px;top:50%;transform:translateY(-50%);
+    width:26px;height:26px;border-radius:50%;background:linear-gradient(var(--accent),var(--accent2));color:#0d1020;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:13px}
+  .actions li b{color:var(--accent2)}
+
+  footer{text-align:center;color:var(--sub);font-size:13px;margin-top:46px;padding-top:20px;border-top:1px solid var(--line)}
+  .hint{text-align:center;color:var(--sub);font-size:12.5px;margin-top:10px}
+  @media(max-width:720px){.mm{flex-direction:column}.mm-root{flex:0 0 auto;justify-content:flex-start}.mm-branches{border-left:none;padding-left:0;padding-top:14px;border-top:2px dashed var(--line)}}
+</style>
+</head>
+<body>
+<header>
+  <div class="badge">每日一学 · 2026-07-09</div>
+  <h1>情绪勒索</h1>
+  <div class="meta">作者：<b>苏珊·福沃德 / 唐娜·弗雷泽</b> ｜ 分类：<b>个人成长 · 人际关系 · 心理边界</b> ｜ 关键词：情绪勒索 · FOG · 界限 · 非防御性沟通</div>
+</header>
+
+<div class="wrap">
+
+  <!-- ===== 思维导图 ===== -->
+  <section>
+    <div class="sec-title"><span class="bar"></span><span class="dot"></span>思维导图</div>
+    <div class="mm">
+      <div class="mm-root"><div class="node">情绪<br>勒索</div></div>
+      <div class="mm-branches">
+
+        <div class="branch open k1">
+          <div class="branch-head" onclick="this.parentNode.classList.toggle('open')">
+            <div class="ic">💡</div><div class="t">核心思想</div>
+            <div class="cnt">1 条</div><div class="arrow">▶</div>
+          </div>
+          <div class="branch-body"><ul>
+            <li><b>你身边那些让你“不得不就范”的人，用的不是道理，而是恐惧、义务与内疚。</b>情绪勒索是一种隐形的关系操控：对方用威胁、沉默、内疚或自我牺牲，让你为了“不破坏关系”而放弃自己的边界。破解之道不是改变对方，而是先看清这团“迷雾”，再夺回说“不”的权利。</li>
+          </ul></div>
+        </div>
+
+        <div class="branch open k2">
+          <div class="branch-head" onclick="this.parentNode.classList.toggle('open')">
+            <div class="ic">🧩</div><div class="t">四要素核心框架</div>
+            <div class="cnt">4 步</div><div class="arrow">▶</div>
+          </div>
+          <div class="branch-body"><ul>
+            <li><b>① 识别迷雾（FOG）</b>：看清对方是用恐惧(Fear)、义务(Obligation)、内疚(Guilt)中的哪一种在操控你。</li>
+            <li><b>② 看穿类型</b>：区分惩罚者、自我牺牲者、悲情者、调停者四种勒索者，针对性应对。</li>
+            <li><b>③ 切断循环</b>：识别情绪勒索的六阶段，在“施压—威胁”之前就停止配合，让循环断链。</li>
+            <li><b>④ 设立界限</b>：用 SOS 三步法 + 非防御性沟通，温和而坚定地守住自己的底线。</li>
+          </ul></div>
+        </div>
+
+        <div class="branch open k3">
+          <div class="branch-head" onclick="this.parentNode.classList.toggle('open')">
+            <div class="ic">📚</div><div class="t">主要知识点</div>
+            <div class="cnt">8 个</div><div class="arrow">▶</div>
+          </div>
+          <div class="branch-body"><ul>
+            <li>FOG 三迷雾：恐惧 / 义务 / 内疚</li>
+            <li>情绪勒索的定义与典型信号</li>
+            <li>勒索者的四种类型（惩罚者·牺牲者·悲情者·调停者）</li>
+            <li>情绪勒索的六阶段循环</li>
+            <li>受害者的“三件套”：病态恐惧·过度责任感·冲突恐惧</li>
+            <li>设立界限（Setting Limits）</li>
+            <li>非防御性沟通（不解释、不辩解、不道歉过度）</li>
+            <li>SOS 三步法：停下来·客观化·策略化</li>
+          </ul></div>
+        </div>
+
+        <div class="branch open k4">
+          <div class="branch-head" onclick="this.parentNode.classList.toggle('open')">
+            <div class="ic">✨</div><div class="t">金句</div>
+            <div class="cnt">5 句</div><div class="arrow">▶</div>
+          </div>
+          <div class="branch-body"><ul>
+            <li>恐惧、义务与内疚，是情绪勒索者用来遮蔽你判断力的三团迷雾。</li>
+            <li>情绪勒索者最厉害的武器，是他们知道你的软肋在哪里。</li>
+            <li>你不必为别人的情绪负责。</li>
+            <li>设立界限不是拒绝别人，而是保护关系。</li>
+            <li>每一次屈服，都是在为下一次勒索铺路。</li>
+          </ul></div>
+        </div>
+
+        <div class="branch open k5">
+          <div class="branch-head" onclick="this.parentNode.classList.toggle('open')">
+            <div class="ic">✅</div><div class="t">行动建议</div>
+            <div class="cnt">5 条</div><div class="arrow">▶</div>
+          </div>
+          <div class="branch-body"><ul>
+            <li>列一张“被逼清单”，标注每段关系里是恐惧/义务/内疚哪种在驱动你。</li>
+            <li>对一次小要求说“我需要考虑一下”，争取 24 小时缓冲，打破秒回。</li>
+            <li>练习非防御性沟通：“我理解你的感受，但我不能……”不解释不道歉过度。</li>
+            <li>被施压时启动 SOS：先停下来、客观化对方要求、再制定策略回应。</li>
+            <li>每天记录一件“为自己而做”的小事，把自我价值从他人评价里抽离出来。</li>
+          </ul></div>
+        </div>
+
+      </div>
+    </div>
+    <div class="hint">点击任意分支标题可展开 / 收起 ▾</div>
+  </section>
+
+  <!-- ===== 核心洞见 ===== -->
+  <section>
+    <div class="sec-title"><span class="bar"></span><span class="dot"></span>核心洞见</div>
+    <div class="card" style="border-left:4px solid var(--accent2)">
+      <p>很多人在关系里长期感到“被绑架”——明明不想做，却总被一股无形的力量推着就范。苏珊·福沃德在《情绪勒索》里点破了这股力量的本质：<b style="color:var(--txt)">对方用的从来不是道理，而是恐惧(Fear)、义务(Obligation)与内疚(Guilt)，她称之为笼罩关系的“FOG 迷雾”。</b></p>
+      <p style="margin-top:10px">更反直觉的是：情绪勒索能成立，是因为“受害者”也有软肋——病态的恐惧（怕被抛弃/不被爱）、过度的责任感（觉得必须为别人的情绪负责）、对冲突的本能逃避。勒索者只是精准地踩中了这些软肋。<b style="color:var(--txt)">所以破解的关键不在改变对方，而在看清迷雾、重建自我，并温和而坚定地设立界限。</b>每一次无底线的屈服，其实都是在训练对方“下次可以更过分”。</p>
+    </div>
+  </section>
+
+  <!-- ===== 四要素 / 核心框架 ===== -->
+  <section>
+    <div class="sec-title"><span class="bar"></span><span class="dot"></span>四要素核心框架</div>
+    <div class="step"><div class="num">1</div><div><h3>识别迷雾 · FOG</h3><p>先给“被逼感”定性：对方用的是恐惧（再闹我就……）、义务（你本该……）还是内疚（我都是为你好）？看清是哪一种迷雾，你才能不被它牵着走。</p></div></div>
+    <div class="step"><div class="num">2</div><div><h3>看穿类型</h3><p>惩罚者用直接威胁；自我牺牲者用“我为你付出那么多”制造内疚；悲情者装可怜博同情；调停者用虚假承诺诱惑。分清类型，才能选对回应方式。</p></div></div>
+    <div class="step"><div class="num">3</div><div><h3>切断循环</h3><p>情绪勒索有六阶段：要求→抵抗→施压→威胁→屈服→重复。对你而言，唯一能打断它的，是在“施压/威胁”阶段停止配合，不再屈服，循环就会断链。</p></div></div>
+    <div class="step"><div class="num">4</div><div><h3>设立界限</h3><p>用 SOS 三步法（Stop 停下来 / Objectify 客观化 / Strategize 策略化）稳住自己，再用非防御性沟通守住底线。界限不是墙，而是你守望关系的门槛。</p></div></div>
+  </section>
+
+  <!-- ===== 主要知识点 ===== -->
+  <section>
+    <div class="sec-title"><span class="bar"></span><span class="dot"></span>主要知识点</div>
+    <div class="grid">
+      <div class="card"><h3>FOG 三迷雾</h3><p>恐惧(Fear)、义务(Obligation)、内疚(Guilt)——情绪勒索者遮蔽你理智、让你就范的三大武器。</p></div>
+      <div class="card"><h3>情绪勒索的定义</h3><p>对方以“破坏关系/撤回爱/惩罚”相要挟，逼你顺从其要求，且你的感受被系统性无视。</p></div>
+      <div class="card"><h3>四种勒索者</h3><p>惩罚者（威胁）、自我牺牲者（内疚）、悲情者（装可怜）、调停者（虚假承诺诱惑）。</p></div>
+      <div class="card"><h3>六阶段循环</h3><p>要求→抵抗→施压→威胁→屈服→重复。破解=在屈服前停手，让循环无法闭环。</p></div>
+      <div class="card"><h3>受害者三件套</h3><p>病态恐惧、过度责任感、冲突恐惧。勒索者踩中的正是这些软肋。</p></div>
+      <div class="card"><h3>设立界限</h3><p>明确“我可以接受什么、不能接受什么”，并让对方知道越界的后果，温和而具体。</p></div>
+      <div class="card"><h3>非防御性沟通</h3><p>不解释、不辩解、不道歉过度；用“我理解，但我不能……”稳住立场，不接情绪球。</p></div>
+      <div class="card"><h3>SOS 三步法</h3><p>Stop 先停下来冷静；Objectify 把对方要求客观化、去情绪化；Strategize 制定应对策略。</p></div>
+    </div>
+  </section>
+
+  <!-- ===== 金句 ===== -->
+  <section>
+    <div class="sec-title"><span class="bar"></span><span class="dot"></span>金句</div>
+    <div class="quotes">
+      <div class="quote">恐惧、义务与内疚，是情绪勒索者用来遮蔽你判断力的三团迷雾。<span>—— 情绪勒索</span></div>
+      <div class="quote">情绪勒索者最厉害的武器，是他们知道你的软肋在哪里。<span>—— 情绪勒索</span></div>
+      <div class="quote">你不必为别人的情绪负责。<span>—— 情绪勒索</span></div>
+      <div class="quote">设立界限不是拒绝别人，而是保护关系。<span>—— 情绪勒索</span></div>
+      <div class="quote">每一次屈服，都是在为下一次勒索铺路。<span>—— 情绪勒索</span></div>
+    </div>
+  </section>
+
+  <!-- ===== 行动建议 ===== -->
+  <section>
+    <div class="sec-title"><span class="bar"></span><span class="dot"></span>行动建议</div>
+    <ol class="actions">
+      <li>列一张 <b>“被逼清单”</b>：写下最近几次你“不想做却做了”的事，标注是<b>恐惧 / 义务 / 内疚</b>哪一种在驱动你。</li>
+      <li>对一次<b>小要求</b>练习说“我需要考虑一下”，争取 24 小时缓冲，打破“秒回就范”的惯性。</li>
+      <li>练习<b>非防御性沟通</b>：“我理解你的感受，但我不能……”——不解释、不辩解、不道歉过度。</li>
+      <li>被施压时启动 <b>SOS</b>：先<b>停下来</b>冷静，把对方要求<b>客观化</b>，再<b>策略化</b>地回应。</li>
+      <li>每天记录一件 <b>“为自己而做”</b> 的小事，逐步把自我价值从他人的评价里抽离出来。</li>
+    </ol>
+  </section>
+
+  <footer>每日一学 · 个人成长思维书单 ｜ 2026-07-09《情绪勒索》｜ 看清迷雾，拿回说“不”的权利</footer>
+</div>
+</body>
+</html>
