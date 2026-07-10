@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 认知觉醒</title>
+<style>
+  :root{
+    --bg:#0f1220; --panel:#171b2e; --panel2:#1f2540; --line:#2c3358;
+    --txt:#e8ecff; --sub:#a7afd6; --accent:#7c8cff; --accent2:#37d0a6;
+    --gold:#ffcf5c; --warn:#ff8a8a; --c1:#7c8cff; --c2:#37d0a6; --c3:#ff9f6b; --c4:#c98bff; --c5:#5cc8ff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    background:radial-gradient(1200px 600px at 50% -10%,#1b2240 0,transparent 60%),var(--bg);
+    background-color:var(--bg); color:var(--txt); line-height:1.7; padding:0 0 60px;
+  }
+  header{
+    text-align:center; padding:46px 20px 30px;
+    background:linear-gradient(135deg,rgba(124,140,255,.18),rgba(55,208,166,.12));
+    border-bottom:1px solid var(--line);
+  }
+  header .badge{display:inline-block;font-size:13px;letter-spacing:2px;color:var(--accent2);
+    border:1px solid var(--accent2);border-radius:30px;padding:4px 16px;margin-bottom:14px}
+  header h1{font-size:34px;font-weight:800;letter-spacing:1px}
+  header .meta{margin-top:10px;color:var(--sub);font-size:14px}
+  header .meta b{color:var(--gold)}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 18px}
+  section{margin-top:34px}
+  .sec-title{display:flex;align-items:center;gap:10px;font-size:20px;font-weight:700;margin-bottom:16px}
+  .sec-title .dot{width:10px;height:10px;border-radius:50%;background:var(--accent)}
+  .sec-title .bar{width:4px;height:22px;border-radius:3px;background:linear-gradient(var(--accent),var(--accent2))}
+
+  /* ===== Mind map ===== */
+  .mm{display:flex;gap:0;align-items:stretch;flex-wrap:nowrap;overflow-x:auto;padding:10px 2px 18px}
+  .mm-root{flex:0 0 150px;display:flex;align-items:center;justify-content:center}
+  .mm-root .node{
+    background:linear-gradient(135deg,var(--accent),var(--c4));
+    color:#0d1020;font-weight:800;font-size:17px;text-align:center;border-radius:16px;
+    padding:18px 14px;box-shadow:0 10px 30px rgba(124,140,255,.35);min-width:130px;
+  }
+  .mm-branches{flex:1 1 auto;display:flex;flex-direction:column;gap:14px;padding-left:26px;position:relative;border-left:2px dashed var(--line)}
+  .branch{background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden;transition:.25s}
+  .branch:hover{border-color:var(--accent)}
+  .branch-head{display:flex;align-items:center;gap:12px;padding:13px 16px;cursor:pointer;user-select:none}
+  .branch-head .ic{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex:0 0 34px}
+  .branch-head .t{font-weight:700;font-size:16px;flex:1}
+  .branch-head .cnt{font-size:12px;color:var(--sub);background:var(--panel2);padding:2px 10px;border-radius:20px}
+  .branch-head .arrow{transition:.25s;color:var(--sub)}
+  .branch.open .branch-head .arrow{transform:rotate(90deg)}
+  .branch-body{max-height:0;overflow:hidden;transition:max-height .3s ease}
+  .branch.open .branch-body{max-height:900px}
+  .branch-body ul{list-style:none;padding:4px 16px 16px 26px}
+  .branch-body li{position:relative;padding:7px 0 7px 18px;color:var(--sub);font-size:14.5px;border-bottom:1px dashed rgba(255,255,255,.05)}
+  .branch-body li:last-child{border-bottom:none}
+  .branch-body li::before{content:"";position:absolute;left:0;top:15px;width:7px;height:7px;border-radius:50%;background:var(--accent)}
+  .branch-body li b{color:var(--txt)}
+  .k1 .ic{background:rgba(124,140,255,.2)} .k2 .ic{background:rgba(55,208,166,.2)}
+  .k3 .ic{background:rgba(255,159,107,.2)} .k4 .ic{background:rgba(201,139,255,.2)} .k5 .ic{background:rgba(92,200,255,.2)}
+
+  /* ===== Cards ===== */
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+  .card h3{font-size:15px;margin-bottom:8px;color:var(--accent2)}
+  .card p{color:var(--sub);font-size:14px}
+  .step{display:flex;gap:14px;align-items:flex-start;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:12px}
+  .step .num{flex:0 0 40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;color:#0d1020}
+  .step:nth-child(1) .num{background:var(--c1)} .step:nth-child(2) .num{background:var(--c2)}
+  .step:nth-child(3) .num{background:var(--c3)} .step:nth-child(4) .num{background:var(--c4)}
+  .step h3{font-size:16px;margin-bottom:4px}
+  .step p{color:var(--sub);font-size:14px}
+
+  .quotes{display:grid;gap:14px}
+  .quote{position:relative;background:linear-gradient(135deg,rgba(255,207,92,.1),rgba(255,138,138,.06));
+    border:1px solid rgba(255,207,92,.3);border-left:4px solid var(--gold);border-radius:12px;padding:16px 20px;font-size:16px}
+  .quote span{display:block;margin-top:8px;color:var(--gold);font-size:13px;text-align:right}
+
+  .actions{counter-reset:a}
+  .actions li{list-style:none;position:relative;padding:12px 16px 12px 52px;background:var(--panel);border:1px solid var(--line);border-radius:12px;margin-bottom:10px;color:var(--txt);font-size:14.5px}
+  .actions li::before{counter-increment:a;content:counter(a);position:absolute;left:14px;top:50%;transform:translateY(-50%);
+    width:26px;height:26px;border-radius:50%;background:linear-gradient(var(--accent),var(--accent2));color:#0d1020;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:13px}
+  .actions li b{color:var(--accent2)}
+
+  footer{text-align:center;color:var(--sub);font-size:13px;margin-top:46px;padding-top:20px;border-top:1px solid var(--line)}
+  .hint{text-align:center;color:var(--sub);font-size:12.5px;margin-top:10px}
+  @media(max-width:720px){.mm{flex-direction:column}.mm-root{flex:0 0 auto;justify-content:flex-start}.mm-branches{border-left:none;padding-left:0;padding-top:14px;border-top:2px dashed var(--line)}}
+</style>
+</head>
+<body>
+<header>
+  <div class="badge">每日一学 · 2026-07-10</div>
+  <h1>认知觉醒</h1>
+  <div class="meta">作者：<b>周岭</b> ｜ 分类：<b>个人成长 · 认知科学 · 自我觉醒</b> ｜ 关键词：元认知 · 三重大脑 · 舒适区边缘 · 清晰力 · 早冥读写跑</div>
+</header>
+
+<div class="wrap">
+
+  <!-- ===== 思维导图 ===== -->
+  <section>
+    <div class="sec-title"><span class="bar"></span><span class="dot"></span>思维导图</div>
+    <div class="mm">
+      <div class="mm-root"><div class="node">认知<br>觉醒</div></div>
+      <div class="mm-branches">
+
+        <div class="branch open k1">
+          <div class="branch-head" onclick="this.parentNode.classList.toggle('open')">
+            <div class="ic">💡</div><div class="t">核心思想</div>
+            <div class="cnt">1 条</div><div class="arrow">▶</div>
+          </div>
+          <div class="branch-body"><ul>
+            <li><b>人与人之间最根本的差异，是认知能力的差异。</b>认知决定选择，选择改变命运；而真正的改变，始于对自己大脑的"觉察"。我们常"懂很多道理却过不好这一生"，是因为理智脑太年轻、太弱小，总被本能和情绪劫持。觉醒，就是用成长带来的"清晰"与"元认知"，让理智脑学会驱动而非对抗本能脑与情绪脑。</li>
+          </ul></div>
+        </div>
+
+        <div class="branch open k2">
+          <div class="branch-head" onclick="this.parentNode.classList.toggle('open')">
+            <div class="ic">🧩</div><div class="t">四要素核心框架</div>
+            <div class="cnt">4 步</div><div class="arrow">▶</div>
+          </div>
+          <div class="branch-body"><ul>
+            <li><b>① 三重大脑</b>：本能脑（3.6亿年）、情绪脑（2亿年）、理智脑（250万年）。理解"为何总被情绪带跑"，才能用理智去引导和驯服它们。</li>
+            <li><b>② 清晰力</b>：模糊是人生困扰之源。把目标写下来、拆到"下一步动作"，用清晰对抗本能的避难趋易。</li>
+            <li><b>③ 舒适区边缘</b>：成长最快的地方是"拉伸区"——太简单无聊、太难焦虑，匹配"能力×难度"才能持续进步。</li>
+            <li><b>④ 成长五件套</b>：早起、冥想、读书、写作、跑步。成本极低、产出极高的人生习惯，用行动重塑大脑。</li>
+          </ul></div>
+        </div>
+
+        <div class="branch open k3">
+          <div class="branch-head" onclick="this.parentNode.classList.toggle('open')">
+            <div class="ic">📚</div><div class="t">主要知识点</div>
+            <div class="cnt">10 个</div><div class="arrow">▶</div>
+          </div>
+          <div class="branch-body"><ul>
+            <li>三重大脑模型：本能脑 / 情绪脑 / 理智脑的演化与分工</li>
+            <li>焦虑公式：欲望远大于能力，且急于求成 + 避难趋易</li>
+            <li>元认知：对"思考"的思考，分被动元认知与主动元认知</li>
+            <li>清晰力：写下来让目标显形，拆解到最小可执行动作</li>
+            <li>深度学习：极度专注 + 主动休息 + 关联（把知识"缝接"起来）</li>
+            <li>舒适区边缘 / 拉伸区：最佳成长区间理论</li>
+            <li>反馈机制：及时的正向反馈是坚持的真正燃料</li>
+            <li>早冥读写跑：五件套人生习惯及其底层逻辑</li>
+            <li>复利与耐心：用长远视角对抗速成焦虑</li>
+            <li>触动学习法：有"触动"= 与已有认知产生了连接</li>
+          </ul></div>
+        </div>
+
+        <div class="branch open k4">
+          <div class="branch-head" onclick="this.parentNode.classList.toggle('open')">
+            <div class="ic">✨</div><div class="t">金句</div>
+            <div class="cnt">5 句</div><div class="arrow">▶</div>
+          </div>
+          <div class="branch-body"><ul>
+            <li>人与人之间的根本差异，是认知能力上的差异；因为认知影响选择，而选择改变命运。</li>
+            <li>我们生而为人，拥有三重大脑，但理智脑的力量实在太微弱了。</li>
+            <li>焦虑的根源，是想同时做很多事，又想立即看到效果。</li>
+            <li>真正的觉醒，是发自内心地想变好，并清楚地知道自己要什么。</li>
+            <li>你若沉浸于当前的事物，便会自动忽略其他；而元认知，让你能跳出来看见自己。</li>
+          </ul></div>
+        </div>
+
+        <div class="branch open k5">
+          <div class="branch-head" onclick="this.parentNode.classList.toggle('open')">
+            <div class="ic">✅</div><div class="t">行动建议</div>
+            <div class="cnt">6 条</div><div class="arrow">▶</div>
+          </div>
+          <div class="branch-body"><ul>
+            <li>每天写下"当日最重要的一件事"，并拆到可立即执行的最小动作，用清晰对抗模糊。</li>
+            <li>培养主动元认知：每天抽 10 分钟"跳出自己"审视一个决策——我刚才为何这样想 / 这样做？</li>
+            <li>从"早冥读写跑"五件套里先挑 1–2 件做起（如早起 + 读书），不求全、先启动。</li>
+            <li>把学习 / 练习放在舒适区边缘：太简单就加难度，太难就降难度，保持"踮脚够得着"。</li>
+            <li>给行动加"及时反馈"：读完写 3 句感想、跑完记成绩，用正反馈喂养坚持。</li>
+            <li>用"7 天微习惯"起步，先完成再完美，以耐心替代速成焦虑。</li>
+          </ul></div>
+        </div>
+
+      </div>
+    </div>
+    <div class="hint">点击任意分支标题可展开 / 收起 ▾</div>
+  </section>
+
+  <!-- ===== 核心洞见 ===== -->
+  <section>
+    <div class="sec-title"><span class="bar"></span><span class="dot"></span>核心洞见</div>
+    <div class="card" style="border-left:4px solid var(--accent2)">
+      <p>为什么我们"懂那么多道理，却依然过不好这一生"？周岭在《认知觉醒》里给出的答案很硬核：<b style="color:var(--txt)">人与人之间的根本差异是认知能力的差异，因为认知决定选择，选择改变命运。</b>而我们大脑的硬件，天然"不站在理智这边"。</p>
+      <p style="margin-top:10px">人类大脑由三重大脑构成：3.6 亿年前演化的本能脑、2 亿年前的情绪脑、以及仅 250 万年的理智脑。理智脑虽然高级，却资历最浅、力量最弱，常常被本能（避难趋易）和情绪（急于求成）劫持——这正是焦虑、拖延、三分钟热度的生理根源。<b style="color:var(--txt)">所以觉醒不是"战胜自己"，而是用清晰的目标、主动的元认知和稳定的习惯，让理智脑学会"驱动"而非"对抗"本能和情绪。</b>改变的本质是大脑的神经重塑，而钥匙，就握在每天微小的、可执行的行动里。</p>
+    </div>
+  </section>
+
+  <!-- ===== 四要素 / 核心框架 ===== -->
+  <section>
+    <div class="sec-title"><span class="bar"></span><span class="dot"></span>四要素核心框架</div>
+    <div class="step"><div class="num">1</div><div><h3>三重大脑 · 认识你的"司机"</h3><p>本能脑负责生存、情绪脑负责感受、理智脑负责远见。接受"理智脑很弱"这个事实，不再苛责自己，转而学会用理智去引导、驯服前两者。</p></div></div>
+    <div class="step"><div class="num">2</div><div><h3>清晰力 · 对抗模糊</h3><p>模糊是人生困扰之源。把模糊的愿望写成清晰的目标，再拆解到"下一步动作"（如"读书"→"每晚 9 点读 10 页"），让本能无从偷懒。</p></div></div>
+    <div class="step"><div class="num">3</div><div><h3>舒适区边缘 · 找对难度</h3><p>太简单会无聊、太难会焦虑，成长最快的是"拉伸区"。让任务难度始终匹配你的当前能力，踮脚够得着，才能持续精进。</p></div></div>
+    <div class="step"><div class="num">4</div><div><h3>成长五件套 · 重塑大脑</h3><p>早起、冥想、读书、写作、跑步。这五件事成本极低、产出极高，用每天微小的行动，从生理层面重塑你的大脑与认知。</p></div></div>
+  </section>
+
+  <!-- ===== 主要知识点 ===== -->
+  <section>
+    <div class="sec-title"><span class="bar"></span><span class="dot"></span>主要知识点</div>
+    <div class="grid">
+      <div class="card"><h3>三重大脑</h3><p>本能脑（爬行动物脑）、情绪脑（哺乳动物脑）、理智脑（新皮层）。理智脑最年轻也最弱小，常被前两者劫持。</p></div>
+      <div class="card"><h3>焦虑公式</h3><p>欲望远大于能力，叠加"急于求成"与"避难趋易"两种天性，便产生焦虑与内耗。</p></div>
+      <div class="card"><h3>元认知</h3><p>对"思考"的思考。被动元认知随波逐流；主动元认知能跳出来审视自己的思维过程——觉醒者的分水岭。</p></div>
+      <div class="card"><h3>清晰力</h3><p>模糊是困扰之源。把目标写下来、拆解到最小动作，用"前馈"让路径显形，本能便难偷懒。</p></div>
+      <div class="card"><h3>深度学习</h3><p>极度专注 + 主动休息（如番茄钟底层）+ 关联：把新知识与旧认知"缝接"，触动=产生连接。</p></div>
+      <div class="card"><h3>舒适区边缘</h3><p>学习区 / 拉伸区是最佳成长区间。匹配"能力×难度"，避免落入"自动完成"或"习得性无助"。</p></div>
+      <div class="card"><h3>反馈机制</h3><p>及时的正向反馈是坚持的真正燃料。读书写感想、运动记成绩，都是给自己造反馈。</p></div>
+      <div class="card"><h3>早冥读写跑</h3><p>五件套人生习惯：早起提效、冥想练专注、读书涨认知、写作促内化、跑步强身心。</p></div>
+      <div class="card"><h3>复利与耐心</h3><p>认知与习惯的复利需要时间。用长远视角对抗速成心态，耐心本身就是一种认知能力。</p></div>
+      <div class="card"><h3>触动学习法</h3><p>不是"读完多少"，而是"触动多少"。有触动的碎片才会与旧认知连接，真正进入长期记忆。</p></div>
+    </div>
+  </section>
+
+  <!-- ===== 金句 ===== -->
+  <section>
+    <div class="sec-title"><span class="bar"></span><span class="dot"></span>金句</div>
+    <div class="quotes">
+      <div class="quote">人与人之间的根本差异，是认知能力上的差异；因为认知影响选择，而选择改变命运。<span>—— 认知觉醒</span></div>
+      <div class="quote">我们生而为人，拥有三重大脑，但理智脑的力量实在太微弱了。<span>—— 认知觉醒</span></div>
+      <div class="quote">焦虑的根源，是想同时做很多事，又想立即看到效果。<span>—— 认知觉醒</span></div>
+      <div class="quote">真正的觉醒，是发自内心地想变好，并清楚地知道自己要什么。<span>—— 认知觉醒</span></div>
+      <div class="quote">你若沉浸于当前的事物，便会自动忽略其他；而元认知，让你能跳出来看见自己。<span>—— 认知觉醒</span></div>
+    </div>
+  </section>
+
+  <!-- ===== 行动建议 ===== -->
+  <section>
+    <div class="sec-title"><span class="bar"></span><span class="dot"></span>行动建议</div>
+    <ol class="actions">
+      <li>每天写下 <b>当日最重要的一件事</b>，并拆到可立即执行的最小动作，用清晰对抗模糊。</li>
+      <li>培养<b>主动元认知</b>：每天抽 10 分钟"跳出自己"审视一个决策——我刚才为何这样想 / 这样做？</li>
+      <li>从 <b>"早冥读写跑"</b> 五件套里先挑 1–2 件做起（如早起 + 读书），不求全、先启动。</li>
+      <li>把学习 / 练习放在 <b>舒适区边缘</b>：太简单就加难度，太难就降难度，保持"踮脚够得着"。</li>
+      <li>给行动加 <b>及时反馈</b>：读完写 3 句感想、跑完记成绩，用正反馈喂养坚持。</li>
+      <li>用 <b>"7 天微习惯"</b> 起步，先完成再完美，以耐心替代速成焦虑。</li>
+    </ol>
+  </section>
+
+  <footer>每日一学 · 个人成长思维书单 ｜ 2026-07-10《认知觉醒》｜ 觉醒，从对自己大脑的觉察开始</footer>
+</div>
+</body>
+</html>
