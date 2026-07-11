@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 认知驱动</title>
+<style>
+  :root{
+    --bg:#0f1220; --panel:#171b2e; --panel2:#1f2540; --line:#2c3358;
+    --txt:#e8ecff; --sub:#a7afd6; --accent:#7c8cff; --accent2:#37d0a6;
+    --gold:#ffcf5c; --warn:#ff8a8a; --c1:#7c8cff; --c2:#37d0a6; --c3:#ff9f6b; --c4:#c98bff; --c5:#5cc8ff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    background:radial-gradient(1200px 600px at 50% -10%,#1b2240 0,transparent 60%),var(--bg);
+    background-color:var(--bg); color:var(--txt); line-height:1.7; padding:0 0 60px;
+  }
+  header{
+    text-align:center; padding:46px 20px 30px;
+    background:linear-gradient(135deg,rgba(124,140,255,.18),rgba(55,208,166,.12));
+    border-bottom:1px solid var(--line);
+  }
+  header .badge{display:inline-block;font-size:13px;letter-spacing:2px;color:var(--accent2);
+    border:1px solid var(--accent2);border-radius:30px;padding:4px 16px;margin-bottom:14px}
+  header h1{font-size:34px;font-weight:800;letter-spacing:1px}
+  header .meta{margin-top:10px;color:var(--sub);font-size:14px}
+  header .meta b{color:var(--gold)}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 18px}
+  section{margin-top:34px}
+  .sec-title{display:flex;align-items:center;gap:10px;font-size:20px;font-weight:700;margin-bottom:16px}
+  .sec-title .dot{width:10px;height:10px;border-radius:50%;background:var(--accent)}
+  .sec-title .bar{width:4px;height:22px;border-radius:3px;background:linear-gradient(var(--accent),var(--accent2))}
+
+  /* ===== Mind map ===== */
+  .mm{display:flex;gap:0;align-items:stretch;flex-wrap:nowrap;overflow-x:auto;padding:10px 2px 18px}
+  .mm-root{flex:0 0 150px;display:flex;align-items:center;justify-content:center}
+  .mm-root .node{
+    background:linear-gradient(135deg,var(--accent),var(--c4));
+    color:#0d1020;font-weight:800;font-size:17px;text-align:center;border-radius:16px;
+    padding:18px 14px;box-shadow:0 10px 30px rgba(124,140,255,.35);min-width:130px;
+  }
+  .mm-branches{flex:1 1 auto;display:flex;flex-direction:column;gap:14px;padding-left:26px;position:relative;border-left:2px dashed var(--line)}
+  .branch{background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden;transition:.25s}
+  .branch:hover{border-color:var(--accent)}
+  .branch-head{display:flex;align-items:center;gap:12px;padding:13px 16px;cursor:pointer;user-select:none}
+  .branch-head .ic{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex:0 0 34px}
+  .branch-head .t{font-weight:700;font-size:16px;flex:1}
+  .branch-head .cnt{font-size:12px;color:var(--sub);background:var(--panel2);padding:2px 10px;border-radius:20px}
+  .branch-head .arrow{transition:.25s;color:var(--sub)}
+  .branch.open .branch-head .arrow{transform:rotate(90deg)}
+  .branch-body{max-height:0;overflow:hidden;transition:max-height .3s ease}
+  .branch.open .branch-body{max-height:900px}
+  .branch-body ul{list-style:none;padding:4px 16px 16px 26px}
+  .branch-body li{position:relative;padding:7px 0 7px 18px;color:var(--sub);font-size:14.5px;border-bottom:1px dashed rgba(255,255,255,.05)}
+  .branch-body li:last-child{border-bottom:none}
+  .branch-body li::before{content:"";position:absolute;left:0;top:15px;width:7px;height:7px;border-radius:50%;background:var(--accent)}
+  .branch-body li b{color:var(--txt)}
+  .k1 .ic{background:rgba(124,140,255,.2)} .k2 .ic{background:rgba(55,208,166,.2)}
+  .k3 .ic{background:rgba(255,159,107,.2)} .k4 .ic{background:rgba(201,139,255,.2)} .k5 .ic{background:rgba(92,200,255,.2)}
+
+  /* ===== Cards ===== */
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+  .card h3{font-size:15px;margin-bottom:8px;color:var(--accent2)}
+  .card p{color:var(--sub);font-size:14px}
+  .step{display:flex;gap:14px;align-items:flex-start;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:12px}
+  .step .num{flex:0 0 40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;color:#0d1020}
+  .step:nth-child(1) .num{background:var(--c1)} .step:nth-child(2) .num{background:var(--c2)}
+  .step:nth-child(3) .num{background:var(--c3)} .step:nth-child(4) .num{background:var(--c4)}
+  .step h3{font-size:16px;margin-bottom:4px}
+  .step p{color:var(--sub);font-size:14px}
+
+  .quotes{display:grid;gap:14px}
+  .quote{position:relative;background:linear-gradient(135deg,rgba(255,207,92,.1),rgba(255,138,138,.06));
+    border:1px solid rgba(255,207,92,.3);border-left:4px solid var(--gold);border-radius:12px;padding:16px 20px;font-size:16px}
+  .quote span{display:block;margin-top:8px;color:var(--gold);font-size:13px;text-align:right}
+
+  .actions{counter-reset:a}
+  .actions li{list-style:none;position:relative;padding:12px 16px 12px 52px;background:var(--panel);border:1px solid var(--line);border-radius:12px;margin-bottom:10px;color:var(--txt);font-size:14.5px}
+  .actions li::before{counter-increment:a;content:counter(a);position:absolute;left:14px;top:50%;transform:translateY(-50%);
+    width:26px;height:26px;border-radius:50%;background:linear-gradient(var(--accent),var(--accent2));color:#0d1020;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:13px}
+  .actions li b{color:var(--accent2)}
+
+  footer{text-align:center;color:var(--sub);font-size:13px;margin-top:46px;padding-top:20px;border-top:1px solid var(--line)}
+  .hint{text-align:center;color:var(--sub);font-size:12.5px;margin-top:10px}
+  @media(max-width:720px){.mm{flex-direction:column}.mm-root{flex:0 0 auto;justify-content:flex-start}.mm-branches{border-left:none;padding-left:0;padding-top:14px;border-top:2px dashed var(--line)}}
+</style>
+</head>
+<body>
+<header>
+  <div class="badge">每日一学 · 2026-07-11</div>
+  <h1>认知驱动</h1>
+  <div class="meta">作者：<b>周岭</b> ｜ 分类：<b>个人成长 · 自我实现 · 价值创造</b> ｜ 关键词：价值 · 身份 · 心理 · 输出 · 最小可行作品 · 早冥读写跑</div>
+</header>
+
+<div class="wrap">
+
+  <!-- ===== 思维导图 ===== -->
+  <section>
+    <div class="sec-title"><span class="bar"></span><span class="dot"></span>思维导图</div>
+    <div class="mm">
+      <div class="mm-root"><div class="node">认知<br>驱动</div></div>
+      <div class="mm-branches">
+
+        <div class="branch open k1">
+          <div class="branch-head" onclick="this.parentNode.classList.toggle('open')">
+            <div class="ic">💡</div><div class="t">核心思想</div>
+            <div class="cnt">1 条</div><div class="arrow">▶</div>
+          </div>
+          <div class="branch-body"><ul>
+            <li><b>成长的目的不是成长本身，而是创造价值。</b>《认知觉醒》解决"如何成为更好的自己"（内向成长），但很多人觉醒后依然"不成事"——问题出在只对内输入、不对外输出。真正的改变，发生在你向外部交付一件"对他人有用"的作品那一刻。从"我要变好"升级为"我做成了一件有用的事"，用价值、身份、心理三要素驱动行动。</li>
+          </ul></div>
+        </div>
+
+        <div class="branch open k2">
+          <div class="branch-head" onclick="this.parentNode.classList.toggle('open')">
+            <div class="ic">🧩</div><div class="t">四要素核心框架</div>
+            <div class="cnt">4 步</div><div class="arrow">▶</div>
+          </div>
+          <div class="branch-body"><ul>
+            <li><b>① 价值导向</b>：从"对内输入"转向"对外输出"。你赚到的，本质是你为他人创造的价值；一切成长围绕"有用"展开。</li>
+            <li><b>② 身份驱动</b>：用"我是怎样的人"定义行为，而非"我要做什么"。身份认同比意志力更持久、更稳定。</li>
+            <li><b>③ 心理支撑</b>：舒适区边缘（找对难度）+ 多维视角（换角度看挫折）+ 意义（找到行动的理由），构成坚持的心理底座。</li>
+            <li><b>④ 产出作品</b>：打造"最小可行作品（MVP）"，先完成一个粗糙但有价值的东西，再迭代，用作品与世界交换反馈。</li>
+          </ul></div>
+        </div>
+
+        <div class="branch open k3">
+          <div class="branch-head" onclick="this.parentNode.classList.toggle('open')">
+            <div class="ic">📚</div><div class="t">主要知识点</div>
+            <div class="cnt">10 个</div><div class="arrow">▶</div>
+          </div>
+          <div class="branch-body"><ul>
+            <li>内向成长 vs 外向成长：习惯（内向，自己受益）vs 技能（外向，他人受益）</li>
+            <li>价值交换：你为他人创造的价值，决定了你被世界回报的多少</li>
+            <li>身份认同："我是写作者"比"我要坚持写作"更有效</li>
+            <li>心理建设三件套：舒适区边缘、多维视角、意义</li>
+            <li>目标清晰：写下来、拆解、设置里程碑，让路径显形</li>
+            <li>价值输出：每天对外输出（写作/分享），让价值被看见</li>
+            <li>反馈系统：外部反馈是坚持的燃料，主动寻求他人评价</li>
+            <li>最小可行作品（MVP）：先完成再完美，用作品带自己上路</li>
+            <li>复利与耐心：作品价值随时间累积，需要长期主义</li>
+            <li>早冥读写跑（升级版）：在认知觉醒基础上加"输出"维度——每日对外交付</li>
+          </ul></div>
+        </div>
+
+        <div class="branch open k4">
+          <div class="branch-head" onclick="this.parentNode.classList.toggle('open')">
+            <div class="ic">✨</div><div class="t">金句</div>
+            <div class="cnt">5 句</div><div class="arrow">▶</div>
+          </div>
+          <div class="branch-body"><ul>
+            <li>成长的目的不是成长本身，而是创造价值。</li>
+            <li>你不是"想要"成为什么的人，而是"已经是"什么的人——身份决定了行为。</li>
+            <li>对内输入让自己变好，对外输出让世界变好；真正的改变发生在向外输出时。</li>
+            <li>做成一件事的核心，是为他人创造价值。</li>
+            <li>别等准备好了再开始，先做一个最小可行作品，让它带你上路。</li>
+          </ul></div>
+        </div>
+
+        <div class="branch open k5">
+          <div class="branch-head" onclick="this.parentNode.classList.toggle('open')">
+            <div class="ic">✅</div><div class="t">行动建议</div>
+            <div class="cnt">6 条</div><div class="arrow">▶</div>
+          </div>
+          <div class="branch-body"><ul>
+            <li>每天对外输出一点价值：写 200 字分享 / 读书笔记，从"只输入"转向"输入 + 输出"。</li>
+            <li>用身份定义目标："我是一个写作者 / 运动者"，而非"我要坚持写作 / 运动"。</li>
+            <li>打造一个"最小可行作品"：一篇短文、一个短视频、一个小工具，先完成再优化。</li>
+            <li>主动寻求外部反馈：把作品发出去、请他人评价，用真实反馈校准方向。</li>
+            <li>心理建设三件套：把目标放进"舒适区边缘"、用"多维视角"看挫折、找到行动的意义。</li>
+            <li>设定清晰里程碑：把"成为 XX"拆成 3 个阶段成果，每达成一个就给自己正向确认。</li>
+          </ul></div>
+        </div>
+
+      </div>
+    </div>
+    <div class="hint">点击任意分支标题可展开 / 收起 ▾</div>
+  </section>
+
+  <!-- ===== 核心洞见 ===== -->
+  <section>
+    <div class="sec-title"><span class="bar"></span><span class="dot"></span>核心洞见</div>
+    <div class="card" style="border-left:4px solid var(--accent2)">
+      <p>很多人在《认知觉醒》之后陷入一个怪圈：道理都懂、习惯也养了，可生活"看起来还是没变好"。周岭在《认知驱动》里点破了这层窗户纸：<b style="color:var(--txt)">成长的目的不是成长本身，而是创造价值。</b>只向内"养成习惯"是一种"内向成长"——你受益了，但世界没改变，自然也得不到世界的回报。</p>
+      <p style="margin-top:10px">真正的改变，发生在你向外部交付一件"对他人有用"的作品那一刻。从"对内输入"转向"对外输出"，用<b style="color:var(--txt)">价值、身份、心理</b>三要素驱动行动：以价值定方向、以身份定义行为、以心理撑住长期主义，再用"最小可行作品"把抽象的成长落到可交付的实处。<b style="color:var(--txt)">当你不再问"我该如何变好"，而是问"我能为别人解决什么问题"，成长才真正开始兑现。</b></p>
+    </div>
+  </section>
+
+  <!-- ===== 四要素 / 核心框架 ===== -->
+  <section>
+    <div class="sec-title"><span class="bar"></span><span class="dot"></span>四要素核心框架</div>
+    <div class="step"><div class="num">1</div><div><h3>价值导向 · 由内转外</h3><p>从"我要变好"升级为"我做成了一件有用的事"。你为他人创造的价值，决定了你被世界回报的多少——价值是成长与回报之间的转换器。</p></div></div>
+    <div class="step"><div class="num">2</div><div><h3>身份驱动 · 用"我是谁"管行为</h3><p>与其靠意志力"坚持做某事"，不如先锚定身份："我是一个写作者"。身份认同比目标更持久，它会自动塑造日常选择。</p></div></div>
+    <div class="step"><div class="num">3</div><div><h3>心理支撑 · 撑住长期主义</h3><p>舒适区边缘（难度匹配）+ 多维视角（换角度看挫折）+ 意义（行动的理由）。心理底座稳了，才不会在反馈迟到时放弃。</p></div></div>
+    <div class="step"><div class="num">4</div><div><h3>产出作品 · 用作品说话</h3><p>打造"最小可行作品（MVP）"：先完成一个粗糙但有价值的东西，发出去、换反馈、再迭代。完成，永远胜过完美。</p></div></div>
+  </section>
+
+  <!-- ===== 主要知识点 ===== -->
+  <section>
+    <div class="sec-title"><span class="bar"></span><span class="dot"></span>主要知识点</div>
+    <div class="grid">
+      <div class="card"><h3>内向 vs 外向成长</h3><p>习惯养成（内向，自己受益）vs 技能培养与输出（外向，他人受益）。只养成习惯不够，要向外创造。</p></div>
+      <div class="card"><h3>价值交换</h3><p>你赚到的钱与机会，约等于你为别人创造的价值。一切成长围绕"有用"展开才有杠杆。</p></div>
+      <div class="card"><h3>身份认同</h3><p>"我是写作的人"比"我要写作"更有效。身份先行，行为自动跟随——这是比自律更稳的引擎。</p></div>
+      <div class="card"><h3>心理三件套</h3><p>舒适区边缘（找对难度）+ 多维视角（换角度看挫折）+ 意义（为何而做），构成坚持的心理底座。</p></div>
+      <div class="card"><h3>目标清晰</h3><p>写下来、拆解到下一步、设置里程碑。模糊的目标会被本能的避难趋易悄悄吃掉。</p></div>
+      <div class="card"><h3>价值输出</h3><p>每天对外输出：写作、分享、讲课。让价值被看见，才有交换与反馈的可能。</p></div>
+      <div class="card"><h3>反馈系统</h3><p>外部反馈是坚持的真正燃料。主动把作品发出去求评价，用真实反馈校准方向。</p></div>
+      <div class="card"><h3>最小可行作品</h3><p>MVP：先完成一个粗糙但有价值的东西，再迭代。完成本身，就是最强的启动。</p></div>
+      <div class="card"><h3>复利与耐心</h3><p>作品的价值随时间累积。用长期主义对抗"急于求成"，耐心是创造者的底层能力。</p></div>
+      <div class="card"><h3>早冥读写跑（升级）</h3><p>在认知觉醒的五件套上增加"输出"维度：每日对外交付一点价值，让成长对外可见。</p></div>
+    </div>
+  </section>
+
+  <!-- ===== 金句 ===== -->
+  <section>
+    <div class="sec-title"><span class="bar"></span><span class="dot"></span>金句</div>
+    <div class="quotes">
+      <div class="quote">成长的目的不是成长本身，而是创造价值。<span>—— 认知驱动</span></div>
+      <div class="quote">你不是"想要"成为什么的人，而是"已经是"什么的人——身份决定了行为。<span>—— 认知驱动</span></div>
+      <div class="quote">对内输入让自己变好，对外输出让世界变好；真正的改变发生在向外输出时。<span>—— 认知驱动</span></div>
+      <div class="quote">做成一件事的核心，是为他人创造价值。<span>—— 认知驱动</span></div>
+      <div class="quote">别等准备好了再开始，先做一个最小可行作品，让它带你上路。<span>—— 认知驱动</span></div>
+    </div>
+  </section>
+
+  <!-- ===== 行动建议 ===== -->
+  <section>
+    <div class="sec-title"><span class="bar"></span><span class="dot"></span>行动建议</div>
+    <ol class="actions">
+      <li>每天对外输出一点价值：写 200 字分享 / 读书笔记，从"只输入"转向"输入 + 输出"。</li>
+      <li>用身份定义目标："我是一个写作者 / 运动者"，而非"我要坚持写作 / 运动"。</li>
+      <li>打造一个"最小可行作品"：一篇短文、一个短视频、一个小工具，先完成再优化。</li>
+      <li>主动寻求外部反馈：把作品发出去、请他人评价，用真实反馈校准方向。</li>
+      <li>心理建设三件套：把目标放进"舒适区边缘"、用"多维视角"看挫折、找到行动的意义。</li>
+      <li>设定清晰里程碑：把"成为 XX"拆成 3 个阶段成果，每达成一个就给自己正向确认。</li>
+    </ol>
+  </section>
+
+  <footer>每日一学 · 个人成长思维书单 ｜ 2026-07-11《认知驱动》｜ 觉醒之后，用创造兑现成长</footer>
+</div>
+</body>
+</html>
