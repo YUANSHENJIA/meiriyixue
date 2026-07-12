@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 自驱型成长</title>
+<style>
+  :root{
+    --bg:#0f1220; --panel:#171b2e; --panel2:#1f2540; --line:#2c3358;
+    --txt:#e8ecff; --sub:#a7afd6; --accent:#7c8cff; --accent2:#37d0a6;
+    --gold:#ffcf5c; --warn:#ff8a8a; --c1:#7c8cff; --c2:#37d0a6; --c3:#ff9f6b; --c4:#c98bff; --c5:#5cc8ff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    background:radial-gradient(1200px 600px at 50% -10%,#1b2240 0,transparent 60%),var(--bg);
+    background-color:var(--bg); color:var(--txt); line-height:1.7; padding:0 0 60px;
+  }
+  header{
+    text-align:center; padding:46px 20px 30px;
+    background:linear-gradient(135deg,rgba(124,140,255,.18),rgba(55,208,166,.12));
+    border-bottom:1px solid var(--line);
+  }
+  header .badge{display:inline-block;font-size:13px;letter-spacing:2px;color:var(--accent2);
+    border:1px solid var(--accent2);border-radius:30px;padding:4px 16px;margin-bottom:14px}
+  header h1{font-size:34px;font-weight:800;letter-spacing:1px}
+  header .meta{margin-top:10px;color:var(--sub);font-size:14px}
+  header .meta b{color:var(--gold)}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 18px}
+  section{margin-top:34px}
+  .sec-title{display:flex;align-items:center;gap:10px;font-size:20px;font-weight:700;margin-bottom:16px}
+  .sec-title .dot{width:10px;height:10px;border-radius:50%;background:var(--accent)}
+  .sec-title .bar{width:4px;height:22px;border-radius:3px;background:linear-gradient(var(--accent),var(--accent2))}
+
+  /* ===== Mind map ===== */
+  .mm{display:flex;gap:0;align-items:stretch;flex-wrap:nowrap;overflow-x:auto;padding:10px 2px 18px}
+  .mm-root{flex:0 0 150px;display:flex;align-items:center;justify-content:center}
+  .mm-root .node{
+    background:linear-gradient(135deg,var(--accent),var(--c4));
+    color:#0d1020;font-weight:800;font-size:17px;text-align:center;border-radius:16px;
+    padding:18px 14px;box-shadow:0 10px 30px rgba(124,140,255,.35);min-width:130px;
+  }
+  .mm-branches{flex:1 1 auto;display:flex;flex-direction:column;gap:14px;padding-left:26px;position:relative;border-left:2px dashed var(--line)}
+  .branch{background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden;transition:.25s}
+  .branch:hover{border-color:var(--accent)}
+  .branch-head{display:flex;align-items:center;gap:12px;padding:13px 16px;cursor:pointer;user-select:none}
+  .branch-head .ic{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex:0 0 34px}
+  .branch-head .t{font-weight:700;font-size:16px;flex:1}
+  .branch-head .cnt{font-size:12px;color:var(--sub);background:var(--panel2);padding:2px 10px;border-radius:20px}
+  .branch-head .arrow{transition:.25s;color:var(--sub)}
+  .branch.open .branch-head .arrow{transform:rotate(90deg)}
+  .branch-body{max-height:0;overflow:hidden;transition:max-height .3s ease}
+  .branch.open .branch-body{max-height:1200px}
+  .branch-body ul{list-style:none;padding:4px 16px 16px 26px}
+  .branch-body li{position:relative;padding:7px 0 7px 18px;color:var(--sub);font-size:14.5px;border-bottom:1px dashed rgba(255,255,255,.05)}
+  .branch-body li:last-child{border-bottom:none}
+  .branch-body li::before{content:"";position:absolute;left:0;top:15px;width:7px;height:7px;border-radius:50%;background:var(--accent)}
+  .branch-body li b{color:var(--txt)}
+  .k1 .ic{background:rgba(124,140,255,.2)} .k2 .ic{background:rgba(55,208,166,.2)}
+  .k3 .ic{background:rgba(255,159,107,.2)} .k4 .ic{background:rgba(201,139,255,.2)} .k5 .ic{background:rgba(92,200,255,.2)}
+
+  /* ===== Cards ===== */
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+  .card h3{font-size:15px;margin-bottom:8px;color:var(--accent2)}
+  .card p{color:var(--sub);font-size:14px}
+  .step{display:flex;gap:14px;align-items:flex-start;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:12px}
+  .step .num{flex:0 0 40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;color:#0d1020}
+  .step:nth-child(1) .num{background:var(--c1)} .step:nth-child(2) .num{background:var(--c2)}
+  .step:nth-child(3) .num{background:var(--c3)} .step:nth-child(4) .num{background:var(--c4)}
+  .step h3{font-size:16px;margin-bottom:4px}
+  .step p{color:var(--sub);font-size:14px}
+
+  .quotes{display:grid;gap:14px}
+  .quote{position:relative;background:linear-gradient(135deg,rgba(255,207,92,.1),rgba(255,138,138,.06));
+    border:1px solid rgba(255,207,92,.3);border-left:4px solid var(--gold);border-radius:12px;padding:16px 20px;font-size:16px}
+  .quote span{display:block;margin-top:8px;color:var(--gold);font-size:13px;text-align:right}
+
+  .actions{counter-reset:a}
+  .actions li{list-style:none;position:relative;padding:12px 16px 12px 52px;background:var(--panel);border:1px solid var(--line);border-radius:12px;margin-bottom:10px;color:var(--txt);font-size:14.5px}
+  .actions li::before{counter-increment:a;content:counter(a);position:absolute;left:14px;top:50%;transform:translateY(-50%);
+    width:26px;height:26px;border-radius:50%;background:linear-gradient(var(--accent),var(--accent2));color:#0d1020;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:13px}
+  .actions li b{color:var(--accent2)}
+
+  footer{text-align:center;color:var(--sub);font-size:13px;margin-top:46px;padding-top:20px;border-top:1px solid var(--line)}
+  .hint{text-align:center;color:var(--sub);font-size:12.5px;margin-top:10px}
+  @media(max-width:720px){.mm{flex-direction:column}.mm-root{flex:0 0 auto;justify-content:flex-start}.mm-branches{border-left:none;padding-left:0;padding-top:14px;border-top:2px dashed var(--line)}}
+</style>
+</head>
+<body>
+<header>
+  <div class="badge">每日一学 · 2026-07-12</div>
+  <h1>自驱型成长</h1>
+  <div class="meta">作者：<b>威廉·斯蒂克斯鲁德 & 奈德·约翰逊</b> ｜ 分类：<b>个人成长 · 动机 · 自主 · 心理健康</b> ｜ 关键词：控制感 · 非焦虑在场 · 自主权 · 三个S · 顾问式 · 内在动机</div>
+</header>
+
+<div class="wrap">
+
+  <!-- ===== 思维导图 ===== -->
+  <section>
+    <div class="sec-title"><span class="bar"></span><span class="dot"></span>思维导图</div>
+    <div class="mm">
+      <div class="mm-root"><div class="node">自驱型<br>成长</div></div>
+      <div class="mm-branches">
+
+        <div class="branch open k1">
+          <div class="branch-head" onclick="this.parentNode.classList.toggle('open')">
+            <div class="ic">💡</div><div class="t">核心思想</div>
+            <div class="cnt">1 条</div><div class="arrow">▶</div>
+          </div>
+          <div class="branch-body"><ul>
+            <li><b>控制感，是人类动机与心理健康的第一要素。</b>当一个人（无论孩子还是成人）真切感到"我对自己的生活有掌控"，内在驱动力才会启动；相反，缺乏控制感正是慢性压力、焦虑与无力感的源头。与其从外部"推"人前进，不如把方向盘还回他自己手里。</li>
+          </ul></div>
+        </div>
+
+        <div class="branch open k2">
+          <div class="branch-head" onclick="this.parentNode.classList.toggle('open')">
+            <div class="ic">🧩</div><div class="t">四要素核心框架</div>
+            <div class="cnt">4 步</div><div class="arrow">▶</div>
+          </div>
+          <div class="branch-body"><ul>
+            <li><b>① 控制感 · 动机引擎</b>：替人做主会夺走控制感、制造压力；让人自己当家，才点燃内在动机。</li>
+            <li><b>② 非焦虑的在场</b>：成年人的情绪稳定是给孩子最好的礼物——你越平静，他越有安全感去尝试。</li>
+            <li><b>③ 三个S · 安全底座</b>：安全感(Safety) + 结构(Structure) + 支持(Support)，是自主生长的土壤。</li>
+            <li><b>④ 顾问而非老板</b>：用提问代替命令，把决策权交还，让他在真实选择中练出判断力。</li>
+          </ul></div>
+        </div>
+
+        <div class="branch open k3">
+          <div class="branch-head" onclick="this.parentNode.classList.toggle('open')">
+            <div class="ic">📚</div><div class="t">主要知识点</div>
+            <div class="cnt">10 个</div><div class="arrow">▶</div>
+          </div>
+          <div class="branch-body"><ul>
+            <li>压力生理学：慢性压力损伤前额叶（计划/决策中枢），放大杏仁核（威胁反应），让人更易失控</li>
+            <li>控制感悖论：你"感觉"能掌控的事，压力就小；越被替做主，越焦虑</li>
+            <li>自我决定论：自主(Autonomy)、胜任(Competence)、归属(Relatedness)是内在动机三养料</li>
+            <li>非焦虑的在场：家长/领导者的情绪会"传染"，稳住自己是第一责任</li>
+            <li>三个S：安全基地 + 可预期的结构 + 无条件的支持，而非包办代劳</li>
+            <li>顾问式：少给答案多提问（"你怎么想？""你打算怎么办？"）</li>
+            <li>失败即数据：让对方承担自然后果，从挫折中学习，而非急着救场</li>
+            <li>大脑的燃料：睡眠、运动、多巴胺（游戏/联结/正念）是自控力的生理基础</li>
+            <li>放手的艺术：把能自己决定的事逐步交还，容忍暂时的不完美</li>
+            <li>目标感：帮他找到"为什么"，意义感是坚持最深的驱动</li>
+          </ul></div>
+        </div>
+
+        <div class="branch open k4">
+          <div class="branch-head" onclick="this.parentNode.classList.toggle('open')">
+            <div class="ic">✨</div><div class="t">金句</div>
+            <div class="cnt">5 句</div><div class="arrow">▶</div>
+          </div>
+          <div class="branch-body"><ul>
+            <li>父母最重要的角色，是做一个"非焦虑的在场者"。</li>
+            <li>控制感，是人类动机与心理健康的第一要素。</li>
+            <li>你没法替孩子过他的人生；你能做的，是帮他把方向盘握回自己手里。</li>
+            <li>当孩子感觉自己能掌控，内在驱动力才会启动。</li>
+            <li>焦虑会传染，平静也会传染。</li>
+          </ul></div>
+        </div>
+
+        <div class="branch open k5">
+          <div class="branch-head" onclick="this.parentNode.classList.toggle('open')">
+            <div class="ic">✅</div><div class="t">行动建议</div>
+            <div class="cnt">6 条</div><div class="arrow">▶</div>
+          </div>
+          <div class="branch-body"><ul>
+            <li>今天的"顾问时刻"：对他人的决定，先问"你怎么想？"再开口给建议。</li>
+            <li>归还一项控制权：挑一件你替对方包办的事，还回去让他自己定。</li>
+            <li>练习"非焦虑的在场"：冲突时先深呼吸、稳住情绪再说话。</li>
+            <li>建立"三个S"：给一个安全基地 + 可预期的结构 + 无条件的支持。</li>
+            <li>留出"无聊时间"：给空白去发展内在兴趣与自控力，别把日程填满。</li>
+            <li>把失败当数据：对方受挫时不急着救场，问"你从中学到了什么？"</li>
+          </ul></div>
+        </div>
+
+      </div>
+    </div>
+    <div class="hint">点击任意分支标题可展开 / 收起 ▾</div>
+  </section>
+
+  <!-- ===== 核心洞见 ===== -->
+  <section>
+    <div class="sec-title"><span class="bar"></span><span class="dot"></span>核心洞见</div>
+    <div class="card" style="border-left:4px solid var(--accent2)">
+      <p>临床神经心理学家斯蒂克斯鲁德与激励教练约翰逊在《自驱型成长》里，用脑科学点破了一个普遍误区：<b style="color:var(--txt)">我们以为"催、推、替孩子安排好"是在帮他，其实恰恰在夺走他最关键的成长养料——控制感。</b>大量研究表明，控制感是人类动机与心理健康的第一要素；当一个人感到"我对自己的生活说了算"，前额叶（负责计划与自控）才在线，内在驱动力才启动。</p>
+      <p style="margin-top:10px">相反，长期被替做主、被过度安排的人，慢性压力会持续损伤大脑的执行功能，陷入"越管越被动、越被动越要管"的恶性循环。<b style="color:var(--txt)">真正的成长，来自把方向盘还回他自己手里</b>——成年人要做的不是老板，而是"非焦虑的在场者"：提供一个安全、有结构、被支持的环境，然后用提问代替命令，让他在真实的选择与后果中长出判断力和自驱力。<b style="color:var(--txt)">这套逻辑不只适用于育儿，也适用于带团队、经营关系，乃至管理我们自己的动机与人生。</b></p>
+    </div>
+  </section>
+
+  <!-- ===== 四要素 / 核心框架 ===== -->
+  <section>
+    <div class="sec-title"><span class="bar"></span><span class="dot"></span>四要素核心框架</div>
+    <div class="step"><div class="num">1</div><div><h3>控制感 · 动机引擎</h3><p>替人做主会夺走控制感、制造压力；让人自己当家，才点燃内在动机。先问"这事谁来决定"，把能自主的逐步交还。</p></div></div>
+    <div class="step"><div class="num">2</div><div><h3>非焦虑的在场</h3><p>成年人的情绪稳定，是给孩子/团队最好的礼物。你越平静，他越有安全感去尝试、去承担。先稳住自己，再谈教育。</p></div></div>
+    <div class="step"><div class="num">3</div><div><h3>三个S · 安全底座</h3><p>安全感(Safety) + 结构(Structure) + 支持(Support)：给一个可依靠的安全基地、可预期的生活结构、无条件的支持，而非包办代劳。</p></div></div>
+    <div class="step"><div class="num">4</div><div><h3>顾问而非老板</h3><p>用提问代替命令（"你怎么想？""你打算怎么办？"），把决策权交还。让他在真实选择中练出判断力，而不是听话的执行者。</p></div></div>
+  </section>
+
+  <!-- ===== 主要知识点 ===== -->
+  <section>
+    <div class="sec-title"><span class="bar"></span><span class="dot"></span>主要知识点</div>
+    <div class="grid">
+      <div class="card"><h3>压力生理学</h3><p>慢性压力损伤前额叶（计划/决策中枢），放大杏仁核（威胁反应），让人更易失控、更焦虑。</p></div>
+      <div class="card"><h3>控制感悖论</h3><p>你"感觉"能掌控的事，压力就小；越被替做主，越焦虑。掌控感是抗压阀。</p></div>
+      <div class="card"><h3>自我决定论</h3><p>自主、胜任、归属是内在动机三养料。三者越被满足，人越自发、越持久。</p></div>
+      <div class="card"><h3>非焦虑的在场</h3><p>家长/领导者的情绪会"传染"。稳住自己，是对他人成长的第一责任。</p></div>
+      <div class="card"><h3>三个S</h3><p>安全基地 + 可预期的结构 + 无条件的支持，是自主得以生长的土壤，而非包办。</p></div>
+      <div class="card"><h3>顾问式</h3><p>少给答案多提问："你怎么想？""你打算怎么办？"用问题唤醒对方的思考。</p></div>
+      <div class="card"><h3>失败即数据</h3><p>让对方承担自然后果，从挫折中学习，而非急着救场。抗挫力是练出来的。</p></div>
+      <div class="card"><h3>大脑的燃料</h3><p>睡眠、运动、多巴胺（游戏/联结/正念）是自控力的生理基础，别忽视身体。</p></div>
+      <div class="card"><h3>放手的艺术</h3><p>把能自己决定的事逐步交还，容忍暂时的不完美——失控一阵，才能学会掌控。</p></div>
+      <div class="card"><h3>目标感</h3><p>帮他找到"为什么"。意义感是坚持最深的驱动，比外部奖励更长久。</p></div>
+    </div>
+  </section>
+
+  <!-- ===== 金句 ===== -->
+  <section>
+    <div class="sec-title"><span class="bar"></span><span class="dot"></span>金句</div>
+    <div class="quotes">
+      <div class="quote">父母最重要的角色，是做一个"非焦虑的在场者"。<span>—— 自驱型成长</span></div>
+      <div class="quote">控制感，是人类动机与心理健康的第一要素。<span>—— 自驱型成长</span></div>
+      <div class="quote">你没法替孩子过他的人生；你能做的，是帮他把方向盘握回自己手里。<span>—— 自驱型成长</span></div>
+      <div class="quote">当孩子感觉自己能掌控，内在驱动力才会启动。<span>—— 自驱型成长</span></div>
+      <div class="quote">焦虑会传染，平静也会传染。<span>—— 自驱型成长</span></div>
+    </div>
+  </section>
+
+  <!-- ===== 行动建议 ===== -->
+  <section>
+    <div class="sec-title"><span class="bar"></span><span class="dot"></span>行动建议</div>
+    <ol class="actions">
+      <li>今天的"顾问时刻"：对他人的决定，先问"你怎么想？"再开口给建议，把思考权留给他。</li>
+      <li>归还一项控制权：挑一件你替对方包办的事（如作息、选课、安排），还回去让他自己定。</li>
+      <li>练习"非焦虑的在场"：冲突或紧张时先深呼吸、稳住情绪再说话，先管理自己的状态。</li>
+      <li>建立"三个S"：给一个安全基地 + 可预期的结构 + 无条件的支持，而不是替他扫清一切障碍。</li>
+      <li>留出"无聊时间"：别把日程填满，给空白让他发展内在兴趣与自控力，无聊是创造力的温床。</li>
+      <li>把失败当数据：对方受挫时不急着救场，问"你从中学到了什么？"，把挫折变成学习素材。</li>
+    </ol>
+  </section>
+
+  <footer>每日一学 · 个人成长思维书单 ｜ 2026-07-12《自驱型成长》｜ 把方向盘还给他自己，自驱才真正开始</footer>
+</div>
+</body>
+</html>
