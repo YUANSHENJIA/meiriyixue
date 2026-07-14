@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 把时间当作朋友</title>
+<style>
+  :root{
+    --bg:#0f1220; --panel:#171b2e; --panel2:#1f2540; --line:#2c3358;
+    --txt:#e8ecff; --sub:#a7afd6; --accent:#7c8cff; --accent2:#37d0a6;
+    --gold:#ffcf5c; --warn:#ff8a8a; --c1:#7c8cff; --c2:#37d0a6; --c3:#ff9f6b; --c4:#c98bff; --c5:#5cc8ff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    background:radial-gradient(1200px 600px at 50% -10%,#1b2240 0,transparent 60%),var(--bg);
+    background-color:var(--bg); color:var(--txt); line-height:1.7; padding:0 0 60px;
+  }
+  header{
+    text-align:center; padding:46px 20px 30px;
+    background:linear-gradient(135deg,rgba(124,140,255,.18),rgba(55,208,166,.12));
+    border-bottom:1px solid var(--line);
+  }
+  header .badge{display:inline-block;font-size:13px;letter-spacing:2px;color:var(--accent2);
+    border:1px solid var(--accent2);border-radius:30px;padding:4px 16px;margin-bottom:14px}
+  header h1{font-size:34px;font-weight:800;letter-spacing:1px}
+  header .meta{margin-top:10px;color:var(--sub);font-size:14px}
+  header .meta b{color:var(--gold)}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 18px}
+  section{margin-top:34px}
+  .sec-title{display:flex;align-items:center;gap:10px;font-size:20px;font-weight:700;margin-bottom:16px}
+  .sec-title .dot{width:10px;height:10px;border-radius:50%;background:var(--accent)}
+  .sec-title .bar{width:4px;height:22px;border-radius:3px;background:linear-gradient(var(--accent),var(--accent2))}
+
+  /* ===== Mind map ===== */
+  .mm{display:flex;gap:0;align-items:stretch;flex-wrap:nowrap;overflow-x:auto;padding:10px 2px 18px}
+  .mm-root{flex:0 0 150px;display:flex;align-items:center;justify-content:center}
+  .mm-root .node{
+    background:linear-gradient(135deg,var(--accent),var(--c4));
+    color:#0d1020;font-weight:800;font-size:17px;text-align:center;border-radius:16px;
+    padding:18px 14px;box-shadow:0 10px 30px rgba(124,140,255,.35);min-width:130px;
+  }
+  .mm-branches{flex:1 1 auto;display:flex;flex-direction:column;gap:14px;padding-left:26px;position:relative;border-left:2px dashed var(--line)}
+  .branch{background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden;transition:.25s}
+  .branch:hover{border-color:var(--accent)}
+  .branch-head{display:flex;align-items:center;gap:12px;padding:13px 16px;cursor:pointer;user-select:none}
+  .branch-head .ic{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex:0 0 34px}
+  .branch-head .t{font-weight:700;font-size:16px;flex:1}
+  .branch-head .cnt{font-size:12px;color:var(--sub);background:var(--panel2);padding:2px 10px;border-radius:20px}
+  .branch-head .arrow{transition:.25s;color:var(--sub)}
+  .branch.open .branch-head .arrow{transform:rotate(90deg)}
+  .branch-body{max-height:0;overflow:hidden;transition:max-height .3s ease}
+  .branch.open .branch-body{max-height:1200px}
+  .branch-body ul{list-style:none;padding:4px 16px 16px 26px}
+  .branch-body li{position:relative;padding:7px 0 7px 18px;color:var(--sub);font-size:14.5px;border-bottom:1px dashed rgba(255,255,255,.05)}
+  .branch-body li:last-child{border-bottom:none}
+  .branch-body li::before{content:"";position:absolute;left:0;top:15px;width:7px;height:7px;border-radius:50%;background:var(--accent)}
+  .branch-body li b{color:var(--txt)}
+  .k1 .ic{background:rgba(124,140,255,.2)} .k2 .ic{background:rgba(55,208,166,.2)}
+  .k3 .ic{background:rgba(255,159,107,.2)} .k4 .ic{background:rgba(201,139,255,.2)} .k5 .ic{background:rgba(92,200,255,.2)}
+
+  /* ===== Cards ===== */
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+  .card h3{font-size:15px;margin-bottom:8px;color:var(--accent2)}
+  .card p{color:var(--sub);font-size:14px}
+  .step{display:flex;gap:14px;align-items:flex-start;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:12px}
+  .step .num{flex:0 0 40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;color:#0d1020}
+  .step:nth-child(1) .num{background:var(--c1)} .step:nth-child(2) .num{background:var(--c2)}
+  .step:nth-child(3) .num{background:var(--c3)} .step:nth-child(4) .num{background:var(--c4)}
+  .step h3{font-size:16px;margin-bottom:4px}
+  .step p{color:var(--sub);font-size:14px}
+
+  .quotes{display:grid;gap:14px}
+  .quote{position:relative;background:linear-gradient(135deg,rgba(255,207,92,.1),rgba(255,138,138,.06));
+    border:1px solid rgba(255,207,92,.3);border-left:4px solid var(--gold);border-radius:12px;padding:16px 20px;font-size:16px}
+  .quote span{display:block;margin-top:8px;color:var(--gold);font-size:13px;text-align:right}
+
+  .actions{counter-reset:a}
+  .actions li{list-style:none;position:relative;padding:12px 16px 12px 52px;background:var(--panel);border:1px solid var(--line);border-radius:12px;margin-bottom:10px;color:var(--txt);font-size:14.5px}
+  .actions li::before{counter-increment:a;content:counter(a);position:absolute;left:14px;top:50%;transform:translateY(-50%);
+    width:26px;height:26px;border-radius:50%;background:linear-gradient(var(--accent),var(--accent2));color:#0d1020;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:13px}
+  .actions li b{color:var(--accent2)}
+
+  footer{text-align:center;color:var(--sub);font-size:13px;margin-top:46px;padding-top:20px;border-top:1px solid var(--line)}
+  .hint{text-align:center;color:var(--sub);font-size:12.5px;margin-top:10px}
+  @media(max-width:720px){.mm{flex-direction:column}.mm-root{flex:0 0 auto;justify-content:flex-start}.mm-branches{border-left:none;padding-left:0;padding-top:14px;border-top:2px dashed var(--line)}}
+</style>
+</head>
+<body>
+<header>
+  <div class="badge">每日一学 · 2026-07-14</div>
+  <h1>把时间当作朋友</h1>
+  <div class="meta">作者：<b>李笑来</b> ｜ 分类：<b>个人成长 · 思维认知 · 时间哲学</b> ｜ 关键词：时间不可管理 · 长期积累 · 接受现实 · 复利思维 · 与时间做朋友</div>
+</header>
+
+<div class="wrap">
+
+  <!-- ===== 思维导图 ===== -->
+  <section>
+    <div class="sec-title"><span class="bar"></span><span class="dot"></span>思维导图</div>
+    <div class="mm">
+      <div class="mm-root"><div class="node">把时间当作朋友</div></div>
+      <div class="mm-branches">
+
+        <div class="branch open k1">
+          <div class="branch-head" onclick="this.parentNode.classList.toggle('open')">
+            <div class="ic">💡</div><div class="t">核心洞见</div>
+            <div class="cnt">1 条</div><div class="arrow">▶</div>
+          </div>
+          <div class="branch-body"><ul>
+            <li><b>时间不可管理，能管理的只有你自己。</b>时间是匀速流逝的客观存在，任何人都无法让它变快或变慢。真正决定人生差距的，不是谁拥有更多时间（每个人每天都有24小时），而是谁在同样的时间里做了正确的事。<b>与其和时间赛跑，不如与时间做朋友</b>——接受现实、耐心积累、相信复利，用正确的方法做正确的事情，剩下的交给时间。成长的本质不是爆发，而是长期积累的必然结果。</li>
+          </ul></div>
+        </div>
+
+        <div class="branch open k2">
+          <div class="branch-head" onclick="this.parentNode.classList.toggle('open')">
+            <div class="ic">🧩</div><div class="t">四要素核心框架</div>
+            <div class="cnt">4 步</div><div class="arrow">▶</div>
+          </div>
+          <div class="branch-body"><ul>
+            <li><b>① 接受现实</b>：承认自己的局限和现实的约束。速成绝无可能，完美永不存在，未知永远存在。不急于求成，不幻想捷径，是一切成长的心理起点。</li>
+            <li><b>② 耐心积累</b>：一切技能和成就都需要足够的积累期。在正确的方向上持续投入，复利效应会带来质变。相信"慢即是快"，长期主义者的核心竞争力。</li>
+            <li><b>③ 记录与复盘</b>：好记性不如烂笔头。用文字记录思考过程和决策依据，定期回顾，发现问题、优化策略。记录是思考的延伸，复盘是成长的加速器。</li>
+            <li><b>④ 与时间做朋友</b>：把时间当作盟友而非敌人。优先做时间越久价值越大的事（如学习、健康、关系），拒绝短期诱惑。时间会奖励耐心的人。</li>
+          </ul></div>
+        </div>
+
+        <div class="branch open k3">
+          <div class="branch-head" onclick="this.parentNode.classList.toggle('open')">
+            <div class="ic">📚</div><div class="t">主要知识点</div>
+            <div class="cnt">10 个</div><div class="arrow">▶</div>
+          </div>
+          <div class="branch-body"><ul>
+            <li>时间不可管理：时间是匀速流逝的客观存在，我们能管理的只有自己在时间中的行为和选择</li>
+            <li>速成绝无可能：一切技能和成就都需要足够的积累期，没有捷径可走，焦虑往往源于对速成的幻想</li>
+            <li>交换才是硬道理：用"我有的"换"我要的"，没有积累就没有交换的筹码，先积累再交换</li>
+            <li>完美永不存在：接受不完美是前进的前提，先完成再完美，在行动中迭代优化</li>
+            <li>未知永远存在：接受未知是常态，在不确定中前行是成长的必修课，不必等一切就绪才出发</li>
+            <li>复利的力量：每天进步一点点，长期来看会带来指数级增长，时间的杠杆效应超乎想象</li>
+            <li>记录的力量：好记性不如烂笔头，记录是思考的延伸，文字让思维从模糊变得清晰</li>
+            <li>独立思考：不盲从权威，不随波逐流，培养自己的判断力，在信息洪流中保持清醒</li>
+            <li>自学能力：最核心的竞争力，是持续学习的能力，学会如何学习比学到什么更重要</li>
+            <li>长期主义：做时间越久价值越大的事，拒绝短期诱惑，与时间做朋友而非对抗</li>
+          </ul></div>
+        </div>
+
+        <div class="branch open k4">
+          <div class="branch-head" onclick="this.parentNode.classList.toggle('open')">
+            <div class="ic">✨</div><div class="t">金句</div>
+            <div class="cnt">5 句</div><div class="arrow">▶</div>
+          </div>
+          <div class="branch-body"><ul>
+            <li>时间不可管理，能管理的只有你自己。</li>
+            <li>速成绝无可能，完美永不存在。</li>
+            <li>与时间做朋友，方法就是：用正确的方法做正确的事情。</li>
+            <li>一切都靠积累，一切都可积累。</li>
+            <li>做长期有价值的事，时间会给你回报。</li>
+          </ul></div>
+        </div>
+
+        <div class="branch open k5">
+          <div class="branch-head" onclick="this.parentNode.classList.toggle('open')">
+            <div class="ic">✅</div><div class="t">行动建议</div>
+            <div class="cnt">6 条</div><div class="arrow">▶</div>
+          </div>
+          <div class="branch-body"><ul>
+            <li>建立"时间账本"：连续一周记录每天的时间去向，分析哪些时间被浪费了，哪些是高价值的投入。</li>
+            <li>每日记录：用文字记录当天的思考、决策和收获，形成个人知识库，记录是思考的延伸。</li>
+            <li>制定长期计划：选一个你想精进的领域，制定至少6个月的学习计划，相信积累的力量。</li>
+            <li>拒绝速成心态：当感到焦虑时，提醒自己"速成绝无可能"，回归当下的积累，相信慢即是快。</li>
+            <li>定期复盘：每周回顾一次计划执行情况，调整方向和方法，让复盘成为成长的加速器。</li>
+            <li>投资"半衰期长"的事：优先做那些随时间推移价值不衰减甚至增长的事，如学习、健康、关系建设。</li>
+          </ul></div>
+        </div>
+
+      </div>
+    </div>
+    <div class="hint">点击任意分支标题可展开 / 收起 ▾</div>
+  </section>
+
+  <!-- ===== 核心洞见 ===== -->
+  <section>
+    <div class="sec-title"><span class="bar"></span><span class="dot"></span>核心洞见</div>
+    <div class="card" style="border-left:4px solid var(--accent2)">
+      <p>李笑来用一个看似简单的命题颠覆了大多数人的时间观：<b style="color:var(--txt)">时间不可管理，能管理的只有你自己。</b>这个洞见的革命性在于——它把焦点从外部（时间）转向了内部（自我）。我们焦虑、急躁、疲惫，不是因为时间不够，而是因为我们试图控制一个根本无法控制的东西，却忽略了唯一能控制的：自己在时间中的选择和行为。</p>
+      <p style="margin-top:10px">"把时间当作朋友"不是消极等待，而是一种深层的认知转变：<b style="color:var(--txt)">接受现实（速成不可能、完美不存在、未知永远在），耐心积累（在正确方向上持续投入），用记录和复盘优化路径，最终让时间成为盟友而非敌人。</b>李笑来自己就是这套理念的最佳注脚——他从英语老师到比特币首富，从程序员到畅销书作家，每一次跨界都不是一夜之间完成的，而是数年甚至数十年积累的复利回报。<b style="color:var(--txt)">一切都靠积累，一切都可积累。做长期有价值的事，时间会给你回报。</b>这不是鸡汤，而是一个经过验证的策略：与时间做朋友的人，终将被时间奖励。</p>
+    </div>
+  </section>
+
+  <!-- ===== 四要素 / 核心框架 ===== -->
+  <section>
+    <div class="sec-title"><span class="bar"></span><span class="dot"></span>四要素核心框架</div>
+    <div class="step"><div class="num">1</div><div><h3>接受现实</h3><p>承认自己的局限和现实的约束。速成绝无可能，完美永不存在，未知永远存在。不急于求成，不幻想捷径，是一切成长的心理起点。只有接受现实，才能真正开始行动。</p></div></div>
+    <div class="step"><div class="num">2</div><div><h3>耐心积累</h3><p>一切技能和成就都需要足够的积累期。在正确的方向上持续投入，复利效应会带来质变。相信"慢即是快"，每天进步一点点，长期来看会带来指数级增长。长期主义者的核心竞争力。</p></div></div>
+    <div class="step"><div class="num">3</div><div><h3>记录与复盘</h3><p>好记性不如烂笔头。用文字记录思考过程和决策依据，定期回顾，发现问题、优化策略。记录是思考的延伸，复盘是成长的加速器。不记录的人生像没有后视镜的驾驶。</p></div></div>
+    <div class="step"><div class="num">4</div><div><h3>与时间做朋友</h3><p>把时间当作盟友而非敌人。优先做时间越久价值越大的事（如学习、健康、关系），拒绝短期诱惑。时间会奖励耐心的人，惩罚急躁的人。与时间同行，而非与时间赛跑。</p></div></div>
+  </section>
+
+  <!-- ===== 主要知识点 ===== -->
+  <section>
+    <div class="sec-title"><span class="bar"></span><span class="dot"></span>主要知识点</div>
+    <div class="grid">
+      <div class="card"><h3>时间不可管理</h3><p>时间是匀速流逝的客观存在，我们能管理的只有自己在时间中的行为和选择。焦点从外部转向内部。</p></div>
+      <div class="card"><h3>速成绝无可能</h3><p>一切技能和成就都需要足够的积累期，没有捷径可走。焦虑往往源于对速成的幻想。</p></div>
+      <div class="card"><h3>交换才是硬道理</h3><p>用"我有的"换"我要的"，没有积累就没有交换的筹码。先积累，再交换，再积累更多。</p></div>
+      <div class="card"><h3>完美永不存在</h3><p>接受不完美是前进的前提。先完成再完美，在行动中迭代优化，而非等到万事俱备才出发。</p></div>
+      <div class="card"><h3>未知永远存在</h3><p>接受未知是常态，在不确定中前行是成长的必修课。不必等一切就绪才出发，边走边解决。</p></div>
+      <div class="card"><h3>复利的力量</h3><p>每天进步一点点，长期来看会带来指数级增长。时间的杠杆效应超乎想象，关键在于持续。</p></div>
+      <div class="card"><h3>记录的力量</h3><p>好记性不如烂笔头。记录是思考的延伸，文字让思维从模糊变得清晰可追溯。</p></div>
+      <div class="card"><h3>独立思考</h3><p>不盲从权威，不随波逐流。培养自己的判断力，在信息洪流中保持清醒和独立。</p></div>
+      <div class="card"><h3>自学能力</h3><p>最核心的竞争力。学会如何学习比学到什么更重要，自学能力是应对变化的终极武器。</p></div>
+      <div class="card"><h3>长期主义</h3><p>做时间越久价值越大的事，拒绝短期诱惑。与时间做朋友而非对抗，时间会给你回报。</p></div>
+    </div>
+  </section>
+
+  <!-- ===== 金句 ===== -->
+  <section>
+    <div class="sec-title"><span class="bar"></span><span class="dot"></span>金句</div>
+    <div class="quotes">
+      <div class="quote">时间不可管理，能管理的只有你自己。<span>—— 李笑来《把时间当作朋友》</span></div>
+      <div class="quote">速成绝无可能，完美永不存在。<span>—— 李笑来《把时间当作朋友》</span></div>
+      <div class="quote">与时间做朋友，方法就是：用正确的方法做正确的事情。<span>—— 李笑来《把时间当作朋友》</span></div>
+      <div class="quote">一切都靠积累，一切都可积累。<span>—— 李笑来《把时间当作朋友》</span></div>
+      <div class="quote">做长期有价值的事，时间会给你回报。<span>—— 李笑来《把时间当作朋友》</span></div>
+    </div>
+  </section>
+
+  <!-- ===== 行动建议 ===== -->
+  <section>
+    <div class="sec-title"><span class="bar"></span><span class="dot"></span>行动建议</div>
+    <ol class="actions">
+      <li>建立<b>"时间账本"</b>：连续一周记录每天的时间去向，分析哪些时间被浪费了，哪些是高价值的投入。</li>
+      <li><b>每日记录</b>：用文字记录当天的思考、决策和收获，形成个人知识库——记录是思考的延伸。</li>
+      <li>制定<b>长期计划</b>：选一个你想精进的领域，制定至少6个月的学习计划，相信积累的力量。</li>
+      <li><b>拒绝速成心态</b>：当感到焦虑时，提醒自己"速成绝无可能"，回归当下的积累，相信慢即是快。</li>
+      <li><b>定期复盘</b>：每周回顾一次计划执行情况，调整方向和方法，让复盘成为成长的加速器。</li>
+      <li>投资<b>"半衰期长"的事</b>：优先做那些随时间推移价值不衰减甚至增长的事，如学习、健康、关系建设。</li>
+    </ol>
+  </section>
+
+  <footer>每日一学 · 个人成长思维书单 ｜ 2026-07-14《把时间当作朋友》｜ 时间不可管理，能管理的只有你自己，与时间做朋友</footer>
+</div>
+</body>
+</html>
