@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 思考的框架</title>
+<style>
+  :root{
+    --bg:#0f1220; --panel:#171b2e; --panel2:#1f2540; --line:#2c3358;
+    --txt:#e8ecff; --sub:#a7afd6; --accent:#7c8cff; --accent2:#37d0a6;
+    --gold:#ffcf5c; --warn:#ff8a8a; --c1:#7c8cff; --c2:#37d0a6; --c3:#ff9f6b; --c4:#c98bff; --c5:#5cc8ff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    background:radial-gradient(1200px 600px at 50% -10%,#1b2240 0,transparent 60%),var(--bg);
+    background-color:var(--bg); color:var(--txt); line-height:1.7; padding:0 0 60px;
+  }
+  header{
+    text-align:center; padding:46px 20px 30px;
+    background:linear-gradient(135deg,rgba(124,140,255,.18),rgba(55,208,166,.12));
+    border-bottom:1px solid var(--line);
+  }
+  header .badge{display:inline-block;font-size:13px;letter-spacing:2px;color:var(--accent2);
+    border:1px solid var(--accent2);border-radius:30px;padding:4px 16px;margin-bottom:14px}
+  header h1{font-size:34px;font-weight:800;letter-spacing:1px}
+  header .meta{margin-top:10px;color:var(--sub);font-size:14px}
+  header .meta b{color:var(--gold)}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 18px}
+  section{margin-top:34px}
+  .sec-title{display:flex;align-items:center;gap:10px;font-size:20px;font-weight:700;margin-bottom:16px}
+  .sec-title .dot{width:10px;height:10px;border-radius:50%;background:var(--accent)}
+  .sec-title .bar{width:4px;height:22px;border-radius:3px;background:linear-gradient(var(--accent),var(--accent2))}
+
+  /* ===== Mind map ===== */
+  .mm{display:flex;gap:0;align-items:stretch;flex-wrap:nowrap;overflow-x:auto;padding:10px 2px 18px}
+  .mm-root{flex:0 0 150px;display:flex;align-items:center;justify-content:center}
+  .mm-root .node{
+    background:linear-gradient(135deg,var(--accent),var(--c4));
+    color:#0d1020;font-weight:800;font-size:17px;text-align:center;border-radius:16px;
+    padding:18px 14px;box-shadow:0 10px 30px rgba(124,140,255,.35);min-width:130px;
+  }
+  .mm-branches{flex:1 1 auto;display:flex;flex-direction:column;gap:14px;padding-left:26px;position:relative;border-left:2px dashed var(--line)}
+  .branch{background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden;transition:.25s}
+  .branch:hover{border-color:var(--accent)}
+  .branch-head{display:flex;align-items:center;gap:12px;padding:13px 16px;cursor:pointer;user-select:none}
+  .branch-head .ic{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex:0 0 34px}
+  .branch-head .t{font-weight:700;font-size:16px;flex:1}
+  .branch-head .cnt{font-size:12px;color:var(--sub);background:var(--panel2);padding:2px 10px;border-radius:20px}
+  .branch-head .arrow{transition:.25s;color:var(--sub)}
+  .branch.open .branch-head .arrow{transform:rotate(90deg)}
+  .branch-body{max-height:0;overflow:hidden;transition:max-height .3s ease}
+  .branch.open .branch-body{max-height:1200px}
+  .branch-body ul{list-style:none;padding:4px 16px 16px 26px}
+  .branch-body li{position:relative;padding:7px 0 7px 18px;color:var(--sub);font-size:14.5px;border-bottom:1px dashed rgba(255,255,255,.05)}
+  .branch-body li:last-child{border-bottom:none}
+  .branch-body li::before{content:"";position:absolute;left:0;top:15px;width:7px;height:7px;border-radius:50%;background:var(--accent)}
+  .branch-body li b{color:var(--txt)}
+  .k1 .ic{background:rgba(124,140,255,.2)} .k2 .ic{background:rgba(55,208,166,.2)}
+  .k3 .ic{background:rgba(255,159,107,.2)} .k4 .ic{background:rgba(201,139,255,.2)} .k5 .ic{background:rgba(92,200,255,.2)}
+
+  /* ===== Cards ===== */
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+  .card h3{font-size:15px;margin-bottom:8px;color:var(--accent2)}
+  .card p{color:var(--sub);font-size:14px}
+  .step{display:flex;gap:14px;align-items:flex-start;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:12px}
+  .step .num{flex:0 0 40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;color:#0d1020}
+  .step:nth-child(1) .num{background:var(--c1)} .step:nth-child(2) .num{background:var(--c2)}
+  .step:nth-child(3) .num{background:var(--c3)} .step:nth-child(4) .num{background:var(--c4)}
+  .step h3{font-size:16px;margin-bottom:4px}
+  .step p{color:var(--sub);font-size:14px}
+
+  .quotes{display:grid;gap:14px}
+  .quote{position:relative;background:linear-gradient(135deg,rgba(255,207,92,.1),rgba(255,138,138,.06));
+    border:1px solid rgba(255,207,92,.3);border-left:4px solid var(--gold);border-radius:12px;padding:16px 20px;font-size:16px}
+  .quote span{display:block;margin-top:8px;color:var(--gold);font-size:13px;text-align:right}
+
+  .actions{counter-reset:a}
+  .actions li{list-style:none;position:relative;padding:12px 16px 12px 52px;background:var(--panel);border:1px solid var(--line);border-radius:12px;margin-bottom:10px;color:var(--txt);font-size:14.5px}
+  .actions li::before{counter-increment:a;content:counter(a);position:absolute;left:14px;top:50%;transform:translateY(-50%);
+    width:26px;height:26px;border-radius:50%;background:linear-gradient(var(--accent),var(--accent2));color:#0d1020;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:13px}
+  .actions li b{color:var(--accent2)}
+
+  footer{text-align:center;color:var(--sub);font-size:13px;margin-top:46px;padding-top:20px;border-top:1px solid var(--line)}
+  .hint{text-align:center;color:var(--sub);font-size:12.5px;margin-top:10px}
+  @media(max-width:720px){.mm{flex-direction:column}.mm-root{flex:0 0 auto;justify-content:flex-start}.mm-branches{border-left:none;padding-left:0;padding-top:14px;border-top:2px dashed var(--line)}}
+</style>
+</head>
+<body>
+<header>
+  <div class="badge">每日一学 · 2026-07-15</div>
+  <h1>思考的框架</h1>
+  <div class="meta">作者：<b>Shane Parrish（沙恩·帕里什）</b> ｜ 分类：<b>个人成长 · 思维模型 · 认知科学</b> ｜ 关键词：思维模型格栅 · 跨学科思考 · 第一性原理 · 避免愚蠢 · 清晰决策</div>
+</header>
+
+<div class="wrap">
+
+  <!-- ===== 思维导图 ===== -->
+  <section>
+    <div class="sec-title"><span class="bar"></span><span class="dot"></span>思维导图</div>
+    <div class="mm">
+      <div class="mm-root"><div class="node">思考的框架</div></div>
+      <div class="mm-branches">
+
+        <div class="branch open k1">
+          <div class="branch-head" onclick="this.parentNode.classList.toggle('open')">
+            <div class="ic">💡</div><div class="t">核心洞见</div>
+            <div class="cnt">1 条</div><div class="arrow">▶</div>
+          </div>
+          <div class="branch-body"><ul>
+            <li><b>决策的质量取决于思维的质量，而思维的质量取决于你掌握的思维模型。</b>大多数人只依赖自己专业领域的单一工具来解决问题——就像手里只有一把锤子，看什么都像钉子。真正的思考高手不是更聪明，而是拥有更丰富的认知工具箱。通过构建跨学科的"思维模型格栅"，从物理学、生物学、经济学、心理学等领域汲取核心模型，你能从多个角度审视同一问题，发现单一视角下的盲区，做出显著更好的决策。<b>掌握思维模型的终极目标不是追求聪明，而是系统性地避免愚蠢</b>——因为减少错误比追求卓越更容易、也更有效。</li>
+          </ul></div>
+        </div>
+
+        <div class="branch open k2">
+          <div class="branch-head" onclick="this.parentNode.classList.toggle('open')">
+            <div class="ic">🧩</div><div class="t">四要素核心框架</div>
+            <div class="cnt">4 步</div><div class="arrow">▶</div>
+          </div>
+          <div class="branch-body"><ul>
+            <li><b>① 地图不是疆域</b>：我们对世界的认知永远不等于世界本身。任何模型、理论、地图都是对现实的简化，都有其适用边界和失真之处。保持认知谦逊，时刻意识到自己的理解可能不完整或有误，是清晰思考的第一步。</li>
+            <li><b>② 能力圈</b>：清楚界定自己真正懂什么、不懂什么。在能力圈内决策时你有信息优势，超出能力圈时应保持谦逊或寻求帮助。知道自己能力的边界，比能力本身更重要。</li>
+            <li><b>③ 第一性原理</b>：剥离所有预设和类比，回归事物最根本的、不可再分的真理，从零开始向上推理。这是打破思维惯性、找到创新解法的最有力工具，也是马斯克等创新者的核心思维武器。</li>
+            <li><b>④ 逆向思维</b>：与其思考"如何成功"，不如先思考"如何避免失败"。把问题反转过来——问"什么会导致最坏的结果"，然后系统地避免这些因素。避免愚蠢比追求聪明更容易，也更可控。</li>
+          </ul></div>
+        </div>
+
+        <div class="branch open k3">
+          <div class="branch-head" onclick="this.parentNode.classList.toggle('open')">
+            <div class="ic">📚</div><div class="t">主要知识点</div>
+            <div class="cnt">10 个</div><div class="arrow">▶</div>
+          </div>
+          <div class="branch-body"><ul>
+            <li>地图不是疆域：所有模型都是对现实的简化，没有模型能完全反映现实。保持谦逊，承认认知的局限性</li>
+            <li>能力圈：明确自己知识和经验的边界。在圈内行动，圈外保持谨慎。巴菲特和芒格的核心投资原则</li>
+            <li>第一性原理：从最根本的真理出发推理，而非类比他人。打破"一直是这么做的"思维惯性</li>
+            <li>思想实验：用想象力在头脑中模拟场景和推演结果。爱因斯坦和费米用思想实验做出了伟大发现</li>
+            <li>二阶思维：不只考虑直接后果（一阶效应），还要考虑后果的后果（二阶、三阶效应）。区分聪明和智慧</li>
+            <li>概率思维：用概率而非确定性来思考世界。关注期望值而非单次结果，接受不确定性是常态</li>
+            <li>逆向思维：把问题反过来想。查理·芒格说"反过来想，总是反过来想"，这是避免愚蠢的利器</li>
+            <li>奥卡姆剃刀：当多个解释都能说明同一现象时，最简单的解释往往最可能是正确的。不要过度复杂化</li>
+            <li>汉隆剃刀：能用疏忽或无能解释的，就不要归因于恶意。减少不必要的敌意假设，改善人际关系</li>
+            <li>思维模型格栅：将跨学科的多元模型组合使用，形成相互印证的认知网络，而非孤立的知识碎片</li>
+          </ul></div>
+        </div>
+
+        <div class="branch open k4">
+          <div class="branch-head" onclick="this.parentNode.classList.toggle('open')">
+            <div class="ic">✨</div><div class="t">金句</div>
+            <div class="cnt">5 句</div><div class="arrow">▶</div>
+          </div>
+          <div class="branch-body"><ul>
+            <li>当你的工具箱里只有一把锤子时，所有问题看起来都像钉子。</li>
+            <li>地图不是疆域本身，但好的地图能帮你找到方向。</li>
+            <li>避免愚蠢比追求聪明更容易，也更重要。</li>
+            <li>清晰的思考不是天赋，而是可以通过练习获得的技能。</li>
+            <li>你不需要成为每个领域的专家，你需要的是掌握每个领域最有用的模型。</li>
+          </ul></div>
+        </div>
+
+        <div class="branch open k5">
+          <div class="branch-head" onclick="this.parentNode.classList.toggle('open')">
+            <div class="ic">✅</div><div class="t">行动建议</div>
+            <div class="cnt">6 条</div><div class="arrow">▶</div>
+          </div>
+          <div class="branch-body"><ul>
+            <li>建立自己的<b>思维模型清单</b>：列出你已掌握的思维模型，标注来源学科和适用场景，定期补充新模型。</li>
+            <li>每周学习一个<b>新思维模型</b>：从不同学科（物理、生物、经济、心理）中选取一个核心概念，理解其原理并尝试应用。</li>
+            <li>用<b>第一性原理</b>拆解一个难题：选一个你正面临的挑战，剥离所有预设假设，从最根本的事实重新推理。</li>
+            <li>做决策前用<b>逆向思维</b>检查：问自己"什么会导致这个决策失败"，然后逐一规避这些风险因素。</li>
+            <li>明确自己的<b>能力圈边界</b>：诚实列出你真正懂的领域和不懂的领域，在边界处标注"需要谨慎"或"寻求帮助"。</li>
+            <li><b>定期复盘</b>决策质量：每周回顾一个重要决策，分析当时用了哪些思维模型，是否遗漏了关键视角，持续优化认知工具箱。</li>
+          </ul></div>
+        </div>
+
+      </div>
+    </div>
+    <div class="hint">点击任意分支标题可展开 / 收起 ▾</div>
+  </section>
+
+  <!-- ===== 核心洞见 ===== -->
+  <section>
+    <div class="sec-title"><span class="bar"></span><span class="dot"></span>核心洞见</div>
+    <div class="card" style="border-left:4px solid var(--accent2)">
+      <p>沙恩·帕里什的核心洞见可以用一句话概括：<b style="color:var(--txt)">你不需要成为最聪明的人，你需要的是用最好的框架来思考。</b>大多数人在面对复杂问题时，本能地依赖自己最熟悉的单一视角——工程师用工程思维，财务用财务思维，销售用销售思维。这就像一个只有锤子的木匠，看什么都像钉子。真正的高手不是在任何单一领域更深，而是拥有一个跨学科的"思维模型格栅"——从物理学中学习熵增和惯性，从生物学中学习进化和适应，从经济学中学习机会成本和边际效应，从心理学中学习认知偏差和动机。</p>
+      <p style="margin-top:10px">帕里什强调，构建思维模型格栅的目的不是显得博学，而是<b style="color:var(--txt)">系统性地减少认知盲区和决策失误</b>。书中最有洞察力的观点之一是：<b style="color:var(--txt)">"避免愚蠢比追求聪明更容易，也更重要。"</b>这与芒格的智慧一脉相承——与其花大量精力寻找最优解，不如先确保自己不犯致命错误。当你用"地图不是疆域"保持谦逊、用"能力圈"守住边界、用"第一性原理"打破惯性、用"逆向思维"规避风险时，你的决策质量就已经超越了大多数人。<b style="color:var(--txt)">清晰的思考不是天赋，而是可以通过刻意练习获得的技能。</b>每个人都可以从今天开始，为自己的认知工具箱添砖加瓦。</p>
+    </div>
+  </section>
+
+  <!-- ===== 四要素 / 核心框架 ===== -->
+  <section>
+    <div class="sec-title"><span class="bar"></span><span class="dot"></span>四要素核心框架</div>
+    <div class="step"><div class="num">1</div><div><h3>地图不是疆域</h3><p>我们对世界的认知永远不等于世界本身。任何模型、理论、经验都是对现实的简化，都有失真之处。保持认知谦逊，时刻意识到自己的理解可能不完整或有误。这不是消极的自我怀疑，而是开放心态——愿意在新信息出现时更新自己的"地图"。</p></div></div>
+    <div class="step"><div class="num">2</div><div><h3>能力圈</h3><p>清楚界定自己真正懂什么、不懂什么。在能力圈内决策时你有信息优势和判断力优势，超出能力圈时应保持谦逊或寻求专业帮助。巴菲特几十年不投科技股不是因为傲慢，而是因为他清楚那不在自己的能力圈内。知道自己能力的边界，比能力本身更重要。</p></div></div>
+    <div class="step"><div class="num">3</div><div><h3>第一性原理</h3><p>剥离所有预设、类比和"一直是这么做的"惯性思维，回归事物最根本的、不可再分的真理，从零开始向上推理。这是打破思维惯性、找到创新解法的最有力工具。马斯克用第一性原理重新计算火箭的材料成本，发现了航天工业数十年未变的巨大浪费，最终实现了可回收火箭。</p></div></div>
+    <div class="step"><div class="num">4</div><div><h3>逆向思维</h3><p>与其思考"如何成功"，不如先思考"如何必然失败"。把问题反转过来——问"什么会导致最坏的结果"，然后系统地避免这些因素。查理·芒格的名言："反过来想，总是反过来想。"避免愚蠢比追求聪明更容易，也更可控。你不需要预知所有正确的事，只需要确保不犯致命的错误。</p></div></div>
+  </section>
+
+  <!-- ===== 主要知识点 ===== -->
+  <section>
+    <div class="sec-title"><span class="bar"></span><span class="dot"></span>主要知识点</div>
+    <div class="grid">
+      <div class="card"><h3>地图不是疆域</h3><p>所有模型都是对现实的简化，没有模型能完全反映现实。保持谦逊，承认认知的局限性，愿意在新信息出现时更新认知。</p></div>
+      <div class="card"><h3>能力圈</h3><p>明确自己知识和经验的边界。在圈内行动有优势，圈外保持谨慎。巴菲特和芒格的核心投资原则。</p></div>
+      <div class="card"><h3>第一性原理</h3><p>从最根本的真理出发推理，而非类比他人。打破"一直是这么做的"思维惯性，找到创新解法。</p></div>
+      <div class="card"><h3>思想实验</h3><p>用想象力在头脑中模拟场景和推演结果。爱因斯坦和费米用思想实验做出了伟大的科学发现。</p></div>
+      <div class="card"><h3>二阶思维</h3><p>不只考虑直接后果，还要考虑后果的后果。一阶思维让人聪明，二阶思维让人有智慧。</p></div>
+      <div class="card"><h3>概率思维</h3><p>用概率而非确定性来思考世界。关注期望值而非单次结果，接受不确定性是常态而非例外。</p></div>
+      <div class="card"><h3>逆向思维</h3><p>把问题反过来想。查理·芒格说"反过来想，总是反过来想"，这是避免愚蠢的利器。</p></div>
+      <div class="card"><h3>奥卡姆剃刀</h3><p>当多个解释都能说明同一现象时，最简单的解释往往最可能是正确的。不要过度复杂化。</p></div>
+      <div class="card"><h3>汉隆剃刀</h3><p>能用疏忽或无能解释的，就不要归因于恶意。减少不必要的敌意假设，改善人际关系。</p></div>
+      <div class="card"><h3>思维模型格栅</h3><p>将跨学科的多元模型组合使用，形成相互印证的认知网络，而非孤立的知识碎片。</p></div>
+    </div>
+  </section>
+
+  <!-- ===== 金句 ===== -->
+  <section>
+    <div class="sec-title"><span class="bar"></span><span class="dot"></span>金句</div>
+    <div class="quotes">
+      <div class="quote">当你的工具箱里只有一把锤子时，所有问题看起来都像钉子。<span>—— Shane Parrish《思考的框架》</span></div>
+      <div class="quote">地图不是疆域本身，但好的地图能帮你找到方向。<span>—— Shane Parrish《思考的框架》</span></div>
+      <div class="quote">避免愚蠢比追求聪明更容易，也更重要。<span>—— Shane Parrish《思考的框架》</span></div>
+      <div class="quote">清晰的思考不是天赋，而是可以通过练习获得的技能。<span>—— Shane Parrish《思考的框架》</span></div>
+      <div class="quote">你不需要成为每个领域的专家，你需要的是掌握每个领域最有用的模型。<span>—— Shane Parrish《思考的框架》</span></div>
+    </div>
+  </section>
+
+  <!-- ===== 行动建议 ===== -->
+  <section>
+    <div class="sec-title"><span class="bar"></span><span class="dot"></span>行动建议</div>
+    <ol class="actions">
+      <li>建立自己的<b>思维模型清单</b>：列出你已掌握的思维模型，标注来源学科和适用场景，定期补充新模型。</li>
+      <li>每周学习一个<b>新思维模型</b>：从不同学科中选取一个核心概念，理解其原理并尝试应用到实际问题中。</li>
+      <li>用<b>第一性原理</b>拆解一个难题：选一个你正面临的挑战，剥离所有预设假设，从最根本的事实重新推理。</li>
+      <li>做决策前用<b>逆向思维</b>检查：问自己"什么会导致这个决策失败"，然后逐一规避这些风险因素。</li>
+      <li>明确自己的<b>能力圈边界</b>：诚实列出你真正懂的领域和不懂的领域，在边界处标注"需要谨慎"或"寻求帮助"。</li>
+      <li><b>定期复盘</b>决策质量：每周回顾一个重要决策，分析当时用了哪些思维模型，是否遗漏了关键视角，持续优化认知工具箱。</li>
+    </ol>
+  </section>
+
+  <footer>每日一学 · 个人成长思维书单 ｜ 2026-07-15《思考的框架》｜ 掌握思维模型格栅，用更好的框架思考，系统性地避免愚蠢</footer>
+</div>
+</body>
+</html>
