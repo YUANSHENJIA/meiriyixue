@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 六顶思考帽</title>
+<style>
+  :root{
+    --bg:#0f1220; --panel:#171b2e; --panel2:#1f2540; --line:#2c3358;
+    --txt:#e8ecff; --sub:#a7afd6; --accent:#7c8cff; --accent2:#37d0a6;
+    --gold:#ffcf5c; --warn:#ff8a8a; --c1:#7c8cff; --c2:#37d0a6; --c3:#ff9f6b; --c4:#c98bff; --c5:#5cc8ff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    background:radial-gradient(1200px 600px at 50% -10%,#1b2240 0,transparent 60%),var(--bg);
+    background-color:var(--bg); color:var(--txt); line-height:1.7; padding:0 0 60px;
+  }
+  header{
+    text-align:center; padding:46px 20px 30px;
+    background:linear-gradient(135deg,rgba(124,140,255,.18),rgba(55,208,166,.12));
+    border-bottom:1px solid var(--line);
+  }
+  header .badge{display:inline-block;font-size:13px;letter-spacing:2px;color:var(--accent2);
+    border:1px solid var(--accent2);border-radius:30px;padding:4px 16px;margin-bottom:14px}
+  header h1{font-size:34px;font-weight:800;letter-spacing:1px}
+  header .meta{margin-top:10px;color:var(--sub);font-size:14px}
+  header .meta b{color:var(--gold)}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 18px}
+  section{margin-top:34px}
+  .sec-title{display:flex;align-items:center;gap:10px;font-size:20px;font-weight:700;margin-bottom:16px}
+  .sec-title .dot{width:10px;height:10px;border-radius:50%;background:var(--accent)}
+  .sec-title .bar{width:4px;height:22px;border-radius:3px;background:linear-gradient(var(--accent),var(--accent2))}
+
+  /* ===== Mind map ===== */
+  .mm{display:flex;gap:0;align-items:stretch;flex-wrap:nowrap;overflow-x:auto;padding:10px 2px 18px}
+  .mm-root{flex:0 0 150px;display:flex;align-items:center;justify-content:center}
+  .mm-root .node{
+    background:linear-gradient(135deg,var(--accent),var(--c4));
+    color:#0d1020;font-weight:800;font-size:17px;text-align:center;border-radius:16px;
+    padding:18px 14px;box-shadow:0 10px 30px rgba(124,140,255,.35);min-width:130px;
+  }
+  .mm-branches{flex:1 1 auto;display:flex;flex-direction:column;gap:14px;padding-left:26px;position:relative;border-left:2px dashed var(--line)}
+  .branch{background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden;transition:.25s}
+  .branch:hover{border-color:var(--accent)}
+  .branch-head{display:flex;align-items:center;gap:12px;padding:13px 16px;cursor:pointer;user-select:none}
+  .branch-head .ic{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex:0 0 34px}
+  .branch-head .t{font-weight:700;font-size:16px;flex:1}
+  .branch-head .cnt{font-size:12px;color:var(--sub);background:var(--panel2);padding:2px 10px;border-radius:20px}
+  .branch-head .arrow{transition:.25s;color:var(--sub)}
+  .branch.open .branch-head .arrow{transform:rotate(90deg)}
+  .branch-body{max-height:0;overflow:hidden;transition:max-height .3s ease}
+  .branch.open .branch-body{max-height:1400px}
+  .branch-body ul{list-style:none;padding:4px 16px 16px 26px}
+  .branch-body li{position:relative;padding:7px 0 7px 18px;color:var(--sub);font-size:14.5px;border-bottom:1px dashed rgba(255,255,255,.05)}
+  .branch-body li:last-child{border-bottom:none}
+  .branch-body li::before{content:"";position:absolute;left:0;top:15px;width:7px;height:7px;border-radius:50%;background:var(--accent)}
+  .branch-body li b{color:var(--txt)}
+  .k1 .ic{background:rgba(124,140,255,.2)} .k2 .ic{background:rgba(55,208,166,.2)}
+  .k3 .ic{background:rgba(255,159,107,.2)} .k4 .ic{background:rgba(201,139,255,.2)} .k5 .ic{background:rgba(92,200,255,.2)}
+
+  /* ===== Cards ===== */
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+  .card h3{font-size:15px;margin-bottom:8px;color:var(--accent2)}
+  .card p{color:var(--sub);font-size:14px}
+  .step{display:flex;gap:14px;align-items:flex-start;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:12px}
+  .step .num{flex:0 0 40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;color:#0d1020}
+  .step:nth-child(1) .num{background:var(--c1)} .step:nth-child(2) .num{background:var(--c2)}
+  .step:nth-child(3) .num{background:var(--c3)} .step:nth-child(4) .num{background:var(--c4)}
+  .step:nth-child(5) .num{background:var(--c5)} .step:nth-child(6) .num{background:var(--gold)}
+  .step h3{font-size:16px;margin-bottom:4px}
+  .step p{color:var(--sub);font-size:14px}
+
+  .quotes{display:grid;gap:14px}
+  .quote{position:relative;background:linear-gradient(135deg,rgba(255,207,92,.1),rgba(255,138,138,.06));
+    border:1px solid rgba(255,207,92,.3);border-left:4px solid var(--gold);border-radius:12px;padding:16px 20px;font-size:16px}
+  .quote span{display:block;margin-top:8px;color:var(--gold);font-size:13px;text-align:right}
+
+  .actions{counter-reset:a}
+  .actions li{list-style:none;position:relative;padding:12px 16px 12px 52px;background:var(--panel);border:1px solid var(--line);border-radius:12px;margin-bottom:10px;color:var(--txt);font-size:14.5px}
+  .actions li::before{counter-increment:a;content:counter(a);position:absolute;left:14px;top:50%;transform:translateY(-50%);
+    width:26px;height:26px;border-radius:50%;background:linear-gradient(var(--accent),var(--accent2));color:#0d1020;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:13px}
+  .actions li b{color:var(--accent2)}
+
+  footer{text-align:center;color:var(--sub);font-size:13px;margin-top:46px;padding-top:20px;border-top:1px solid var(--line)}
+  .hint{text-align:center;color:var(--sub);font-size:12.5px;margin-top:10px}
+  @media(max-width:720px){.mm{flex-direction:column}.mm-root{flex:0 0 auto;justify-content:flex-start}.mm-branches{border-left:none;padding-left:0;padding-top:14px;border-top:2px dashed var(--line)}}
+</style>
+</head>
+<body>
+<header>
+  <div class="badge">每日一学 · 2026-07-16</div>
+  <h1>六顶思考帽</h1>
+  <div class="meta">作者：<b>Edward de Bono（爱德华·德·博诺）</b> ｜ 分类：<b>个人成长 · 思维方法 · 决策科学</b> ｜ 关键词：平行思考 · 六帽框架 · 消除自我 · 团队决策 · 创造性思维</div>
+</header>
+
+<div class="wrap">
+
+  <!-- ===== 思维导图 ===== -->
+  <section>
+    <div class="sec-title"><span class="bar"></span><span class="dot"></span>思维导图</div>
+    <div class="mm">
+      <div class="mm-root"><div class="node">六顶思考帽</div></div>
+      <div class="mm-branches">
+
+        <div class="branch open k1">
+          <div class="branch-head" onclick="this.parentNode.classList.toggle('open')">
+            <div class="ic">💡</div><div class="t">核心洞见</div>
+            <div class="cnt">1 条</div><div class="arrow">▶</div>
+          </div>
+          <div class="branch-body"><ul>
+            <li><b>传统西方思考的本质是对抗——从苏格拉底到法庭辩论，我们习惯了用反驳来找到真理。</b>但这种模式效率极低：每个人同时从不同角度思考，导致争论、防御和自我膨胀。德·博诺提出了一个革命性的替代方案——<b>平行思考</b>：让所有人在同一时刻朝同一个方向看，然后一起转向下一个方向。六顶不同颜色的帽子代表六种思考模式：白帽看事实、红帽看情感、黑帽看风险、黄帽看价值、绿帽看创意、蓝帽管流程。<b>帽子的魔力在于它将"自我"从思考中分离出来</b>——你不再是为自己的观点辩护，而是戴上某一顶帽子，在那一刻你就是那种思考方式本身。这彻底消除了"谁对谁错"的对抗，将集体思考从辩论赛变成了交响乐。</li>
+          </ul></div>
+        </div>
+
+        <div class="branch open k2">
+          <div class="branch-head" onclick="this.parentNode.classList.toggle('open')">
+            <div class="ic">🎩</div><div class="t">六帽核心框架</div>
+            <div class="cnt">6 顶</div><div class="arrow">▶</div>
+          </div>
+          <div class="branch-body"><ul>
+            <li><b>白帽（White Hat）—— 事实与数据</b>：中立、客观的信息层。白帽思考时，你只关注"我们知道什么""我们还不知道什么""需要获取什么信息"。不评判、不下结论，像电脑一样陈述事实和数据。白帽是所有其他思考的基础。</li>
+            <li><b>红帽（Red Hat）—— 情感与直觉</b>：允许合法地表达感受和直觉，无需解释和辩护。红帽思考时可以说"我不喜欢这个方案""我的直觉告诉我这行不通"，无需给出理由。这给了情感一个正式的出口，而不是让它在暗中影响整个思考过程。</li>
+            <li><b>黑帽（Black Hat）—— 谨慎与批判</b>：最自然也最有价值的思考帽。黑帽思考关注风险、危险、障碍、潜在问题，是"什么地方可能出错"的系统性扫描。但关键原则是：黑帽只在被要求时使用，不能在黄帽和绿帽阶段用批判扼杀热情和创意。</li>
+            <li><b>黄帽（Yellow Hat）—— 乐观与价值</b>：积极、建设性的思考。黄帽关注"这样做有什么好处""价值在哪里""可行性如何"。黄帽不是盲目乐观，而是有逻辑地寻找方案的价值和可行性，与黑帽的批判形成平衡。</li>
+            <li><b>绿帽（Green Hat）—— 创意与可能</b>：专门用于产生新想法、替代方案和创造性突破。绿帽思考时，"疯狂"的想法是受欢迎的，因为它们可能成为通往更好方案的跳板。绿帽的关键不是评判创意的好坏，而是尽力产生更多创意。</li>
+            <li><b>蓝帽（Blue Hat）—— 控制与流程</b>：思考的"指挥官"。蓝帽负责组织整个思考过程：决定使用哪顶帽子、按什么顺序、分配时间、总结结论。蓝帽是元认知——对思考本身的思考。会议开始时用蓝帽设定议程，结束时用蓝帽总结成果。</li>
+          </ul></div>
+        </div>
+
+        <div class="branch open k3">
+          <div class="branch-head" onclick="this.parentNode.classList.toggle('open')">
+            <div class="ic">📚</div><div class="t">主要知识点</div>
+            <div class="cnt">10 个</div><div class="arrow">▶</div>
+          </div>
+          <div class="branch-body"><ul>
+            <li>平行思考 vs 对抗思考：传统讨论中每个人同时从不同角度出发，导致混乱和争执。六帽让所有人同时聚焦同一模式，消除了90%的无效争论</li>
+            <li>白帽思考：中立的信息收集阶段。区分"已验证的事实"和"需要验证的假设"，明确信息缺口。这是所有决策的事实基础</li>
+            <li>红帽思考：给情感和直觉一个合法出口。传统讨论中情感被压抑或伪装为逻辑，暗中搅乱决策。红帽让情感被听见后自动退场</li>
+            <li>黑帽思考：最强大也最危险的帽子。系统性扫描风险和障碍是决策不可或缺的环节，但在错误时机使用会扼杀一切创意和积极性</li>
+            <li>黄帽思考：人类大脑天然倾向风险规避（进化使然），因此黄帽需要刻意练习。寻找价值、可行性和好处是黄帽的核心任务</li>
+            <li>绿帽思考：创造力的专用时间。关键原则是不评判——先产生大量想法，之后再筛选。绿帽为创新提供了"许可证"，让"不成熟的想法"被听到</li>
+            <li>蓝帽思考：元认知的实践。蓝帽负责组织、控制和总结思考过程，是确保其他五顶帽子被有效使用的"乐队指挥"</li>
+            <li>消除自我：帽子将"我"与"我的观点"分离。当你戴黑帽时不是在攻击别人，而是在执行黑帽角色。这从根本上减少了防御性争论</li>
+            <li>序列使用：帽子不是随机使用的，而是按特定顺序（序列）。常见序列如蓝→白→绿→黄→黑→红→蓝用于探索新方案</li>
+            <li>时间盒原则：每顶帽子的使用应有严格时间限制（通常每人1分钟），防止某一模式（尤其是黑帽）过度占据思考时间</li>
+          </ul></div>
+        </div>
+
+        <div class="branch open k4">
+          <div class="branch-head" onclick="this.parentNode.classList.toggle('open')">
+            <div class="ic">✨</div><div class="t">金句</div>
+            <div class="cnt">5 句</div><div class="arrow">▶</div>
+          </div>
+          <div class="branch-body"><ul>
+            <li>思考的最大敌人不是无知，而是自以为是的正确。</li>
+            <li>平行思考的核心是：在同一时刻，所有人都朝同一个方向看，然后一起转向下一个方向。</li>
+            <li>黑帽思考是判断中最有价值的部分，但如果你在需要创造力时戴上黑帽，它就会扼杀一切。</li>
+            <li>如果你不能说"我不知道"，你就永远无法学到任何新东西。</li>
+            <li>蓝帽就像乐队指挥——它不演奏任何乐器，但它确保整个乐队协调一致地演奏出美妙的交响乐。</li>
+          </ul></div>
+        </div>
+
+        <div class="branch open k5">
+          <div class="branch-head" onclick="this.parentNode.classList.toggle('open')">
+            <div class="ic">✅</div><div class="t">行动建议</div>
+            <div class="cnt">6 条</div><div class="arrow">▶</div>
+          </div>
+          <div class="branch-body"><ul>
+            <li>在下次<b>团队会议</b>中试用六帽序列：先蓝帽设定议程→白帽摆事实→绿帽提创意→黄帽找价值→黑帽扫风险→蓝帽做总结，体验平行思考的效率。</li>
+            <li>个人决策时<b>按帽思考</b>：面对一个重要决定，不要杂乱地想，而是依次戴上六顶帽子，每种模式专注3-5分钟，确保不遗漏任何维度。</li>
+            <li>练习<b>红帽直觉</b>：每天对一个事物快速给出你的直觉感受（喜欢/不喜欢/好/坏），训练自己觉察并尊重直觉，不被"理性"压制。</li>
+            <li>刻意练习<b>黄帽思考</b>：面对一个你本能反对的方案，强迫自己找出三个可能的好处。人类大脑天然偏黑帽，黄帽需要刻意锻炼。</li>
+            <li>建立自己的<b>帽子序列</b>：针对不同场景（决策、创意、问题解决、冲突调解）设计不同的帽子使用顺序，形成标准化的思考流程。</li>
+            <li>用<b>蓝帽复盘</b>：每次重要思考或讨论结束后，花5分钟回顾"我们用了哪些帽子、是否遗漏了某顶帽子、流程是否高效"，持续优化思考过程。</li>
+          </ul></div>
+        </div>
+
+      </div>
+    </div>
+    <div class="hint">点击任意分支标题可展开 / 收起 ▾</div>
+  </section>
+
+  <!-- ===== 核心洞见 ===== -->
+  <section>
+    <div class="sec-title"><span class="bar"></span><span class="dot"></span>核心洞见</div>
+    <div class="card" style="border-left:4px solid var(--accent2)">
+      <p>德·博诺的核心洞见可以用一句话概括：<b style="color:var(--txt)">人类思考效率低下的根本原因不是不够聪明，而是每个人同时在不同的思考模式之间切换和争论。</b>传统讨论中，一个人说"这个方案有风险"（黑帽），另一个人回应"但也有好处"（黄帽），第三个人插嘴"我觉得不太好"（红帽）——三个方向同时碰撞，谁也说服不了谁。六顶思考帽的革命性在于它引入了"平行思考"：让所有人在同一时刻戴上同一顶帽子，朝同一个方向思考。</p>
+      <p style="margin-top:10px">更深层的天才之处在于帽子将<b style="color:var(--txt)">自我与思考分离</b>。在传统讨论中，当你提出一个观点，它就变成了"你的"观点，你的面子与它绑在一起，于是你不得不为之辩护，即使新信息已经证明你错了。六帽改变了这个结构——当你"戴黑帽"时，你只是在执行黑帽的职能，不是在攻击任何人；当你"戴绿帽"时，提出的创意也不代表你的立场。<b style="color:var(--txt)">帽子让思考变成了一种可以被组织、被分配、被切换的活动，而不是一种与自尊绑定的防御行为。</b>这就是为什么六帽能将会议时间缩短50%-80%——不是因为它让人想得更快，而是因为它消灭了90%的无效争论。</p>
+    </div>
+  </section>
+
+  <!-- ===== 六帽核心框架 ===== -->
+  <section>
+    <div class="sec-title"><span class="bar"></span><span class="dot"></span>六帽核心框架</div>
+    <div class="step"><div class="num">⬜</div><div><h3>白帽 — 事实与数据</h3><p>中立的信息层。白帽思考时，你只关注客观事实：我们已知什么？还缺什么信息？如何获取？不评判、不推测，像电脑一样陈述数据。白帽是所有其他帽子的基础——没有事实支撑的思考只是空谈。</p></div></div>
+    <div class="step"><div class="num">🟥</div><div><h3>红帽 — 情感与直觉</h3><p>给情感一个合法出口。红帽思考时可以说"我的直觉是……""我感觉不好"，无需解释或辩护。这看似不理性，实则极其重要——被压抑的情感会暗中影响整个决策过程。让情感被正式表达后，它们就不再暗中作祟。</p></div></div>
+    <div class="step"><div class="num">⬛</div><div><h3>黑帽 — 谨慎与批判</h3><p>最有价值也最危险的帽子。黑帽系统性扫描风险、障碍和潜在问题。人类大脑因进化本能而天然擅长黑帽思考，因此它最强大。但关键原则是：黑帽只在指定时间使用，不能在黄帽和绿帽阶段"偷袭"扼杀热情和创意。</p></div></div>
+    <div class="step"><div class="num">🟨</div><div><h3>黄帽 — 乐观与价值</h3><p>积极、建设性的思考。黄帽关注方案的可行性、价值和好处。因为人类大脑天然偏悲观，黄帽思考需要刻意练习和努力。黄帽不是盲目乐观，而是有逻辑地论证"为什么这个方案值得尝试"，与黑帽的风险扫描形成平衡。</p></div></div>
+    <div class="step"><div class="num">🟩</div><div><h3>绿帽 — 创意与可能</h3><p>创造力的专属时间。绿帽思考时，"疯狂"的想法是受欢迎的，因为它们可能是通往更好方案的跳板。绿帽的核心原则是不评判——先产生，后筛选。没有绿帽，思考就只是在既有框架内打转，永远无法突破。</p></div></div>
+    <div class="step"><div class="num">🟦</div><div><h3>蓝帽 — 控制与流程</h3><p>思考的指挥官。蓝帽负责组织整个思考过程：决定用哪些帽子、按什么顺序、分配多少时间、什么时候切换。蓝帽是元认知——对思考本身的思考。会议开始用蓝帽设议程，结束用蓝帽做总结，它是确保其他五顶帽子被有效使用的乐队指挥。</p></div></div>
+  </section>
+
+  <!-- ===== 主要知识点 ===== -->
+  <section>
+    <div class="sec-title"><span class="bar"></span><span class="dot"></span>主要知识点</div>
+    <div class="grid">
+      <div class="card"><h3>平行思考</h3><p>所有人同时朝同一方向思考，然后一起转向下一方向。消除了传统对抗式讨论中不同观点同时碰撞造成的混乱和低效。</p></div>
+      <div class="card"><h3>白帽：事实基础</h3><p>区分已验证的事实和待验证的假设，明确信息缺口。所有决策都应从白帽开始，确保建立在事实之上。</p></div>
+      <div class="card"><h3>红帽：情感出口</h3><p>让直觉和情感被正式表达，不再伪装成逻辑暗中搅乱决策。被听见的情感会自动退场。</p></div>
+      <div class="card"><h3>黑帽：风险扫描</h3><p>最强大也最危险的帽子。系统性扫描风险和障碍是决策不可或缺的，但在错误时机会扼杀一切创意。</p></div>
+      <div class="card"><h3>黄帽：价值发现</h3><p>寻找方案的好处、可行性和价值。因人类天然偏悲观，黄帽需要刻意练习。与黑帽形成平衡。</p></div>
+      <div class="card"><h3>绿帽：创意生成</h3><p>创造力的专用时间和空间。不评判，先产生大量想法。为"不成熟的想法"提供许可证。</p></div>
+      <div class="card"><h3>蓝帽：流程控制</h3><p>元认知的实践。组织思考序列、分配时间、总结结论。确保思考有序、全面、高效。</p></div>
+      <div class="card"><h3>消除自我</h3><p>帽子将"我"与"我的观点"分离。戴帽时你在执行角色而非维护自尊，从根本上减少防御性争论。</p></div>
+      <div class="card"><h3>序列使用</h3><p>帽子按特定顺序使用而非随机。不同场景需要不同序列，蓝帽负责设计和调整序列。</p></div>
+      <div class="card"><h3>时间盒原则</h3><p>每顶帽子使用严格限时，防止某一模式（尤其黑帽）过度占据时间，确保思考均衡覆盖所有维度。</p></div>
+    </div>
+  </section>
+
+  <!-- ===== 金句 ===== -->
+  <section>
+    <div class="sec-title"><span class="bar"></span><span class="dot"></span>金句</div>
+    <div class="quotes">
+      <div class="quote">思考的最大敌人不是无知，而是自以为是的正确。<span>—— Edward de Bono《六顶思考帽》</span></div>
+      <div class="quote">平行思考的核心是：在同一时刻，所有人都朝同一个方向看，然后一起转向下一个方向。<span>—— Edward de Bono《六顶思考帽》</span></div>
+      <div class="quote">黑帽思考是判断中最有价值的部分，但如果你在需要创造力时戴上黑帽，它就会扼杀一切。<span>—— Edward de Bono《六顶思考帽》</span></div>
+      <div class="quote">如果你不能说"我不知道"，你就永远无法学到任何新东西。<span>—— Edward de Bono《六顶思考帽》</span></div>
+      <div class="quote">蓝帽就像乐队指挥——它不演奏任何乐器，但它确保整个乐队协调一致地演奏出美妙的交响乐。<span>—— Edward de Bono《六顶思考帽》</span></div>
+    </div>
+  </section>
+
+  <!-- ===== 行动建议 ===== -->
+  <section>
+    <div class="sec-title"><span class="bar"></span><span class="dot"></span>行动建议</div>
+    <ol class="actions">
+      <li>在下次<b>团队会议</b>中试用六帽序列：蓝帽设定议程→白帽摆事实→绿帽提创意→黄帽找价值→黑帽扫风险→蓝帽做总结，体验平行思考的效率。</li>
+      <li>个人决策时<b>按帽思考</b>：面对一个重要决定，依次戴上六顶帽子，每种模式专注3-5分钟，确保不遗漏任何思考维度。</li>
+      <li>练习<b>红帽直觉</b>：每天对一个事物快速给出直觉感受，训练自己觉察并尊重直觉，不让"理性"压抑真实的情感信号。</li>
+      <li>刻意练习<b>黄帽思考</b>：面对一个你本能反对的方案，强迫自己找出三个可能的好处。人类大脑天然偏黑帽，黄帽需要刻意锻炼。</li>
+      <li>建立自己的<b>帽子序列</b>：针对不同场景（决策、创意、问题解决、冲突调解）设计不同的帽子使用顺序，形成标准化思考流程。</li>
+      <li>用<b>蓝帽复盘</b>：每次重要思考结束后，花5分钟回顾"我用了哪些帽子、是否遗漏了维度、流程是否高效"，持续优化自己的思考过程。</li>
+    </ol>
+  </section>
+
+  <footer>每日一学 · 个人成长思维书单 ｜ 2026-07-16《六顶思考帽》｜ 戴上不同帽子，让所有人朝同一方向思考，将争论变为交响乐</footer>
+</div>
+</body>
+</html>
