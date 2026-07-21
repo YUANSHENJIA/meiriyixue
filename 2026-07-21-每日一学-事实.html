@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 事实</title>
+<style>
+  :root{
+    --bg:#0f1220; --panel:#171b2e; --panel2:#1f2540; --line:#2c3358;
+    --txt:#e8ecff; --sub:#a7afd6; --accent:#7c8cff; --accent2:#37d0a6;
+    --gold:#ffcf5c; --warn:#ff8a8a; --c1:#7c8cff; --c2:#37d0a6; --c3:#ff9f6b; --c4:#c98bff; --c5:#5cc8ff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    background:radial-gradient(1200px 600px at 50% -10%,#1b2240 0,transparent 60%),var(--bg);
+    background-color:var(--bg); color:var(--txt); line-height:1.7; padding:0 0 60px;
+  }
+  header{
+    text-align:center; padding:46px 20px 30px;
+    background:linear-gradient(135deg,rgba(124,140,255,.18),rgba(55,208,166,.12));
+    border-bottom:1px solid var(--line);
+  }
+  header .badge{display:inline-block;font-size:13px;letter-spacing:2px;color:var(--accent2);
+    border:1px solid var(--accent2);border-radius:30px;padding:4px 16px;margin-bottom:14px}
+  header h1{font-size:34px;font-weight:800;letter-spacing:1px}
+  header .meta{margin-top:10px;color:var(--sub);font-size:14px}
+  header .meta b{color:var(--gold)}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 18px}
+  section{margin-top:34px}
+  .sec-title{display:flex;align-items:center;gap:10px;font-size:20px;font-weight:700;margin-bottom:16px}
+  .sec-title .dot{width:10px;height:10px;border-radius:50%;background:var(--accent)}
+  .sec-title .bar{width:4px;height:22px;border-radius:3px;background:linear-gradient(var(--accent),var(--accent2))}
+
+  /* ===== Mind map ===== */
+  .mm{display:flex;gap:0;align-items:stretch;flex-wrap:nowrap;overflow-x:auto;padding:10px 2px 18px}
+  .mm-root{flex:0 0 150px;display:flex;align-items:center;justify-content:center}
+  .mm-root .node{
+    background:linear-gradient(135deg,var(--accent),var(--c4));
+    color:#0d1020;font-weight:800;font-size:15px;text-align:center;border-radius:16px;
+    padding:18px 14px;box-shadow:0 10px 30px rgba(124,140,255,.35);min-width:130px;
+  }
+  .mm-branches{flex:1 1 auto;display:flex;flex-direction:column;gap:14px;padding-left:26px;position:relative;border-left:2px dashed var(--line)}
+  .branch{background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden;transition:.25s}
+  .branch:hover{border-color:var(--accent)}
+  .branch-head{display:flex;align-items:center;gap:12px;padding:13px 16px;cursor:pointer;user-select:none}
+  .branch-head .ic{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex:0 0 34px}
+  .branch-head .t{font-weight:700;font-size:16px;flex:1}
+  .branch-head .cnt{font-size:12px;color:var(--sub);background:var(--panel2);padding:2px 10px;border-radius:20px}
+  .branch-head .arrow{transition:.25s;color:var(--sub)}
+  .branch.open .branch-head .arrow{transform:rotate(90deg)}
+  .branch-body{max-height:0;overflow:hidden;transition:max-height .3s ease}
+  .branch.open .branch-body{max-height:3000px}
+  .branch-body ul{list-style:none;padding:4px 16px 16px 26px}
+  .branch-body li{position:relative;padding:7px 0 7px 18px;color:var(--sub);font-size:14.5px;border-bottom:1px dashed rgba(255,255,255,.05)}
+  .branch-body li:last-child{border-bottom:none}
+  .branch-body li::before{content:"";position:absolute;left:0;top:15px;width:7px;height:7px;border-radius:50%;background:var(--accent)}
+  .branch-body li b{color:var(--txt)}
+  .k1 .ic{background:rgba(124,140,255,.2)} .k2 .ic{background:rgba(55,208,166,.2)}
+  .k3 .ic{background:rgba(255,159,107,.2)} .k4 .ic{background:rgba(201,139,255,.2)} .k5 .ic{background:rgba(92,200,255,.2)}
+
+  /* ===== Cards ===== */
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+  .card h3{font-size:15px;margin-bottom:8px;color:var(--accent2)}
+  .card p{color:var(--sub);font-size:14px}
+  .step{display:flex;gap:14px;align-items:flex-start;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:12px}
+  .step .num{flex:0 0 40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;color:#0d1020}
+  .step:nth-child(1) .num{background:var(--c1)} .step:nth-child(2) .num{background:var(--c2)}
+  .step:nth-child(3) .num{background:var(--c3)} .step:nth-child(4) .num{background:var(--c4)}
+  .step:nth-child(5) .num{background:var(--c5)} .step:nth-child(6) .num{background:var(--gold)}
+  .step h3{font-size:16px;margin-bottom:4px}
+  .step p{color:var(--sub);font-size:14px}
+
+  .quotes{display:grid;gap:14px}
+  .quote{position:relative;background:linear-gradient(135deg,rgba(255,207,92,.1),rgba(255,138,138,.06));
+    border:1px solid rgba(255,207,92,.3);border-left:4px solid var(--gold);border-radius:12px;padding:16px 20px;font-size:16px}
+  .quote span{display:block;margin-top:8px;color:var(--gold);font-size:13px;text-align:right}
+
+  .actions{counter-reset:a}
+  .actions li{list-style:none;position:relative;padding:12px 16px 12px 52px;background:var(--panel);border:1px solid var(--line);border-radius:12px;margin-bottom:10px;color:var(--txt);font-size:14.5px}
+  .actions li::before{counter-increment:a;content:counter(a);position:absolute;left:14px;top:50%;transform:translateY(-50%);
+    width:26px;height:26px;border-radius:50%;background:linear-gradient(var(--accent),var(--accent2));color:#0d1020;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:13px}
+  .actions li b{color:var(--accent2)}
+
+  footer{text-align:center;color:var(--sub);font-size:13px;margin-top:46px;padding-top:20px;border-top:1px solid var(--line)}
+  .hint{text-align:center;color:var(--sub);font-size:12.5px;margin-top:10px}
+  @media(max-width:720px){.mm{flex-direction:column}.mm-root{flex:0 0 auto;justify-content:flex-start}.mm-branches{border-left:none;padding-left:0;padding-top:14px;border-top:2px dashed var(--line)}}
+</style>
+</head>
+<body>
+<header>
+  <div class="badge">每日一学 · 2026-07-21</div>
+  <h1>事实</h1>
+  <div class="meta">作者：<b>Hans Rosling（汉斯·罗斯林）</b> ｜ 分类：<b>认知思维 · 数据素养 · 批判性思考</b> ｜ 关键词：十大本能 · 四级收入框架 · 事实思维 · 数据驱动 · 剧场式世界观</div>
+</header>
+
+<div class="wrap">
+
+  <!-- ===== 思维导图 ===== -->
+  <section>
+    <div class="sec-title"><span class="bar"></span><span class="dot"></span>思维导图</div>
+    <div class="mm">
+      <div class="mm-root"><div class="node">事实</div></div>
+      <div class="mm-branches">
+
+        <div class="branch open k1">
+          <div class="branch-head" onclick="this.parentNode.classList.toggle('open')">
+            <div class="ic">💡</div><div class="t">核心洞见</div>
+            <div class="cnt">1 条</div><div class="arrow">▶</div>
+          </div>
+          <div class="branch-body"><ul>
+            <li><b>你以为你了解这个世界，但其实你对世界的认知几乎全是错的——而且错得系统化、错得可预测。</b>汉斯·罗斯林用一道全球知识测试证明了一个令人震惊的事实：一群黑猩猩随机猜测的正确率（33%）竟然高于全球受过教育的人群——包括世界银行高管、诺贝尔奖得主和知名记者。原因不是无知，而是<b>我们的大脑自带十种"戏剧性本能"</b>，它们在进化中帮助人类快速应对危险，但在信息爆炸的现代社会，这些本能系统性地扭曲了我们对世界的判断，让我们坚信"世界在变糟""穷人和富人天差地别""一切都在紧急恶化"。本书的核心洞见是：<b>对世界的悲观误解不是知识问题，而是思维本能问题。解决办法不是获得更多数据，而是建立一套对抗本能的"事实思维"框架。</b>罗斯林提出的四级收入框架取代了过时的"发达国家/发展中国家"二元分类，让我们第一次看清——全球75%的人口已经生活在中等收入水平，世界远比我们想象的更美好、更平等、进步更快。当你学会用事实而非本能来看世界，你不仅会变得更乐观，更会做出更理性的决策。</li>
+          </ul></div>
+        </div>
+
+        <div class="branch open k2">
+          <div class="branch-head" onclick="this.parentNode.classList.toggle('open')">
+            <div class="ic">🧩</div><div class="t">四要素核心框架</div>
+            <div class="cnt">4 维</div><div class="arrow">▶</div>
+          </div>
+          <div class="branch-body"><ul>
+            <li><b>维度一 · 四级收入框架（Four Income Levels）</b>：罗斯林最重要的认知工具——用日均收入的四个层级替代"发达/发展中"二元分类。第一级（日收入1美元，约10亿人）：靠步行取水、种地为生；第二级（4美元，约30亿人）：有自行车、能买基本药物；第三级（16美元，约20亿人）：有摩托车、冰箱、少量存款；第四级（64美元以上，约10亿人）：有汽车、能旅行度假。这个框架让你一眼看清——<b>全球绝大多数人既不是赤贫也不是巨富，而是处于中间层级且持续向上流动。</b></li>
+            <li><b>维度二 · 十大戏剧性本能（Ten Dramatic Instincts）</b>：系统扭曲我们世界观十大认知偏差的完整清单——差距本能（高估群体差异）、消极本能（只看坏消息）、直线本能（忽视曲线变化）、恐惧本能（被危险劫持）、规模本能（单个数字脱离比例）、概括本能（以偏概全）、命中注定本能（认为不变）、单一视角本能（只信一种解释）、归咎本能（找人背锅）、急迫本能（制造假性紧迫）。每个本能都有对应的解药规则。</li>
+            <li><b>维度三 · 事实思维法则（Rules of Factfulness）</b>：对应十个本能的十条实践法则——如"比较平均值时看分布而非极值""接受变好事也变坏事同时发生""警惕直线假设""计算后再感受""警惕单一数字"等。这十条法则构成了一套<b>可日常操作的"认知除偏清单"</b>，每次遇到重大判断时逐条过一遍，就能大幅降低本能扭曲。</li>
+            <li><b>维度四 · 事实世界观（Fact-Based Worldview）</b>：本书的终极目标——建立一种基于数据而非戏剧的世界观。它不是盲目乐观，而是<b>"可能性乐观"</b>：同时看到世界的严重问题（仍然存在贫困、疾病、气候危机）和巨大进步（预期寿命翻倍、极端贫困率骤降、女童教育普及）。事实世界观让你既不被新闻吓坏，也不在安逸中麻痹，而是基于对现实的准确判断采取有效行动。</li>
+          </ul></div>
+        </div>
+
+        <div class="branch open k3">
+          <div class="branch-head" onclick="this.parentNode.classList.toggle('open')">
+            <div class="ic">📚</div><div class="t">主要知识点</div>
+            <div class="cnt">10 个</div><div class="arrow">▶</div>
+          </div>
+          <div class="branch-body"><ul>
+            <li>差距本能的陷阱：人类天生喜欢二元分类——"我们与他们""富国与穷国""好与坏"。但真实世界几乎都是连续分布而非两极对立。解药：看大多数人在哪里，而不是只看两端的极端案例。用"钟形分布"替代"两极对立"的思维模型</li>
+            <li>消极本能的机制：坏事发生得快且戏剧化（灾难、战争、疫情），好事发生得慢且渐进（人均寿命延长、贫困率下降）。新闻天然偏好坏事，导致我们系统性地高估坏消息。解药：同时预期"坏事和好事"——告诉自己"坏消息更多不等于世界更糟"</li>
+            <li>直线本能的误区：我们假设趋势会沿直线延续——"人口会无限增长""病例会持续增加"。但现实中最常见的曲线是S型、驼峰型、滑梯型。解药：在假设直线之前，问自己"这条线会不会弯曲？什么条件下会拐弯？"</li>
+            <li>恐惧本能的生物学根源：大脑的杏仁核对危险信息有优先处理权——一听到"癌症""恐怖袭击""核武器"就进入高度警觉。但<b>你害怕的危险和真正杀死你的危险往往完全不同</b>。解药：计算实际风险概率后再决定恐惧程度，把"可怕"和"危险"分开</li>
+            <li>规模本能的破解：单独看一个数字（"300万人死于某病"）觉得很严重，但放到总人口比例中（300万/70亿=0.04%）可能微不足道。解药：永远用"比例"而非"绝对数字"来判断规模，并用参照物对比（"这个数字是去年的多少倍？是同类事件的多少倍？"）</li>
+            <li>概括本能的危险：从"我在贫民窟看到的情况"概括"整个非洲都这样"是致命错误。同一国家不同地区、同一社区不同家庭之间的差异可能比不同国家之间还大。解药：在同一类别中找差异，在不同类别中找相似，旅行时质疑自己的第一印象</li>
+            <li>命中注定本能的谬误：认为某些文化/国家"天生就是那样"——"非洲永远贫穷""穆斯林社会不可能现代化"。但事实是：伊朗的识字率从1960年代的17%飙升到今天的97%；孟加拉国的生育率从7降到2。解药：注意缓慢变化，追踪几代人而非几年的数据</li>
+            <li>单一视角本能的幻觉：拥有一个锤子的人看什么都像钉子。自由市场经济学家看什么都归因于市场，阴谋论者看什么都归因于阴谋。解药：检验你的想法——"有没有一个简单的解决方案能解决这个复杂问题？"如果有，你大概率漏看了什么。拥抱复杂性，测试不同视角</li>
+            <li>归咎本能的代价：出问题时找替罪羊是本能反应——把复杂系统失灵简化为"某人的错"。但归咎不仅找不到真正原因，还会阻碍系统性改进。解药：寻找原因而非寻找罪人，关注系统而非个人，理解"没有单一责任人"的复杂性场景</li>
+            <li>急迫本能的陷阱："再不行动就来不及了"是最危险的认知劫持之一。它让你跳过分析直接行动，被营销和政客利用。罗斯林自己在面对气候变化议题时也强调：<b>紧急但不恐慌，重要但不盲目。</b>解药：小步快走、持续测试、拒绝"要么全做要么不做"的虚假二选一</li>
+          </ul></div>
+        </div>
+
+        <div class="branch open k4">
+          <div class="branch-head" onclick="this.parentNode.classList.toggle('open')">
+            <div class="ic">✨</div><div class="t">金句</div>
+            <div class="cnt">5 句</div><div class="arrow">▶</div>
+          </div>
+          <div class="branch-body"><ul>
+            <li>世界远比你想象的更美好——这不是乐观主义，而是数据告诉你的事实。</li>
+            <li>当你拥有一个锤子，你看什么都像钉子；当你拥有一种视角，你看什么都只看到那一个侧面——单一视角是理解世界最大的障碍。</li>
+            <li>我们不应该因为害怕犯错就停止行动，但我们绝对应该因为害怕以错误的方式行动而学会检查自己的本能。</li>
+            <li>紧急感和恐慌是两回事——紧急感让你小步快走、持续迭代，恐慌让你一步迈太大然后摔倒。</li>
+            <li>数据不会替你思考，但没有数据的思考几乎一定是在被本能牵着走——事实思维不是让你变成计算机，而是让你在直觉响起时多问一句"真的是这样吗？"</li>
+          </ul></div>
+        </div>
+
+        <div class="branch open k5">
+          <div class="branch-head" onclick="this.parentNode.classList.toggle('open')">
+            <div class="ic">✅</div><div class="t">行动建议</div>
+            <div class="cnt">6 条</div><div class="arrow">▶</div>
+          </div>
+          <div class="branch-body"><ul>
+            <li><b>事实核查习惯</b>：每次看到"震惊""崩溃""史上最"等情绪化新闻标题时，暂停5秒，问自己三个问题——① 这个数字的基数是多少（比例而非绝对值）？② 和10年前/20年前比是更好还是更糟？③ 新闻媒体有没有动机放大负面？建立一个"事实核查"的反射动作，不被标题牵着走。</li>
+            <li><b>四级收入框架日常应用</b>：在做市场分析、产品设计、投资决策或政策判断时，用四级收入框架替代"发达/发展中"的粗分类。问自己——"目标群体在哪个收入层级？他们在往上移动还是往下掉？"这个框架能让你对全球市场的判断精度提升一个量级。</li>
+            <li><b>本能除偏清单</b>：在手机备忘录里存一份"十大本能清单"，每次做重大决策（投资、跳槽、买房、判断他人）时逐条过一遍——"我是不是在差距本能里把两端极端化了？""我是不是被恐惧本能劫持了？""我是不是在直线外推而忽视了拐弯可能？"这个清单是认知除偏的瑞士军刀。</li>
+            <li><b>对比参照物练习</b>：每当遇到一个"很大的数字"或"很严重的问题"时，找至少两个参照物来对比——① 去年同期是多少（时间对比）？② 同类事件是多少（类别对比）？③ 占总量比例是多少（规模对比）？比如看到"某病死亡300万"，查一下全球总死亡人数（约5800万），你就知道300万约占5%，判断会更理性。</li>
+            <li><b>多视角验证法</b>：对任何重要判断，刻意找至少两个不同视角的解读——如果你倾向于自由市场视角的解释，去找行为经济学视角的解读；如果你认同技术决定论，去读社会建构论的视角。不是要你当骑墙派，而是让结论经过不同框架的锤炼后再下判断。</li>
+            <li><b>"好事也在发生"日记</b>：每天记录1-2件"世界在变好"的数据或事实——全球极端贫困率下降了多少、某种疾病的治愈率提升了多少、女童入学率达到了多少。这不是自我安慰的盲目乐观，而是对抗消极本能的刻意练习，让你对世界的认知恢复平衡。</li>
+          </ul></div>
+        </div>
+
+      </div>
+    </div>
+    <div class="hint">点击任意分支标题可展开 / 收起 ▾</div>
+  </section>
+
+  <!-- ===== 核心洞见 ===== -->
+  <section>
+    <div class="sec-title"><span class="bar"></span><span class="dot"></span>核心洞见</div>
+    <div class="card" style="border-left:4px solid var(--accent2)">
+      <p>汉斯·罗斯林的核心洞见可以用一句话概括：<b style="color:var(--txt)">你对世界的认知偏差不是知识不足造成的，而是大脑的十种戏剧性本能系统扭曲的结果——解决办法不是获取更多数据，而是建立一套对抗本能的事实思维框架。</b>罗斯林用一道全球知识测试震撼了世界——在关于全球贫困、教育、健康等基本事实的多选题上，随机猜答案的黑猩猩正确率（33%）竟然高于全球各行业的精英人群。这不是因为精英无知，而是因为<b style="color:var(--txt)">他们和所有人一样被本能绑架了</b>。</p>
+      <p style="margin-top:10px">本书最深远的贡献是四级收入框架和十大本能清单。四级框架——日均1美元、4美元、16美元、64美元以上——彻底取代了过时的"发达国家/发展中国家"二元分类，让我们第一次看清全球75%的人口已处于中间层级并持续向上流动。<b style="color:var(--txt)">十大本能——差距、消极、直线、恐惧、规模、概括、命中注定、单一视角、归咎、急迫——是一份完整的"认知除偏清单"</b>，每个本能都有对应的解药法则。罗斯林反复强调：事实思维不是盲目乐观，而是"可能性乐观"——同时看到世界的严重问题和巨大进步，基于对现实的准确判断采取有效行动。在信息过载和情绪化新闻充斥的时代，<b style="color:var(--txt)">用事实而非本能看世界，本身就是一种强大的认知免疫力。</b></p>
+    </div>
+  </section>
+
+  <!-- ===== 四要素核心框架 ===== -->
+  <section>
+    <div class="sec-title"><span class="bar"></span><span class="dot"></span>四要素核心框架</div>
+    <div class="step"><div class="num">1</div><div><h3>四级收入框架 — 替代二元分类</h3><p>用日均收入的四个层级替代"发达/发展中国家"分类。第一级（1美元，10亿人）：步行取水、种地；第二级（4美元，30亿人）：有自行车、基本药物；第三级（16美元，20亿人）：有摩托车、冰箱、存款；第四级（64美元+，10亿人）：有汽车、能旅行。全球75%人口处于中间层级且持续向上流动——世界远比"富国穷国"的叙事更平等。</p></div></div>
+    <div class="step"><div class="num">2</div><div><h3>十大戏剧性本能 — 认知偏差全景图</h3><p>系统扭曲世界观的十种认知本能：差距本能（高估群体差异）、消极本能（只看坏消息）、直线本能（忽视曲线）、恐惧本能（被危险劫持）、规模本能（脱离比例）、概括本能（以偏概全）、命中注定本能（认为不变）、单一视角本能（只信一种解释）、归咎本能（找人背锅）、急迫本能（制造假紧迫）。每个本能都源于进化但在现代社会失效。</p></div></div>
+    <div class="step"><div class="num">3</div><div><h3>事实思维法则 — 可操作的除偏清单</h3><p>对应十个本能的十条实践法则：看分布不看极值、同时预期好事和坏事、警惕直线假设、计算后再感受、用比例判断规模、在同类别中找差异、追踪缓慢变化、测试多种视角、找原因不找罪人、小步快走不恐慌。每次重大判断时逐条过一遍，就能大幅降低本能扭曲。</p></div></div>
+    <div class="step"><div class="num">4</div><div><h3>事实世界观 — 可能性乐观</h3><p>终极目标：建立基于数据而非戏剧的世界观。不是盲目乐观，而是同时看到世界的问题和进步——极端贫困率从50%降到10%、预期寿命从31岁到73岁、女童入学率接近90%。事实世界观让你既不被新闻吓坏也不在安逸中麻痹，基于对现实的准确判断采取有效行动。</p></div></div>
+  </section>
+
+  <!-- ===== 主要知识点 ===== -->
+  <section>
+    <div class="sec-title"><span class="bar"></span><span class="dot"></span>主要知识点</div>
+    <div class="grid">
+      <div class="card"><h3>差距本能</h3><p>天生喜欢二元分类，但真实世界是连续分布。解药：看大多数人在哪里，不只看极端两端。用"钟形分布"替代"两极对立"。</p></div>
+      <div class="card"><h3>消极本能</h3><p>坏事发生快且戏剧化，好事慢且渐进。新闻偏好坏事导致系统性高估坏消息。解药：预期好坏事同时发生。</p></div>
+      <div class="card"><h3>直线本能</h3><p>假设趋势直线延续，但现实常见S型、驼峰型、滑梯型曲线。解药：问"这条线会不会弯曲？什么条件下拐弯？"</p></div>
+      <div class="card"><h3>恐惧本能</h3><p>杏仁核优先处理危险信息。你害怕的危险和真正杀死你的危险往往不同。解药：计算实际风险概率后再决定恐惧程度。</p></div>
+      <div class="card"><h3>规模本能</h3><p>单独看数字觉得严重，放到比例中可能微不足道。解药：永远用比例判断规模，用参照物对比（时间、类别、总量）。</p></div>
+      <div class="card"><h3>概括本能</h3><p>从局部样本概括整体是致命错误。同国不同地区差异可能比不同国家还大。解药：在同类别中找差异，质疑第一印象。</p></div>
+      <div class="card"><h3>命中注定本能</h3><p>认为某些文化/国家"天生如此"，忽视缓慢但深刻的变化。伊朗识字率从17%到97%用了60年。解药：追踪几代人数据。</p></div>
+      <div class="card"><h3>单一视角本能</h3><p>拥有一个锤子看什么都像钉子。简单解决方案通常意味着漏看了复杂性。解药：拥抱复杂性，测试不同视角。</p></div>
+      <div class="card"><h3>归咎本能</h3><p>出问题找替罪羊阻碍系统性改进。解药：找原因不找罪人，关注系统而非个人。</p></div>
+      <div class="card"><h3>急迫本能</h3><p>"再不行动就来不及"是最危险的认知劫持。解药：小步快走、持续测试、拒绝"全做或不做"的假二选一。</p></div>
+    </div>
+  </section>
+
+  <!-- ===== 金句 ===== -->
+  <section>
+    <div class="sec-title"><span class="bar"></span><span class="dot"></span>金句</div>
+    <div class="quotes">
+      <div class="quote">世界远比你想象的更美好——这不是乐观主义，而是数据告诉你的事实。<span>—— Hans Rosling《事实》</span></div>
+      <div class="quote">当你拥有一个锤子，你看什么都像钉子；当你拥有一种视角，你看什么都只看到那一个侧面——单一视角是理解世界最大的障碍。<span>—— Hans Rosling《事实》</span></div>
+      <div class="quote">我们不应该因为害怕犯错就停止行动，但我们绝对应该因为害怕以错误的方式行动而学会检查自己的本能。<span>—— Hans Rosling《事实》</span></div>
+      <div class="quote">紧急感和恐慌是两回事——紧急感让你小步快走、持续迭代，恐慌让你一步迈太大然后摔倒。<span>—— Hans Rosling《事实》</span></div>
+      <div class="quote">数据不会替你思考，但没有数据的思考几乎一定是在被本能牵着走——事实思维不是让你变成计算机，而是让你在直觉响起时多问一句"真的是这样吗？"<span>—— Hans Rosling《事实》</span></div>
+    </div>
+  </section>
+
+  <!-- ===== 行动建议 ===== -->
+  <section>
+    <div class="sec-title"><span class="bar"></span><span class="dot"></span>行动建议</div>
+    <ol class="actions">
+      <li><b>事实核查习惯</b>：看到"震惊""崩溃""史上最"等标题时暂停5秒，问——① 基数是多少（比例而非绝对值）？② 和10年前比更好还是更糟？③ 媒体有没有放大负面的动机？建立"事实核查"反射动作。</li>
+      <li><b>四级收入框架日常应用</b>：在市场分析、产品设计、投资决策时，用四级收入框架替代"发达/发展中"粗分类。问"目标群体在哪个层级？在往上还是往下？"判断精度提升一个量级。</li>
+      <li><b>本能除偏清单</b>：在手机备忘录存"十大本能清单"，每次重大决策时逐条过——"差距极端化了？""恐惧劫持了？""直线外推了？"这是认知除偏的瑞士军刀。</li>
+      <li><b>对比参照物练习</b>：遇到"很大的数字"时找两个参照物——去年同期是多少？同类事件是多少？占总量比例是多少？用比例而非绝对数字判断规模。</li>
+      <li><b>多视角验证法</b>：对重要判断刻意找至少两个不同视角的解读。如果你认同技术决定论，去读社会建构论。不是当骑墙派，而是让结论经过不同框架锤炼后再下判断。</li>
+      <li><b>"好事也在发生"日记</b>：每天记录1-2件"世界在变好"的数据——极端贫困率下降、疾病治愈率提升、女童入学率上升。这不是盲目乐观，而是对抗消极本能的刻意练习。</li>
+    </ol>
+  </section>
+
+  <footer>每日一学 · 个人成长思维书单 ｜ 2026-07-21《事实》｜ 对世界的悲观误解不是知识问题，而是思维本能问题——用事实而非本能看世界，本身就是一种强大的认知免疫力</footer>
+</div>
+</body>
+</html>
