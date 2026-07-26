@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 娱乐至死 — 尼尔·波兹曼</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --card-bg: #1e293b;
+    --border: #334155;
+    --text: #e2e8f0;
+    --text-secondary: #94a3b8;
+    --accent: #38bdf8;
+    --accent2: #a78bfa;
+    --accent3: #f472b6;
+    --accent4: #34d399;
+    --accent5: #fbbf24;
+    --danger: #ef4444;
+    --gold: #f59e0b;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 40px 20px;
+  }
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+  .header .badge {
+    display: inline-block;
+    padding: 6px 18px;
+    background: rgba(56, 189, 248, 0.15);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    border-radius: 20px;
+    font-size: 14px;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+  .header h1 {
+    font-size: 42px;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+  }
+  .header .subtitle {
+    font-size: 18px;
+    color: var(--text-secondary);
+  }
+  .header .author {
+    font-size: 16px;
+    color: var(--accent3);
+    margin-top: 4px;
+  }
+  .mindmap {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+  .root-node {
+    background: linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(167, 139, 250, 0.2));
+    border: 2px solid rgba(56, 189, 248, 0.4);
+    border-radius: 16px;
+    padding: 32px;
+    text-align: center;
+  }
+  .root-node h2 {
+    font-size: 28px;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .root-node p {
+    color: var(--text-secondary);
+    font-size: 16px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .branches {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 24px;
+  }
+  .branch {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .branch:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+  }
+  .branch-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .branch-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+  .icon-blue { background: rgba(56,189,248,0.15); }
+  .icon-purple { background: rgba(167,139,250,0.15); }
+  .icon-pink { background: rgba(244,114,182,0.15); }
+  .icon-green { background: rgba(52,211,153,0.15); }
+  .icon-yellow { background: rgba(251,191,36,0.15); }
+  .icon-red { background: rgba(239,68,68,0.15); }
+  .branch-title {
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .branch ul {
+    list-style: none;
+    padding: 0;
+  }
+  .branch li {
+    position: relative;
+    padding: 8px 0 8px 20px;
+    color: var(--text-secondary);
+    font-size: 15px;
+    line-height: 1.7;
+  }
+  .branch li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 14px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    opacity: 0.6;
+  }
+  .insight-box {
+    background: linear-gradient(135deg, rgba(167,139,250,0.1), rgba(56,189,248,0.1));
+    border: 1px solid rgba(167,139,250,0.3);
+    border-radius: 16px;
+    padding: 28px;
+    margin-top: 8px;
+  }
+  .insight-box h3 {
+    font-size: 20px;
+    color: var(--accent2);
+    margin-bottom: 16px;
+  }
+  .insight-item {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 12px;
+    align-items: flex-start;
+  }
+  .insight-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--accent2);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .insight-text {
+    flex: 1;
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--text);
+  }
+  .quotes-section {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+  }
+  .quotes-section h3 {
+    font-size: 20px;
+    color: var(--accent5);
+    margin-bottom: 16px;
+  }
+  .quote-item {
+    border-left: 3px solid var(--accent5);
+    padding: 12px 20px;
+    margin-bottom: 12px;
+    font-style: italic;
+    color: var(--text-secondary);
+    font-size: 15px;
+    line-height: 1.7;
+    background: rgba(251,191,36,0.05);
+    border-radius: 0 8px 8px 0;
+  }
+  .actions-section {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+  }
+  .actions-section h3 {
+    font-size: 20px;
+    color: var(--accent4);
+    margin-bottom: 16px;
+  }
+  .action-item {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 14px;
+    align-items: flex-start;
+  }
+  .action-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: rgba(52,211,153,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .action-text {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--text);
+  }
+  .footer {
+    text-align: center;
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    color: var(--text-secondary);
+    font-size: 13px;
+  }
+  .tag {
+    display: inline-block;
+    padding: 3px 10px;
+    background: rgba(167,139,250,0.12);
+    border-radius: 10px;
+    font-size: 12px;
+    color: var(--accent2);
+    margin: 2px;
+  }
+  @media (max-width: 768px) {
+    .header h1 { font-size: 30px; }
+    .branches { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="badge">2026年7月26日 · 第71期</div>
+    <h1>娱乐至死</h1>
+    <div class="subtitle">Amusing Ourselves to Death</div>
+    <div class="author">尼尔·波兹曼（Neil Postman）· 1985</div>
+  </div>
+
+  <div class="mindmap">
+    <!-- Root Node -->
+    <div class="root-node">
+      <h2>🧠 "媒介即隐喻" — 当娱乐成为一切，我们正在娱乐至死</h2>
+      <p>波兹曼警告：电视等电子媒介正在把一切公共话语——政治、宗教、新闻、教育——变成娱乐的附庸。当严肃的思想被消解为碎片化的表演，人类引以为傲的理性思考能力正在不可逆地退化。这不仅是媒介批判，更是对现代文明走向的深刻忧虑。</p>
+    </div>
+
+    <!-- Branches: Core Framework -->
+    <div class="branches">
+      <!-- Branch 1: Core Concepts -->
+      <div class="branch">
+        <div class="branch-header">
+          <div class="branch-icon icon-blue">📡</div>
+          <div class="branch-title" style="color:var(--accent)">核心概念</div>
+        </div>
+        <ul>
+          <li><strong>媒介即隐喻：</strong>媒介形式本身就在定义话语内容，不透明但无处不在</li>
+          <li><strong>媒介即认识论：</strong>媒介决定了我们如何认知世界、什么是"真相"</li>
+          <li><strong>"娱乐至死"：</strong>当一切公共话语以娱乐形式呈现，文化将走向死亡</li>
+          <li><strong>信息-行动比：</strong>我们获取大量信息，却无法对其采取行动</li>
+          <li><strong>"好……现在"模式：</strong>新闻播报的过渡词，消解了所有事件的连续性和深度</li>
+        </ul>
+      </div>
+
+      <!-- Branch 2: Features of TV Culture -->
+      <div class="branch">
+        <div class="branch-header">
+          <div class="branch-icon icon-purple">📺</div>
+          <div class="branch-title" style="color:var(--accent2)">电视文化的特征</div>
+        </div>
+        <ul>
+          <li><strong>碎片化：</strong>信息被切割成无关联的片段，消解逻辑连贯性</li>
+          <li><strong>去语境化：</strong>所有内容脱离历史与背景，成为孤立的娱乐消费品</li>
+          <li><strong>即时满足：</strong>追求感官刺激而非理性思考，观众习惯被动接收</li>
+          <li><strong>图像至上：</strong>视觉冲击力取代逻辑论证，好看比说对更重要</li>
+          <li><strong>严肃与娱乐的混淆：</strong>宗教、政治、教育都被包装成娱乐秀</li>
+        </ul>
+      </div>
+
+      <!-- Branch 3: Typographic vs Television -->
+      <div class="branch">
+        <div class="branch-header">
+          <div class="branch-icon icon-pink">⚖️</div>
+          <div class="branch-title" style="color:var(--accent3)">印刷术时代 vs 电视时代</div>
+        </div>
+        <ul>
+          <li><strong>印刷术时代：</strong>培养线性思维、逻辑推理、抽象思考、延迟满足</li>
+          <li><strong>电视时代：</strong>强化图像思维、感性刺激、即时反应、注意力涣散</li>
+          <li><strong>公共话语：</strong>从林肯-道格拉斯式的深度辩论退化为30秒广告式表达</li>
+          <li><strong>真理标准：</strong>从"可验证的命题"变为"看起来可信的表演"</li>
+          <li><strong>公民素质：</strong>从理性公民蜕变为被动观众/消费者</li>
+        </ul>
+      </div>
+
+      <!-- Branch 4: Key Knowledge Points -->
+      <div class="branch">
+        <div class="branch-header">
+          <div class="branch-icon icon-green">📖</div>
+          <div class="branch-title" style="color:var(--accent4)">主要知识点</div>
+        </div>
+        <ul>
+          <li><strong>赫胥黎式预言：</strong>不是奥威尔的外部压迫，而是人们"爱上压迫"</li>
+          <li><strong>媒介分类：</strong>不同媒介有不同的"隐喻偏好"，塑造不同认知模式</li>
+          <li><strong>新闻娱乐化：</strong>新闻成为娱乐节目，灾难与广告并置消解严肃性</li>
+          <li><strong>宗教电视化：</strong>布道变成表演，神圣体验被收视率替代</li>
+          <li><strong>政治秀场化：</strong>形象比政纲重要，候选人如同商品般被包装营销</li>
+          <li><strong>教育娱乐化：</strong>教室引入电视，"寓教于乐"使学生丧失深度学习能力</li>
+          <li><strong>童年的消逝：</strong>电视打破了成人世界与儿童世界的信息壁垒</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Core Insights -->
+    <div class="insight-box">
+      <h3>💡 五大核心洞见</h3>
+      <div class="insight-item">
+        <div class="insight-num">1</div>
+        <div class="insight-text"><strong>媒介形式比内容更根本。</strong>电报发明之前，信息受限于运输速度；报纸时代，信息需要连贯性和深度；电视时代，信息必须有趣。形式的改变先于并决定了内容的改变。</div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-num">2</div>
+        <div class="insight-text"><strong>我们正在"笑死"而非"吓死"。</strong>奥威尔担心禁书令，赫胥黎担心没人想读书。真正的威胁不是暴政，而是人们自愿沉浸在娱乐中，丧失思考的意愿。</div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-num">3</div>
+        <div class="insight-text"><strong>"信息过剩"导致"意义枯竭"。</strong>我们知道的越来越多，理解的越来越少。每日海量新闻让我们对世界了如指掌，却无法对任何一件事采取有效行动。</div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-num">4</div>
+        <div class="insight-text"><strong>媒介即隐喻，隐喻即世界观。</strong>钟表把时间变成精确的独立序列，眼镜矫正了我们对"正常"的定义。每种媒介都在悄悄重塑我们看待世界的方式。</div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-num">5</div>
+        <div class="insight-text"><strong>抵抗娱乐至死，唯有"理解媒介"。</strong>不是拒绝技术，而是学会批判性地认识媒介如何塑造我们的思维。培养"媒介素养"是当代公民的必修课。</div>
+      </div>
+    </div>
+
+    <!-- Golden Quotes -->
+    <div class="quotes-section">
+      <h3>✨ 金句精选</h3>
+      <div class="quote-item">"我们将毁于我们所热爱的东西。"</div>
+      <div class="quote-item">"奥威尔害怕的是那些强行禁书的人，赫胥黎担心的是再也没有人想读书。"</div>
+      <div class="quote-item">"媒介即隐喻，隐喻创造了我们的文化内容。"</div>
+      <div class="quote-item">"真理不能、也从来没有毫无修饰地存在。它必须穿着某种合适的外衣出现，否则就可能得不到承认。"</div>
+      <div class="quote-item">"在印刷术时代，一个人必须拥有内部一致性的观点；在电视时代，一致性是一种认知负担。"</div>
+      <div class="quote-item">"过去人们是为了解决问题而搜寻信息，现在是为了让无用的信息派上用场而制造问题。"</div>
+      <div class="quote-item">"当一种文化开始把'好看'当作'好'的标准，它就已经走上了通往死亡的道路。"</div>
+    </div>
+
+    <!-- Action Suggestions -->
+    <div class="actions-section">
+      <h3>🎯 行动建议</h3>
+      <div class="action-item">
+        <div class="action-icon">📵</div>
+        <div class="action-text"><strong>每日"数字斋戒"：</strong>每天留出至少1小时完全远离屏幕，用深度阅读（纸质书）替代碎片化浏览。这不仅是习惯改变，更是对大脑思考方式的重新校准。</div>
+      </div>
+      <div class="action-item">
+        <div class="action-icon">🔍</div>
+        <div class="action-text"><strong>培养"媒介素养"：</strong>每次消费媒体内容时，问自己三个问题：谁在说？用什么媒介说？这种媒介可能如何歪曲信息？</div>
+      </div>
+      <div class="action-item">
+        <div class="action-icon">📝</div>
+        <div class="action-text"><strong>重建"长文阅读"肌肉：</strong>每周选一篇深度长文或一章书，用纸笔做结构化笔记（而非高亮/收藏），训练线性逻辑思考能力。</div>
+      </div>
+      <div class="action-item">
+        <div class="action-icon">🎙️</div>
+        <div class="action-text"><strong>关注"如何说"而非"说什么"：</strong>下次看新闻或政论节目时，刻意观察其呈现形式——画面切换速度、背景音乐、主播表情——思考这些形式如何影响你对内容的判断。</div>
+      </div>
+      <div class="action-item">
+        <div class="action-icon">🗣️</div>
+        <div class="action-text"><strong>练习"林肯-道格拉斯"式对话：</strong>找一位朋友就某个严肃话题进行至少30分钟的面对面深度交谈，不使用手机查资料，训练逻辑表达和耐心倾听。</div>
+      </div>
+    </div>
+
+    <!-- Tags -->
+    <div style="text-align:center; margin-top:24px;">
+      <span class="tag">媒介批判</span>
+      <span class="tag">认知科学</span>
+      <span class="tag">文化研究</span>
+      <span class="tag">信息素养</span>
+      <span class="tag">深度思考</span>
+      <span class="tag">传播学经典</span>
+      <span class="tag">尼尔·波兹曼</span>
+    </div>
+  </div>
+
+  <div class="footer">
+    每日一学 · 用经典思维武装大脑 · 2026年7月26日
+  </div>
+</div>
+</body>
+</html>
