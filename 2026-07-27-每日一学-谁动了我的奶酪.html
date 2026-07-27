@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 谁动了我的奶酪</title>
+<style>
+  :root {
+    --bg: #0f0f1a;
+    --card-bg: #1a1a2e;
+    --text: #e0e0e0;
+    --text-secondary: #a0a0b8;
+    --accent: #f0a500;
+    --accent2: #e94560;
+    --accent3: #00b4d8;
+    --accent4: #2ec4b6;
+    --border: #2a2a40;
+    --glow: rgba(240, 165, 0, 0.15);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+  .header {
+    text-align: center;
+    padding: 60px 20px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(ellipse at center, rgba(240,165,0,0.08) 0%, transparent 70%);
+    animation: headerPulse 8s ease-in-out infinite;
+  }
+  @keyframes headerPulse {
+    0%, 100% { opacity: 0.6; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.05); }
+  }
+  .header-content { position: relative; z-index: 1; }
+  .date-badge {
+    display: inline-block;
+    background: rgba(240,165,0,0.15);
+    color: var(--accent);
+    padding: 6px 18px;
+    border-radius: 20px;
+    font-size: 13px;
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+  }
+  .title {
+    font-size: 42px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #f0a500, #e94560, #f0a500);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradientShift 3s ease infinite;
+  }
+  @keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+  .subtitle {
+    color: var(--text-secondary);
+    font-size: 15px;
+    margin-top: 8px;
+    letter-spacing: 1px;
+  }
+  .container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  /* Mind Map */
+  .mindmap-section {
+    padding: 20px 0 40px;
+    overflow-x: auto;
+  }
+  .mindmap-section h2 {
+    text-align: center;
+    color: var(--accent);
+    font-size: 24px;
+    margin-bottom: 30px;
+    letter-spacing: 2px;
+  }
+  .mindmap {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px 0;
+  }
+  .center-node {
+    background: linear-gradient(135deg, #f0a500, #e06000);
+    color: #fff;
+    padding: 24px 32px;
+    border-radius: 16px;
+    font-size: 20px;
+    font-weight: 700;
+    text-align: center;
+    box-shadow: 0 8px 40px rgba(240,165,0,0.3);
+    position: relative;
+    z-index: 2;
+    min-width: 200px;
+  }
+  .branch-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: center;
+    align-items: flex-start;
+    margin-top: 40px;
+  }
+  .branch {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    width: 220px;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+  .branch:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+    border-color: var(--accent);
+  }
+  .branch-icon {
+    font-size: 32px;
+    margin-bottom: 8px;
+    display: block;
+  }
+  .branch-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .branch-desc {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* Characters */
+  .characters-section {
+    padding: 30px 0;
+  }
+  .characters-section h2 {
+    text-align: center;
+    color: var(--accent);
+    font-size: 24px;
+    margin-bottom: 24px;
+    letter-spacing: 2px;
+  }
+  .characters-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+  }
+  .char-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px;
+    text-align: center;
+    transition: all 0.3s ease;
+  }
+  .char-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+  }
+  .char-emoji { font-size: 48px; margin-bottom: 12px; display: block; }
+  .char-name { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+  .char-type { font-size: 12px; color: var(--text-secondary); margin-bottom: 10px; }
+  .char-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+  .char-card:nth-child(1) .char-name { color: var(--accent3); }
+  .char-card:nth-child(2) .char-name { color: var(--accent4); }
+  .char-card:nth-child(3) .char-name { color: var(--accent2); }
+  .char-card:nth-child(4) .char-name { color: var(--accent); }
+
+  /* Insights */
+  .insight-section {
+    background: linear-gradient(135deg, rgba(240,165,0,0.08), rgba(233,69,96,0.08));
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 36px;
+    margin: 30px 0;
+    text-align: center;
+  }
+  .insight-label {
+    font-size: 13px;
+    color: var(--accent);
+    letter-spacing: 3px;
+    margin-bottom: 12px;
+  }
+  .insight-text {
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 1.8;
+    color: #fff;
+  }
+
+  /* Quotes */
+  .quotes-section {
+    padding: 30px 0;
+  }
+  .quotes-section h2 {
+    text-align: center;
+    color: var(--accent);
+    font-size: 24px;
+    margin-bottom: 24px;
+    letter-spacing: 2px;
+  }
+  .quotes-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .quote-card {
+    background: var(--card-bg);
+    border-left: 4px solid var(--accent);
+    border-radius: 0 12px 12px 0;
+    padding: 20px 24px;
+    transition: all 0.3s ease;
+  }
+  .quote-card:hover {
+    border-left-color: var(--accent2);
+    transform: translateX(4px);
+  }
+  .quote-text {
+    font-size: 16px;
+    font-style: italic;
+    color: #e0e0e0;
+    margin-bottom: 6px;
+    line-height: 1.7;
+  }
+  .quote-source {
+    font-size: 12px;
+    color: var(--text-secondary);
+    text-align: right;
+  }
+
+  /* Action */
+  .actions-section {
+    padding: 30px 0;
+  }
+  .actions-section h2 {
+    text-align: center;
+    color: var(--accent);
+    font-size: 24px;
+    margin-bottom: 24px;
+    letter-spacing: 2px;
+  }
+  .actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+  }
+  .action-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    transition: all 0.3s ease;
+  }
+  .action-card:hover {
+    border-color: var(--accent);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+  }
+  .action-num {
+    background: var(--accent);
+    color: #000;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .action-content h4 {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: #fff;
+  }
+  .action-content p {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  /* Knowledge points */
+  .knowledge-section {
+    padding: 30px 0;
+  }
+  .knowledge-section h2 {
+    text-align: center;
+    color: var(--accent);
+    font-size: 24px;
+    margin-bottom: 24px;
+    letter-spacing: 2px;
+  }
+  .knowledge-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 16px;
+  }
+  .knowledge-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    transition: all 0.3s ease;
+  }
+  .knowledge-card:hover {
+    border-color: var(--accent3);
+  }
+  .knowledge-card h4 {
+    color: var(--accent3);
+    font-size: 15px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .knowledge-card h4 .num {
+    background: rgba(0,180,216,0.2);
+    color: var(--accent3);
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .knowledge-card p {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* Book info */
+  .book-info {
+    text-align: center;
+    padding: 40px 0;
+    border-top: 1px solid var(--border);
+    margin-top: 20px;
+  }
+  .book-info p {
+    color: var(--text-secondary);
+    font-size: 13px;
+    line-height: 1.8;
+  }
+  .book-info .author {
+    color: var(--accent);
+    font-weight: 600;
+    font-size: 14px;
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 30px;
+    color: var(--text-secondary);
+    font-size: 12px;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-content">
+    <div class="date-badge">2026.07.27 · 每日一学</div>
+    <h1 class="title">谁动了我的奶酪？</h1>
+    <p class="subtitle">Who Moved My Cheese? —— 应对变化的智慧寓言</p>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- 核心洞见 -->
+  <div class="insight-section">
+    <div class="insight-label">✦ 核心洞见 ✦</div>
+    <div class="insight-text">
+      变化不可避免。真正决定命运的，不是你能否预见变化，<br>而是你在变化发生后的反应速度与适应姿态。
+    </div>
+  </div>
+
+  <!-- 思维导图 -->
+  <div class="mindmap-section">
+    <h2>🧠 思维导图</h2>
+    <div style="display:flex;justify-content:center;flex-wrap:wrap;gap:16px;padding:10px 0">
+      <div class="center-node">🧀 谁动了<br>我的奶酪</div>
+      <div style="flex:1;min-width:300px">
+        <div class="branch-container">
+          <div class="branch">
+            <span class="branch-icon">🔍</span>
+            <div class="branch-title">预见变化</div>
+            <div class="branch-desc">时刻保持警觉，嗅探环境中的细微变化信号</div>
+          </div>
+          <div class="branch">
+            <span class="branch-icon">🏃</span>
+            <div class="branch-title">迅速行动</div>
+            <div class="branch-desc">放下恐惧，立刻迈出第一步，不要过度分析</div>
+          </div>
+          <div class="branch">
+            <span class="branch-icon">🔄</span>
+            <div class="branch-title">适应变化</div>
+            <div class="branch-desc">越是早放弃旧的奶酪，就越早发现新的奶酪</div>
+          </div>
+          <div class="branch">
+            <span class="branch-icon">🎯</span>
+            <div class="branch-title">享受变化</div>
+            <div class="branch-desc">在探索未知的过程中找到乐趣和成长</div>
+          </div>
+          <div class="branch">
+            <span class="branch-icon">🚀</span>
+            <div class="branch-title">拥抱不确定性</div>
+            <div class="branch-desc">最大的风险是不冒任何风险</div>
+          </div>
+          <div class="branch">
+            <span class="branch-icon">💡</span>
+            <div class="branch-title">简化思维</div>
+            <div class="branch-desc">复杂的思考有时不如直觉和简单的行动</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 四要素：四个角色 -->
+  <div class="characters-section">
+    <h2>🎭 四个角色 — 四种应对变化的姿态</h2>
+    <div class="characters-grid">
+      <div class="char-card">
+        <span class="char-emoji">🐭</span>
+        <div class="char-name">嗅嗅 Sniff</div>
+        <div class="char-type">敏锐的察觉者</div>
+        <div class="char-desc">能早早嗅出变化的端倪，见微知著。它不纠结于为什么变化，只是敏锐地感知并准备应对。</div>
+      </div>
+      <div class="char-card">
+        <span class="char-emoji">🐭</span>
+        <div class="char-name">匆匆 Scurry</div>
+        <div class="char-type">果断的行动者</div>
+        <div class="char-desc">一旦察觉变化，立刻采取行动。不拖延、不抱怨，用最快的速度投入新方向。</div>
+      </div>
+      <div class="char-card">
+        <span class="char-emoji">🤷</span>
+        <div class="char-name">哼哼 Hem</div>
+        <div class="char-type">固执的抗拒者</div>
+        <div class="char-desc">否认变化的发生，抱怨"这不公平"，固守原地等待一切恢复原样。最终困在自己建造的牢笼里。</div>
+      </div>
+      <div class="char-card">
+        <span class="char-emoji">🧠</span>
+        <div class="char-name">唧唧 Haw</div>
+        <div class="char-type">觉醒的适应者</div>
+        <div class="char-desc">起初也害怕改变，但最终战胜恐惧，迈出探索的脚步。他在迷宫的墙上写下感悟，成为后来者的指引。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 主要知识点 -->
+  <div class="knowledge-section">
+    <h2>📚 主要知识点</h2>
+    <div class="knowledge-grid">
+      <div class="knowledge-card">
+        <h4><span class="num">1</span> 奶酪就是你的追求</h4>
+        <p>"奶酪"是一个隐喻，代表你在生活中追求的任何东西——工作、关系、金钱、健康、自由、心灵的平静。</p>
+      </div>
+      <div class="knowledge-card">
+        <h4><span class="num">2</span> 迷宫就是你的环境</h4>
+        <p>"迷宫"代表你花费时间寻找奶酪的地方——你的工作场所、家庭、社区或其他社交环境。</p>
+      </div>
+      <div class="knowledge-card">
+        <h4><span class="num">3</span> 拥有奶酪就拥有幸福</h4>
+        <p>当我们拥有"奶酪"时，我们会感到安全、舒适、满足。但越是沉溺于这种舒适，变化来临时就越痛苦。</p>
+      </div>
+      <div class="knowledge-card">
+        <h4><span class="num">4</span> 恐惧让你困在迷宫中</h4>
+        <p>对未知的恐惧比未知本身更可怕。当你克服了恐惧，你就会感到前所未有的自由。</p>
+      </div>
+      <div class="knowledge-card">
+        <h4><span class="num">5</span> 觉察小变化防大危机</h4>
+        <p>经常闻一闻你的奶酪，这样你就会知道它什么时候开始变质。微小变化的积累最终会引发巨变。</p>
+      </div>
+      <div class="knowledge-card">
+        <h4><span class="num">6</span> 旧信念不再禁锢你</h4>
+        <p>当你改变了自己的信念，你也就改变了自己的行为。阻碍你前进的，往往不是客观条件，而是你内心的旧信念。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 金句 -->
+  <div class="quotes-section">
+    <h2>💬 经典金句</h2>
+    <div class="quotes-list">
+      <div class="quote-card">
+        <div class="quote-text">"如果你不改变，你就会被淘汰。"</div>
+        <div class="quote-source">—— 唧唧写在墙上的话</div>
+      </div>
+      <div class="quote-card">
+        <div class="quote-text">"当你不再恐惧时，你会感到前所未有的自由。"</div>
+        <div class="quote-source">—— 唧唧的感悟</div>
+      </div>
+      <div class="quote-card">
+        <div class="quote-text">"尽早注意细小的变化，这将有助于你适应即将到来的更大的变化。"</div>
+        <div class="quote-source">—— 唧唧写在墙上的话</div>
+      </div>
+      <div class="quote-card">
+        <div class="quote-text">"陈旧的信念，不会帮助你找到新的奶酪。"</div>
+        <div class="quote-source">—— 唧唧的觉醒</div>
+      </div>
+      <div class="quote-card">
+        <div class="quote-text">"当你发现你会找到新的奶酪，并且能够享用它时，你就会改变你的路线。"</div>
+        <div class="quote-source">—— 唧唧写在墙上的话</div>
+      </div>
+      <div class="quote-card">
+        <div class="quote-text">"越早放弃旧的奶酪，你就会越早发现新的奶酪。"</div>
+        <div class="quote-source">—— 全书核心金句</div>
+      </div>
+      <div class="quote-card">
+        <div class="quote-text">"在迷宫中搜寻，比停留在没有奶酪的地方更安全。"</div>
+        <div class="quote-source">—— 唧唧的启示</div>
+      </div>
+      <div class="quote-card">
+        <div class="quote-text">"变化总是在发生——他们总是不断拿走你的奶酪。"</div>
+        <div class="quote-source">—— 全书开篇</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 行动建议 -->
+  <div class="actions-section">
+    <h2>🎯 行动建议</h2>
+    <div class="actions-grid">
+      <div class="action-card">
+        <div class="action-num">1</div>
+        <div class="action-content">
+          <h4>做自己的"嗅嗅"</h4>
+          <p>每周花15分钟审视你所在的领域正在发生的变化。订阅行业资讯，和不同背景的人交流，保持对环境信号的敏感度。</p>
+        </div>
+      </div>
+      <div class="action-card">
+        <div class="action-num">2</div>
+        <div class="action-content">
+          <h4>练习"匆匆"速度</h4>
+          <p>当发现变化信号时，给自己设定一个时限（比如48小时），在此之前做出第一个行动。不是完善方案，只是第一个行动。</p>
+        </div>
+      </div>
+      <div class="action-card">
+        <div class="action-num">3</div>
+        <div class="action-content">
+          <h4>画出你的"迷宫墙"</h4>
+          <p>像唧唧一样，在笔记本上写下那些限制你的旧信念，然后逐条写下"新的奶酪可能是什么？"。把改变可视化。</p>
+        </div>
+      </div>
+      <div class="action-card">
+        <div class="action-num">4</div>
+        <div class="action-content">
+          <h4>克服恐惧三步法</h4>
+          <p>①问自己"如果我不改变，一年后会怎样？"；②想象成功适应后的画面；③做一件让你略微不安的小事，感受恐惧的消退。</p>
+        </div>
+      </div>
+      <div class="action-card">
+        <div class="action-num">5</div>
+        <div class="action-content">
+          <h4>建立变化仪式</h4>
+          <p>每月设定一个"奶酪检查日"，评估你的工作、关系、技能、健康的"奶酪"状态。预防胜于治疗。</p>
+        </div>
+      </div>
+      <div class="action-card">
+        <div class="action-num">6</div>
+        <div class="action-content">
+          <h4>分享你的"迷宫故事"</h4>
+          <p>找一个你信任的人，讲述你面对变化的经历。像唧唧在墙上留言一样，你的故事可能会成为他人的灯塔。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="book-info">
+    <p class="author">📖 《谁动了我的奶酪？》Who Moved My Cheese?</p>
+    <p>作者：斯宾塞·约翰逊（Spencer Johnson）</p>
+    <p>全球销量超过 2800 万册 · 译成 40+ 种语言 · 史上最畅销的变革管理寓言之一</p>
+  </div>
+
+</div>
+
+<div class="footer">
+  <p>每日一学 · 2026.07.27 · 个人成长与思维提升</p>
+</div>
+
+</body>
+</html>
