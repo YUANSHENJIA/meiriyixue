@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 动机心理学</title>
+<style>
+  :root {
+    --bg: #0f0f1a;
+    --card-bg: #1a1a2e;
+    --text: #e0e0e0;
+    --text-secondary: #a0a0b8;
+    --accent: #7c3aed;
+    --accent2: #e94560;
+    --accent3: #00b4d8;
+    --accent4: #2ec4b6;
+    --border: #2a2a40;
+    --glow: rgba(124, 58, 237, 0.15);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+  .header {
+    text-align: center;
+    padding: 60px 20px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(ellipse at center, rgba(124,58,237,0.08) 0%, transparent 70%);
+    animation: headerPulse 8s ease-in-out infinite;
+  }
+  @keyframes headerPulse {
+    0%, 100% { opacity: 0.6; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.05); }
+  }
+  .header-content { position: relative; z-index: 1; }
+  .date-badge {
+    display: inline-block;
+    background: rgba(124,58,237,0.15);
+    color: var(--accent);
+    padding: 6px 18px;
+    border-radius: 20px;
+    font-size: 13px;
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+  }
+  .title {
+    font-size: 42px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #7c3aed, #e94560, #7c3aed);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradientShift 3s ease infinite;
+  }
+  @keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+  .subtitle {
+    color: var(--text-secondary);
+    font-size: 15px;
+    margin-top: 8px;
+    letter-spacing: 1px;
+  }
+  .container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  /* Mind Map */
+  .mindmap-section {
+    padding: 20px 0 40px;
+    overflow-x: auto;
+  }
+  .mindmap-section h2 {
+    text-align: center;
+    color: var(--accent);
+    font-size: 24px;
+    margin-bottom: 30px;
+    letter-spacing: 2px;
+  }
+  .mindmap {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px 0;
+  }
+  .center-node {
+    background: linear-gradient(135deg, #7c3aed, #5b21b6);
+    color: #fff;
+    padding: 24px 32px;
+    border-radius: 16px;
+    font-size: 20px;
+    font-weight: 700;
+    text-align: center;
+    box-shadow: 0 8px 40px rgba(124,58,237,0.3);
+    position: relative;
+    z-index: 2;
+    min-width: 200px;
+  }
+  .branch-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: center;
+    align-items: flex-start;
+    margin-top: 40px;
+  }
+  .branch {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    width: 220px;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+  .branch:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+    border-color: var(--accent);
+  }
+  .branch-icon {
+    font-size: 32px;
+    margin-bottom: 8px;
+    display: block;
+  }
+  .branch-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .branch-desc {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* Characters */
+  .characters-section {
+    padding: 30px 0;
+  }
+  .characters-section h2 {
+    text-align: center;
+    color: var(--accent);
+    font-size: 24px;
+    margin-bottom: 24px;
+    letter-spacing: 2px;
+  }
+  .characters-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+  }
+  .char-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px;
+    text-align: center;
+    transition: all 0.3s ease;
+  }
+  .char-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+  }
+  .char-emoji { font-size: 48px; margin-bottom: 12px; display: block; }
+  .char-name { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+  .char-type { font-size: 12px; color: var(--text-secondary); margin-bottom: 10px; }
+  .char-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+  .char-card:nth-child(1) .char-name { color: var(--accent3); }
+  .char-card:nth-child(2) .char-name { color: var(--accent4); }
+  .char-card:nth-child(3) .char-name { color: var(--accent2); }
+  .char-card:nth-child(4) .char-name { color: var(--accent); }
+
+  /* Insights */
+  .insight-section {
+    background: linear-gradient(135deg, rgba(124,58,237,0.08), rgba(233,69,96,0.08));
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 36px;
+    margin: 30px 0;
+    text-align: center;
+  }
+  .insight-label {
+    font-size: 13px;
+    color: var(--accent);
+    letter-spacing: 3px;
+    margin-bottom: 12px;
+  }
+  .insight-text {
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 1.8;
+    color: #fff;
+  }
+
+  /* Quotes */
+  .quotes-section {
+    padding: 30px 0;
+  }
+  .quotes-section h2 {
+    text-align: center;
+    color: var(--accent);
+    font-size: 24px;
+    margin-bottom: 24px;
+    letter-spacing: 2px;
+  }
+  .quotes-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .quote-card {
+    background: var(--card-bg);
+    border-left: 4px solid var(--accent);
+    border-radius: 0 12px 12px 0;
+    padding: 20px 24px;
+    transition: all 0.3s ease;
+  }
+  .quote-card:hover {
+    border-left-color: var(--accent2);
+    transform: translateX(4px);
+  }
+  .quote-text {
+    font-size: 16px;
+    font-style: italic;
+    color: #e0e0e0;
+    margin-bottom: 6px;
+    line-height: 1.7;
+  }
+  .quote-source {
+    font-size: 12px;
+    color: var(--text-secondary);
+    text-align: right;
+  }
+
+  /* Action */
+  .actions-section {
+    padding: 30px 0;
+  }
+  .actions-section h2 {
+    text-align: center;
+    color: var(--accent);
+    font-size: 24px;
+    margin-bottom: 24px;
+    letter-spacing: 2px;
+  }
+  .actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+  }
+  .action-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    transition: all 0.3s ease;
+  }
+  .action-card:hover {
+    border-color: var(--accent);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+  }
+  .action-num {
+    background: var(--accent);
+    color: #fff;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .action-content h4 {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: #fff;
+  }
+  .action-content p {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  /* Knowledge points */
+  .knowledge-section {
+    padding: 30px 0;
+  }
+  .knowledge-section h2 {
+    text-align: center;
+    color: var(--accent);
+    font-size: 24px;
+    margin-bottom: 24px;
+    letter-spacing: 2px;
+  }
+  .knowledge-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 16px;
+  }
+  .knowledge-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    transition: all 0.3s ease;
+  }
+  .knowledge-card:hover {
+    border-color: var(--accent3);
+  }
+  .knowledge-card h4 {
+    color: var(--accent3);
+    font-size: 15px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .knowledge-card h4 .num {
+    background: rgba(0,180,216,0.2);
+    color: var(--accent3);
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .knowledge-card p {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* Book info */
+  .book-info {
+    text-align: center;
+    padding: 40px 0;
+    border-top: 1px solid var(--border);
+    margin-top: 20px;
+  }
+  .book-info p {
+    color: var(--text-secondary);
+    font-size: 13px;
+    line-height: 1.8;
+  }
+  .book-info .author {
+    color: var(--accent);
+    font-weight: 600;
+    font-size: 14px;
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 30px;
+    color: var(--text-secondary);
+    font-size: 12px;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-content">
+    <div class="date-badge">2026.07.28 · 每日一学</div>
+    <h1 class="title">动机心理学</h1>
+    <p class="subtitle">The Psychology of Motivation —— 理解行为背后的驱动力</p>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- 核心洞见 -->
+  <div class="insight-section">
+    <div class="insight-label">✦ 核心洞见 ✦</div>
+    <div class="insight-text">
+      人类行为背后并非随机冲动，而是有规律的心理机制。<br>掌握动机的运作原理，就是掌握自我驱动与持续成长的底层密码。
+    </div>
+  </div>
+
+  <!-- 思维导图 -->
+  <div class="mindmap-section">
+    <h2>🧠 思维导图</h2>
+    <div style="display:flex;justify-content:center;flex-wrap:wrap;gap:16px;padding:10px 0">
+      <div class="center-node">🔥 动机<br>心理学</div>
+      <div style="flex:1;min-width:300px">
+        <div class="branch-container">
+          <div class="branch">
+            <span class="branch-icon">🎯</span>
+            <div class="branch-title">内在动机</div>
+            <div class="branch-desc">自主性、胜任感、归属感——源于活动本身的满足，而非外部奖励</div>
+          </div>
+          <div class="branch">
+            <span class="branch-icon">🏆</span>
+            <div class="branch-title">外在动机</div>
+            <div class="branch-desc">金钱、名声、认可——外部驱动力，短期有效但需警惕过度合理化效应</div>
+          </div>
+          <div class="branch">
+            <span class="branch-icon">📐</span>
+            <div class="branch-title">目标设定</div>
+            <div class="branch-desc">SMART原则、执行意图、趋近vs回避——目标的结构决定执行的力度</div>
+          </div>
+          <div class="branch">
+            <span class="branch-icon">🧭</span>
+            <div class="branch-title">自我调节</div>
+            <div class="branch-desc">延迟满足、意志力管理、环境设计——在冲动与克制之间做出智慧选择</div>
+          </div>
+          <div class="branch">
+            <span class="branch-icon">💪</span>
+            <div class="branch-title">自我效能感</div>
+            <div class="branch-desc">"我能做到"的信念——班杜拉提出，是所有改变发生的起点</div>
+          </div>
+          <div class="branch">
+            <span class="branch-icon">🌊</span>
+            <div class="branch-title">心流体验</div>
+            <div class="branch-desc">挑战与技能匹配时的沉浸状态，是内在动机的最高表现形式</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 四要素：核心框架 -->
+  <div class="characters-section">
+    <h2>🏛️ 四大核心驱动力</h2>
+    <div class="characters-grid">
+      <div class="char-card">
+        <span class="char-emoji">🆓</span>
+        <div class="char-name">自主性 Autonomy</div>
+        <div class="char-type">自我决定理论核心</div>
+        <div class="char-desc">人们渴望掌控自己的行为与选择。当感知到自己说了算时，内在动机被激发；被控制感则扼杀动力。</div>
+      </div>
+      <div class="char-card">
+        <span class="char-emoji">🎓</span>
+        <div class="char-name">胜任感 Competence</div>
+        <div class="char-type">成长需求的满足</div>
+        <div class="char-desc">完成任务并感受到进步是人类的基本心理需求。挑战过高导致焦虑，过低导致无聊，恰到好处才产生心流。</div>
+      </div>
+      <div class="char-card">
+        <span class="char-emoji">🤝</span>
+        <div class="char-name">归属感 Relatedness</div>
+        <div class="char-type">连接与认同</div>
+        <div class="char-desc">与他人建立有意义的连接，感到被理解与被接纳，是持续投入的重要动力源泉。孤独是动机的杀手。</div>
+      </div>
+      <div class="char-card">
+        <span class="char-emoji">🎯</span>
+        <div class="char-name">意义感 Purpose</div>
+        <div class="char-type">超越自我的追求</div>
+        <div class="char-desc">当行为与更高价值连接——让世界变得更好、留下遗产——人展现出惊人的韧性与持久力。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 主要知识点 -->
+  <div class="knowledge-section">
+    <h2>📚 主要知识点</h2>
+    <div class="knowledge-grid">
+      <div class="knowledge-card">
+        <h4><span class="num">1</span> 自我决定理论（SDT）</h4>
+        <p>Deci & Ryan提出：自主性、胜任感和归属感是人类的三种基本心理需求。满足这三种需求的环境能极大激发内在动机与幸福感。</p>
+      </div>
+      <div class="knowledge-card">
+        <h4><span class="num">2</span> 过度合理化效应</h4>
+        <p>当外部奖励被引入来激励原本由内在动机驱动的行为时，内在动机会被削弱。"为钱而做"取代了"为乐趣而做"。</p>
+      </div>
+      <div class="knowledge-card">
+        <h4><span class="num">3</span> 目标设定理论</h4>
+        <p>Locke & Latham的研究证明：具体且有挑战性的目标比模糊的"尽力而为"更能激发高绩效。关键在于目标的明确性与承诺度。</p>
+      </div>
+      <div class="knowledge-card">
+        <h4><span class="num">4</span> 执行意图（WOOP）</h4>
+        <p>Gollwitzer提出：不仅设定目标（what），还要明确"如果...就..."的具体行动计划。格式："当X发生时，我就做Y"。这比单纯意愿强3倍。</p>
+      </div>
+      <div class="knowledge-card">
+        <h4><span class="num">5</span> 自我效能感</h4>
+        <p>Bandura的核心概念：你对自己能否完成任务的信念，比实际能力更能预测结果。效能感来自：掌握经验、替代经验、言语说服、生理状态。</p>
+      </div>
+      <div class="knowledge-card">
+        <h4><span class="num">6</span> 成就动机理论</h4>
+        <p>Atkinson & McClelland区分三种需求：成就需求（追求卓越）、权力需求（影响他人）、亲和需求（建立关系）。理解你的主导需求，就能设计适合你的激励策略。</p>
+      </div>
+      <div class="knowledge-card">
+        <h4><span class="num">7</span> 心流理论</h4>
+        <p>Csikszentmihalyi发现：当挑战水平与技能水平匹配合适时，人进入"心流"——完全沉浸、时间感消失、活动本身即是奖赏。这是人类体验的最佳状态。</p>
+      </div>
+      <div class="knowledge-card">
+        <h4><span class="num">8</span> 延迟满足与意志力</h4>
+        <p>Mischel的棉花糖实验揭示了自控力对长期成就的重要性。但Baumeister也指出，意志力是有限资源——明智的策略是设计环境而非单纯硬扛。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 金句 -->
+  <div class="quotes-section">
+    <h2>💬 经典金句</h2>
+    <div class="quotes-list">
+      <div class="quote-card">
+        <div class="quote-text">"不要问'我如何激励别人'，而应该问'我如何创造一个人们能自我激励的环境'。"</div>
+        <div class="quote-source">—— Edward Deci，自我决定理论创始人</div>
+      </div>
+      <div class="quote-card">
+        <div class="quote-text">"自主性不是做什么都行，而是带着意愿和选择去行动。"</div>
+        <div class="quote-source">—— Richard Ryan，SDT联合创始人</div>
+      </div>
+      <div class="quote-card">
+        <div class="quote-text">"信念在能力的形成中起着关键作用。认为自己不行的人，不会去尝试；不尝试的人，永远不会进步。"</div>
+        <div class="quote-source">—— Albert Bandura，自我效能感理论</div>
+      </div>
+      <div class="quote-card">
+        <div class="quote-text">"最好的时刻通常发生在一个人为完成有挑战性但值得的任务而主动将身心能力发挥到极致的时候。"</div>
+        <div class="quote-source">—— Mihaly Csikszentmihalyi，心流理论</div>
+      </div>
+      <div class="quote-card">
+        <div class="quote-text">"不是因为我们有意志力才成功；而是因为我们设计了不需要意志力的环境。"</div>
+        <div class="quote-source">—— 行为设计学的核心洞察</div>
+      </div>
+      <div class="quote-card">
+        <div class="quote-text">"没有内在动机支撑的勤奋，像没有燃料的长途跋涉——走得越远，越痛苦。"</div>
+        <div class="quote-source">—— 动机心理学的核心警示</div>
+      </div>
+      <div class="quote-card">
+        <div class="quote-text">"人类最深层的内驱力是成为自决的存在——按照自己的意志选择并引导自己的行动。"</div>
+        <div class="quote-source">—— 自我决定理论的基本命题</div>
+      </div>
+      <div class="quote-card">
+        <div class="quote-text">"问自己'为什么做这件事'，如果你的答案让你感到能量上升而非消耗，你就找到了对的方向。"</div>
+        <div class="quote-source">—— 动机类型辨识的实用法则</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 行动建议 -->
+  <div class="actions-section">
+    <h2>🎯 行动建议</h2>
+    <div class="actions-grid">
+      <div class="action-card">
+        <div class="action-num">1</div>
+        <div class="action-content">
+          <h4>动机诊断：画一张"为什么"地图</h4>
+          <p>选一个你正在努力的目标，连续问5次"为什么"。分辨每个"为什么"是来自内在（成长、意义、乐趣）还是外在（金钱、压力、面子）。</p>
+        </div>
+      </div>
+      <div class="action-card">
+        <div class="action-num">2</div>
+        <div class="action-content">
+          <h4>提升自主性：给自己"选择感"</h4>
+          <p>即使任务本身无法选择，你仍然可以选择何时做、怎么做、和谁一起做。寻找并创造自主空间，哪怕只是重新排列任务顺序。</p>
+        </div>
+      </div>
+      <div class="action-card">
+        <div class="action-num">3</div>
+        <div class="action-content">
+          <h4>构建执行意图：写50字"如果-就"</h4>
+          <p>为最重要的目标写一段："如果[具体情境]发生，那么我就[具体行动]。"例如："如果晚上9点闹钟响了，我就关掉手机开始阅读30分钟。"</p>
+        </div>
+      </div>
+      <div class="action-card">
+        <div class="action-num">4</div>
+        <div class="action-content">
+          <h4>搭建胜任感：设置"金发姑娘"挑战</h4>
+          <p>确保每周有至少一项挑战介于"太容易"和"太难"之间——刚好需要你跳一跳才能完成。记录完成后的感受，强化自我效能反馈。</p>
+        </div>
+      </div>
+      <div class="action-card">
+        <div class="action-num">5</div>
+        <div class="action-content">
+          <h4>创造心流环境：消除干扰时段</h4>
+          <p>每天设定一段"单任务时间"（25-45分钟），关闭所有通知，全身心投入一项任务。目标是挑战与技能匹配的沉浸状态，而非产出最大化。</p>
+        </div>
+      </div>
+      <div class="action-card">
+        <div class="action-num">6</div>
+        <div class="action-content">
+          <h4>意义连接：给枯燥任务贴上"价值观标签"</h4>
+          <p>对于不得不做的乏味任务，找到它与你核心价值观的微小关联。洗碗=为家人创造整洁空间；填报表=训练精确思维的刻意练习。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="book-info">
+    <p class="author">📖 《动机心理学》The Psychology of Motivation</p>
+    <p>核心理论贡献者：Edward Deci & Richard Ryan（自我决定理论）、Albert Bandura（自我效能感）、</p>
+    <p>Edwin Locke & Gary Latham（目标设定理论）、Mihaly Csikszentmihalyi（心流理论）</p>
+  </div>
+
+</div>
+
+<div class="footer">
+  <p>每日一学 · 2026.07.28 · 个人成长与思维提升</p>
+</div>
+
+</body>
+</html>
