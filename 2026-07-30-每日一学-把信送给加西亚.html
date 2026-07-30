@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 把信送给加西亚 · 思维导图</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --card: #1e293b;
+    --border: #334155;
+    --text: #e2e8f0;
+    --text-secondary: #94a3b8;
+    --accent: #f59e0b;
+    --accent2: #ef4444;
+    --accent3: #3b82f6;
+    --accent4: #10b981;
+    --accent5: #8b5cf6;
+    --accent6: #ec4899;
+    --node-bg: #1e293b;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow: hidden;
+    height: 100vh;
+    user-select: none;
+  }
+  header {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: linear-gradient(180deg, rgba(15,23,42,0.98) 60%, rgba(15,23,42,0) 100%);
+    padding: 20px 30px 35px;
+    pointer-events: none;
+  }
+  header .title-area { pointer-events: auto; }
+  header h1 {
+    font-size: 22px; font-weight: 700; color: var(--accent);
+    letter-spacing: 1px;
+  }
+  header .subtitle {
+    font-size: 13px; color: var(--text-secondary); margin-top: 4px;
+  }
+  header .date {
+    font-size: 12px; color: var(--text-secondary); margin-top: 2px; opacity: 0.7;
+  }
+  .legend {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 100;
+    display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;
+  }
+  .legend-item {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 12px; color: var(--text-secondary);
+  }
+  .legend-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+  }
+  .controls {
+    position: fixed; top: 20px; right: 30px; z-index: 101;
+    display: flex; gap: 8px;
+  }
+  .ctrl-btn {
+    width: 36px; height: 36px; border-radius: 8px;
+    border: 1px solid var(--border); background: var(--card);
+    color: var(--text); cursor: pointer; font-size: 16px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+  .ctrl-btn:hover { background: var(--border); }
+  #mindmap-container {
+    width: 100%; height: 100vh;
+    cursor: grab;
+  }
+  #mindmap-container:active { cursor: grabbing; }
+  #mindmap-container.panning { cursor: grabbing; }
+  svg { display: block; }
+  .node-group { cursor: pointer; transition: opacity 0.3s; }
+  .node-group:hover .node-circle { filter: brightness(1.3); }
+  .node-group:hover .node-text { font-weight: 700; }
+  .node-circle { transition: all 0.3s ease; }
+  .conn-line { stroke-width: 2; stroke-linecap: round; transition: opacity 0.3s; }
+  .detail-card {
+    position: fixed; right: -420px; top: 100px; width: 380px;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 16px; padding: 24px;
+    transition: right 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    z-index: 200; max-height: calc(100vh - 160px); overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+  .detail-card.show { right: 30px; }
+  .detail-card h3 { font-size: 18px; margin-bottom: 12px; color: var(--accent); }
+  .detail-card p { font-size: 14px; color: var(--text-secondary); line-height: 1.8; }
+  .detail-card .close-btn {
+    position: absolute; top: 16px; right: 16px;
+    width: 30px; height: 30px; border-radius: 50%;
+    border: none; background: var(--border); color: var(--text);
+    cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center;
+  }
+  .detail-card .close-btn:hover { background: var(--text-secondary); }
+  .detail-card .tag {
+    display: inline-block; padding: 2px 10px; border-radius: 20px;
+    font-size: 11px; margin: 4px 4px 4px 0;
+  }
+  .tooltip {
+    position: fixed; pointer-events: none; z-index: 150;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 8px; padding: 8px 14px;
+    font-size: 13px; color: var(--text);
+    opacity: 0; transition: opacity 0.15s;
+    white-space: nowrap; box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  }
+  .tooltip.visible { opacity: 1; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="title-area">
+    <h1>🧭 把信送给加西亚</h1>
+    <div class="subtitle">A Message to Garcia · Elbert Hubbard · 1899</div>
+    <div class="date">2026年7月30日 · 每日一学 #76</div>
+  </div>
+</header>
+
+<div class="controls">
+  <button class="ctrl-btn" id="btn-zoom-in" title="放大">+</button>
+  <button class="ctrl-btn" id="btn-zoom-out" title="缩小">−</button>
+  <button class="ctrl-btn" id="btn-reset" title="重置视角">⟳</button>
+</div>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div>人物与故事</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--accent2)"></div>核心精神</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--accent3)"></div>行动法则</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--accent4)"></div>品质修炼</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--accent5)"></div>反面警示</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--accent6)"></div>现代启示</div>
+</div>
+
+<div class="tooltip" id="tooltip"></div>
+
+<div class="detail-card" id="detail-card">
+  <button class="close-btn" id="close-detail">✕</button>
+  <h3 id="detail-title"></h3>
+  <p id="detail-content"></p>
+</div>
+
+<div id="mindmap-container"></div>
+
+<script>
+(function() {
+  const W = window.innerWidth;
+  const H = window.innerHeight;
+  const svgNS = 'http://www.w3.org/2000/svg';
+  const container = document.getElementById('mindmap-container');
+  const tooltip = document.getElementById('tooltip');
+  const detailCard = document.getElementById('detail-card');
+
+  // SVG setup
+  const svg = document.createElementNS(svgNS, 'svg');
+  svg.setAttribute('width', W);
+  svg.setAttribute('height', H);
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  const gRoot = document.createElementNS(svgNS, 'g');
+  gRoot.setAttribute('id', 'root-group');
+  svg.appendChild(gRoot);
+
+  // Defs for gradients and filters
+  const defs = document.createElementNS(svgNS, 'defs');
+  const glowFilter = document.createElementNS(svgNS, 'filter');
+  glowFilter.setAttribute('id', 'glow');
+  glowFilter.innerHTML = '<feGaussianBlur stdDeviation="4" result="blur"/><feComposite in="SourceGraphic" in2="blur" operator="over"/>';
+  defs.appendChild(glowFilter);
+
+  const shadowFilter = document.createElementNS(svgNS, 'filter');
+  shadowFilter.setAttribute('id', 'shadow');
+  shadowFilter.innerHTML = '<feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.3"/>';
+  defs.appendChild(shadowFilter);
+  svg.appendChild(defs);
+
+  container.appendChild(svg);
+
+  // Data - mind map structure
+  const centerX = W / 2;
+  const centerY = H / 2;
+
+  const centerNode = {
+    id: 'center', label: '把信送给\n加西亚', cx: centerX, cy: centerY, r: 60,
+    color: '#f59e0b', category: 'core',
+    detail: '1899年，Elbert Hubbard在《菲士利人》杂志上发表了一篇短文《把信送给加西亚》。故事讲述了美西战争期间，年轻中尉安德鲁·罗文受麦金莱总统之命，孤身深入古巴丛林，将一封至关重要的信送给起义军领袖加西亚将军。罗文没有问"他在哪里"，接过信就出发了。这篇不足1500字的文章，成为世界印刷史上发行量最大的出版物之一，全球累计销量超过8亿册，被视为职业精神与主动执行力的永恒经典。'
+  };
+
+  const branches = [
+    {
+      id: 'branch1', label: '故事背景', cx: 0, cy: 0, r: 48, color: '#f59e0b',
+      angle: -90, distance: 200, category: 'story',
+      detail: '1898年美西战争爆发，美国总统麦金莱急需与古巴起义军领袖加西亚将军取得联系。没有人知道加西亚的确切位置，他在古巴山区的某个地方。有人向总统推荐了安德鲁·罗文中尉——一个年轻而可靠的军官。总统把信交给罗文，罗文没有问任何问题，将信藏于胸前，四天后乘船出发，登陆古巴后徒步穿越丛林，最终在三周后将信送到了加西亚手中。',
+      children: [
+        { id: 's1', label: '美西战争\n1898', r: 36, color: '#fbbf24', detail: '1898年美国与西班牙在古巴和菲律宾等地交战，战争持续仅3个多月。这是美国崛起为世界强国的转折点。' },
+        { id: 's2', label: '麦金莱总统', r: 36, color: '#fbbf24', detail: '美国第25任总统威廉·麦金莱，在关键时刻做出决策——选择信任罗文，将影响战争进程的重任交给他。' },
+        { id: 's3', label: '安德鲁·罗文', r: 36, color: '#fbbf24', detail: '安德鲁·萨默斯·罗文（Andrew Summers Rowan），1857年出生，美国陆军军官。他毕业于西点军校，以冷静果断著称。送信任务成功后被授予杰出服务十字勋章。' },
+        { id: 's4', label: '加西亚将军', r: 36, color: '#fbbf24', detail: '卡利斯托·加西亚·伊尼格兹，古巴独立战争中最著名的将军之一，率领起义军抗击西班牙殖民者。' }
+      ]
+    },
+    {
+      id: 'branch2', label: '核心精神', cx: 0, cy: 0, r: 48, color: '#ef4444',
+      angle: -30, distance: 220, category: 'spirit',
+      detail: '罗文接过信的那一刻，展现了一种超越时代的职业精神：不问理由、不找借口、不讲条件，径直采取行动，克服一切困难完成任务。这种态度颠覆了"先理解再行动"的常规思维。',
+      children: [
+        { id: 's5', label: '主动执行', r: 36, color: '#f87171', detail: '不是被动等待指令，而是将任务视为自己的使命。主动性意味着在无人监督的情况下，仍然全力以赴。' },
+        { id: 's6', label: '使命必达', r: 36, color: '#f87171', detail: '无论遇到什么阻碍，目标不变。罗文穿越敌占区、翻越山脉、穿越丛林，始终不放弃。' },
+        { id: 's7', label: '不找借口', r: 36, color: '#f87171', detail: '罗文没有说"我不认识他""那里太危险""我需要更多信息"，他唯一的回答是行动。' },
+        { id: 's8', label: '绝对忠诚', r: 36, color: '#f87171', detail: '对使命的忠诚超越了个人安危。在极端环境下，忠诚是唯一不会动摇的锚点。' }
+      ]
+    },
+    {
+      id: 'branch3', label: '行动法则', cx: 0, cy: 0, r: 48, color: '#3b82f6',
+      angle: 30, distance: 240, category: 'action',
+      detail: 'Hubbard提炼出五条行动法则，构成了"罗文精神"的方法论。这些法则不仅适用于战场，更是现代职场的黄金准则。',
+      children: [
+        { id: 's9', label: '接受任务\n毫不犹豫', r: 36, color: '#60a5fa', detail: '当任务来临，第一时间接受并启动，而非陷入"能不能""值不值"的纠结。决策速度本身是一种竞争力。' },
+        { id: 's10', label: '自主规划\n独立执行', r: 36, color: '#60a5fa', detail: '不依赖他人给出详细地图，自己寻找路径。真正能干的人，从不需要别人告诉他每一步该怎么走。' },
+        { id: 's11', label: '克服困难\n不抱怨', r: 36, color: '#60a5fa', detail: '抱怨消耗的是解决问题的能量。罗文在毒虫、沼泽、敌军巡逻中前行，他选择把精力用在前进上。' },
+        { id: 's12', label: '结果导向\n坚持到底', r: 36, color: '#60a5fa', detail: '过程重要，但结果才是检验执行力的唯一标准。半途而废的努力等于零。罗文用了三周，但从未想过放弃。' }
+      ]
+    },
+    {
+      id: 'branch4', label: '品质修炼', cx: 0, cy: 0, r: 48, color: '#10b981',
+      angle: 90, distance: 230, category: 'quality',
+      detail: '罗文的送信之旅，本质上是一次个人品质的集中展示。这些品质不是天生的，而是可以通过刻意修炼获得的。',
+      children: [
+        { id: 's13', label: '沉着冷静', r: 36, color: '#34d399', detail: '面对未知的敌占区和迫在眉睫的危险，罗文始终保持冷静判断。恐慌是最大的敌人。' },
+        { id: 's14', label: '坚韧不拔', r: 36, color: '#34d399', detail: '丛林中的每一步都是考验。坚韧不是一腔热血，而是日复一日在困难中的默默坚持。' },
+        { id: 's15', label: '独立思考', r: 36, color: '#34d399', detail: '孤身行动意味着每一个决定都必须自己做出。独立思考力在远离支持系统时最为关键。' },
+        { id: 's16', label: '谦逊务实', r: 36, color: '#34d399', detail: '任务完成后，罗文没有邀功请赏，而是低调地回到岗位上。真正的高手不炫耀。' }
+      ]
+    },
+    {
+      id: 'branch5', label: '反面警示', cx: 0, cy: 0, r: 48, color: '#8b5cf6',
+      angle: 150, distance: 240, category: 'warning',
+      detail: 'Hubbard在文章中严厉批评了那些"需要被踢着走"的人。他指出，大多数人在接到任务时的第一反应是质疑、推脱、找理由。这些"送不到信的人"是组织最大的隐性成本。',
+      children: [
+        { id: 's17', label: '习惯性追问\n"为什么是我"', r: 36, color: '#a78bfa', detail: '每次接受任务都像在谈判。这类人把精力花在了"推卸"而非"承担"上，久而久之失去信任。' },
+        { id: 's18', label: '需要持续\n监督推动', r: 36, color: '#a78bfa', detail: '领导不催就不动，推一下走一步。这种"被动执行力"让管理者精疲力尽，是团队效率的杀手。' },
+        { id: 's19', label: '遇到困难\n立即退缩', r: 36, color: '#a78bfa', detail: '第一个障碍出现就举手投降。"条件不具备""资源不足"成为永恒的挡箭牌。现实中不存在完美的出发条件。' },
+        { id: 's20', label: '完成一半\n即告成功', r: 36, color: '#a78bfa', detail: '做到80%就以为结束了。但"几乎完成"和"已完成"之间，隔着一条无法跨越的信誉鸿沟。' }
+      ]
+    },
+    {
+      id: 'branch6', label: '现代启示', cx: 0, cy: 0, r: 48, color: '#ec4899',
+      angle: 210, distance: 250, category: 'modern',
+      detail: '120多年过去了，"送信精神"不仅没有过时，反而在信息过载、注意力碎片化的时代变得更为稀缺和珍贵。从职场到创业，从管理到个人成长，罗文的故事提供了永恒的启示。',
+      children: [
+        { id: 's21', label: '职场竞争力', r: 36, color: '#f472b6', detail: '在AI和自动化浪潮中，"能把信送到"的人永远不会被替代。执行力是穿越经济周期的硬通货。' },
+        { id: 's22', label: '创业精神', r: 36, color: '#f472b6', detail: '每个创业者都是罗文：目标在前方，路径靠自己走。没有人给你地图，没有人替你冒险。' },
+        { id: 's23', label: '管理哲学', r: 36, color: '#f472b6', detail: '管理者的核心任务不是下达详细指令，而是找到"能送信的人"——然后放手让他去送。' },
+        { id: 's24', label: '个人品牌', r: 36, color: '#f472b6', detail: '当你成为那个"能把信送到加西亚手中"的人，你的名字本身就是最有价值的品牌资产。' }
+      ]
+    }
+  ];
+
+  // Position branches
+  branches.forEach(b => {
+    const rad = b.angle * Math.PI / 180;
+    b.cx = centerX + Math.cos(rad) * b.distance;
+    b.cy = centerY + Math.sin(rad) * b.distance;
+    const spreadRad = 0.55;
+    b.children.forEach((ch, i) => {
+      const childAngle = b.angle + (i - (b.children.length - 1) / 2) * (spreadRad * 180 / Math.PI) / (b.children.length / 2);
+      const childRad = childAngle * Math.PI / 180;
+      const childDist = b.distance + 130 + (Math.random() * 20 - 10);
+      ch.cx = centerX + Math.cos(childRad) * childDist;
+      ch.cy = centerY + Math.sin(childRad) * childDist;
+      ch.parentCx = b.cx;
+      ch.parentCy = b.cy;
+    });
+  });
+
+  // Draw connections
+  function drawConn(x1, y1, x2, y2, color) {
+    const line = document.createElementNS(svgNS, 'path');
+    const mx = (x1 + x2) / 2;
+    const my = (y1 + y2) / 2;
+    const dx = x2 - x1;
+    const dy = y2 - y1;
+    const dist = Math.sqrt(dx*dx + dy*dy);
+    const cpDist = dist * 0.1;
+    const angle = Math.atan2(dy, dx);
+    const cpx1 = x1 + Math.cos(angle) * dist * 0.35 + Math.cos(angle + Math.PI/2) * cpDist;
+    const cpy1 = y1 + Math.sin(angle) * dist * 0.35 + Math.sin(angle + Math.PI/2) * cpDist;
+    line.setAttribute('d', `M${x1},${y1} C${cpx1},${cpy1} ${x2 - Math.cos(angle) * dist * 0.2},${y2 - Math.sin(angle) * dist * 0.2} ${x2},${y2}`);
+    line.setAttribute('stroke', color);
+    line.setAttribute('stroke-opacity', '0.35');
+    line.setAttribute('fill', 'none');
+    line.setAttribute('stroke-width', '1.5');
+    line.classList.add('conn-line');
+    return line;
+  }
+
+  // Draw node
+  function drawNode(node, isCenter) {
+    const g = document.createElementNS(svgNS, 'g');
+    g.setAttribute('class', 'node-group');
+    g.setAttribute('data-id', node.id);
+    g.setAttribute('data-detail', node.detail || '');
+
+    // Outer glow circle
+    const glow = document.createElementNS(svgNS, 'circle');
+    glow.setAttribute('cx', node.cx);
+    glow.setAttribute('cy', node.cy);
+    glow.setAttribute('r', node.r + 6);
+    glow.setAttribute('fill', 'none');
+    glow.setAttribute('stroke', node.color);
+    glow.setAttribute('stroke-opacity', '0.15');
+    glow.setAttribute('stroke-width', '3');
+    g.appendChild(glow);
+
+    // Main circle
+    const circle = document.createElementNS(svgNS, 'circle');
+    circle.setAttribute('cx', node.cx);
+    circle.setAttribute('cy', node.cy);
+    circle.setAttribute('r', node.r);
+    circle.setAttribute('fill', '#1e293b');
+    circle.setAttribute('stroke', node.color);
+    circle.setAttribute('stroke-width', isCenter ? '3' : '2');
+    circle.setAttribute('filter', 'url(#shadow)');
+    circle.classList.add('node-circle');
+    g.appendChild(circle);
+
+    // Inner gradient fill
+    const inner = document.createElementNS(svgNS, 'circle');
+    inner.setAttribute('cx', node.cx);
+    inner.setAttribute('cy', node.cy);
+    inner.setAttribute('r', node.r - 3);
+    inner.setAttribute('fill', 'none');
+    inner.setAttribute('stroke', node.color);
+    inner.setAttribute('stroke-opacity', '0.08');
+    inner.setAttribute('stroke-width', node.r - 3);
+    g.appendChild(inner);
+
+    // Text
+    const lines = node.label.split('\n');
+    const text = document.createElementNS(svgNS, 'text');
+    text.setAttribute('x', node.cx);
+    text.setAttribute('y', node.cy - (lines.length - 1) * (isCenter ? 12 : 8) * 0.5);
+    text.setAttribute('text-anchor', 'middle');
+    text.setAttribute('fill', node.color);
+    text.setAttribute('font-size', isCenter ? '15' : '13');
+    text.setAttribute('font-weight', isCenter ? '700' : '600');
+    text.setAttribute('font-family', "'PingFang SC','Microsoft YaHei',sans-serif");
+    text.classList.add('node-text');
+    lines.forEach((line, i) => {
+      const tspan = document.createElementNS(svgNS, 'tspan');
+      tspan.setAttribute('x', node.cx);
+      tspan.setAttribute('dy', i === 0 ? '0' : (isCenter ? '20' : '17'));
+      tspan.textContent = line;
+      text.appendChild(tspan);
+    });
+    g.appendChild(text);
+
+    return g;
+  }
+
+  // Build SVG
+  const layers = { bg: [], conn: [], nodes: [] };
+
+  // Draw all connections first (behind nodes)
+  branches.forEach(b => {
+    const conn = drawConn(centerX, centerY, b.cx, b.cy, b.color);
+    layers.conn.push(conn);
+    b.children.forEach(ch => {
+      const cc = drawConn(b.cx, b.cy, ch.cx, ch.cy, b.color);
+      layers.conn.push(cc);
+    });
+  });
+
+  // Draw all nodes
+  branches.forEach(b => {
+    layers.nodes.push(drawNode(b));
+    b.children.forEach(ch => {
+      layers.nodes.push(drawNode(ch));
+    });
+  });
+  layers.nodes.push(drawNode(centerNode, true));
+
+  // Add subtle background grid
+  const grid = document.createElementNS(svgNS, 'g');
+  grid.setAttribute('opacity', '0.04');
+  for (let x = 0; x < W; x += 50) {
+    const line = document.createElementNS(svgNS, 'line');
+    line.setAttribute('x1', x); line.setAttribute('y1', 0);
+    line.setAttribute('x2', x); line.setAttribute('y2', H);
+    line.setAttribute('stroke', '#94a3b8'); line.setAttribute('stroke-width', '0.5');
+    grid.appendChild(line);
+  }
+  for (let y = 0; y < H; y += 50) {
+    const line = document.createElementNS(svgNS, 'line');
+    line.setAttribute('x1', 0); line.setAttribute('y1', y);
+    line.setAttribute('x2', W); line.setAttribute('y2', y);
+    line.setAttribute('stroke', '#94a3b8'); line.setAttribute('stroke-width', '0.5');
+    grid.appendChild(line);
+  }
+  layers.bg.push(grid);
+
+  // Append in order
+  layers.bg.forEach(el => gRoot.appendChild(el));
+  layers.conn.forEach(el => gRoot.appendChild(el));
+  layers.nodes.forEach(el => gRoot.appendChild(el));
+
+  // Interaction - pan & zoom
+  let scale = 1, tx = 0, ty = 0, isPanning = false, startX, startY;
+  const minScale = 0.3, maxScale = 2.5;
+
+  function updateTransform() {
+    gRoot.setAttribute('transform', `translate(${tx},${ty}) scale(${scale})`);
+  }
+
+  container.addEventListener('mousedown', e => {
+    if (e.target.closest('.node-group')) return;
+    isPanning = true;
+    container.classList.add('panning');
+    startX = e.clientX - tx;
+    startY = e.clientY - ty;
+  });
+
+  window.addEventListener('mousemove', e => {
+    if (!isPanning) return;
+    tx = e.clientX - startX;
+    ty = e.clientY - startY;
+    updateTransform();
+  });
+
+  window.addEventListener('mouseup', () => {
+    isPanning = false;
+    container.classList.remove('panning');
+  });
+
+  container.addEventListener('wheel', e => {
+    e.preventDefault();
+    const rect = container.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    const factor = e.deltaY < 0 ? 1.08 : 1 / 1.08;
+    const newScale = Math.min(maxScale, Math.max(minScale, scale * factor));
+    tx = mouseX - (mouseX - tx) * (newScale / scale);
+    ty = mouseY - (mouseY - ty) * (newScale / scale);
+    scale = newScale;
+    updateTransform();
+  }, { passive: false });
+
+  document.getElementById('btn-zoom-in').addEventListener('click', () => {
+    scale = Math.min(maxScale, scale * 1.2);
+    updateTransform();
+  });
+  document.getElementById('btn-zoom-out').addEventListener('click', () => {
+    scale = Math.max(minScale, scale / 1.2);
+    updateTransform();
+  });
+  document.getElementById('btn-reset').addEventListener('click', () => {
+    scale = 1; tx = 0; ty = 0;
+    updateTransform();
+  });
+
+  // Detail card and tooltip
+  const nodeGroups = document.querySelectorAll('.node-group');
+  nodeGroups.forEach(g => {
+    g.addEventListener('mouseenter', e => {
+      const label = g.querySelector('.node-text')?.textContent?.replace(/\s+/g, ' ').trim() || '';
+      if (label && label.length < 15) {
+        tooltip.textContent = label;
+        tooltip.style.left = (e.clientX + 16) + 'px';
+        tooltip.style.top = (e.clientY - 36) + 'px';
+        tooltip.classList.add('visible');
+      }
+    });
+    g.addEventListener('mouseleave', () => {
+      tooltip.classList.remove('visible');
+    });
+    g.addEventListener('click', e => {
+      e.stopPropagation();
+      const detail = g.getAttribute('data-detail') || '';
+      const label = g.querySelector('.node-text')?.textContent?.replace(/\s+/g, ' ').trim() || '';
+      if (detail && detail !== 'undefined') {
+        document.getElementById('detail-title').textContent = label;
+        document.getElementById('detail-content').textContent = detail;
+        detailCard.classList.add('show');
+      }
+    });
+  });
+
+  document.getElementById('close-detail').addEventListener('click', () => {
+    detailCard.classList.remove('show');
+  });
+
+  document.addEventListener('click', e => {
+    if (!detailCard.contains(e.target) && !e.target.closest('.node-group')) {
+      detailCard.classList.remove('show');
+    }
+  });
+
+  // Touch support
+  let touches = [];
+  container.addEventListener('touchstart', e => {
+    if (e.touches.length === 1) {
+      isPanning = true;
+      startX = e.touches[0].clientX - tx;
+      startY = e.touches[0].clientY - ty;
+    }
+    if (e.touches.length === 2) {
+      isPanning = false;
+      touches = [{ x: e.touches[0].clientX, y: e.touches[0].clientY },
+                 { x: e.touches[1].clientX, y: e.touches[1].clientY }];
+    }
+  });
+  container.addEventListener('touchmove', e => {
+    if (e.touches.length === 2) {
+      e.preventDefault();
+      const t1 = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+      const t2 = { x: e.touches[1].clientX, y: e.touches[1].clientY };
+      const prevDist = Math.hypot(touches[0].x - touches[1].x, touches[0].y - touches[1].y);
+      const currDist = Math.hypot(t1.x - t2.x, t1.y - t2.y);
+      scale = Math.min(maxScale, Math.max(minScale, scale * (currDist / prevDist)));
+      touches = [t1, t2];
+      updateTransform();
+    }
+  }, { passive: false });
+
+  // Initial view adjustment
+  tx = W * 0.05;
+  ty = H * 0.02;
+  scale = 0.85;
+  updateTransform();
+
+  console.log('🧭 把信送给加西亚 · 思维导图已就绪');
+  console.log('💡 点击节点查看详情  |  滚轮缩放  |  拖拽平移');
+})();
+</script>
+</body>
+</html>
