@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 认知红利 · 思维导图</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --card: #1e293b;
+    --border: #334155;
+    --text: #e2e8f0;
+    --text-secondary: #94a3b8;
+    --accent: #f59e0b;
+    --accent2: #ef4444;
+    --accent3: #3b82f6;
+    --accent4: #10b981;
+    --accent5: #8b5cf6;
+    --accent6: #ec4899;
+    --node-bg: #1e293b;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow: hidden;
+    height: 100vh;
+    user-select: none;
+  }
+  header {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: linear-gradient(180deg, rgba(15,23,42,0.98) 60%, rgba(15,23,42,0) 100%);
+    padding: 20px 30px 35px;
+    pointer-events: none;
+  }
+  header .title-area { pointer-events: auto; }
+  header h1 {
+    font-size: 22px; font-weight: 700; color: var(--accent);
+    letter-spacing: 1px;
+  }
+  header .subtitle {
+    font-size: 13px; color: var(--text-secondary); margin-top: 4px;
+  }
+  header .date {
+    font-size: 12px; color: var(--text-secondary); margin-top: 2px; opacity: 0.7;
+  }
+  .legend {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 100;
+    display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;
+  }
+  .legend-item {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 12px; color: var(--text-secondary);
+  }
+  .legend-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+  }
+  .controls {
+    position: fixed; top: 20px; right: 30px; z-index: 101;
+    display: flex; gap: 8px;
+  }
+  .ctrl-btn {
+    width: 36px; height: 36px; border-radius: 8px;
+    border: 1px solid var(--border); background: var(--card);
+    color: var(--text); cursor: pointer; font-size: 16px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+  .ctrl-btn:hover { background: var(--border); }
+  #mindmap-container {
+    width: 100%; height: 100vh;
+    cursor: grab;
+  }
+  #mindmap-container:active { cursor: grabbing; }
+  #mindmap-container.panning { cursor: grabbing; }
+  svg { display: block; }
+  .node-group { cursor: pointer; transition: opacity 0.3s; }
+  .node-group:hover .node-circle { filter: brightness(1.3); }
+  .node-group:hover .node-text { font-weight: 700; }
+  .node-circle { transition: all 0.3s ease; }
+  .conn-line { stroke-width: 2; stroke-linecap: round; transition: opacity 0.3s; }
+  .detail-card {
+    position: fixed; right: -420px; top: 100px; width: 380px;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 16px; padding: 24px;
+    transition: right 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    z-index: 200; max-height: calc(100vh - 160px); overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+  .detail-card.show { right: 30px; }
+  .detail-card h3 { font-size: 18px; margin-bottom: 12px; color: var(--accent); }
+  .detail-card p { font-size: 14px; color: var(--text-secondary); line-height: 1.8; }
+  .detail-card .close-btn {
+    position: absolute; top: 16px; right: 16px;
+    width: 30px; height: 30px; border-radius: 50%;
+    border: none; background: var(--border); color: var(--text);
+    cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center;
+  }
+  .detail-card .close-btn:hover { background: var(--text-secondary); }
+  .detail-card .tag {
+    display: inline-block; padding: 2px 10px; border-radius: 20px;
+    font-size: 11px; margin: 4px 4px 4px 0;
+  }
+  .tooltip {
+    position: fixed; pointer-events: none; z-index: 150;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 8px; padding: 8px 14px;
+    font-size: 13px; color: var(--text);
+    opacity: 0; transition: opacity 0.15s;
+    white-space: nowrap; box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  }
+  .tooltip.visible { opacity: 1; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="title-area">
+    <h1>🧠 认知红利</h1>
+    <div class="subtitle">Cognitive Dividends · 谢春霖 · 2019</div>
+    <div class="date">2026年7月31日 · 每日一学 #77</div>
+  </div>
+</header>
+
+<div class="controls">
+  <button class="ctrl-btn" id="btn-zoom-in" title="放大">+</button>
+  <button class="ctrl-btn" id="btn-zoom-out" title="缩小">−</button>
+  <button class="ctrl-btn" id="btn-reset" title="重置视角">⟳</button>
+</div>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div>认知升级</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--accent2)"></div>思维模型</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--accent3)"></div>深度学习</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--accent4)"></div>决策框架</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--accent5)"></div>行动系统</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--accent6)"></div>元认知</div>
+</div>
+
+<div class="tooltip" id="tooltip"></div>
+
+<div class="detail-card" id="detail-card">
+  <button class="close-btn" id="close-detail">✕</button>
+  <h3 id="detail-title"></h3>
+  <p id="detail-content"></p>
+</div>
+
+<div id="mindmap-container"></div>
+
+<script>
+(function() {
+  const W = window.innerWidth;
+  const H = window.innerHeight;
+  const svgNS = 'http://www.w3.org/2000/svg';
+  const container = document.getElementById('mindmap-container');
+  const tooltip = document.getElementById('tooltip');
+  const detailCard = document.getElementById('detail-card');
+
+  const svg = document.createElementNS(svgNS, 'svg');
+  svg.setAttribute('width', W);
+  svg.setAttribute('height', H);
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  const gRoot = document.createElementNS(svgNS, 'g');
+  gRoot.setAttribute('id', 'root-group');
+  svg.appendChild(gRoot);
+
+  const defs = document.createElementNS(svgNS, 'defs');
+  const glowFilter = document.createElementNS(svgNS, 'filter');
+  glowFilter.setAttribute('id', 'glow');
+  glowFilter.innerHTML = '<feGaussianBlur stdDeviation="4" result="blur"/><feComposite in="SourceGraphic" in2="blur" operator="over"/>';
+  defs.appendChild(glowFilter);
+
+  const shadowFilter = document.createElementNS(svgNS, 'filter');
+  shadowFilter.setAttribute('id', 'shadow');
+  shadowFilter.innerHTML = '<feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.3"/>';
+  defs.appendChild(shadowFilter);
+  svg.appendChild(defs);
+
+  container.appendChild(svg);
+
+  const centerX = W / 2;
+  const centerY = H / 2;
+
+  const centerNode = {
+    id: 'center', label: '认知\n红利', cx: centerX, cy: centerY, r: 56,
+    color: '#f59e0b', category: 'core',
+    detail: '谢春霖的《认知红利》系统阐述了"认知是人与人之间最根本的差距"。作者提出：在信息过载的时代，普通人与高手之间的鸿沟不在知识多寡，而在于认知的深度、加工效率和转化能力。认知是一种可以持续增值的资产，当你开始有意识地升级自己的认知系统，你就能享受到持续的"认知红利"——更精准的判断、更高效的决策、更清晰的个人成长路径。本书构建了一套完整的认知提升框架，从思维模式到行动系统，为读者提供了一条可操作的认知跃迁路径。'
+  };
+
+  const branches = [
+    {
+      id: 'branch1', label: '认知升级\n基础', cx: 0, cy: 0, r: 46, color: '#f59e0b',
+      angle: -90, distance: 195, category: 'cognition',
+      detail: '认知升级是一切能力提升的底层基础。谢春霖指出，大多数人终其一生都在"原始认知模式"中打转——依靠本能、经验和惯性做判断，而非经过训练的理性分析。认知升级的第一步是意识到自己的认知局限，然后将"元认知"作为自我观察和校正的工具。',
+      children: [
+        { id: 's1', label: '认知决定\n思维方式', r: 34, color: '#fbbf24', detail: '你对世界的认知深度，直接决定你思考问题的格局与边界。认知浅的人看到现象，认知深的人看到本质结构。' },
+        { id: 's2', label: '打破认知\n局限', r: 34, color: '#fbbf24', detail: '最危险的认知状态是"不知道自己不知道"。打破认知局限的第一步是保持开放心态，承认世界远比你以为的复杂。' },
+        { id: 's3', label: '认知红利\n定义', r: 34, color: '#fbbf24', detail: '认知红利是指通过升级认知系统带来的持续竞争优势——如同在信息不对称的市场中获得信息优势，认知优势是最高级的不对称优势。' },
+        { id: 's4', label: '知识→认知\n转化', r: 34, color: '#fbbf24', detail: '知识是原料，认知是加工能力。囤积知识不能带来红利，只有将信息提炼为洞察、将经验转化为原则，才能产生复利。' }
+      ]
+    },
+    {
+      id: 'branch2', label: '核心思维\n模型', cx: 0, cy: 0, r: 46, color: '#ef4444',
+      angle: -30, distance: 215, category: 'models',
+      detail: '掌握核心思维模型是认知升级的关键路径。谢春霖在书中介绍了多套经过验证的思维工具，帮助读者从"感性直觉"切换到"理性分析"，从而做出更高质量的判断。',
+      children: [
+        { id: 's5', label: '第一性\n原理', r: 34, color: '#f87171', detail: '回归事物最底层的本质来思考。不被表象和类比迷惑，从最基本的事实出发重新推导。Elon Musk将此作为核心思考方式。' },
+        { id: 's6', label: '系统思维', r: 34, color: '#f87171', detail: '将问题置于整体系统中观察，识别要素之间的反馈回路、延迟效应和杠杆点，避免线性思维的短视。' },
+        { id: 's7', label: '复利思维', r: 34, color: '#f87171', detail: '认知领域的复利效应同样惊人：每天进步1%，一年后是37.8倍。关键在于持续积累和避免中断。' },
+        { id: 's8', label: '逆向思维', r: 34, color: '#f87171', detail: '从结果倒推条件，从失败反推成功。查理·芒格："反过来想，总是反过来想。"这种方法能绕开认知盲区。' }
+      ]
+    },
+    {
+      id: 'branch3', label: '深度学习\n方法', cx: 0, cy: 0, r: 46, color: '#3b82f6',
+      angle: 30, distance: 230, category: 'learning',
+      detail: '深度学习的本质不是获取更多信息，而是构建更密集、更多元的神经连接网络。谢春霖强调，真正有效的学习必须突破"舒适区"和"恐慌区"，停留在"学习区"——既有挑战又能承受的区间。',
+      children: [
+        { id: 's9', label: '费曼学习法', r: 34, color: '#60a5fa', detail: '以教为学：尝试用最简单的语言向他人解释一个概念。如果解释不清，说明你还没真正理解。这是最有效的自检方法。' },
+        { id: 's10', label: '刻意练习\n四要素', r: 34, color: '#60a5fa', detail: '明确目标→极度专注→有效反馈→走出舒适区。拒绝"天真的重复"，每次练习必须有清晰的提升目标。' },
+        { id: 's11', label: '知识体系\n构建', r: 34, color: '#60a5fa', detail: '不满足于碎片化知识。将新知识嵌入已有的认知结构中，形成彼此关联的知识网络。零散的知识如同散落的珍珠，需要一根线索串联。' },
+        { id: 's12', label: '深度阅读\n策略', r: 34, color: '#60a5fa', detail: '不仅要读，更要"啃"——带着问题读、做笔记、画思维导图、写读后感、与人讨论。高质量输入是高质量输出的前提。' }
+      ]
+    },
+    {
+      id: 'branch4', label: '决策与\n判断', cx: 0, cy: 0, r: 46, color: '#10b981',
+      angle: 90, distance: 225, category: 'decision',
+      detail: '认知红利最直接的变现方式就是决策质量的提升。谢春霖指出，大多数人做决策时依赖的是"直觉+情绪"，而高认知者能够在关键节点上调用理性框架，避开认知偏误的陷阱。',
+      children: [
+        { id: 's13', label: '识别认知\n偏误', r: 34, color: '#34d399', detail: '确认偏误、从众效应、锚定效应、损失厌恶……了解这些偏误是抵御它们的第一步。认知的敌人往往不是无知，而是自以为知道。' },
+        { id: 's14', label: '概率思维', r: 34, color: '#34d399', detail: '告别非黑即白的二元判断，用概率分布评估不确定性。高手不是预测未来，而是管理不确定性的分布。' },
+        { id: 's15', label: '长期主义\n决策', r: 34, color: '#34d399', detail: '在做重大决策时拉长时间维度。短期看起来重要的选择，从十年视角看去可能无足轻重；反之亦然。' },
+        { id: 's16', label: '决策清单\n与复盘', r: 34, color: '#34d399', detail: '建立个人决策清单，记录每次重要决策的背景、推理和预期。定期复盘决策质量，而非只看结果——好结果可能来自坏决策。' }
+      ]
+    },
+    {
+      id: 'branch5', label: '行动系统\n与习惯', cx: 0, cy: 0, r: 46, color: '#8b5cf6',
+      angle: 150, distance: 235, category: 'action',
+      detail: '认知最终需要通过行动来变现。谢春霖强调"知行合一"不是口号，而是一套可以设计的系统。从微小习惯的启动到大目标的分解执行，每一步都需要认知的牵引和行动的回馈。',
+      children: [
+        { id: 's17', label: '最小行动\n法则', r: 34, color: '#a78bfa', detail: '将大目标分解为最小可执行单元。当你不知道从何开始时，先做一件5分钟能完成的小事。行动本身会产生动力。' },
+        { id: 's18', label: '习惯回路\n设计', r: 34, color: '#a78bfa', detail: '提示→惯常行为→奖赏。主动设计你的习惯回路，用好的触发器替代坏的触发器。环境设计比意志力更可靠。' },
+        { id: 's19', label: '注意力\n管理', r: 34, color: '#a78bfa', detail: '注意力是认知红利中最稀缺的资源。保护你的深度工作时间，主动消除环境中的干扰源。"你的注意力流向哪里，你的人生就走向哪里。"' },
+        { id: 's20', label: '反馈驱动\n迭代', r: 34, color: '#a78bfa', detail: '快速获得反馈→分析差距→调整方法→再次行动。将失败视为数据而非判决。每一次迭代都让认知模型更精确。' }
+      ]
+    },
+    {
+      id: 'branch6', label: '元认知\n与复盘', cx: 0, cy: 0, r: 46, color: '#ec4899',
+      angle: 210, distance: 245, category: 'meta',
+      detail: '元认知——对认知本身的认知——是谢春霖全书中最核心的概念之一。它如同一个内置的观察者，时刻审视你的思考过程。高认知者与普通人的分水岭，往往不在于谁更聪明，而在于谁更善于"观察自己的思考"。',
+      children: [
+        { id: 's21', label: '自我觉察\n训练', r: 34, color: '#f472b6', detail: '每天留出15分钟，不带评判地观察自己的思维流动。觉察情绪如何影响判断，偏见如何在不知不觉中介入决策。' },
+        { id: 's22', label: '结构化\n复盘', r: 34, color: '#f472b6', detail: '复盘四步法：回顾目标→评估结果→分析原因→总结规律。不是简单地"想一想"，而是用书写的方式逼自己深度思考。' },
+        { id: 's23', label: '认知迭代\n周期', r: 34, color: '#f472b6', detail: '建立个人认知迭代周期：日复盘（做了什么/学到了什么）、周复盘（趋势与模式）、月复盘（战略调整）、年复盘（方向确认）。' },
+        { id: 's24', label: '成长型\n思维', r: 34, color: '#f472b6', detail: '相信能力可以通过努力提升。将挑战视为成长机会，将批评视为改进信息，将他人的成功视为学习资源。固定型思维是认知红利的天敌。' }
+      ]
+    }
+  ];
+
+  // Position branches
+  branches.forEach(b => {
+    const rad = b.angle * Math.PI / 180;
+    b.cx = centerX + Math.cos(rad) * b.distance;
+    b.cy = centerY + Math.sin(rad) * b.distance;
+    const spreadRad = 0.55;
+    b.children.forEach((ch, i) => {
+      const childAngle = b.angle + (i - (b.children.length - 1) / 2) * (spreadRad * 180 / Math.PI) / (b.children.length / 2);
+      const childRad = childAngle * Math.PI / 180;
+      const childDist = b.distance + 130 + (Math.random() * 20 - 10);
+      ch.cx = centerX + Math.cos(childRad) * childDist;
+      ch.cy = centerY + Math.sin(childRad) * childDist;
+      ch.parentCx = b.cx;
+      ch.parentCy = b.cy;
+    });
+  });
+
+  function drawConn(x1, y1, x2, y2, color) {
+    const line = document.createElementNS(svgNS, 'path');
+    const dx = x2 - x1;
+    const dy = y2 - y1;
+    const dist = Math.sqrt(dx*dx + dy*dy);
+    const cpDist = dist * 0.1;
+    const angle = Math.atan2(dy, dx);
+    const cpx1 = x1 + Math.cos(angle) * dist * 0.35 + Math.cos(angle + Math.PI/2) * cpDist;
+    const cpy1 = y1 + Math.sin(angle) * dist * 0.35 + Math.sin(angle + Math.PI/2) * cpDist;
+    line.setAttribute('d', `M${x1},${y1} C${cpx1},${cpy1} ${x2 - Math.cos(angle) * dist * 0.2},${y2 - Math.sin(angle) * dist * 0.2} ${x2},${y2}`);
+    line.setAttribute('stroke', color);
+    line.setAttribute('stroke-opacity', '0.35');
+    line.setAttribute('fill', 'none');
+    line.setAttribute('stroke-width', '1.5');
+    line.classList.add('conn-line');
+    return line;
+  }
+
+  function drawNode(node, isCenter) {
+    const g = document.createElementNS(svgNS, 'g');
+    g.setAttribute('class', 'node-group');
+    g.setAttribute('data-id', node.id);
+    g.setAttribute('data-detail', node.detail || '');
+
+    const glow = document.createElementNS(svgNS, 'circle');
+    glow.setAttribute('cx', node.cx);
+    glow.setAttribute('cy', node.cy);
+    glow.setAttribute('r', node.r + 6);
+    glow.setAttribute('fill', 'none');
+    glow.setAttribute('stroke', node.color);
+    glow.setAttribute('stroke-opacity', '0.15');
+    glow.setAttribute('stroke-width', '3');
+    g.appendChild(glow);
+
+    const circle = document.createElementNS(svgNS, 'circle');
+    circle.setAttribute('cx', node.cx);
+    circle.setAttribute('cy', node.cy);
+    circle.setAttribute('r', node.r);
+    circle.setAttribute('fill', '#1e293b');
+    circle.setAttribute('stroke', node.color);
+    circle.setAttribute('stroke-width', isCenter ? '3' : '2');
+    circle.setAttribute('filter', 'url(#shadow)');
+    circle.classList.add('node-circle');
+    g.appendChild(circle);
+
+    const inner = document.createElementNS(svgNS, 'circle');
+    inner.setAttribute('cx', node.cx);
+    inner.setAttribute('cy', node.cy);
+    inner.setAttribute('r', node.r - 3);
+    inner.setAttribute('fill', 'none');
+    inner.setAttribute('stroke', node.color);
+    inner.setAttribute('stroke-opacity', '0.08');
+    inner.setAttribute('stroke-width', node.r - 3);
+    g.appendChild(inner);
+
+    const lines = node.label.split('\n');
+    const text = document.createElementNS(svgNS, 'text');
+    text.setAttribute('x', node.cx);
+    text.setAttribute('y', node.cy - (lines.length - 1) * (isCenter ? 12 : 8) * 0.5);
+    text.setAttribute('text-anchor', 'middle');
+    text.setAttribute('fill', node.color);
+    text.setAttribute('font-size', isCenter ? '15' : '13');
+    text.setAttribute('font-weight', isCenter ? '700' : '600');
+    text.setAttribute('font-family', "'PingFang SC','Microsoft YaHei',sans-serif");
+    text.classList.add('node-text');
+    lines.forEach((line, i) => {
+      const tspan = document.createElementNS(svgNS, 'tspan');
+      tspan.setAttribute('x', node.cx);
+      tspan.setAttribute('dy', i === 0 ? '0' : (isCenter ? '20' : '17'));
+      tspan.textContent = line;
+      text.appendChild(tspan);
+    });
+    g.appendChild(text);
+
+    return g;
+  }
+
+  const layers = { bg: [], conn: [], nodes: [] };
+
+  branches.forEach(b => {
+    const conn = drawConn(centerX, centerY, b.cx, b.cy, b.color);
+    layers.conn.push(conn);
+    b.children.forEach(ch => {
+      const cc = drawConn(b.cx, b.cy, ch.cx, ch.cy, b.color);
+      layers.conn.push(cc);
+    });
+  });
+
+  branches.forEach(b => {
+    layers.nodes.push(drawNode(b));
+    b.children.forEach(ch => {
+      layers.nodes.push(drawNode(ch));
+    });
+  });
+  layers.nodes.push(drawNode(centerNode, true));
+
+  const grid = document.createElementNS(svgNS, 'g');
+  grid.setAttribute('opacity', '0.04');
+  for (let x = 0; x < W; x += 50) {
+    const line = document.createElementNS(svgNS, 'line');
+    line.setAttribute('x1', x); line.setAttribute('y1', 0);
+    line.setAttribute('x2', x); line.setAttribute('y2', H);
+    line.setAttribute('stroke', '#94a3b8'); line.setAttribute('stroke-width', '0.5');
+    grid.appendChild(line);
+  }
+  for (let y = 0; y < H; y += 50) {
+    const line = document.createElementNS(svgNS, 'line');
+    line.setAttribute('x1', 0); line.setAttribute('y1', y);
+    line.setAttribute('x2', W); line.setAttribute('y2', y);
+    line.setAttribute('stroke', '#94a3b8'); line.setAttribute('stroke-width', '0.5');
+    grid.appendChild(line);
+  }
+  layers.bg.push(grid);
+
+  layers.bg.forEach(el => gRoot.appendChild(el));
+  layers.conn.forEach(el => gRoot.appendChild(el));
+  layers.nodes.forEach(el => gRoot.appendChild(el));
+
+  let scale = 1, tx = 0, ty = 0, isPanning = false, startX, startY;
+  const minScale = 0.3, maxScale = 2.5;
+
+  function updateTransform() {
+    gRoot.setAttribute('transform', `translate(${tx},${ty}) scale(${scale})`);
+  }
+
+  container.addEventListener('mousedown', e => {
+    if (e.target.closest('.node-group')) return;
+    isPanning = true;
+    container.classList.add('panning');
+    startX = e.clientX - tx;
+    startY = e.clientY - ty;
+  });
+
+  window.addEventListener('mousemove', e => {
+    if (!isPanning) return;
+    tx = e.clientX - startX;
+    ty = e.clientY - startY;
+    updateTransform();
+  });
+
+  window.addEventListener('mouseup', () => {
+    isPanning = false;
+    container.classList.remove('panning');
+  });
+
+  container.addEventListener('wheel', e => {
+    e.preventDefault();
+    const rect = container.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    const factor = e.deltaY < 0 ? 1.08 : 1 / 1.08;
+    const newScale = Math.min(maxScale, Math.max(minScale, scale * factor));
+    tx = mouseX - (mouseX - tx) * (newScale / scale);
+    ty = mouseY - (mouseY - ty) * (newScale / scale);
+    scale = newScale;
+    updateTransform();
+  }, { passive: false });
+
+  document.getElementById('btn-zoom-in').addEventListener('click', () => {
+    scale = Math.min(maxScale, scale * 1.2);
+    updateTransform();
+  });
+  document.getElementById('btn-zoom-out').addEventListener('click', () => {
+    scale = Math.max(minScale, scale / 1.2);
+    updateTransform();
+  });
+  document.getElementById('btn-reset').addEventListener('click', () => {
+    scale = 1; tx = 0; ty = 0;
+    updateTransform();
+  });
+
+  const nodeGroups = document.querySelectorAll('.node-group');
+  nodeGroups.forEach(g => {
+    g.addEventListener('mouseenter', e => {
+      const label = g.querySelector('.node-text')?.textContent?.replace(/\s+/g, ' ').trim() || '';
+      if (label && label.length < 15) {
+        tooltip.textContent = label;
+        tooltip.style.left = (e.clientX + 16) + 'px';
+        tooltip.style.top = (e.clientY - 36) + 'px';
+        tooltip.classList.add('visible');
+      }
+    });
+    g.addEventListener('mouseleave', () => {
+      tooltip.classList.remove('visible');
+    });
+    g.addEventListener('click', e => {
+      e.stopPropagation();
+      const detail = g.getAttribute('data-detail') || '';
+      const label = g.querySelector('.node-text')?.textContent?.replace(/\s+/g, ' ').trim() || '';
+      if (detail && detail !== 'undefined') {
+        document.getElementById('detail-title').textContent = label;
+        document.getElementById('detail-content').textContent = detail;
+        detailCard.classList.add('show');
+      }
+    });
+  });
+
+  document.getElementById('close-detail').addEventListener('click', () => {
+    detailCard.classList.remove('show');
+  });
+
+  document.addEventListener('click', e => {
+    if (!detailCard.contains(e.target) && !e.target.closest('.node-group')) {
+      detailCard.classList.remove('show');
+    }
+  });
+
+  let touches = [];
+  container.addEventListener('touchstart', e => {
+    if (e.touches.length === 1) {
+      isPanning = true;
+      startX = e.touches[0].clientX - tx;
+      startY = e.touches[0].clientY - ty;
+    }
+    if (e.touches.length === 2) {
+      isPanning = false;
+      touches = [{ x: e.touches[0].clientX, y: e.touches[0].clientY },
+                 { x: e.touches[1].clientX, y: e.touches[1].clientY }];
+    }
+  });
+  container.addEventListener('touchmove', e => {
+    if (e.touches.length === 2) {
+      e.preventDefault();
+      const t1 = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+      const t2 = { x: e.touches[1].clientX, y: e.touches[1].clientY };
+      const prevDist = Math.hypot(touches[0].x - touches[1].x, touches[0].y - touches[1].y);
+      const currDist = Math.hypot(t1.x - t2.x, t1.y - t2.y);
+      scale = Math.min(maxScale, Math.max(minScale, scale * (currDist / prevDist)));
+      touches = [t1, t2];
+      updateTransform();
+    }
+  }, { passive: false });
+
+  tx = W * 0.05;
+  ty = H * 0.02;
+  scale = 0.85;
+  updateTransform();
+
+  console.log('🧠 认知红利 · 思维导图已就绪');
+  console.log('💡 点击节点查看详情  |  滚轮缩放  |  拖拽平移');
+})();
+</script>
+</body>
+</html>
