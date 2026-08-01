@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 批判性思维工具 · 思维导图</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --card: #1e293b;
+    --border: #334155;
+    --text: #e2e8f0;
+    --text-secondary: #94a3b8;
+    --accent: #f59e0b;
+    --accent2: #ef4444;
+    --accent3: #3b82f6;
+    --accent4: #10b981;
+    --accent5: #8b5cf6;
+    --accent6: #ec4899;
+    --node-bg: #1e293b;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow: hidden;
+    height: 100vh;
+    user-select: none;
+  }
+  header {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: linear-gradient(180deg, rgba(15,23,42,0.98) 60%, rgba(15,23,42,0) 100%);
+    padding: 20px 30px 35px;
+    pointer-events: none;
+  }
+  header .title-area { pointer-events: auto; }
+  header h1 {
+    font-size: 22px; font-weight: 700; color: var(--accent);
+    letter-spacing: 1px;
+  }
+  header .subtitle {
+    font-size: 13px; color: var(--text-secondary); margin-top: 4px;
+  }
+  header .date {
+    font-size: 12px; color: var(--text-secondary); margin-top: 2px; opacity: 0.7;
+  }
+  .legend {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 100;
+    display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;
+  }
+  .legend-item {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 12px; color: var(--text-secondary);
+  }
+  .legend-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+  }
+  .controls {
+    position: fixed; top: 20px; right: 30px; z-index: 101;
+    display: flex; gap: 8px;
+  }
+  .ctrl-btn {
+    width: 36px; height: 36px; border-radius: 8px;
+    border: 1px solid var(--border); background: var(--card);
+    color: var(--text); cursor: pointer; font-size: 16px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+  .ctrl-btn:hover { background: var(--border); }
+  #mindmap-container {
+    width: 100%; height: 100vh;
+    cursor: grab;
+  }
+  #mindmap-container:active { cursor: grabbing; }
+  #mindmap-container.panning { cursor: grabbing; }
+  svg { display: block; }
+  .node-group { cursor: pointer; transition: opacity 0.3s; }
+  .node-group:hover .node-circle { filter: brightness(1.3); }
+  .node-group:hover .node-text { font-weight: 700; }
+  .node-circle { transition: all 0.3s ease; }
+  .conn-line { stroke-width: 2; stroke-linecap: round; transition: opacity 0.3s; }
+  .detail-card {
+    position: fixed; right: -420px; top: 100px; width: 380px;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 16px; padding: 24px;
+    transition: right 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    z-index: 200; max-height: calc(100vh - 160px); overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+  .detail-card.show { right: 30px; }
+  .detail-card h3 { font-size: 18px; margin-bottom: 12px; color: var(--accent); }
+  .detail-card p { font-size: 14px; color: var(--text-secondary); line-height: 1.8; }
+  .detail-card .close-btn {
+    position: absolute; top: 16px; right: 16px;
+    width: 30px; height: 30px; border-radius: 50%;
+    border: none; background: var(--border); color: var(--text);
+    cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center;
+  }
+  .detail-card .close-btn:hover { background: var(--text-secondary); }
+  .detail-card .tag {
+    display: inline-block; padding: 2px 10px; border-radius: 20px;
+    font-size: 11px; margin: 4px 4px 4px 0;
+  }
+  .tooltip {
+    position: fixed; pointer-events: none; z-index: 150;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 8px; padding: 8px 14px;
+    font-size: 13px; color: var(--text);
+    opacity: 0; transition: opacity 0.15s;
+    white-space: nowrap; box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  }
+  .tooltip.visible { opacity: 1; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="title-area">
+    <h1>🔍 批判性思维工具</h1>
+    <div class="subtitle">Critical Thinking: Tools for Taking Charge · Richard Paul & Linda Elder · 2001</div>
+    <div class="date">2026年8月1日 · 每日一学 #78</div>
+  </div>
+</header>
+
+<div class="controls">
+  <button class="ctrl-btn" id="btn-zoom-in" title="放大">+</button>
+  <button class="ctrl-btn" id="btn-zoom-out" title="缩小">−</button>
+  <button class="ctrl-btn" id="btn-reset" title="重置视角">⟳</button>
+</div>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div>思维要素</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--accent2)"></div>思维标准</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--accent3)"></div>思维特质</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--accent4)"></div>认知偏差</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--accent5)"></div>提问技术</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--accent6)"></div>实践应用</div>
+</div>
+
+<div class="tooltip" id="tooltip"></div>
+
+<div class="detail-card" id="detail-card">
+  <button class="close-btn" id="close-detail">✕</button>
+  <h3 id="detail-title"></h3>
+  <p id="detail-content"></p>
+</div>
+
+<div id="mindmap-container"></div>
+
+<script>
+(function() {
+  const W = window.innerWidth;
+  const H = window.innerHeight;
+  const svgNS = 'http://www.w3.org/2000/svg';
+  const container = document.getElementById('mindmap-container');
+  const tooltip = document.getElementById('tooltip');
+  const detailCard = document.getElementById('detail-card');
+
+  const svg = document.createElementNS(svgNS, 'svg');
+  svg.setAttribute('width', W);
+  svg.setAttribute('height', H);
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  const gRoot = document.createElementNS(svgNS, 'g');
+  gRoot.setAttribute('id', 'root-group');
+  svg.appendChild(gRoot);
+
+  const defs = document.createElementNS(svgNS, 'defs');
+  const glowFilter = document.createElementNS(svgNS, 'filter');
+  glowFilter.setAttribute('id', 'glow');
+  glowFilter.innerHTML = '<feGaussianBlur stdDeviation="4" result="blur"/><feComposite in="SourceGraphic" in2="blur" operator="over"/>';
+  defs.appendChild(glowFilter);
+
+  const shadowFilter = document.createElementNS(svgNS, 'filter');
+  shadowFilter.setAttribute('id', 'shadow');
+  shadowFilter.innerHTML = '<feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.3"/>';
+  defs.appendChild(shadowFilter);
+  svg.appendChild(defs);
+
+  container.appendChild(svg);
+
+  const centerX = W / 2;
+  const centerY = H / 2;
+
+  const centerNode = {
+    id: 'center', label: '批判性\n思维工具', cx: centerX, cy: centerY, r: 56,
+    color: '#f59e0b', category: 'core',
+    detail: 'Richard Paul与Linda Elder合著的《批判性思维工具》是批判性思维领域最具系统性的经典之作。本书提出：思维的质量决定生活的质量。绝大多数人的思维是"未受训练的"——充满偏见、模糊、自相矛盾。作者构建了一套完整的批判性思维框架：从分析思维的八大要素出发，以九大思维标准进行校准，培养关键的思维特质，最终将批判性思维内化为一种日常习惯。这不是一本关于"如何赢得辩论"的书，而是一本关于"如何更清晰地思考、更理性地决策、更深刻地理解世界"的工具箱。'
+  };
+
+  const branches = [
+    {
+      id: 'branch1', label: '思维八\n大要素', cx: 0, cy: 0, r: 46, color: '#f59e0b',
+      angle: -90, distance: 200, category: 'elements',
+      detail: '任何思维过程都包含八个基本要素。Paul与Elder认为，掌握这八个要素是批判性思维的第一步——如同了解汽车的各个部件才能诊断故障，了解思维的要素才能分析思维的质量。',
+      children: [
+        { id: 's1', label: '目的\nPurpose', r: 32, color: '#fbbf24', detail: '任何思维都有目的。批判性思考者会不断追问：我的目的是什么？这个目的合理吗？我是否偏离了初始目的？明确目的是一切清晰思维的前提。' },
+        { id: 's2', label: '问题\nQuestion', r: 32, color: '#fbbf24', detail: '思维试图回答某个问题。模糊的问题导致模糊的答案。学会将模糊的忧虑转化为精确的问题，是思维能力提升的关键标志。' },
+        { id: 's3', label: '信息\nInformation', r: 32, color: '#fbbf24', detail: '思维需要信息作为原料。批判性思考者关切：我依赖的信息来源可靠吗？我是否遗漏了重要信息？我的信息是否足以支持结论？' },
+        { id: 's4', label: '解释与\n推断', r: 32, color: '#fbbf24', detail: '思维基于信息得出结论。关键要区分"事实陈述"和"解释推断"——同样的信息可以导向不同的推断，意识到这一点是避免思维陷阱的核心。' },
+        { id: 's5', label: '概念\nConcepts', r: 32, color: '#fbbf24', detail: '思维使用概念来组织信息。模糊的概念导致模糊的思维。批判性思考者不断澄清自己使用的关键概念："我说的'成功'到底指什么？"' },
+        { id: 's6', label: '假设\nAssumptions', r: 32, color: '#fbbf24', detail: '思维建立在假设之上。最危险的假设是我们不知道自己正在做的假设。批判性思维要求将隐藏的假设浮现到意识层面加以检验。' },
+        { id: 's7', label: '意涵与\n后果', r: 32, color: '#fbbf24', detail: '思维会产生后果。批判性思考者追问：如果我接受这个结论，会带来什么连锁反应？对他人、对社会、对未来意味着什么？' },
+        { id: 's8', label: '观点\nPoint of View', r: 32, color: '#fbbf24', detail: '思维从某个视角出发。意识到自己的观点只是众多可能观点之一，并主动尝试从其他视角看待问题，是思维成熟度的核心标志。' }
+      ]
+    },
+    {
+      id: 'branch2', label: '思维九\n大标准', cx: 0, cy: 0, r: 44, color: '#ef4444',
+      angle: -30, distance: 205, category: 'standards',
+      detail: '思维标准是评估思维质量的尺度。Paul与Elder提出九项通用标准，可应用于任何领域的思维评估。如同用尺子量长度，我们用这些标准来衡量思维的"好坏"。',
+      children: [
+        { id: 't1', label: '清晰性\nClarity', r: 30, color: '#f87171', detail: '能详细阐述吗？能举例说明吗？能用类比解释吗？如果思维不清晰，其他一切评估都无从谈起。' },
+        { id: 't2', label: '准确性\nAccuracy', r: 30, color: '#f87171', detail: '这是真的吗？如何验证？信息来源可靠吗？准确性要求思维与事实相符，而非与愿望或偏见相符。' },
+        { id: 't3', label: '精确性\nPrecision', r: 30, color: '#f87171', detail: '能更具体吗？能给出更多细节吗？"很多""不久""大概"是精确性不足的信号，精确思维给出可验证的具体陈述。' },
+        { id: 't4', label: '相关性\nRelevance', r: 30, color: '#f87171', detail: '这与问题有何关联？这个信息如何帮助我们回答核心问题？思维中最常见的谬误之一就是把不相关的事项引入讨论。' },
+        { id: 't5', label: '深度\nDepth', r: 30, color: '#f87171', detail: '这个问题的复杂性是什么？我们是否触及了表面之下的因素？深度思维追问根本原因，而非停留在症状层面。' },
+        { id: 't6', label: '广度\nBreadth', r: 30, color: '#f87171', detail: '是否考虑了其他观点？是否从不同角度审视？广度思维要求我们主动寻找被忽略的视角和替代方案。' },
+        { id: 't7', label: '逻辑性\nLogic', r: 30, color: '#f87171', detail: '各部分之间是否一致？结论是否从前提中合理推导？逻辑性检查思维的内部一致性——不自相矛盾是最基本的要求。' },
+        { id: 't8', label: '重要性\nSignificance', r: 30, color: '#f87171', detail: '这是最重要的问题吗？这是核心因素吗？在所有相关信息中，哪些是最关键的？区分重要与琐碎是思维效率的关键。' },
+        { id: 't9', label: '公正性\nFairness', r: 30, color: '#f87171', detail: '我的思维是否公正？是否偏向于自己的利益？公正思考要求我们以相同的标准对待自己和他人的观点。' }
+      ]
+    },
+    {
+      id: 'branch3', label: '思维\n特质', cx: 0, cy: 0, r: 44, color: '#3b82f6',
+      angle: 30, distance: 205, category: 'traits',
+      detail: '批判性思维的最终目标不是掌握技术，而是培养思维特质（intellectual virtues）——内化的思维习惯和品格。这些特质使批判性思维从"技能"升华为"品格"。',
+      children: [
+        { id: 'v1', label: '思维谦逊\nHumility', r: 30, color: '#60a5fa', detail: '知道自己不知道什么。承认自己的知识局限和偏见盲区。与之对立的是思维傲慢——高估自己知道的范围和确定性。' },
+        { id: 'v2', label: '思维勇气\nCourage', r: 30, color: '#60a5fa', detail: '敢于面对与自己深层信念相悖的观点和证据。思维懦弱的表现是只接受让自己舒适的信息，回避认知失调。' },
+        { id: 'v3', label: '思维换位\nEmpathy', r: 30, color: '#60a5fa', detail: '真诚地进入他人的思维框架，理解对方的推理过程——不是"我理解你但你是错的"，而是"如果我在你的位置，我也会这样想"。' },
+        { id: 'v4', label: '思维正直\nIntegrity', r: 30, color: '#60a5fa', detail: '对自己和对他人使用相同的思维标准。不搞双重标准——批判性思维最根本的伦理基础是对逻辑一致性（而非立场一致性）的忠诚。' },
+        { id: 'v5', label: '思维坚毅\nPerseverance', r: 30, color: '#60a5fa', detail: '面对复杂问题时不急于求成，忍受混乱和不确定性，坚持探索直到厘清。与思维懒惰——遇到困难就放弃或接受简单答案——相对。' },
+        { id: 'v6', label: '笃信理性\nConfidence', r: 30, color: '#60a5fa', detail: '相信在长远来看，理性思维最符合自己和他人的利益。不依赖直觉、传统或权威，而是信任经过审视的推理过程。' },
+        { id: 'v7', label: '思维自主\nAutonomy', r: 30, color: '#60a5fa', detail: '独立掌控自己的思维过程。不盲从群体信念、主流观点或权威意见——但也不是为了反对而反对，而是基于理性的独立判断。' }
+      ]
+    },
+    {
+      id: 'branch4', label: '苏格拉底\n式提问', cx: 0, cy: 0, r: 42, color: '#8b5cf6',
+      angle: 90, distance: 200, category: 'questioning',
+      detail: '苏格拉底式提问是批判性思维最有力的工具。它不是普通的问答，而是一种系统性的深度追问——通过一系列结构化问题，引导对方（或自己）发现思维中的矛盾、漏洞和未检验的假设。核心不是"给出答案"，而是"唤醒思考"。',
+      children: [
+        { id: 'q1', label: '澄清问题\nClarification', r: 30, color: '#a78bfa', detail: '"你说的X具体是什么意思？""能否举一个例子？""这与我们讨论的主题有何关联？"——首先确保理解准确。' },
+        { id: 'q2', label: '探询假设\nProbing', r: 30, color: '#a78bfa', detail: '"你做出这个判断的假设是什么？""如果这个假设不成立呢？""还有哪些隐含假设？"——将隐藏前提浮现。' },
+        { id: 'q3', label: '追问证据\nEvidence', r: 30, color: '#a78bfa', detail: '"支持这个观点的证据是什么？""这些证据的来源可靠吗？""有没有相反的证据？""证据是否足够充分？"' },
+        { id: 'q4', label: '探索视角\nPerspective', r: 30, color: '#a78bfa', detail: '"还有谁会以不同方式看待这个问题？""如果站在对立面会怎么看？""这个观点在什么情境下可能不成立？"' },
+        { id: 'q5', label: '检验后果\nImplications', r: 30, color: '#a78bfa', detail: '"如果这是真的，会带来什么后果？""对谁有利？对谁不利？""这种思考方式的长期影响是什么？"' },
+        { id: 'q6', label: '反思提问\nMeta-Q', r: 30, color: '#a78bfa', detail: '"我为什么问这个问题？""这个问题的目的是什么？""我们讨论到现在，真正的问题是什么？"——对提问本身的反思。' }
+      ]
+    },
+    {
+      id: 'branch5', label: '认知偏差\n与陷阱', cx: 0, cy: 0, r: 42, color: '#10b981',
+      angle: 150, distance: 205, category: 'biases',
+      detail: 'Paul与Elder特别强调人类思维的两个根本性陷阱：自我中心主义（egocentrism）和社会中心主义（sociocentrism）。理解这些深层偏差比记住一长串认知偏误列表更为根本。',
+      children: [
+        { id: 'b1', label: '自我中心\nEgocentrism', r: 30, color: '#34d399', detail: '以自我利益和自我经验为衡量一切的尺子。表现为：选择性关注有利信息、归因偏差（自己的成功归因于能力，他人的成功归因于运气）、合理化自己的不当行为。' },
+        { id: 'b2', label: '社会中心\nSociocentrism', r: 30, color: '#34d399', detail: '以自己所属群体的信念为标准判断一切。表现为：族群中心主义、组织盲从、"我们vs他们"的二元思维。社会中心思维往往比自我中心更隐蔽。' },
+        { id: 'b3', label: '确认偏差\nConfirmation', r: 30, color: '#34d399', detail: '主动寻找和支持已有信念的证据，忽视或贬低相反证据。这是所有认知偏差中最普遍、最危险的一种，是思维懒惰和思维自负的共同产物。' },
+        { id: 'b4', label: '可得性\n偏差', r: 30, color: '#34d399', detail: '过分依赖最先想到或最容易回忆的信息。最近发生的事、最生动的事例被视为"最重要的"或"最普遍的"，忽略统计规律和系统数据。' },
+        { id: 'b5', label: '非此即彼\n二元思维', r: 30, color: '#34d399', detail: '将复杂问题简化为两极对立：好/坏、对/错、朋友/敌人。这种思维模式忽略了绝大多数问题中的"灰度地带"和多元可能性。' },
+        { id: 'b6', label: '刻板印象\nStereotyping', r: 30, color: '#34d399', detail: '用类别标签取代个体分析。刻板印象是一种思维捷径，代价是牺牲了精确性和公正性。批判性思维要求超越标签，进行个体化判断。' }
+      ]
+    },
+    {
+      id: 'branch6', label: '实践\n框架', cx: 0, cy: 0, r: 42, color: '#ec4899',
+      angle: 210, distance: 200, category: 'practice',
+      detail: '批判性思维不是理论，而是需要刻意练习的技能。Paul与Elder提供了一套可操作的日常实践框架，帮助读者将批判性思维从"知道"转化为"做到"。',
+      children: [
+        { id: 'p1', label: '思维日志\nJournal', r: 30, color: '#f472b6', detail: '每天挑选一个重要决策或判断，回溯当时的思维过程，逐一用八大要素和九大标准进行分析。思维日志是最有效的批判性思维训练工具。' },
+        { id: 'p2', label: '重述练习\nRestate', r: 30, color: '#f472b6', detail: '用自己的话重述对方的观点，要求对方确认"你是否准确理解"。这是思维换位的最简单练习，能迅速暴露理解偏差和主观臆断。' },
+        { id: 'p3', label: '问题重构\nReframe', r: 30, color: '#f472b6', detail: '面对问题时，强制自己用至少三种不同的方式重新表述问题。例如："我该如何升职？" → "我如何为组织创造更大价值？" → "什么样的能力在市场上最有需求？"' },
+        { id: 'p4', label: '反对派\n角色扮演', r: 30, color: '#f472b6', detail: '为自己最坚定的信念寻找最强反对论据。不是敷衍地找几个弱论点然后反驳，而是真诚地寻找对方最有力的论证。这是思维勇气的直接训练。' },
+        { id: 'p5', label: '阅读分析\n模板', r: 30, color: '#f472b6', detail: '使用批判性思维模板系统分析任何文章或演讲：作者目的→核心问题→关键信息→主要结论→核心概念→隐含假设→推理意涵→作者视角。' },
+        { id: 'p6', label: '专家思维\n养成', r: 30, color: '#f472b6', detail: '选择所在领域的一位批判性思考者（最好是在世的研究者或实践者），研究其思考方式——不只是其结论，而是得出结论的过程。模仿是最高效的学习路径。' }
+      ]
+    }
+  ];
+
+  // Layout: calculate positions for each branch and its children
+  branches.forEach((b, bi) => {
+    const rad = (b.angle * Math.PI) / 180;
+    b.cx = centerX + b.distance * Math.cos(rad);
+    b.cy = centerY + b.distance * Math.sin(rad);
+    if (b.children) {
+      const n = b.children.length;
+      const spreadAngle = Math.min(Math.PI * 0.6, (n - 1) * 0.45);
+      const baseAng = rad + Math.PI;
+      b.children.forEach((ch, ci) => {
+        const ca = baseAng - spreadAngle / 2 + (spreadAngle / (n - 1 || 1)) * ci;
+        ch.cx = b.cx + 90 * Math.cos(ca);
+        ch.cy = b.cy + 90 * Math.sin(ca);
+      });
+    }
+  });
+
+  // Draw connections
+  branches.forEach(b => {
+    const line = document.createElementNS(svgNS, 'line');
+    line.setAttribute('x1', centerX); line.setAttribute('y1', centerY);
+    line.setAttribute('x2', b.cx); line.setAttribute('y2', b.cy);
+    line.setAttribute('stroke', b.color);
+    line.setAttribute('stroke-opacity', '0.4');
+    line.setAttribute('class', 'conn-line');
+    line.setAttribute('stroke-width', '2.5');
+    gRoot.appendChild(line);
+
+    if (b.children) {
+      b.children.forEach(ch => {
+        const cl = document.createElementNS(svgNS, 'line');
+        cl.setAttribute('x1', b.cx); cl.setAttribute('y1', b.cy);
+        cl.setAttribute('x2', ch.cx); cl.setAttribute('y2', ch.cy);
+        cl.setAttribute('stroke', b.color);
+        cl.setAttribute('stroke-opacity', '0.25');
+        cl.setAttribute('class', 'conn-line');
+        cl.setAttribute('stroke-width', '1.5');
+        gRoot.appendChild(cl);
+      });
+    }
+  });
+
+  // Draw node function
+  function drawNode(node) {
+    const g = document.createElementNS(svgNS, 'g');
+    g.setAttribute('class', 'node-group');
+    g.setAttribute('data-id', node.id);
+
+    const circle = document.createElementNS(svgNS, 'circle');
+    circle.setAttribute('cx', node.cx); circle.setAttribute('cy', node.cy);
+    circle.setAttribute('r', node.r);
+    circle.setAttribute('fill', '#1e293b');
+    circle.setAttribute('stroke', node.color);
+    circle.setAttribute('stroke-width', node.id === 'center' ? '3' : '2');
+    circle.setAttribute('class', 'node-circle');
+    circle.setAttribute('filter', node.id === 'center' ? 'url(#shadow)' : '');
+    g.appendChild(circle);
+
+    const text = document.createElementNS(svgNS, 'text');
+    text.setAttribute('x', node.cx); text.setAttribute('y', node.cy);
+    text.setAttribute('text-anchor', 'middle');
+    text.setAttribute('dominant-baseline', 'central');
+    text.setAttribute('fill', node.color);
+    text.setAttribute('font-size', node.id === 'center' ? '15' : (node.r >= 40 ? '13' : '11'));
+    text.setAttribute('font-weight', node.id === 'center' ? '800' : '600');
+    text.setAttribute('class', 'node-text');
+    text.setAttribute('pointer-events', 'none');
+    const lines = node.label.split('\n');
+    if (lines.length === 1) {
+      text.textContent = node.label;
+    } else {
+      lines.forEach((line, i) => {
+        const tsp = document.createElementNS(svgNS, 'tspan');
+        tsp.setAttribute('x', node.cx);
+        tsp.setAttribute('dy', i === 0 ? `-${(lines.length - 1) * 7}px` : '14px');
+        tsp.textContent = line;
+        text.appendChild(tsp);
+      });
+    }
+    g.appendChild(text);
+
+    // Events
+    g.addEventListener('mouseenter', (e) => {
+      if (node.label) {
+        tooltip.innerHTML = node.detail ? node.detail.slice(0, 60) + '...' : node.label.replace(/\n/g, ' ');
+        tooltip.classList.add('visible');
+      }
+    });
+    g.addEventListener('mousemove', (e) => {
+      tooltip.style.left = (e.clientX + 16) + 'px';
+      tooltip.style.top = (e.clientY - 40) + 'px';
+    });
+    g.addEventListener('mouseleave', () => { tooltip.classList.remove('visible'); });
+    g.addEventListener('click', (e) => {
+      e.stopPropagation();
+      document.getElementById('detail-title').textContent = node.label.replace(/\n/g, ' ');
+      document.getElementById('detail-content').textContent = node.detail || '';
+      detailCard.classList.add('show');
+    });
+
+    gRoot.appendChild(g);
+  }
+
+  // Draw all nodes
+  drawNode(centerNode);
+  branches.forEach(b => {
+    drawNode(b);
+    if (b.children) b.children.forEach(ch => drawNode(ch));
+  });
+
+  // Close detail
+  document.getElementById('close-detail').addEventListener('click', () => {
+    detailCard.classList.remove('show');
+  });
+  svg.addEventListener('click', () => { detailCard.classList.remove('show'); });
+
+  // Pan & zoom
+  let scale = 1, tx = 0, ty = 0, isPanning = false, startX, startY;
+  const limits = { minScale: 0.3, maxScale: 2.5 };
+
+  function applyTransform() {
+    gRoot.setAttribute('transform', `translate(${tx},${ty}) scale(${scale})`);
+  }
+
+  svg.addEventListener('mousedown', (e) => {
+    if (e.target === svg || e.target.id === 'mindmap-container') {
+      isPanning = true; startX = e.clientX - tx; startY = e.clientY - ty;
+      container.classList.add('panning');
+    }
+  });
+  window.addEventListener('mousemove', (e) => {
+    if (isPanning) { tx = e.clientX - startX; ty = e.clientY - startY; applyTransform(); }
+  });
+  window.addEventListener('mouseup', () => { isPanning = false; container.classList.remove('panning'); });
+
+  svg.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const ds = e.deltaY > 0 ? 0.9 : 1.1;
+    const ns = Math.min(limits.maxScale, Math.max(limits.minScale, scale * ds));
+    const mx = e.clientX, my = e.clientY;
+    tx = mx - (mx - tx) * (ns / scale);
+    ty = my - (my - ty) * (ns / scale);
+    scale = ns; applyTransform();
+  }, { passive: false });
+
+  // Touch
+  let lastDist = 0;
+  svg.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 1) { isPanning = true; startX = e.touches[0].clientX - tx; startY = e.touches[0].clientY - ty; }
+    if (e.touches.length === 2) lastDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+  });
+  svg.addEventListener('touchmove', (e) => {
+    if (e.touches.length === 1 && isPanning) { tx = e.touches[0].clientX - startX; ty = e.touches[0].clientY - startY; applyTransform(); }
+    if (e.touches.length === 2) {
+      const d = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+      if (lastDist) { const ns = Math.min(limits.maxScale, Math.max(limits.minScale, scale * (d / lastDist))); scale = ns; applyTransform(); }
+      lastDist = d;
+    }
+  }, { passive: false });
+  svg.addEventListener('touchend', () => { isPanning = false; lastDist = 0; });
+
+  document.getElementById('btn-zoom-in').addEventListener('click', () => {
+    scale = Math.min(limits.maxScale, scale * 1.2); applyTransform();
+  });
+  document.getElementById('btn-zoom-out').addEventListener('click', () => {
+    scale = Math.max(limits.minScale, scale * 0.8); applyTransform();
+  });
+  document.getElementById('btn-reset').addEventListener('click', () => {
+    scale = 1; tx = 0; ty = 0; applyTransform();
+  });
+})();
+</script>
+</body>
+</html>
