@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 大问题 · 思维导图</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --card: #1e293b;
+    --border: #334155;
+    --text: #e2e8f0;
+    --text-secondary: #94a3b8;
+    --accent: #f59e0b;
+    --accent2: #ef4444;
+    --accent3: #3b82f6;
+    --accent4: #10b981;
+    --accent5: #8b5cf6;
+    --accent6: #ec4899;
+    --node-bg: #1e293b;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow: hidden;
+    height: 100vh;
+    user-select: none;
+  }
+  header {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: linear-gradient(180deg, rgba(15,23,42,0.98) 60%, rgba(15,23,42,0) 100%);
+    padding: 20px 30px 35px;
+    pointer-events: none;
+  }
+  header .title-area { pointer-events: auto; }
+  header h1 {
+    font-size: 22px; font-weight: 700; color: var(--accent);
+    letter-spacing: 1px;
+  }
+  header .subtitle {
+    font-size: 13px; color: var(--text-secondary); margin-top: 4px;
+  }
+  header .date {
+    font-size: 12px; color: var(--text-secondary); margin-top: 2px; opacity: 0.7;
+  }
+  .legend {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 100;
+    display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;
+  }
+  .legend-item {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 12px; color: var(--text-secondary);
+  }
+  .legend-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+  }
+  .controls {
+    position: fixed; top: 20px; right: 30px; z-index: 101;
+    display: flex; gap: 8px;
+  }
+  .ctrl-btn {
+    width: 36px; height: 36px; border-radius: 8px;
+    border: 1px solid var(--border); background: var(--card);
+    color: var(--text); cursor: pointer; font-size: 16px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+  .ctrl-btn:hover { background: var(--border); }
+  #mindmap-container {
+    width: 100%; height: 100vh;
+    cursor: grab;
+  }
+  #mindmap-container:active { cursor: grabbing; }
+  #mindmap-container.panning { cursor: grabbing; }
+  svg { display: block; }
+  .node-group { cursor: pointer; transition: opacity 0.3s; }
+  .node-group:hover .node-circle { filter: brightness(1.3); }
+  .node-group:hover .node-text { font-weight: 700; }
+  .node-circle { transition: all 0.3s ease; }
+  .conn-line { stroke-width: 2; stroke-linecap: round; transition: opacity 0.3s; }
+  .detail-card {
+    position: fixed; right: -420px; top: 100px; width: 380px;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 16px; padding: 24px;
+    transition: right 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    z-index: 200; max-height: calc(100vh - 160px); overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+  .detail-card.show { right: 30px; }
+  .detail-card h3 { font-size: 18px; margin-bottom: 12px; color: var(--accent); }
+  .detail-card p { font-size: 14px; color: var(--text-secondary); line-height: 1.8; }
+  .detail-card .close-btn {
+    position: absolute; top: 16px; right: 16px;
+    width: 30px; height: 30px; border-radius: 50%;
+    border: none; background: var(--border); color: var(--text);
+    cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center;
+  }
+  .detail-card .close-btn:hover { background: var(--text-secondary); }
+  .detail-card .tag {
+    display: inline-block; padding: 2px 10px; border-radius: 20px;
+    font-size: 11px; margin: 4px 4px 4px 0;
+  }
+  .tooltip {
+    position: fixed; pointer-events: none; z-index: 150;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 8px; padding: 8px 14px;
+    font-size: 13px; color: var(--text);
+    opacity: 0; transition: opacity 0.15s;
+    white-space: nowrap; box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  }
+  .tooltip.visible { opacity: 1; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="title-area">
+    <h1>🎓 大问题：简明哲学导论</h1>
+    <div class="subtitle">The Big Questions: A Short Introduction to Philosophy · Robert C. Solomon & Kathleen M. Higgins · 第10版</div>
+    <div class="date">2026年8月2日 · 每日一学 #79</div>
+  </div>
+</header>
+
+<div class="controls">
+  <button class="ctrl-btn" id="btn-zoom-in" title="放大">+</button>
+  <button class="ctrl-btn" id="btn-zoom-out" title="缩小">−</button>
+  <button class="ctrl-btn" id="btn-reset" title="重置视角">⟳</button>
+</div>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div>核心追问</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--accent2)"></div>哲学思维方法</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--accent3)"></div>哲学分支领域</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--accent4)"></div>重要哲学家线索</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--accent5)"></div>论证与思辨工具</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--accent6)"></div>生活实践转化</div>
+</div>
+
+<div class="tooltip" id="tooltip"></div>
+
+<div class="detail-card" id="detail-card">
+  <button class="close-btn" id="close-detail">✕</button>
+  <h3 id="detail-title"></h3>
+  <p id="detail-content"></p>
+</div>
+
+<div id="mindmap-container"></div>
+
+<script>
+(function() {
+  const W = window.innerWidth;
+  const H = window.innerHeight;
+  const svgNS = 'http://www.w3.org/2000/svg';
+  const container = document.getElementById('mindmap-container');
+  const tooltip = document.getElementById('tooltip');
+  const detailCard = document.getElementById('detail-card');
+
+  const svg = document.createElementNS(svgNS, 'svg');
+  svg.setAttribute('width', W);
+  svg.setAttribute('height', H);
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  const gRoot = document.createElementNS(svgNS, 'g');
+  gRoot.setAttribute('id', 'root-group');
+  svg.appendChild(gRoot);
+
+  const defs = document.createElementNS(svgNS, 'defs');
+  const glowFilter = document.createElementNS(svgNS, 'filter');
+  glowFilter.setAttribute('id', 'glow');
+  glowFilter.innerHTML = '<feGaussianBlur stdDeviation="4" result="blur"/><feComposite in="SourceGraphic" in2="blur" operator="over"/>';
+  defs.appendChild(glowFilter);
+
+  const shadowFilter = document.createElementNS(svgNS, 'filter');
+  shadowFilter.setAttribute('id', 'shadow');
+  shadowFilter.innerHTML = '<feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.3"/>';
+  defs.appendChild(shadowFilter);
+  svg.appendChild(defs);
+
+  container.appendChild(svg);
+
+  const centerX = W / 2;
+  const centerY = H / 2;
+
+  const centerNode = {
+    id: 'center', label: '大问题\n哲学思维', cx: centerX, cy: centerY, r: 56,
+    color: '#f59e0b', category: 'core',
+    detail: 'Robert C. Solomon与Kathleen M. Higgins合著的《大问题：简明哲学导论》是全球最受欢迎的哲学入门教材之一。不同于传统的哲学史或按哲学家编排的导论，本书以一系列"大问题"为线索——生活的意义是什么？上帝存在吗？什么是实在？什么是自我？什么是自由？——引导读者像哲学家一样思考。Solomon的核心信念是：哲学不是一套现成的答案，而是一种持续的追问活动。每个人都可以、也应该成为自己生活的哲学家。第10版延续了本书标志性的清晰文风、丰富案例和引导式提问，被誉为"让哲学从象牙塔走入日常生活的最佳桥梁"。'
+  };
+
+  const branches = [
+    {
+      id: 'branch1', label: '哲学的\n核心追问', cx: 0, cy: 0, r: 46, color: '#f59e0b',
+      angle: -90, distance: 210, category: 'questions',
+      detail: '哲学始于惊奇，始于对世界和自身存在的根本性追问。Solomon以七个"大问题"展开全书，这些问题是人类思想史上反复出现的核心议题，至今没有终极答案——而这恰恰是哲学的价值所在。',
+      children: [
+        { id: 's1', label: '生活的\n意义', r: 32, color: '#fbbf24', detail: '生活有意义吗？如果有，它来自哪里？亚里士多德的"幸福"(eudaimonia)、加缪的荒谬主义、托尔斯泰的信仰追问——不同传统给出截然不同的回答。关键不在于找到"正确"答案，而在于理解每种回答背后的预设。' },
+        { id: 's2', label: '上帝\n存在吗？', r: 32, color: '#fbbf24', detail: '安瑟伦的本体论论证、阿奎那的宇宙论论证、佩利的钟表匠论证（设计论论证）是三大经典有神论论证。而恶的问题（如果上帝全善全能，为何允许恶存在？）则是最有力的反驳。哲学分析这些论证的逻辑有效性，而非给出教条式答案。' },
+        { id: 's3', label: '什么是\n实在？', r: 32, color: '#fbbf24', detail: '我们感知到的世界是真实的吗？柏拉图的洞穴比喻、笛卡尔的"恶魔欺骗"假说、普特南的"缸中之脑"——形而上学追问：存在本身是什么？在现象背后有无更根本的实在？这是哲学最深层的追问之一。' },
+        { id: 's4', label: '自我的\n本质', r: 32, color: '#fbbf24', detail: '"我是谁？"笛卡尔的"我思故我在"确立了自我作为思维主体的地位；休谟则认为自我只是"一束知觉"的集合；佛教传统否定恒常自体的存在。当代神经科学又为这场争论提供了全新数据。' },
+        { id: 's5', label: '什么是\n自由？', r: 32, color: '#fbbf24', detail: '如果一切都有原因，自由还存在吗？决定论、自由意志论与相容论分别给出不同回答。Solomon特别指出：自由不仅是形而上学问题，更是伦理学问题——我们需要"足够"的自由来承担道德责任。' },
+        { id: 's6', label: '道德从\n何而来？', r: 32, color: '#fbbf24', detail: '道德是客观存在的，还是人类约定？康德的道义论（义务）、边沁/密尔的功利主义（后果最大化）、亚里士多德的德性伦理（品格养成）——三大伦理框架各有优劣，理解它们比选择"哪一个是对的"更有价值。' },
+        { id: 's7', label: '什么是\n正义？', r: 32, color: '#fbbf24', detail: '柏拉图将正义视为"各安其位"的秩序；罗尔斯提出"无知之幕"下的公平原则；诺齐克强调个人权利优先于再分配。正义问题的核心是：我们如何在一起好好生活？政治哲学就是从这一追问出发的。' },
+        { id: 's8', label: '什么是\n美？', r: 32, color: '#fbbf24', detail: '美是客观属性还是主观感受？从柏拉图的"美本身"到康德的"无利害的愉悦"，再到当代关于艺术定义之争——美学追问的不只是"什么是好艺术"，更是"感知和判断如何运作"的深层问题。' }
+      ]
+    },
+    {
+      id: 'branch2', label: '哲学思维\n方式', cx: 0, cy: 0, r: 44, color: '#ef4444',
+      angle: -30, distance: 215, category: 'methods',
+      detail: '哲学的核心不是记住谁说了什么，而是学会如何哲学地思考。Solomon强调：哲学是一种活动(activity)，而非一套已完成的知识体系。本章梳理了哲学思考的六种基本方式。',
+      children: [
+        { id: 't1', label: '概念分析\nAnalysis', r: 30, color: '#f87171', detail: '哲学始于澄清概念。当我们讨论"自由""正义""知识"时，我们到底在说什么？概念分析要求精确界定术语的边界——很多时候争论之所以无解，是因为双方在使用相同词汇但赋予不同含义。' },
+        { id: 't2', label: '逻辑推理\nLogic', r: 30, color: '#f87171', detail: '哲学论证的骨架是逻辑。演绎推理从前提必然推出结论；归纳推理从经验提供概率支持。学习识别有效论证与谬误（如循环论证、偷换概念、诉诸情感）是哲学思维的基本训练。' },
+        { id: 't3', label: '思想实验\nExperiment', r: 30, color: '#f87171', detail: '哲学不依赖实验室，但依赖思想实验。柏拉图的戒指、诺齐克的体验机器、汤姆逊的小提琴家——通过构造想象的极限情境检验我们的直觉和原则，是哲学最独特的思维工具。' },
+        { id: 't4', label: '怀疑论\nSkepticism', r: 30, color: '#f87171', detail: '"你怎么知道？"是哲学家的标志性问句。健康的怀疑不意味着否定一切，而是对所有声称"确定无疑"的知识保持审慎距离。笛卡尔的方法论怀疑是典型示范。' },
+        { id: 't5', label: '辩证法\nDialectic', r: 30, color: '#f87171', detail: '苏格拉底→黑格尔→马克思传承的辩证方法：通过正题-反题-合题的动态过程逼近更全面的理解。辩证思维拒绝静止的、非此即彼的立场，追求在张力中把握复杂性的综合视角。' },
+        { id: 't6', label: '现象学\nPhenomenology', r: 30, color: '#f87171', detail: '胡塞尔"回到事物本身"——悬置前见，如实地描述意识经验。现象学方法强调：在做出任何理论判断之前，先细致入微地观察事物"在世界中呈现"的方式。这对理解意识、时间、身体体验尤为重要。' }
+      ]
+    },
+    {
+      id: 'branch3', label: '哲学分支\n领域', cx: 0, cy: 0, r: 44, color: '#3b82f6',
+      angle: 30, distance: 215, category: 'branches',
+      detail: '哲学不是铁板一块，而是由多个相互关联的分支领域组成。Solomon在文中以清晰的脉络展示了这一知识地图，每个分支都对应特定的追问方向和论证风格。',
+      children: [
+        { id: 'v1', label: '形而上\n学', r: 30, color: '#60a5fa', detail: '追问"存在本身是什么"：实在与现象、心与物、时间与空间、因果关系、同一性与变化。亚里士多德称之为"第一哲学"，是所有哲学追问中最基础的层面——在问"如何生活"之前，先要问"世界是怎样的"。' },
+        { id: 'v2', label: '认识论\nEpistemology', r: 30, color: '#60a5fa', detail: '追问"我们如何知道"：知识的来源（理性vs经验）、知识的边界（我们能知道什么）、真理的标准（符合论vs融贯论vs实用论）。从柏拉图到盖梯尔问题，认识论是哲学中最"实用"的分支之一。' },
+        { id: 'v3', label: '伦理学\nEthics', r: 30, color: '#60a5fa', detail: '追问"我们应该如何生活"：什么是善？道德义务从何而来？道义论（遵循规则）、后果论（追求最优结果）、德性伦理（培养品格）构成三大传统，现实道德推理往往混合三者。' },
+        { id: 'v4', label: '政治哲学\nPolitics', r: 30, color: '#60a5fa', detail: '追问"我们如何在一起生活"：国家存在的正当性、权利与义务的来源、自由与平等的张力、正义的分配原则。从柏拉图《理想国》到罗尔斯《正义论》，政治哲学始终在追问"好社会"的蓝图。' },
+        { id: 'v5', label: '心灵哲学\nMind', r: 30, color: '#60a5fa', detail: '追问"意识是什么"：心身问题(心与脑是同一的，还是不同的实体？)、意识难题(物理过程如何产生主观体验？)、他人心灵问题(我如何知道他人在思考？)。AI时代使心身问题从思辨走向工程实践。' },
+        { id: 'v6', label: '宗教哲学\nReligion', r: 30, color: '#60a5fa', detail: '理性审视宗教信仰的合理性：信仰与理性的关系、神正论（恶的问题）、宗教体验的可信度、宗教多元主义的挑战。宗教哲学不同于神学——它不预设某一宗教传统为真，而是对所有宗教声称进行哲学检验。' },
+        { id: 'v7', label: '美学\nAesthetics', r: 30, color: '#60a5fa', detail: '追问"美和艺术的本质"：美的客观性vs主观性、艺术的界定（杜尚的小便池是艺术吗？）、审美体验与日常体验的区别、艺术的价值（认识价值、道德价值、纯粹快感）。' }
+      ]
+    },
+    {
+      id: 'branch4', label: '重要哲学\n家线索', cx: 0, cy: 0, r: 42, color: '#10b981',
+      angle: 90, distance: 210, category: 'philosophers',
+      detail: 'Solomon不是按哲学家顺序编排全书，但各章自然地串联起西方哲学传统中的关键人物。理解这些思想家的核心贡献，是建立哲学思维地图的必经之路。',
+      children: [
+        { id: 'q1', label: '苏格拉底\nSocrates', r: 28, color: '#34d399', detail: '哲学精神的化身——"未经审视的生活不值得过"。苏格拉底方法的精髓：承认无知是一切智慧的开端，通过持续提问揭示对方论证中的矛盾和未经检验的假设。他没有留下任何著作，却定义了哲学的意义。' },
+        { id: 'q2', label: '柏拉图\nPlato', r: 28, color: '#34d399', detail: '理念论：我们感知的世界只是完美"理念"世界的不完美摹本。洞穴比喻揭示了哲学旅程的本质——从蒙昧到启蒙，从影子到光。理想国探讨了正义城邦的蓝图，影响延续至今。' },
+        { id: 'q3', label: '亚里士多德\nAristotle', r: 28, color: '#34d399', detail: '以经验观察为基础的务实哲学：形式与质料、四因说、中庸之道(Golden Mean)、目的论世界观。德性伦理学的奠基人——善的生活不是遵守规则，而是养成卓越的品格习惯。' },
+        { id: 'q4', label: '笛卡尔\nDescartes', r: 28, color: '#34d399', detail: '近代哲学之父。"我思故我在"(Cogito)为知识找到了一个不可怀疑的基点。心物二元论——意识和物质是两种根本不同的实体——塑造了此后四百年的心身问题讨论。' },
+        { id: 'q5', label: '康德\nKant', r: 28, color: '#34d399', detail: '哥白尼式革命：不是我们的知识符合对象，而是对象符合我们的认知形式。范畴命令(Categorical Imperative)："只按照你同时愿意它成为普遍法则的准则去行动。"将道德基础从后果转移到理性本身。' },
+        { id: 'q6', label: '尼采\nNietzsche', r: 28, color: '#34d399', detail: '"上帝已死"——不是庆祝，而是警示：当传统价值基础崩塌后，人类必须自己创造意义。"权力意志"和"永恒轮回"是对生命肯定的极致表达。每个哲学学生都必须面对尼采的挑战。' },
+        { id: 'q7', label: '萨特\nSartre', r: 28, color: '#34d399', detail: '"存在先于本质"——人首先存在，然后通过自由选择定义自己。这种激进自由是一种负担：我们必须为自己的选择承担全部责任，没有"人性"或"上帝的计划"可以借口。存在主义的核心是行动。' }
+      ]
+    },
+    {
+      id: 'branch5', label: '论证与\n思辨工具', cx: 0, cy: 0, r: 42, color: '#8b5cf6',
+      angle: 150, distance: 215, category: 'tools',
+      detail: 'Solomon在书中贯穿展示了哲学思辨的核心工具。这些工具不仅适用于哲学问题，更是任何深度思考的通用技能。',
+      children: [
+        { id: 'b1', label: '论证分析\nStructure', r: 30, color: '#a78bfa', detail: '任何哲学观点背后都是一个论证：前提 → 推理 → 结论。学会拆解论证——找前提、检推理、验结论——是哲学思维的基本功。好的哲学批评从不攻击人，只攻击论证中的逻辑漏洞。' },
+        { id: 'b2', label: '归谬法\nReductio', r: 30, color: '#a78bfa', detail: '假设对方的观点为真，推导出荒谬或自相矛盾的结果，从而证明该观点不成立。这是最优雅的反驳方法——不是从外部攻击，而是从内部瓦解。苏格拉底与对手对话中的经典手法。' },
+        { id: 'b3', label: '奥卡姆\n剃刀', r: 30, color: '#a78bfa', detail: '"如无必要，勿增实体。"——当多个理论都能解释同一现象时，最简单的那个更可能是正确的。这不是逻辑必然性，而是方法论审慎原则：避免不必要的复杂性是对思维的经济管理。' },
+        { id: 'b4', label: '思想实验\nThought Exp', r: 30, color: '#a78bfa', detail: '哲学实验室里的虚拟实验：改变一个变量，观察直觉判断如何变化。电车难题、中文房间、孪生地球——每个经典思想实验都精确地分离出一个概念的核心要素，迫使我们对直觉进行理性反思。' },
+        { id: 'b5', label: '区分与\n澄清', r: 30, color: '#a78bfa', detail: '"区别有多大差别，就造成多大差别。"——概念区分是哲学最基础也是最精妙的工作：事实/价值、先天/后天、分析/综合、描述性/规范性。许多"哲学问题"其实源自混淆了不同层面的概念。' },
+        { id: 'b6', label: '溯因推理\nAbduction', r: 30, color: '#a78bfa', detail: '不同于演绎（必然推理）和归纳（概率推理），溯因推理从令人惊讶的事实出发，寻找"最佳解释"。皮尔士认为这是科学发现和日常推理中最常见的模式——"如果X为真，这个事实就不奇怪了"。' }
+      ]
+    },
+    {
+      id: 'branch6', label: '生活的\n哲学实践', cx: 0, cy: 0, r: 42, color: '#ec4899',
+      angle: 210, distance: 210, category: 'practice',
+      detail: 'Solomon全书的最终指向是：哲学不是学术奢侈品，而是每个人面对生活所需的思维方式。本章汇集了将哲学思维融入日常生活的实践路径。',
+      children: [
+        { id: 'p1', label: '审视信念\nExamine', r: 30, color: '#f472b6', detail: '定期对自己的核心信念进行"哲学审计"：我真的相信这一点吗？为什么？它是基于证据还是习惯？如果换一个时代/文化/出身，我还会持有这个信念吗？苏格拉底式的自我审视不是自我怀疑，而是自我澄清。' },
+        { id: 'p2', label: '伦理决策\nDecide', r: 30, color: '#f472b6', detail: '面对道德困境时，有意识地使用多种伦理框架：康德式（这能成为普遍法则吗？）+ 功利式（什么选择带来最大净收益？）+ 德性式（一个有品格的人会怎么做？）。多视角交叉比单一框架可靠得多。' },
+        { id: 'p3', label: '理解分歧\nUnderstand', r: 30, color: '#f472b6', detail: '哲学训练的核心收获之一：理解与你意见相左的人。不是"容忍"不同意见，而是真正进入对方的论证结构，找到其内部逻辑——即使你最终不同意。这种能力是民主社会和健康人际关系的基石。' },
+        { id: 'p4', label: '批判阅读\nRead', r: 30, color: '#f472b6', detail: '用哲学方法阅读任何严肃文本：作者的论证是什么？前提可靠吗？推理有效吗？有未被检验的预设吗？与自己持有的信念有何张力？批判阅读让阅读从"接收信息"升华为"与作者对话"。' },
+        { id: 'p5', label: '写作清\n晰化', r: 30, color: '#f472b6', detail: '哲学写作的核心技巧是精确。尝试将模糊的想法写清楚、把直觉判断转化为论证、用"如果有人反对，他会怎么说"来检测自己的观点。写作是思维的显影剂——在表达之前，我们常常不知道自己在想什么。' },
+        { id: 'p6', label: '哲学对话\nDialogue', r: 30, color: '#f472b6', detail: '建立哲学对话的习惯——与朋友、同事或家人讨论"大问题"。不是辩论赛（谁赢谁输），而是共同探索（我们一起能发现什么）。苏格拉底的遗产：最好的哲学发生在对话中，而非独白中。' }
+      ]
+    }
+  ];
+
+  // Layout: calculate positions for each branch and its children
+  branches.forEach((b, bi) => {
+    const rad = (b.angle * Math.PI) / 180;
+    b.cx = centerX + b.distance * Math.cos(rad);
+    b.cy = centerY + b.distance * Math.sin(rad);
+    if (b.children) {
+      const n = b.children.length;
+      const spreadAngle = Math.min(Math.PI * 0.65, (n - 1) * 0.42);
+      const baseAng = rad + Math.PI;
+      b.children.forEach((ch, ci) => {
+        const ca = baseAng - spreadAngle / 2 + (spreadAngle / (n - 1 || 1)) * ci;
+        ch.cx = b.cx + 95 * Math.cos(ca);
+        ch.cy = b.cy + 95 * Math.sin(ca);
+      });
+    }
+  });
+
+  // Draw connections
+  branches.forEach(b => {
+    const line = document.createElementNS(svgNS, 'line');
+    line.setAttribute('x1', centerX); line.setAttribute('y1', centerY);
+    line.setAttribute('x2', b.cx); line.setAttribute('y2', b.cy);
+    line.setAttribute('stroke', b.color);
+    line.setAttribute('stroke-width', '2.5');
+    line.setAttribute('opacity', '0.5');
+    line.classList.add('conn-line');
+    gRoot.appendChild(line);
+
+    if (b.children) {
+      b.children.forEach(ch => {
+        const subLine = document.createElementNS(svgNS, 'line');
+        subLine.setAttribute('x1', b.cx); subLine.setAttribute('y1', b.cy);
+        subLine.setAttribute('x2', ch.cx); subLine.setAttribute('y2', ch.cy);
+        subLine.setAttribute('stroke', b.color);
+        subLine.setAttribute('stroke-width', '1.5');
+        subLine.setAttribute('opacity', '0.3');
+        subLine.classList.add('conn-line');
+        gRoot.appendChild(subLine);
+      });
+    }
+  });
+
+  const allNodes = [];
+
+  // Draw center node
+  function drawNode(node) {
+    const g = document.createElementNS(svgNS, 'g');
+    g.setAttribute('transform', `translate(${node.cx},${node.cy})`);
+    g.classList.add('node-group');
+    g.setAttribute('data-id', node.id);
+    g.setAttribute('data-detail', node.detail || '');
+    g.setAttribute('data-label', node.label.replace(/\n/g, ' '));
+
+    const circle = document.createElementNS(svgNS, 'circle');
+    circle.setAttribute('r', node.r);
+    circle.setAttribute('fill', node.color);
+    circle.setAttribute('opacity', node.id === 'center' ? '1' : '0.85');
+    circle.setAttribute('filter', 'url(#shadow)');
+    circle.classList.add('node-circle');
+    g.appendChild(circle);
+
+    const lines = node.label.split('\n');
+    const text = document.createElementNS(svgNS, 'text');
+    text.classList.add('node-text');
+    text.setAttribute('text-anchor', 'middle');
+    text.setAttribute('fill', '#fff');
+    text.setAttribute('font-size', node.r > 40 ? '13px' : '11px');
+    text.setAttribute('font-weight', '600');
+    const lineHeight = node.r > 40 ? 17 : 15;
+    const startY = -(lines.length - 1) * lineHeight / 2;
+    lines.forEach((l, i) => {
+      const tspan = document.createElementNS(svgNS, 'tspan');
+      tspan.setAttribute('x', '0');
+      tspan.setAttribute('y', startY + i * lineHeight);
+      tspan.textContent = l;
+      text.appendChild(tspan);
+    });
+    g.appendChild(text);
+
+    gRoot.appendChild(g);
+    allNodes.push({ id: node.id, g, label: node.label.replace(/\n/g, ' '), detail: node.detail || '', color: node.color });
+  }
+
+  drawNode(centerNode);
+  branches.forEach(b => { drawNode(b); if (b.children) b.children.forEach(ch => drawNode(ch)); });
+
+  // Event handlers
+  let isPanning = false;
+  let startX, startY;
+  let translateX = 0, translateY = 0;
+  let scale = 1;
+
+  function updateTransform() {
+    gRoot.setAttribute('transform', `translate(${translateX},${translateY}) scale(${scale})`);
+  }
+
+  svg.addEventListener('mousedown', (e) => {
+    if (e.target === svg) {
+      isPanning = true;
+      startX = e.clientX - translateX;
+      startY = e.clientY - translateY;
+      container.classList.add('panning');
+    }
+  });
+
+  window.addEventListener('mousemove', (e) => {
+    if (isPanning) {
+      translateX = e.clientX - startX;
+      translateY = e.clientY - startY;
+      updateTransform();
+    }
+    // Tooltip
+    const hovered = allNodes.find(n => {
+      const rect = n.g.getBoundingClientRect();
+      return e.clientX >= rect.left && e.clientX <= rect.right &&
+             e.clientY >= rect.top && e.clientY <= rect.bottom;
+    });
+    if (hovered) {
+      tooltip.textContent = hovered.label;
+      tooltip.style.left = (e.clientX + 16) + 'px';
+      tooltip.style.top = (e.clientY - 40) + 'px';
+      tooltip.classList.add('visible');
+    } else {
+      tooltip.classList.remove('visible');
+    }
+  });
+
+  window.addEventListener('mouseup', () => {
+    isPanning = false;
+    container.classList.remove('panning');
+  });
+
+  svg.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? 0.9 : 1.1;
+    scale = Math.min(Math.max(scale * delta, 0.3), 3);
+    updateTransform();
+  });
+
+  // Touch support
+  svg.addEventListener('touchstart', (e) => {
+    if (e.target === svg && e.touches.length === 1) {
+      isPanning = true;
+      startX = e.touches[0].clientX - translateX;
+      startY = e.touches[0].clientY - translateY;
+    }
+  });
+  svg.addEventListener('touchmove', (e) => {
+    if (isPanning && e.touches.length === 1) {
+      translateX = e.touches[0].clientX - startX;
+      translateY = e.touches[0].clientY - startY;
+      updateTransform();
+    }
+  });
+  svg.addEventListener('touchend', () => { isPanning = false; });
+
+  // Double-click node to show detail
+  svg.addEventListener('dblclick', (e) => {
+    const target = e.target.closest('.node-group');
+    if (!target) return;
+    const node = allNodes.find(n => n.g === target);
+    if (node && node.detail) {
+      document.getElementById('detail-title').textContent = node.label;
+      document.getElementById('detail-content').textContent = node.detail;
+      detailCard.classList.add('show');
+    }
+  });
+
+  document.getElementById('close-detail').addEventListener('click', () => {
+    detailCard.classList.remove('show');
+  });
+
+  // Zoom controls
+  document.getElementById('btn-zoom-in').addEventListener('click', () => {
+    scale = Math.min(scale * 1.2, 3);
+    updateTransform();
+  });
+  document.getElementById('btn-zoom-out').addEventListener('click', () => {
+    scale = Math.max(scale * 0.8, 0.3);
+    updateTransform();
+  });
+  document.getElementById('btn-reset').addEventListener('click', () => {
+    scale = 1; translateX = 0; translateY = 0;
+    updateTransform();
+  });
+
+})();
+</script>
+</body>
+</html>
