@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 无畏 · 思维导图</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --card: #1e293b;
+    --border: #334155;
+    --text: #e2e8f0;
+    --text-secondary: #94a3b8;
+    --accent: #f59e0b;
+    --accent2: #8b5cf6;
+    --accent3: #3b82f6;
+    --accent4: #10b981;
+    --accent5: #ec4899;
+    --accent6: #f97316;
+    --node-bg: #1e293b;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow: hidden;
+    height: 100vh;
+    user-select: none;
+  }
+  header {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: linear-gradient(180deg, rgba(15,23,42,0.98) 60%, rgba(15,23,42,0) 100%);
+    padding: 20px 30px 35px;
+    pointer-events: none;
+  }
+  header .title-area { pointer-events: auto; }
+  header h1 {
+    font-size: 22px; font-weight: 700; color: var(--accent);
+    letter-spacing: 1px;
+  }
+  header .subtitle {
+    font-size: 13px; color: var(--text-secondary); margin-top: 4px;
+  }
+  header .date {
+    font-size: 12px; color: var(--text-secondary); margin-top: 2px; opacity: 0.7;
+  }
+  .legend {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 100;
+    display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;
+  }
+  .legend-item {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 12px; color: var(--text-secondary);
+  }
+  .legend-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+  }
+  .controls {
+    position: fixed; top: 20px; right: 30px; z-index: 101;
+    display: flex; gap: 8px;
+  }
+  .ctrl-btn {
+    width: 36px; height: 36px; border-radius: 8px;
+    border: 1px solid var(--border); background: var(--card);
+    color: var(--text); cursor: pointer; font-size: 16px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+  .ctrl-btn:hover { background: var(--border); }
+  #mindmap-container {
+    width: 100%; height: 100vh;
+    cursor: grab;
+  }
+  #mindmap-container:active { cursor: grabbing; }
+  #mindmap-container.panning { cursor: grabbing; }
+  svg { display: block; }
+  .node-group { cursor: pointer; transition: opacity 0.3s; }
+  .node-group:hover .node-circle { filter: brightness(1.3); }
+  .node-group:hover .node-text { font-weight: 700; }
+  .tooltip {
+    position: fixed; z-index: 200; pointer-events: none;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 10px; padding: 14px 18px; max-width: 320px;
+    opacity: 0; transition: opacity 0.2s;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  }
+  .tooltip.visible { opacity: 1; }
+  .tooltip h3 { font-size: 14px; color: var(--accent); margin-bottom: 6px; }
+  .tooltip p { font-size: 12px; color: var(--text-secondary); line-height: 1.6; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="title-area">
+    <h1>📚 每日一学 · 无畏</h1>
+    <div class="subtitle">Daring Greatly — Brené Brown / 布琳·布朗</div>
+    <div class="date">2026年8月4日</div>
+  </div>
+</header>
+
+<div class="controls">
+  <button class="ctrl-btn" id="btnZoomIn" title="放大">+</button>
+  <button class="ctrl-btn" id="btnZoomOut" title="缩小">−</button>
+  <button class="ctrl-btn" id="btnReset" title="重置">⟲</button>
+</div>
+
+<div id="mindmap-container">
+  <svg id="mindmap" xmlns="http://www.w3.org/2000/svg"></svg>
+</div>
+
+<div class="tooltip" id="tooltip">
+  <h3 id="tt-title"></h3>
+  <p id="tt-desc"></p>
+</div>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:#f59e0b"></div> 核心洞见</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#8b5cf6"></div> 四要素框架</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#3b82f6"></div> 主要知识点</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#10b981"></div> 金句</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#ec4899"></div> 行动建议</div>
+</div>
+
+<script>
+(function() {
+  const svg = document.getElementById('mindmap');
+  const container = document.getElementById('mindmap-container');
+  const tooltip = document.getElementById('tooltip');
+  const ttTitle = document.getElementById('tt-title');
+  const ttDesc = document.getElementById('tt-desc');
+
+  // State
+  let scale = 1;
+  let tx = 0, ty = 0;
+  let isPanning = false;
+  let startX, startY, startTX, startTY;
+
+  function setTransform() {
+    svg.setAttribute('transform', `translate(${tx},${ty}) scale(${scale})`);
+  }
+
+  // Pan
+  container.addEventListener('mousedown', e => {
+    if (e.target.closest('.node-group')) return;
+    isPanning = true;
+    container.classList.add('panning');
+    startX = e.clientX; startY = e.clientY;
+    startTX = tx; startTY = ty;
+  });
+  window.addEventListener('mousemove', e => {
+    if (!isPanning) return;
+    tx = startTX + (e.clientX - startX);
+    ty = startTY + (e.clientY - startY);
+    setTransform();
+  });
+  window.addEventListener('mouseup', () => {
+    isPanning = false;
+    container.classList.remove('panning');
+  });
+
+  // Zoom controls
+  document.getElementById('btnZoomIn').addEventListener('click', () => {
+    scale = Math.min(scale * 1.2, 3);
+    setTransform();
+  });
+  document.getElementById('btnZoomOut').addEventListener('click', () => {
+    scale = Math.max(scale / 1.2, 0.3);
+    setTransform();
+  });
+  document.getElementById('btnReset').addEventListener('click', () => {
+    scale = 1; tx = 0; ty = 0;
+    setTransform();
+  });
+
+  // Wheel zoom
+  container.addEventListener('wheel', e => {
+    e.preventDefault();
+    const ds = e.deltaY < 0 ? 1.1 : 0.9;
+    const rect = container.getBoundingClientRect();
+    const mx = e.clientX - rect.left;
+    const my = e.clientY - rect.top;
+    const newScale = Math.max(0.3, Math.min(3, scale * ds));
+    tx = mx - (mx - tx) * (newScale / scale);
+    ty = my - (my - ty) * (newScale / scale);
+    scale = newScale;
+    setTransform();
+  }, { passive: false });
+
+  // Data
+  const nodes = [
+    // ROOT
+    { id: 'root', x: 680, y: 400, r: 52, color: '#f59e0b', label: '无畏', sub: 'Daring Greatly', desc: 'Brené Brown 著 | 脆弱不是软弱，而是勇气最精确的度量' },
+
+    // Branch 1: 核心洞见 (accent)
+    { id: 'b1', x: 680, y: 160, r: 34, color: '#f59e0b', label: '核心洞见', desc: '脆弱是勇气、同理心与联结的诞生之地' },
+    { id: 'b1a', x: 500, y: 80, r: 28, color: '#f59e0b', label: '脆弱≠软弱', desc: '脆弱是面对不确定性和情感暴露时的勇气。我们文化中最普遍的神话：脆弱是软弱' },
+    { id: 'b1b', x: 700, y: 55, r: 28, color: '#f59e0b', label: '竞技场隐喻', desc: '罗斯福演讲：重要的不是批评者，而是站在竞技场中的人——满脸尘土、汗水与鲜血，勇敢地奋斗' },
+    { id: 'b1c', x: 880, y: 80, r: 28, color: '#f59e0b', label: '麻木脆弱=麻木一切', desc: '我们无法选择性地麻木情绪。麻木脆弱的同时，也麻木了喜悦、感恩与幸福' },
+
+    // Branch 2: 四要素框架 (accent2)
+    { id: 'b2', x: 680, y: 640, r: 34, color: '#8b5cf6', label: '四要素框架', desc: '全情投入生活的四大支柱' },
+    { id: 'b2a', x: 400, y: 560, r: 28, color: '#8b5cf6', label: '脆弱', desc: '敢于暴露真实的自己，即使结果不确定。这是勇气之源，而非弱点' },
+    { id: 'b2b', x: 580, y: 530, r: 28, color: '#8b5cf6', label: '勇气', desc: 'Courage词源：拉丁语cor(心)——勇气就是袒露真心。说出你的故事，全心地' },
+    { id: 'b2c', x: 780, y: 530, r: 28, color: '#8b5cf6', label: '羞耻复原力', desc: '识别羞耻触发器→批判性觉察→触及他人→谈论羞耻。羞耻在沉默、评判和秘密中生长' },
+    { id: 'b2d', x: 960, y: 560, r: 28, color: '#8b5cf6', label: '同理心', desc: '与某人一起感同身受，是羞耻的解药。同理心=换位思考+不评判+识别情绪+沟通理解' },
+
+    // Branch 3: 主要知识点 (accent3)
+    { id: 'b3', x: 260, y: 400, r: 34, color: '#3b82f6', label: '主要知识点', desc: '六大关键学习模块' },
+    { id: 'b3a', x: 80, y: 250, r: 28, color: '#3b82f6', label: '匮乏文化', desc: '永远不够——不够好、不够完美、不够瘦、不够成功。匮乏感是羞耻的温床' },
+    { id: 'b3b', x: 120, y: 380, r: 28, color: '#3b82f6', label: '羞耻 vs 内疚', desc: '羞耻="我很坏"（身份层面）；内疚="我做了一件坏事"（行为层面）。内疚可驱动改变，羞耻则摧毁自我价值' },
+    { id: 'b3c', x: 80, y: 510, r: 28, color: '#3b82f6', label: '勇气文化', desc: '职场/家庭中培养信任、开放与创新——敢于尝试、允许失败、坦诚反馈的文化' },
+    { id: 'b3d', x: 250, y: 600, r: 28, color: '#3b82f6', label: '全情投入十指标', desc: '真实、自我同情、复原精神、感恩与喜悦、直觉与信任、创造力、玩乐与休息、平静与冷静、意义工作、欢笑歌舞' },
+    { id: 'b3e', x: 120, y: 680, r: 28, color: '#3b82f6', label: '完美主义陷阱', desc: '完美主义不是追求卓越，而是相信"如果完美了，就不会被评判"。它是羞耻的20吨盾牌' },
+    { id: 'b3f', x: 80, y: 120, r: 28, color: '#3b82f6', label: '联结的力量', desc: '人天生渴望联结。羞耻切断联结；脆弱重建联结。联结赋予生命意义' },
+
+    // Branch 4: 金句 (accent4)
+    { id: 'b4', x: 1100, y: 400, r: 34, color: '#10b981', label: '金句', desc: '书中发人深省的箴言' },
+    { id: 'b4a', x: 1200, y: 200, r: 28, color: '#10b981', label: '金句一', desc: '"脆弱是我们衡量勇气最精确的尺度。"' },
+    { id: 'b4b', x: 1310, y: 320, r: 28, color: '#10b981', label: '金句二', desc: '"完美主义是羞耻的20吨盾牌，我们每天举着它，希望借此保护自己。"' },
+    { id: 'b4c', x: 1300, y: 460, r: 28, color: '#10b981', label: '金句三', desc: '"勇气始于展示自己、让别人看见我们。"' },
+    { id: 'b4d', x: 1200, y: 580, r: 28, color: '#10b981', label: '金句四', desc: '"如果你想建立联结，就必须让自己被看见——真正地看见。"' },
+    { id: 'b4e', x: 1060, y: 660, r: 28, color: '#10b981', label: '金句五', desc: '"我们是带着伤痕、而非完美无缺地走向彼此。"' },
+
+    // Branch 5: 行动建议 (accent5)
+    { id: 'b5', x: 680, y: 790, r: 34, color: '#ec4899', label: '行动建议', desc: '从认知到实践的五个步骤' },
+    { id: 'b5a', x: 440, y: 730, r: 28, color: '#ec4899', label: '练习脆弱', desc: '每天选择一个微小的"脆弱时刻"——分享真实想法、承认不确定、请求帮助' },
+    { id: 'b5b', x: 600, y: 730, r: 28, color: '#ec4899', label: '识别羞耻触发器', desc: '当感到"我不够好"时，暂停、深呼吸，问："发生了什么？背后的故事是什么？"' },
+    { id: 'b5c', x: 760, y: 730, r: 28, color: '#ec4899', label: '建立勇气文化', desc: '在团队或家庭中以身作则：坦诚分享失败、赞美尝试而非仅结果、创造安全感' },
+    { id: 'b5d', x: 920, y: 730, r: 28, color: '#ec4899', label: '培养同理心', desc: '倾听时不评判不修正；说"我也经历过"而非"你应该……"；陪伴而非修复' },
+    { id: 'b5e', x: 680, y: 730, r: 28, color: '#ec4899', label: '放下完美主义', desc: '将对"完美"的追求改为对"卓越"和"成长"的追求——足够好就是最好的开始' },
+  ];
+
+  const edges = [
+    ['root','b1'], ['root','b2'], ['root','b3'], ['root','b4'], ['root','b5'],
+    ['b1','b1a'], ['b1','b1b'], ['b1','b1c'],
+    ['b2','b2a'], ['b2','b2b'], ['b2','b2c'], ['b2','b2d'],
+    ['b3','b3a'], ['b3','b3b'], ['b3','b3c'], ['b3','b3d'], ['b3','b3e'], ['b3','b3f'],
+    ['b4','b4a'], ['b4','b4b'], ['b4','b4c'], ['b4','b4d'], ['b4','b4e'],
+    ['b5','b5a'], ['b5','b5b'], ['b5','b5c'], ['b5','b5d'], ['b5','b5e'],
+  ];
+
+  const nodeMap = {};
+  nodes.forEach(n => nodeMap[n.id] = n);
+
+  // Create SVG elements
+  const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+  g.setAttribute('id', 'main-group');
+
+  // Edges
+  edges.forEach(([from, to]) => {
+    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('x1', nodeMap[from].x);
+    line.setAttribute('y1', nodeMap[from].y);
+    line.setAttribute('x2', nodeMap[to].x);
+    line.setAttribute('y2', nodeMap[to].y);
+    line.setAttribute('stroke', '#334155');
+    line.setAttribute('stroke-width', '1.5');
+    line.setAttribute('stroke-dasharray', '4,3');
+    line.setAttribute('opacity', '0.5');
+    g.appendChild(line);
+  });
+
+  // Nodes
+  nodes.forEach(n => {
+    const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    group.setAttribute('class', 'node-group');
+    group.setAttribute('data-id', n.id);
+    group.setAttribute('transform', `translate(${n.x},${n.y})`);
+
+    // Circle
+    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    circle.setAttribute('class', 'node-circle');
+    circle.setAttribute('r', n.r);
+    circle.setAttribute('fill', n.id === 'root' ? n.color : 'var(--node-bg)');
+    circle.setAttribute('stroke', n.color);
+    circle.setAttribute('stroke-width', n.id === 'root' ? '3' : '2');
+    circle.setAttribute('opacity', n.id === 'root' ? '1' : '0.9');
+    group.appendChild(circle);
+
+    // Main label
+    const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    text.setAttribute('class', 'node-text');
+    text.setAttribute('text-anchor', 'middle');
+    text.setAttribute('dy', n.id === 'root' ? '-0.1em' : '0.35em');
+    text.setAttribute('fill', n.id === 'root' ? '#0f172a' : n.color);
+    text.setAttribute('font-size', n.id === 'root' ? '18' : '13');
+    text.setAttribute('font-weight', '700');
+    text.textContent = n.label;
+    group.appendChild(text);
+
+    // Sub label for root
+    if (n.id === 'root' && n.sub) {
+      const subText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      subText.setAttribute('text-anchor', 'middle');
+      subText.setAttribute('dy', '1.4em');
+      subText.setAttribute('fill', '#0f172a');
+      subText.setAttribute('font-size', '10');
+      subText.setAttribute('opacity', '0.7');
+      subText.textContent = n.sub;
+      group.appendChild(subText);
+    }
+
+    // Hover events
+    group.addEventListener('mouseenter', (e) => {
+      ttTitle.textContent = n.label;
+      ttDesc.textContent = n.desc;
+      tooltip.classList.add('visible');
+    });
+    group.addEventListener('mousemove', (e) => {
+      tooltip.style.left = (e.clientX + 16) + 'px';
+      tooltip.style.top = (e.clientY - 40) + 'px';
+    });
+    group.addEventListener('mouseleave', () => {
+      tooltip.classList.remove('visible');
+    });
+
+    g.appendChild(group);
+  });
+
+  svg.appendChild(g);
+
+  // Set viewBox large enough
+  svg.setAttribute('viewBox', '0 0 1440 900');
+  svg.setAttribute('width', '100%');
+  svg.setAttribute('height', '100%');
+
+  // Initial center offset
+  const rect = container.getBoundingClientRect();
+  tx = rect.width / 2 - 680;
+  ty = rect.height / 2 - 400;
+  setTransform();
+})();
+</script>
+
+</body>
+</html>
