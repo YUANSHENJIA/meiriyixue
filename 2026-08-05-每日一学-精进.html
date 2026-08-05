@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 精进 · 思维导图</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --card: #1e293b;
+    --border: #334155;
+    --text: #e2e8f0;
+    --text-secondary: #94a3b8;
+    --accent: #f59e0b;
+    --accent2: #8b5cf6;
+    --accent3: #3b82f6;
+    --accent4: #10b981;
+    --accent5: #ec4899;
+    --accent6: #f97316;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow: hidden;
+    height: 100vh;
+    user-select: none;
+  }
+  header {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: linear-gradient(180deg, rgba(15,23,42,0.98) 60%, rgba(15,23,42,0) 100%);
+    padding: 20px 30px 35px;
+    pointer-events: none;
+  }
+  header .title-area { pointer-events: auto; }
+  header h1 {
+    font-size: 22px; font-weight: 700; color: var(--accent);
+    letter-spacing: 1px;
+  }
+  header .subtitle {
+    font-size: 13px; color: var(--text-secondary); margin-top: 4px;
+  }
+  header .date {
+    font-size: 12px; color: var(--text-secondary); margin-top: 2px; opacity: 0.7;
+  }
+  .controls {
+    position: fixed; top: 20px; right: 30px; z-index: 101;
+    display: flex; gap: 8px;
+  }
+  .ctrl-btn {
+    width: 36px; height: 36px; border-radius: 8px;
+    border: 1px solid var(--border); background: var(--card);
+    color: var(--text); cursor: pointer; font-size: 16px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+  .ctrl-btn:hover { background: var(--border); }
+  #mindmap-container {
+    width: 100%; height: 100vh;
+    cursor: grab;
+  }
+  #mindmap-container:active { cursor: grabbing; }
+  #mindmap-container.panning { cursor: grabbing; }
+  svg { display: block; }
+  .node-group { cursor: pointer; transition: opacity 0.3s; }
+  .node-group:hover .node-circle { filter: brightness(1.3); }
+  .node-group:hover .node-text { font-weight: 700; }
+  .tooltip {
+    position: fixed; z-index: 200; pointer-events: none;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 10px; padding: 14px 18px; max-width: 320px;
+    opacity: 0; transition: opacity 0.2s;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  }
+  .tooltip.visible { opacity: 1; }
+  .tooltip h3 { font-size: 14px; color: var(--accent); margin-bottom: 6px; }
+  .tooltip p { font-size: 12px; color: var(--text-secondary); line-height: 1.6; }
+  .legend {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 100;
+    display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;
+  }
+  .legend-item {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 12px; color: var(--text-secondary);
+  }
+  .legend-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="title-area">
+    <h1>📚 每日一学 · 精进</h1>
+    <div class="subtitle">如何成为一个很厉害的人 — 采铜 著</div>
+    <div class="date">2026年8月5日</div>
+  </div>
+</header>
+
+<div class="controls">
+  <button class="ctrl-btn" id="btnZoomIn" title="放大">+</button>
+  <button class="ctrl-btn" id="btnZoomOut" title="缩小">−</button>
+  <button class="ctrl-btn" id="btnReset" title="重置">⟲</button>
+</div>
+
+<div id="mindmap-container">
+  <svg id="mindmap" xmlns="http://www.w3.org/2000/svg"></svg>
+</div>
+
+<div class="tooltip" id="tooltip">
+  <h3 id="tt-title"></h3>
+  <p id="tt-desc"></p>
+</div>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:#f59e0b"></div> 核心洞见</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#8b5cf6"></div> 七个精进维度</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#3b82f6"></div> 主要知识点</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#10b981"></div> 金句</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#ec4899"></div> 行动建议</div>
+</div>
+
+<script>
+(function() {
+  const svg = document.getElementById('mindmap');
+  const container = document.getElementById('mindmap-container');
+  const tooltip = document.getElementById('tooltip');
+  const ttTitle = document.getElementById('tt-title');
+  const ttDesc = document.getElementById('tt-desc');
+
+  let scale = 1;
+  let tx = 0, ty = 0;
+  let isPanning = false;
+  let startX, startY, startTX, startTY;
+
+  function setTransform() {
+    svg.setAttribute('transform', `translate(${tx},${ty}) scale(${scale})`);
+  }
+
+  container.addEventListener('mousedown', e => {
+    if (e.target.closest('.node-group')) return;
+    isPanning = true;
+    container.classList.add('panning');
+    startX = e.clientX; startY = e.clientY;
+    startTX = tx; startTY = ty;
+  });
+  window.addEventListener('mousemove', e => {
+    if (!isPanning) return;
+    tx = startTX + (e.clientX - startX);
+    ty = startTY + (e.clientY - startY);
+    setTransform();
+  });
+  window.addEventListener('mouseup', () => {
+    isPanning = false;
+    container.classList.remove('panning');
+  });
+
+  document.getElementById('btnZoomIn').addEventListener('click', () => {
+    scale = Math.min(scale * 1.2, 3);
+    setTransform();
+  });
+  document.getElementById('btnZoomOut').addEventListener('click', () => {
+    scale = Math.max(scale / 1.2, 0.3);
+    setTransform();
+  });
+  document.getElementById('btnReset').addEventListener('click', () => {
+    scale = 1; tx = 0; ty = 0;
+    setTransform();
+  });
+
+  container.addEventListener('wheel', e => {
+    e.preventDefault();
+    const ds = e.deltaY < 0 ? 1.1 : 0.9;
+    const rect = container.getBoundingClientRect();
+    const mx = e.clientX - rect.left;
+    const my = e.clientY - rect.top;
+    const newScale = Math.max(0.3, Math.min(3, scale * ds));
+    tx = mx - (mx - tx) * (newScale / scale);
+    ty = my - (my - ty) * (newScale / scale);
+    scale = newScale;
+    setTransform();
+  }, { passive: false });
+
+  const nodes = [
+    // ROOT
+    { id: 'root', x: 680, y: 420, r: 52, color: '#f59e0b', label: '精进', sub: '如何成为一个很厉害的人', desc: '采铜 著 | 用持续精进的行动，把时间铸成你独一无二的作品' },
+
+    // Branch 1: 核心洞见
+    { id: 'b1', x: 680, y: 150, r: 34, color: '#f59e0b', label: '核心洞见', desc: '真正的精进不是比别人强，而是比昨天的自己更懂得如何思考与行动' },
+    { id: 'b1a', x: 500, y: 65, r: 28, color: '#f59e0b', label: '时间视角决定格局', desc: '用"远期未来"的视角审视当下选择。五年后你想成为什么样的人？这个答案决定了今天的优先级' },
+    { id: 'b1b', x: 690, y: 40, r: 28, color: '#f59e0b', label: '产品思维', desc: '把学习和工作的成果看作"产品"——可交付、可迭代、可传播。每一次输出都是一次自我升级' },
+    { id: 'b1c', x: 870, y: 65, r: 28, color: '#f59e0b', label: '独特性即竞争力', desc: '不要追求标准答案式的成功。你的独特经历、技能组合和视角，才是不可替代的价值来源' },
+
+    // Branch 2: 七个精进维度
+    { id: 'b2', x: 680, y: 690, r: 34, color: '#8b5cf6', label: '七个精进维度', desc: '系统性自我提升的完整框架' },
+    { id: 'b2a', x: 360, y: 620, r: 26, color: '#8b5cf6', label: '1. 时间', desc: '用半衰期法则审视所有行为：做高收益值+长半衰期的事。把时间花在能持续产生价值的地方' },
+    { id: 'b2b', x: 500, y: 600, r: 26, color: '#8b5cf6', label: '2. 选择', desc: '以最高目标为决策准则。在格局之上做选择：更高的标准，才会有更好的选择' },
+    { id: 'b2c', x: 640, y: 590, r: 26, color: '#8b5cf6', label: '3. 行动', desc: '最小化可行产品：不必等到完美才出手。开始并完成一件事情，比做好它更重要' },
+    { id: 'b2d', x: 780, y: 590, r: 26, color: '#8b5cf6', label: '4. 学习', desc: '学会提问而非囤积知识。解码深层结构，让新旧知识在未来相遇并融合' },
+    { id: 'b2e', x: 920, y: 600, r: 26, color: '#8b5cf6', label: '5. 思维', desc: '简化是高级的思考。借助图解、矩阵和清单，为大脑"减负"——简洁是天才的姐妹' },
+    { id: 'b2f', x: 1060, y: 620, r: 26, color: '#8b5cf6', label: '6. 才能', desc: '专注优势领域，做"T型人才"。在擅长的地方深耕，比处处平庸更有效率' },
+    { id: 'b2g', x: 1160, y: 660, r: 26, color: '#8b5cf6', label: '7. 成功', desc: '每一个成功者都是唯一的。创造自己的道路，而不是复制别人的地图' },
+
+    // Branch 3: 主要知识点
+    { id: 'b3', x: 260, y: 420, r: 34, color: '#3b82f6', label: '主要知识点', desc: '七大核心概念详解' },
+    { id: 'b3a', x: 65, y: 180, r: 28, color: '#3b82f6', label: '半衰期法则', desc: '判断一件事值不值得做：收益半衰期越长越值得。阅读、写作、技能练习——长半衰期；刷短视频——短半衰期' },
+    { id: 'b3b', x: 80, y: 300, r: 28, color: '#3b82f6', label: '隐含假设', desc: '我们的选择常被"看不见的牢笼"束缚——如"必须二选一"。识别隐含假设，才能找到第三条路' },
+    { id: 'b3c', x: 70, y: 420, r: 28, color: '#3b82f6', label: '"精益创业"行动法', desc: '构建→测量→学习循环。与其纸上推演，不如做出最小可行产品去验证' },
+    { id: 'b3d', x: 75, y: 540, r: 28, color: '#3b82f6', label: '深度学习：解码', desc: '不仅看"是什么"和"怎么做"，更要追问"为什么"和"还能怎样"。三层解码：感受→评价→分析' },
+    { id: 'b3e', x: 75, y: 660, r: 28, color: '#3b82f6', label: '思维脚手架', desc: '清单（防遗漏）、矩阵（多维度对比）、图解（化繁为简）——用工具为思考搭建结构' },
+    { id: 'b3f', x: 260, y: 730, r: 28, color: '#3b82f6', label: '努力是一种才能', desc: '努力不是蛮干。找到自己的"甜蜜区"——兴趣+能力+价值的交集，持续投入' },
+    { id: 'b3g', x: 260, y: 820, r: 28, color: '#3b82f6', label: '非线性成长', desc: '人生不是爬梯子，而是种树。不追求线性晋升，追求能力树的丰富与独特' },
+
+    // Branch 4: 金句
+    { id: 'b4', x: 1100, y: 420, r: 34, color: '#10b981', label: '金句', desc: '书中发人深省的箴言' },
+    { id: 'b4a', x: 1180, y: 250, r: 28, color: '#10b981', label: '金句一', desc: '"一个人如何对待他的时间，决定了他可以成为什么样的人。"' },
+    { id: 'b4b', x: 1300, y: 320, r: 28, color: '#10b981', label: '金句二', desc: '"开始并完成一件事情，比做好它更重要。因为只要开始了，你就有机会把它做得更好。"' },
+    { id: 'b4c', x: 1310, y: 430, r: 28, color: '#10b981', label: '金句三', desc: '"在主流观点之外洞察出别人未曾发现的机会。"' },
+    { id: 'b4d', x: 1260, y: 550, r: 28, color: '#10b981', label: '金句四', desc: '"一个优秀的人，不仅要有深度，还要有温度；不仅要有理性，还要有感性。"' },
+    { id: 'b4e', x: 1100, y: 640, r: 28, color: '#10b981', label: '金句五', desc: '"保持你的独特性，是比刻意练习更重要的事。"' },
+
+    // Branch 5: 行动建议
+    { id: 'b5', x: 680, y: 860, r: 34, color: '#ec4899', label: '行动建议', desc: '从认知到实践的五项行动' },
+    { id: 'b5a', x: 380, y: 810, r: 28, color: '#ec4899', label: '五年愿景', desc: '写下五年后你理想中的一天是什么样子——用具体场景倒推今天的行动优先级' },
+    { id: 'b5b', x: 540, y: 810, r: 28, color: '#ec4899', label: '周度复盘', desc: '每周日回顾：这周做了多少长半衰期的事？哪些时间被短半衰期吞噬？' },
+    { id: 'b5c', x: 700, y: 810, r: 28, color: '#ec4899', label: 'Mvp实验', desc: '选择一个想了很久但未开始的项目，本周完成一个最小可行产品并分享出去' },
+    { id: 'b5d', x: 860, y: 810, r: 28, color: '#ec4899', label: '优势清单', desc: '列出你的三项核心优势，用具体案例证明。然后问：我如何让它们发挥更大价值？' },
+    { id: 'b5e', x: 1020, y: 810, r: 28, color: '#ec4899', label: '解码练习', desc: '每天选一篇好文章，不止读一遍：先用自己的话复述，再分析结构，最后追问"为什么"' },
+  ];
+
+  // Build edges (connections)
+  const edges = [];
+  const parentMap = {
+    'b1a': 'b1', 'b1b': 'b1', 'b1c': 'b1',
+    'b2a': 'b2', 'b2b': 'b2', 'b2c': 'b2', 'b2d': 'b2', 'b2e': 'b2', 'b2f': 'b2', 'b2g': 'b2',
+    'b3a': 'b3', 'b3b': 'b3', 'b3c': 'b3', 'b3d': 'b3', 'b3e': 'b3', 'b3f': 'b3', 'b3g': 'b3',
+    'b4a': 'b4', 'b4b': 'b4', 'b4c': 'b4', 'b4d': 'b4', 'b4e': 'b4',
+    'b5a': 'b5', 'b5b': 'b5', 'b5c': 'b5', 'b5d': 'b5', 'b5e': 'b5',
+    'b1': 'root', 'b2': 'root', 'b3': 'root', 'b4': 'root', 'b5': 'root'
+  };
+
+  const nodeMap = {};
+  nodes.forEach(n => { nodeMap[n.id] = n; });
+
+  // Render SVG
+  let html = '';
+  // Filter defs
+  html += `<defs>\n`;
+  const colors = ['#f59e0b', '#8b5cf6', '#3b82f6', '#10b981', '#ec4899', '#f97316'];
+  colors.forEach((c, i) => {
+    html += `  <filter id="glow${i}"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>\n`;
+  });
+  html += `</defs>\n`;
+
+  // Draw edges
+  html += `<g class="edges">\n`;
+  for (const [childId, parentId] of Object.entries(parentMap)) {
+    const child = nodeMap[childId];
+    const parent = nodeMap[parentId];
+    if (!child || !parent) continue;
+    const angle = Math.atan2(child.y - parent.y, child.x - parent.x);
+    const px = parent.x + parent.r * Math.cos(angle);
+    const py = parent.y + parent.r * Math.sin(angle);
+    const cx = child.x - child.r * Math.cos(angle);
+    const cy = child.y - child.r * Math.sin(angle);
+    html += `  <line x1="${px}" y1="${py}" x2="${cx}" y2="${cy}" stroke="${parent.color}" stroke-width="1.5" stroke-opacity="0.4"/>\n`;
+  }
+  html += `</g>\n`;
+
+  // Draw nodes
+  html += `<g class="nodes">\n`;
+  nodes.forEach(n => {
+    const fontSize = n.id === 'root' ? 14 : (n.r >= 30 ? 12 : 10);
+    const id = n.id;
+    html += `  <g class="node-group" data-id="${id}">\n`;
+    html += `    <circle class="node-circle" cx="${n.x}" cy="${n.y}" r="${n.r}" fill="${n.color}" fill-opacity="0.2" stroke="${n.color}" stroke-width="2"/>\n`;
+    html += `    <text class="node-text" x="${n.x}" y="${n.y - (n.r >= 34 ? 4 : 1)}" text-anchor="middle" fill="${n.color}" font-size="${fontSize}" font-weight="700">${n.label}</text>\n`;
+    if (n.sub) {
+      html += `    <text x="${n.x}" y="${n.y + 12}" text-anchor="middle" fill="#94a3b8" font-size="9">${n.sub}</text>\n`;
+    }
+    html += `  </g>\n`;
+  });
+  html += `</g>\n`;
+
+  svg.innerHTML = html;
+
+  // Tooltip handling
+  svg.addEventListener('mouseover', e => {
+    const group = e.target.closest('.node-group');
+    if (!group) return;
+    const id = group.dataset.id;
+    const node = nodeMap[id];
+    if (!node || !node.desc) return;
+    ttTitle.textContent = node.label;
+    ttDesc.textContent = node.desc;
+    tooltip.classList.add('visible');
+  });
+  svg.addEventListener('mousemove', e => {
+    tooltip.style.left = (e.clientX + 18) + 'px';
+    tooltip.style.top = (e.clientY - 10) + 'px';
+  });
+  svg.addEventListener('mouseout', e => {
+    const group = e.target.closest('.node-group');
+    if (!group) return;
+    tooltip.classList.remove('visible');
+  });
+
+  // Touch support for mobile
+  let lastDist = 0;
+  container.addEventListener('touchstart', e => {
+    if (e.touches.length === 1) {
+      isPanning = true;
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+      startTX = tx; startTY = ty;
+    } else if (e.touches.length === 2) {
+      isPanning = false;
+      lastDist = Math.hypot(
+        e.touches[0].clientX - e.touches[1].clientX,
+        e.touches[0].clientY - e.touches[1].clientY
+      );
+    }
+  });
+  container.addEventListener('touchmove', e => {
+    if (e.touches.length === 1 && isPanning) {
+      tx = startTX + (e.touches[0].clientX - startX);
+      ty = startTY + (e.touches[0].clientY - startY);
+      setTransform();
+    } else if (e.touches.length === 2) {
+      const dist = Math.hypot(
+        e.touches[0].clientX - e.touches[1].clientX,
+        e.touches[0].clientY - e.touches[1].clientY
+      );
+      if (lastDist) {
+        scale = Math.max(0.3, Math.min(3, scale * (dist / lastDist)));
+        setTransform();
+      }
+      lastDist = dist;
+    }
+  });
+  container.addEventListener('touchend', () => { isPanning = false; lastDist = 0; });
+})();
+</script>
+
+</body>
+</html>
