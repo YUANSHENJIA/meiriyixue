@@ -58,21 +58,16 @@
         
         .mindmap-container {
             position: relative;
+            padding-top: 60px;
+            margin-bottom: 30px;
+        }
+
+        .center-node {
             display: flex;
             justify-content: center;
-            align-items: flex-start;
-            min-height: 800px;
-            overflow-x: auto;
+            margin-bottom: 50px;
         }
-        
-        .center-node {
-            position: absolute;
-            left: 50%;
-            top: 40px;
-            transform: translateX(-50%);
-            z-index: 10;
-        }
-        
+
         .center-node .node-box {
             width: 280px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -82,64 +77,64 @@
             box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
             border: 2px solid rgba(255,255,255,0.1);
         }
-        
+
         .center-node .node-box h2 {
             font-size: 1.5em;
             color: white;
             margin-bottom: 8px;
         }
-        
+
         .center-node .node-box p {
             font-size: 0.9em;
             opacity: 0.9;
         }
-        
+
         .branches {
-            position: relative;
-            width: 1150px;
-            height: 900px;
-            margin-top: 140px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            max-width: 900px;
+            margin: 0 auto;
         }
-        
+
         .branch {
-            position: absolute;
-            width: 240px;
+            width: 100%;
         }
-        
+
         .branch-node {
             border-radius: 16px;
-            padding: 18px 16px;
+            padding: 20px 18px;
             box-shadow: 0 8px 25px rgba(0,0,0,0.3);
             transition: transform 0.3s ease;
-            cursor: pointer;
+            height: 100%;
         }
-        
+
         .branch-node:hover {
             transform: translateY(-5px);
         }
-        
+
         .branch-node h3 {
-            font-size: 1.05em;
-            margin-bottom: 10px;
+            font-size: 1.1em;
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
             gap: 8px;
         }
-        
+
         .branch-node ul {
             list-style: none;
             padding-left: 0;
         }
-        
+
         .branch-node li {
-            font-size: 0.82em;
-            padding: 6px 0;
+            font-size: 0.85em;
+            padding: 7px 0;
             padding-left: 18px;
             position: relative;
-            line-height: 1.5;
-            color: rgba(255,255,255,0.85);
+            line-height: 1.55;
+            color: rgba(255,255,255,0.9);
         }
-        
+
         .branch-node li::before {
             content: "▸";
             position: absolute;
@@ -147,38 +142,32 @@
             font-size: 0.75em;
             opacity: 0.7;
         }
-        
-        .branch-1 { top: 0; left: 0; }
+
         .branch-1 .branch-node {
             background: linear-gradient(145deg, #e74c3c, #c0392b);
             border: 2px solid rgba(231, 76, 60, 0.3);
         }
-        
-        .branch-2 { top: 0; right: 0; }
+
         .branch-2 .branch-node {
             background: linear-gradient(145deg, #3498db, #2980b9);
             border: 2px solid rgba(52, 152, 219, 0.3);
         }
-        
-        .branch-3 { top: 260px; left: 0; }
+
         .branch-3 .branch-node {
             background: linear-gradient(145deg, #27ae60, #229954);
             border: 2px solid rgba(39, 174, 96, 0.3);
         }
-        
-        .branch-4 { top: 260px; right: 0; }
+
         .branch-4 .branch-node {
             background: linear-gradient(145deg, #f39c12, #d68910);
             border: 2px solid rgba(243, 156, 18, 0.3);
         }
-        
-        .branch-5 { top: 520px; left: 80px; }
+
         .branch-5 .branch-node {
             background: linear-gradient(145deg, #9b59b6, #8e44ad);
             border: 2px solid rgba(155, 89, 182, 0.3);
         }
-        
-        .branch-6 { top: 520px; right: 80px; }
+
         .branch-6 .branch-node {
             background: linear-gradient(145deg, #1abc9c, #16a085);
             border: 2px solid rgba(26, 188, 156, 0.3);
@@ -302,16 +291,10 @@
 
         .icon { font-size: 1.2em; }
 
-        @media (max-width: 1100px) {
+        @media (max-width: 900px) {
             .branches {
-                width: 700px;
-                height: 1300px;
-                margin-top: 120px;
-            }
-            .branch {
-                width: 320px;
-                position: static !important;
-                margin-bottom: 25px;
+                grid-template-columns: 1fr;
+                max-width: 600px;
             }
             .center-node .node-box {
                 width: 240px;
@@ -327,7 +310,7 @@
             .header .subtitle { font-size: 1em; }
             .center-node .node-box { width: 200px; padding: 18px 14px; }
             .branch-node { padding: 14px 12px; }
-            .branch-node li { font-size: 0.78em; padding: 5px 0 5px 16px; }
+            .branch-node li { font-size: 0.82em; padding: 5px 0 5px 16px; }
             .quotes-section, .action-section { padding: 20px 16px; }
             .quote-item { padding: 14px 16px; font-size: 0.88em; }
             .action-item { padding: 14px 16px; flex-direction: column; gap: 10px; }
