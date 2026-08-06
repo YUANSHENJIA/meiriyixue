@@ -1,349 +1,541 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>每日一学 · 掌控谈话 · 思维导图</title>
-<style>
-  :root {
-    --bg: #0f172a;
-    --card: #1e293b;
-    --border: #334155;
-    --text: #e2e8f0;
-    --text-secondary: #94a3b8;
-    --accent: #f59e0b;
-    --accent2: #8b5cf6;
-    --accent3: #3b82f6;
-    --accent4: #10b981;
-    --accent5: #ec4899;
-    --accent6: #f97316;
-  }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    overflow: hidden;
-    height: 100vh;
-    user-select: none;
-  }
-  header {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    background: linear-gradient(180deg, rgba(15,23,42,0.98) 60%, rgba(15,23,42,0) 100%);
-    padding: 20px 30px 35px;
-    pointer-events: none;
-  }
-  header .title-area { pointer-events: auto; }
-  header h1 {
-    font-size: 22px; font-weight: 700; color: var(--accent);
-    letter-spacing: 1px;
-  }
-  header .subtitle {
-    font-size: 13px; color: var(--text-secondary); margin-top: 4px;
-  }
-  header .date {
-    font-size: 12px; color: var(--text-secondary); margin-top: 2px; opacity: 0.7;
-  }
-  .controls {
-    position: fixed; top: 20px; right: 30px; z-index: 101;
-    display: flex; gap: 8px;
-  }
-  .ctrl-btn {
-    width: 36px; height: 36px; border-radius: 8px;
-    border: 1px solid var(--border); background: var(--card);
-    color: var(--text); cursor: pointer; font-size: 16px;
-    display: flex; align-items: center; justify-content: center;
-    transition: all 0.2s;
-  }
-  .ctrl-btn:hover { background: var(--border); }
-  #mindmap-container {
-    width: 100%; height: 100vh;
-    cursor: grab;
-  }
-  #mindmap-container:active { cursor: grabbing; }
-  #mindmap-container.panning { cursor: grabbing; }
-  svg { display: block; width: 100%; height: 100%; }
-  .node-group { cursor: pointer; transition: opacity 0.3s; }
-  .node-group:hover .node-circle { filter: brightness(1.3); }
-  .node-group:hover .node-text { font-weight: 700; }
-  .tooltip {
-    position: fixed; z-index: 200; pointer-events: none;
-    background: var(--card); border: 1px solid var(--border);
-    border-radius: 10px; padding: 14px 18px; max-width: 320px;
-    opacity: 0; transition: opacity 0.2s;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
-  }
-  .tooltip.visible { opacity: 1; }
-  .tooltip h3 { font-size: 14px; color: var(--accent); margin-bottom: 6px; }
-  .tooltip p { font-size: 12px; color: var(--text-secondary); line-height: 1.6; }
-  .legend {
-    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 100;
-    display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;
-  }
-  .legend-item {
-    display: flex; align-items: center; gap: 6px;
-    font-size: 12px; color: var(--text-secondary);
-  }
-  .legend-dot {
-    width: 10px; height: 10px; border-radius: 50%;
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026-08-06-每日一学-掌控谈话</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #e4e4e7;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            margin-bottom: 30px;
+        }
+        
+        .header .date-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 8px 24px;
+            border-radius: 20px;
+            font-size: 14px;
+            margin-bottom: 16px;
+            letter-spacing: 2px;
+        }
+        
+        .header h1 {
+            font-size: 2.8em;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+        }
+        
+        .header .subtitle {
+            font-size: 1.3em;
+            color: #a78bfa;
+            margin-bottom: 8px;
+        }
+        
+        .header .author {
+            color: #94a3b8;
+            font-style: italic;
+        }
+        
+        .mindmap-container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 800px;
+            overflow-x: auto;
+        }
+        
+        .center-node {
+            position: absolute;
+            left: 50%;
+            top: 40px;
+            transform: translateX(-50%);
+            z-index: 10;
+        }
+        
+        .center-node .node-box {
+            width: 280px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            padding: 28px 24px;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+            border: 2px solid rgba(255,255,255,0.1);
+        }
+        
+        .center-node .node-box h2 {
+            font-size: 1.5em;
+            color: white;
+            margin-bottom: 8px;
+        }
+        
+        .center-node .node-box p {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        
+        .branches {
+            position: relative;
+            width: 1150px;
+            height: 900px;
+            margin-top: 140px;
+        }
+        
+        .branch {
+            position: absolute;
+            width: 240px;
+        }
+        
+        .branch-node {
+            border-radius: 16px;
+            padding: 18px 16px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .branch-node:hover {
+            transform: translateY(-5px);
+        }
+        
+        .branch-node h3 {
+            font-size: 1.05em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .branch-node ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .branch-node li {
+            font-size: 0.82em;
+            padding: 6px 0;
+            padding-left: 18px;
+            position: relative;
+            line-height: 1.5;
+            color: rgba(255,255,255,0.85);
+        }
+        
+        .branch-node li::before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            font-size: 0.75em;
+            opacity: 0.7;
+        }
+        
+        .branch-1 { top: 0; left: 0; }
+        .branch-1 .branch-node {
+            background: linear-gradient(145deg, #e74c3c, #c0392b);
+            border: 2px solid rgba(231, 76, 60, 0.3);
+        }
+        
+        .branch-2 { top: 0; right: 0; }
+        .branch-2 .branch-node {
+            background: linear-gradient(145deg, #3498db, #2980b9);
+            border: 2px solid rgba(52, 152, 219, 0.3);
+        }
+        
+        .branch-3 { top: 260px; left: 0; }
+        .branch-3 .branch-node {
+            background: linear-gradient(145deg, #27ae60, #229954);
+            border: 2px solid rgba(39, 174, 96, 0.3);
+        }
+        
+        .branch-4 { top: 260px; right: 0; }
+        .branch-4 .branch-node {
+            background: linear-gradient(145deg, #f39c12, #d68910);
+            border: 2px solid rgba(243, 156, 18, 0.3);
+        }
+        
+        .branch-5 { top: 520px; left: 80px; }
+        .branch-5 .branch-node {
+            background: linear-gradient(145deg, #9b59b6, #8e44ad);
+            border: 2px solid rgba(155, 89, 182, 0.3);
+        }
+        
+        .branch-6 { top: 520px; right: 80px; }
+        .branch-6 .branch-node {
+            background: linear-gradient(145deg, #1abc9c, #16a085);
+            border: 2px solid rgba(26, 188, 156, 0.3);
+        }
+        
+        .quotes-section {
+            max-width: 900px;
+            margin: 60px auto 40px;
+            padding: 35px;
+            background: linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .quotes-section h2 {
+            text-align: center;
+            font-size: 1.5em;
+            margin-bottom: 25px;
+            color: #fbbf24;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+        
+        .quote-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 18px;
+        }
+        
+        .quote-item {
+            padding: 18px 20px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 12px;
+            border-left: 4px solid #f59e0b;
+            font-style: italic;
+            font-size: 0.95em;
+            line-height: 1.7;
+            color: #e2e8f0;
+            transition: all 0.3s;
+        }
+        
+        .quote-item:hover {
+            background: rgba(255,255,255,0.08);
+            transform: translateX(5px);
+        }
+        
+        .quote-item span {
+            display: block;
+            margin-top: 8px;
+            font-style: normal;
+            font-size: 0.85em;
+            color: #94a3b8;
+        }
+        
+        .action-section {
+            max-width: 900px;
+            margin: 0 auto 40px;
+            padding: 35px;
+            background: linear-gradient(145deg, rgba(34, 197, 94, 0.1), rgba(16, 185, 129, 0.05));
+            border-radius: 20px;
+            border: 1px solid rgba(34, 197, 94, 0.2);
+        }
+        
+        .action-section h2 {
+            text-align: center;
+            font-size: 1.5em;
+            margin-bottom: 25px;
+            color: #34d399;
+        }
+        
+        .action-list {
+            display: grid;
+            gap: 16px;
+        }
+        
+        .action-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 18px 20px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 12px;
+            transition: all 0.3s;
+        }
+        
+        .action-item:hover {
+            background: rgba(255,255,255,0.08);
+        }
+        
+        .action-number {
+            flex-shrink: 0;
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        
+        .action-text {
+            flex: 1;
+            line-height: 1.6;
+        }
+        
+        .action-text strong {
+            color: #86efac;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #64748b;
+            font-size: 0.85em;
+        }
+
+        .icon { font-size: 1.2em; }
+
+        @media (max-width: 1100px) {
+            .branches {
+                width: 700px;
+                height: 1300px;
+                margin-top: 120px;
+            }
+            .branch {
+                width: 320px;
+                position: static !important;
+                margin-bottom: 25px;
+            }
+            .center-node .node-box {
+                width: 240px;
+                padding: 22px 18px;
+            }
+            .header h1 { font-size: 2em; }
+            .quote-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .header h1 { font-size: 1.6em; }
+            .header .subtitle { font-size: 1em; }
+            .center-node .node-box { width: 200px; padding: 18px 14px; }
+            .branch-node { padding: 14px 12px; }
+            .branch-node li { font-size: 0.78em; padding: 5px 0 5px 16px; }
+            .quotes-section, .action-section { padding: 20px 16px; }
+            .quote-item { padding: 14px 16px; font-size: 0.88em; }
+            .action-item { padding: 14px 16px; flex-direction: column; gap: 10px; }
+        }
+    </style>
 </head>
 <body>
+    <div class="container">
+        <div class="header">
+            <div class="date-badge">📅 2026年8月6日 · 每日一学</div>
+            <h1>《掌控谈话》</h1>
+            <p class="subtitle">Never Split the Difference</p>
+            <p class="author">👤 克里斯·沃斯（Chris Voss）| 🎖️ FBI前首席人质谈判专家</p>
+        </div>
 
-<header>
-  <div class="title-area">
-    <h1>📚 每日一学 · 掌控谈话</h1>
-    <div class="subtitle">Never Split the Difference — Chris Voss 著</div>
-    <div class="date">2026年8月6日</div>
-  </div>
-</header>
+        <div class="mindmap-container">
+            <div class="center-node">
+                <div class="node-box">
+                    <h2>🎙️ 掌控谈话</h2>
+                    <p>FBI谈判专家的沟通心法</p>
+                    <p style="margin-top:8px;font-size:0.85em;opacity:0.8;">Never Split the Difference</p>
+                </div>
+            </div>
 
-<div class="controls">
-  <button class="ctrl-btn" id="btnZoomIn" title="放大">+</button>
-  <button class="ctrl-btn" id="btnZoomOut" title="缩小">−</button>
-  <button class="ctrl-btn" id="btnReset" title="重置">⟲</button>
-</div>
+            <div class="branches">
+                <!-- 分支1：核心洞见 -->
+                <div class="branch branch-1">
+                    <div class="branch-node">
+                        <h3><span class="icon">💡</span> 核心洞见</h3>
+                        <ul>
+                            <li>谈判的本质不是妥协，而是<strong>共情与信息博弈</strong></li>
+                            <li>折中方案往往是最差的结果<br>（Never Split the Difference）</li>
+                            <li>人是<strong>情绪动物</strong>，理性只是情绪的仆人</li>
+                            <li>谈判必须<strong>先处理情绪，再处理逻辑</strong></li>
+                            <li>"不"才是谈判的真正起点——<br>让对对方感到安全和控制</li>
+                            <li>"Yes"可能是敷衍，"That's right"才是真正的认同</li>
+                            <li>最高级的沟通是让对对方感觉<strong>被真正听见</strong></li>
+                            <li>每一场谈判都藏有一条你不知道但<strong>至关重要的信息</strong></li>
+                        </ul>
+                    </div>
+                </div>
 
-<div id="mindmap-container">
-  <svg id="mindmap" xmlns="http://www.w3.org/2000/svg"></svg>
-</div>
+                <!-- 分支2：九大谈判武器 -->
+                <div class="branch branch-2">
+                    <div class="branch-node">
+                        <h3><span class="icon">🛠️</span> 九大谈判武器</h3>
+                        <ul>
+                            <li><strong>1. 深夜电台声音：</strong>缓慢、低沉、平和的语调营造安全氛围</li>
+                            <li><strong>2. 镜像法：</strong>重复对对方最后1-3个词，好奇的语气</li>
+                            <li><strong>3. 标注法：</strong>"看起来..."说出对对方感受，标注情绪=化解情绪</li>
+                            <li><strong>4. 总结复述：</strong>复述处境+情绪，以"对吗？"结尾，等待"你说得对"</li>
+                            <li><strong>5. 校准问题：</strong>用"我该如何..."替代"为什么"，把负担转移给对对方</li>
+                            <li><strong>6. 说不的艺术：</strong>让对对方安全说"不"，建立掌控感</li>
+                            <li><strong>7. 阿克曼议价：</strong>目标价→65%→三个递增加价→精确到个位数</li>
+                            <li><strong>8. 黑天鹅：</strong>寻找你不知道但至关重要的信息</li>
+                        </ul>
+                    </div>
+                </div>
 
-<div class="tooltip" id="tooltip">
-  <h3 id="tt-title"></h3>
-  <p id="tt-desc"></p>
-</div>
+                <!-- 分支3：主要知识点 -->
+                <div class="branch branch-3">
+                    <div class="branch-node">
+                        <h3><span class="icon">📚</span> 主要知识点</h3>
+                        <ul>
+                            <li><strong>战术同理心：</strong>理解≠同意，不带评判地听见——听见=认同感</li>
+                            <li><strong>三大谈判风格：</strong>适应型（关系）+ 主张型（结果）+ 分析型（数据），识别并灵活切换</li>
+                            <li><strong>损失厌恶：</strong>对损失的恐惧远大于对收益的渴望，核心动力杠杆</li>
+                            <li><strong>公平感知：</strong>人会因"不公平感"放弃利益，"这对你公平吗？"是校准工具</li>
+                            <li><strong>截止时间的幻觉：</strong>所有deadline都是人造的、可变的——问"过了这个时间会怎样？"</li>
+                            <li><strong>确认偏误：</strong>人只看到支持自己立场的信息——主动寻求"我可能错吗？"</li>
+                            <li><strong>"That's Right" vs "You're Right"：</strong>前者是真正认同，后者是被动附和</li>
+                            <li><strong>沉默的力量：</strong>停顿不是尴尬，是最有效的对话工具</li>
+                        </ul>
+                    </div>
+                </div>
 
-<div class="legend">
-  <div class="legend-item"><div class="legend-dot" style="background:#f59e0b"></div> 核心洞见</div>
-  <div class="legend-item"><div class="legend-dot" style="background:#8b5cf6"></div> 九大谈判武器</div>
-  <div class="legend-item"><div class="legend-dot" style="background:#3b82f6"></div> 主要知识点</div>
-  <div class="legend-item"><div class="legend-dot" style="background:#10b981"></div> 金句</div>
-  <div class="legend-item"><div class="legend-dot" style="background:#ec4899"></div> 行动建议</div>
-</div>
+                <!-- 分支4：四要素核心框架 -->
+                <div class="branch branch-4">
+                    <div class="branch-node">
+                        <h3><span class="icon">📐</span> 核心框架：FBI谈判四步法</h3>
+                        <ul>
+                            <li><strong>第一步 | 倾听：</strong>用深夜电台声音+镜像法打开对话通道。不说教，不打断，收集信息</li>
+                            <li><strong>第二步 | 共情：</strong>用标注法说出情绪，用总结复述确认理解。让对方感到被真正听见</li>
+                            <li><strong>第三步 | 引导：</strong>用校准问题转移解决负担，"我该如何...？"引导对对方走向你的方向</li>
+                            <li><strong>第四步 | 掌控：</strong>用阿克曼议价模型设定框架，用"不"创造安全边界，达成真正认同</li>
+                            <li><strong>贯穿全程 | 黑天鹅搜索：</strong>始终追问"我还不了解什么？对方真正想要的是什么？"</li>
+                            <li><strong>贯穿全程 | 情绪管理：</strong>控制自己的情绪，利用对对方的情绪——不被激怒，不被带偏</li>
+                            <li><strong>终极目标：</strong>让对方发自内心说出"你说得对"——不是胜利，是共识</li>
+                        </ul>
+                    </div>
+                </div>
 
-<script>
-(function() {
-  const svg = document.getElementById('mindmap');
-  const container = document.getElementById('mindmap-container');
-  const tooltip = document.getElementById('tooltip');
-  const ttTitle = document.getElementById('tt-title');
-  const ttDesc = document.getElementById('tt-desc');
+                <!-- 分支5：战术同理心 -->
+                <div class="branch branch-5">
+                    <div class="branch-node">
+                        <h3><span class="icon">🎯</span> 战术同理心的三项练习</h3>
+                        <ul>
+                            <li><strong>练习一·延迟反应：</strong>听到不同意观点时，数三秒再回应。系统2接管，防止情绪化反驳</li>
+                            <li><strong>练习二·视角切换：</strong>每天一次，用3分钟完全站在对对方立场思考。不是"他怎么错了"，而是"他为什么觉得自己对"</li>
+                            <li><strong>练习三·精准标注：</strong>每天在对话中至少做一次情绪标注——"听起来你似乎...""看起来这件事让你..."，观察对方反应</li>
+                            <li><strong>进阶·积极聆听清单：</strong>微笑→慢语调→镜像→标注→总结→停顿，形成肌肉记忆</li>
+                            <li><strong>进阶·校准问题库：</strong>积累10个"我该如何...？"句式的校准问题，在重要谈话前准备好</li>
+                            <li><strong>进阶·阿克曼训练：</strong>在日常小谈判（还价、议价）中练习阿克曼模型，直到内化为本能</li>
+                            <li><strong>终极·黑天鹅直觉：</strong>每次谈话前写下3个未知问题，在对话中主动探索——养成寻找盲点的习惯</li>
+                        </ul>
+                    </div>
+                </div>
 
-  let scale = 1;
-  let tx = 0, ty = 0;
-  let isPanning = false;
-  let startX, startY, startTX, startTY;
+                <!-- 分支6：阿克曼议价模型详解 -->
+                <div class="branch branch-6">
+                    <div class="branch-node">
+                        <h3><span class="icon">📊</span> 阿克曼议价模型详解</h3>
+                        <ul>
+                            <li><strong>第1步：设定目标价</strong><br>你想达成的理想数字，设定后坚持不动摇</li>
+                            <li><strong>第2步：首次出价65%</strong><br>出目标的65%，给对方还价空间，制造锚定效应</li>
+                            <li><strong>第3步：三个递增</strong><br>计算三个递增加价，每次加价幅度递减（如85%→95%→100%）</li>
+                            <li><strong>第4步：拒绝时停顿</strong><br>对方还价不够时用停顿施压，而非直接反驳</li>
+                            <li><strong>第5步：精准到个位数</strong><br>最终报价精确到个位数（如9783而非10000），暗示经过精算</li>
+                            <li><strong>第6步：附赠非金钱筹码</strong><br>最后一轮可附加非金钱让步——让对方"赢了"，但不影响核心利益</li>
+                            <li><strong>核心理念：</strong>让对方感觉赢了，但实际拿到你想要的结果</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-  function setTransform() {
-    svg.setAttribute('transform', `translate(${tx},${ty}) scale(${scale})`);
-  }
+        <div class="quotes-section">
+            <h2><span>💬</span> 经典金句</h2>
+            <div class="quote-grid">
+                <div class="quote-item">
+                    "永远不要用'是'来确认进展，要追求'你说得对'——前者是被动附和，后者是真正认同。"
+                    <span>—— 关于认同的层次</span>
+                </div>
+                <div class="quote-item">
+                    "谈判不是一场战斗，而是一次发现之旅。你的目标不是打败对方，而是找到对方真正想要什么。"
+                    <span>—— 关于谈判的本质</span>
+                </div>
+                <div class="quote-item">
+                    "让对方说'不'，谈判才真正开始。'是'往往是假的，'不'反而是通往真实信息的大门。"
+                    <span>—— 关于"不"的力量</span>
+                </div>
+                <div class="quote-item">
+                    "不要试图表现得聪明。表现得有点笨，让对方来教你这件事情——这就是信息收集。"
+                    <span>—— 关于低姿态战略</span>
+                </div>
+                <div class="quote-item">
+                    "如果你觉得自己已经准备好了一切，那你就是最危险的时刻——黑天鹅总是藏在你看不到的地方。"
+                    <span>—— 关于未知的敬畏</span>
+                </div>
+                <div class="quote-item">
+                    "一个人对你说'不'时，他不是在拒绝你——他是在保护自己。理解这一点，你就能把'不'变成开始。"
+                    <span>—— 关于重构"不"的含义</span>
+                </div>
+            </div>
+        </div>
 
-  container.addEventListener('mousedown', e => {
-    if (e.target.closest('.node-group')) return;
-    isPanning = true;
-    container.classList.add('panning');
-    startX = e.clientX; startY = e.clientY;
-    startTX = tx; startTY = ty;
-  });
-  window.addEventListener('mousemove', e => {
-    if (!isPanning) return;
-    tx = startTX + (e.clientX - startX);
-    ty = startTY + (e.clientY - startY);
-    setTransform();
-  });
-  window.addEventListener('mouseup', () => {
-    isPanning = false;
-    container.classList.remove('panning');
-  });
+        <div class="action-section">
+            <h2>🚀 行动建议</h2>
+            <div class="action-list">
+                <div class="action-item">
+                    <div class="action-number">1</div>
+                    <div class="action-text">
+                        <strong>每日镜像练习</strong><br>
+                        在今天的任意对话中，重复对方最后三个字，用好奇的语气说出。观察对方是否自然地展开更多话题。
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">2</div>
+                    <div class="action-text">
+                        <strong>标注情绪+静默90秒</strong><br>
+                        下次听到同事抱怨时，不要说"别急"或给建议，试试说"听上去这件事让你很沮丧"，然后静默90秒。
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">3</div>
+                    <div class="action-text">
+                        <strong>校准问题转换</strong><br>
+                        本周把三个"为什么..."句式改为"我该如何..."。例如："你为什么没完成？"→"我该如何帮助你推进这件事？"
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">4</div>
+                    <div class="action-text">
+                        <strong>主动创造"不"</strong><br>
+                        下次谈价格或协商时，用否定式提问开局："现在谈这个是不是不太合适？"给对方安全感。
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">5</div>
+                    <div class="action-text">
+                        <strong>寻找黑天鹅</strong><br>
+                        在下次重要对话前，写下"我还不了解对方哪三件事？"在对话中主动探索这些未知信息。
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">6</div>
+                    <div class="action-text">
+                        <strong>深夜电台声音练习</strong><br>
+                        今天至少一次有意识地放慢语速、降低音调说话，注意对方的反应变化。你的声音是最强大的谈判工具。
+                    </div>
+                </div>
+            </div>
+        </div>
 
-  document.getElementById('btnZoomIn').addEventListener('click', () => {
-    scale = Math.min(scale * 1.2, 3);
-    setTransform();
-  });
-  document.getElementById('btnZoomOut').addEventListener('click', () => {
-    scale = Math.max(scale / 1.2, 0.3);
-    setTransform();
-  });
-  document.getElementById('btnReset').addEventListener('click', () => {
-    scale = 1; tx = 0; ty = 0;
-    setTransform();
-  });
-
-  container.addEventListener('wheel', e => {
-    e.preventDefault();
-    const ds = e.deltaY < 0 ? 1.1 : 0.9;
-    const rect = container.getBoundingClientRect();
-    const mx = e.clientX - rect.left;
-    const my = e.clientY - rect.top;
-    const newScale = Math.max(0.3, Math.min(3, scale * ds));
-    tx = mx - (mx - tx) * (newScale / scale);
-    ty = my - (my - ty) * (newScale / scale);
-    scale = newScale;
-    setTransform();
-  }, { passive: false });
-
-  const nodes = [
-    // ROOT
-    { id: 'root', x: 680, y: 420, r: 52, color: '#f59e0b', label: '掌控谈话', sub: 'Never Split the Difference', desc: 'Chris Voss 著 | FBI前首席谈判专家的沟通心法——谈判的本质不是妥协，而是共情与信息博弈' },
-
-    // Branch 1: 核心洞见
-    { id: 'b1', x: 680, y: 140, r: 34, color: '#f59e0b', label: '核心洞见', desc: '从FBI人质谈判到日常生活：最高级的沟通，是让对方感觉被真正听见' },
-    { id: 'b1a', x: 440, y: 80, r: 28, color: '#f59e0b', label: '不妥协不拆解差异', desc: 'Never Split the Difference：折中方案往往是最差的结果。真正的谈判者不追求各退一步，而是创造新的可能性' },
-    { id: 'b1b', x: 680, y: 40, r: 28, color: '#f59e0b', label: '人是情绪动物', desc: '所有决策都受情绪驱动，理性只是情绪的仆人。谈判必须先处理情绪，再处理逻辑' },
-    { id: 'b1c', x: 920, y: 80, r: 28, color: '#f59e0b', label: 'No才是谈判的开始', desc: '"不"不是拒绝，而是一道安全边界。让对方说出"不"，反而能让他们感到掌控感和安全' },
-
-    // Branch 2: 九大谈判武器
-    { id: 'b2', x: 680, y: 720, r: 34, color: '#8b5cf6', label: '九大谈判武器', desc: 'FBI实战验证的高效沟通技术工具箱' },
-    { id: 'b2a', x: 230, y: 650, r: 26, color: '#8b5cf6', label: '1.深夜电台声音', desc: '用缓慢、低沉、平和的语调说话，营造安全氛围。你的声音是第一个谈判工具' },
-    { id: 'b2b', x: 340, y: 630, r: 26, color: '#8b5cf6', label: '2.镜像法', desc: '重复对方最后1-3个词，用好奇的语气。这能让对方不自觉展开话题，暴露更多信息' },
-    { id: 'b2c', x: 480, y: 620, r: 26, color: '#8b5cf6', label: '3.标注法', desc: '用"看起来...""听上去..."句式说出对方当下的感受。标注情绪=化解情绪' },
-    { id: 'b2d', x: 620, y: 615, r: 26, color: '#8b5cf6', label: '4.总结复述', desc: '用自己的话总结对方的处境+情绪，以"对吗？"结尾——停顿，等待对方说出"你说的对"' },
-    { id: 'b2e', x: 760, y: 620, r: 26, color: '#8b5cf6', label: '5.校准问题', desc: '用"我该如何...?"问开放性问题，把解决问题的负担转移给对方。少用"为什么"' },
-    { id: 'b2f', x: 900, y: 630, r: 26, color: '#8b5cf6', label: '6.说不的艺术', desc: '故意让对方有机会说"不"。你可以问"现在不方便谈？"——让对方感到安全与控制' },
-    { id: 'b2g', x: 1040, y: 650, r: 26, color: '#8b5cf6', label: '7.阿克曼议价', desc: '报价的六步法：设定目标价→首次出价为目标价65%→三个递增加价→最终精确到个位数' },
-    { id: 'b2h', x: 1120, y: 690, r: 26, color: '#8b5cf6', label: '8.黑天鹅', desc: '每一场谈判都有一条你不知道但至关重要的信息。你的任务是找到它' },
-    { id: 'b2i', x: 1180, y: 740, r: 26, color: '#8b5cf6', label: '9.你说得对', desc: '终极目标不是让对方说"是的"，而是让对方发自内心地说出"你说得对"——这意味着真正的认同' },
-
-    // Branch 3: 主要知识点
-    { id: 'b3', x: 200, y: 420, r: 34, color: '#3b82f6', label: '主要知识点', desc: '谈判心理学的六大底层原理' },
-    { id: 'b3a', x: 50, y: 220, r: 28, color: '#3b82f6', label: '战术同理心', desc: '不是同意对方，而是理解对方。站在对方的情绪视角看问题，不带评判——听见=认同感' },
-    { id: 'b3b', x: 40, y: 340, r: 28, color: '#3b82f6', label: '三大谈判风格', desc: '适应型（建立关系）、主张型（直奔结果）、分析型（需要数据）。识别对方的风格，灵活切换' },
-    { id: 'b3c', x: 45, y: 460, r: 28, color: '#3b82f6', label: '损失厌恶', desc: '人对损失的恐惧远大于对收益的渴望。让对方意识到"不成交"会失去什么，比展示你会给他们什么更有效' },
-    { id: 'b3d', x: 55, y: 580, r: 28, color: '#3b82f6', label: '公平感知', desc: '人们会因为"不公平感"放弃利益。主动提出公平框架，把"这对你公平吗？"当作校准工具' },
-    { id: 'b3e', x: 200, y: 700, r: 28, color: '#3b82f6', label: '截止时间的幻觉', desc: '所有截止时间都是人造的、可变的。别被deadline绑架——问自己"过了这个时间会怎样？"' },
-    { id: 'b3f', x: 250, y: 790, r: 28, color: '#3b82f6', label: '确认偏误', desc: '人只看到支持自己立场的信息。谈判中要主动寻求"反证"——我可能是错的吗？对方有什么我没看到？' },
-
-    // Branch 4: 金句
-    { id: 'b4', x: 1160, y: 420, r: 34, color: '#10b981', label: '金句', desc: '来自FBI谈判现场的智慧精华' },
-    { id: 'b4a', x: 1260, y: 230, r: 28, color: '#10b981', label: '金句一', desc: '"永远不要用"是"来确认进展，要追求"你说得对"——前者是被动附和，后者是真正认同。"' },
-    { id: 'b4b', x: 1340, y: 320, r: 28, color: '#10b981', label: '金句二', desc: '"谈判不是一场战斗，而是一次发现之旅。你的目标不是打败对方，而是找到对方真正想要什么。"' },
-    { id: 'b4c', x: 1330, y: 430, r: 28, color: '#10b981', label: '金句三', desc: '"如果你觉得自己已经准备好了一切，那你就是最危险的时刻——黑天鹅总是藏在你看不到的地方。"' },
-    { id: 'b4d', x: 1300, y: 540, r: 28, color: '#10b981', label: '金句四', desc: '"让对方说"不"，谈判才真正开始。"是"往往是假的，"不"反而是通往真实信息的大门。"' },
-    { id: 'b4e', x: 1240, y: 640, r: 28, color: '#10b981', label: '金句五', desc: '"不要试图表现得聪明。表现得有点笨，让对方来教你这件事情——这就是信息收集。"' },
-
-    // Branch 5: 行动建议
-    { id: 'b5', x: 680, y: 880, r: 34, color: '#ec4899', label: '行动建议', desc: '从今天开始练习的五项核心技能' },
-    { id: 'b5a', x: 340, y: 830, r: 28, color: '#ec4899', label: '每日镜像练习', desc: '今天在任意对话中，挑对方最后3个字重复一遍，用好奇的语气。观察对方是否自然地展开话题' },
-    { id: 'b5b', x: 510, y: 830, r: 28, color: '#ec4899', label: '标注情绪90秒', desc: '下次听到同事抱怨时，不要说"别急"，试试说"听上去这件事让你很沮丧"。静默90秒，听对方说什么' },
-    { id: 'b5c', x: 680, y: 830, r: 28, color: '#ec4899', label: '校准问题转换', desc: '把三个"为什么"句式改为"我该如何..."。例如"你为什么没完成？"→"我该如何帮助你推进这件事？"' },
-    { id: 'b5d', x: 850, y: 830, r: 28, color: '#ec4899', label: '主动创造"不"', desc: '下次谈价格时，用否定式提问开局："现在谈这个是不是不太合适？"给对方安全说"不"的空间' },
-    { id: 'b5e', x: 1020, y: 830, r: 28, color: '#ec4899', label: '寻找黑天鹅', desc: '在下次重要对话前，写下："我还不了解对方哪三件事？"在对话中主动探索这些未知信息' },
-  ];
-
-  // Build edges
-  const edges = [];
-  const parentMap = {
-    'b1a': 'b1', 'b1b': 'b1', 'b1c': 'b1',
-    'b2a': 'b2', 'b2b': 'b2', 'b2c': 'b2', 'b2d': 'b2', 'b2e': 'b2', 'b2f': 'b2', 'b2g': 'b2', 'b2h': 'b2', 'b2i': 'b2',
-    'b3a': 'b3', 'b3b': 'b3', 'b3c': 'b3', 'b3d': 'b3', 'b3e': 'b3', 'b3f': 'b3',
-    'b4a': 'b4', 'b4b': 'b4', 'b4c': 'b4', 'b4d': 'b4', 'b4e': 'b4',
-    'b5a': 'b5', 'b5b': 'b5', 'b5c': 'b5', 'b5d': 'b5', 'b5e': 'b5',
-    'b1': 'root', 'b2': 'root', 'b3': 'root', 'b4': 'root', 'b5': 'root'
-  };
-
-  const nodeMap = {};
-  nodes.forEach(n => { nodeMap[n.id] = n; });
-
-  // Fix SVG viewBox so coordinates map correctly
-  svg.setAttribute('viewBox', '0 0 1400 950');
-  svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
-  svg.setAttribute('width', '100%');
-  svg.setAttribute('height', '100%');
-
-  let html = '';
-  html += `<defs>\n`;
-  const colors = ['#f59e0b', '#8b5cf6', '#3b82f6', '#10b981', '#ec4899', '#f97316'];
-  colors.forEach((c, i) => {
-    html += `  <filter id="glow${i}"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>\n`;
-  });
-  html += `</defs>\n`;
-
-  html += `<g class="edges">\n`;
-  for (const [childId, parentId] of Object.entries(parentMap)) {
-    const child = nodeMap[childId];
-    const parent = nodeMap[parentId];
-    if (!child || !parent) continue;
-    const angle = Math.atan2(child.y - parent.y, child.x - parent.x);
-    const px = parent.x + parent.r * Math.cos(angle);
-    const py = parent.y + parent.r * Math.sin(angle);
-    const cx = child.x - child.r * Math.cos(angle);
-    const cy = child.y - child.r * Math.sin(angle);
-    html += `  <line x1="${px}" y1="${py}" x2="${cx}" y2="${cy}" stroke="${parent.color}" stroke-width="1.5" stroke-opacity="0.4"/>\n`;
-  }
-  html += `</g>\n`;
-
-  html += `<g class="nodes">\n`;
-  nodes.forEach(n => {
-    const fontSize = n.id === 'root' ? 14 : (n.r >= 30 ? 12 : 10);
-    const id = n.id;
-    html += `  <g class="node-group" data-id="${id}">\n`;
-    html += `    <circle class="node-circle" cx="${n.x}" cy="${n.y}" r="${n.r}" fill="${n.color}" fill-opacity="0.2" stroke="${n.color}" stroke-width="2"/>\n`;
-    html += `    <text class="node-text" x="${n.x}" y="${n.y - (n.r >= 34 ? 4 : 1)}" text-anchor="middle" fill="${n.color}" font-size="${fontSize}" font-weight="700">${n.label}</text>\n`;
-    if (n.sub) {
-      html += `    <text x="${n.x}" y="${n.y + 12}" text-anchor="middle" fill="#94a3b8" font-size="9">${n.sub}</text>\n`;
-    }
-    html += `  </g>\n`;
-  });
-  html += `</g>\n`;
-
-  svg.innerHTML = html;
-
-  svg.addEventListener('mouseover', e => {
-    const group = e.target.closest('.node-group');
-    if (!group) return;
-    const id = group.dataset.id;
-    const node = nodeMap[id];
-    if (!node || !node.desc) return;
-    ttTitle.textContent = node.label;
-    ttDesc.textContent = node.desc;
-    tooltip.classList.add('visible');
-  });
-  svg.addEventListener('mousemove', e => {
-    tooltip.style.left = (e.clientX + 18) + 'px';
-    tooltip.style.top = (e.clientY - 10) + 'px';
-  });
-  svg.addEventListener('mouseout', e => {
-    const group = e.target.closest('.node-group');
-    if (!group) return;
-    tooltip.classList.remove('visible');
-  });
-
-  let lastDist = 0;
-  container.addEventListener('touchstart', e => {
-    if (e.touches.length === 1) {
-      isPanning = true;
-      startX = e.touches[0].clientX;
-      startY = e.touches[0].clientY;
-      startTX = tx; startTY = ty;
-    } else if (e.touches.length === 2) {
-      isPanning = false;
-      lastDist = Math.hypot(
-        e.touches[0].clientX - e.touches[1].clientX,
-        e.touches[0].clientY - e.touches[1].clientY
-      );
-    }
-  });
-  container.addEventListener('touchmove', e => {
-    if (e.touches.length === 1 && isPanning) {
-      tx = startTX + (e.touches[0].clientX - startX);
-      ty = startTY + (e.touches[0].clientY - startY);
-      setTransform();
-    } else if (e.touches.length === 2) {
-      const dist = Math.hypot(
-        e.touches[0].clientX - e.touches[1].clientX,
-        e.touches[0].clientY - e.touches[1].clientY
-      );
-      if (lastDist) {
-        scale = Math.max(0.3, Math.min(3, scale * (dist / lastDist)));
-        setTransform();
-      }
-      lastDist = dist;
-    }
-  });
-  container.addEventListener('touchend', () => { isPanning = false; lastDist = 0; });
-})();
-</script>
-
+        <footer>
+            <p>📚 每日一学 | 持续学习，不断成长 | 2026-08-06</p>
+            <p style="margin-top:8px;">💡 推荐阅读：《掌控谈话》— 克里斯·沃斯</p>
+        </footer>
+    </div>
 </body>
 </html>
