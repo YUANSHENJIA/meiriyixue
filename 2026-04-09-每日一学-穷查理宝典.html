@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 穷查理宝典</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'PingFang SC', 'Microsoft YaHei', 'Noto Sans CJK SC', sans-serif;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #0f3460 100%);
+    min-height: 100vh;
+    padding: 24px 16px;
+    color: #e0e0e0;
+  }
+
+  /* ===== 顶部标题卡 ===== */
+  .header-card {
+    max-width: 960px;
+    margin: 0 auto 28px;
+    background: linear-gradient(135deg, #e8a04a 0%, #c67c22 50%, #a85d0e 100%);
+    border-radius: 20px;
+    padding: 32px 36px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    box-shadow: 0 12px 40px rgba(200,120,30,0.4);
+  }
+  .book-icon {
+    font-size: 64px;
+    flex-shrink: 0;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+  }
+  .header-text h1 {
+    font-size: 2rem;
+    color: #fff;
+    font-weight: 800;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    line-height: 1.2;
+  }
+  .header-text .subtitle {
+    font-size: 1.05rem;
+    color: rgba(255,255,255,0.88);
+    margin-top: 6px;
+  }
+  .header-text .meta {
+    display: flex;
+    gap: 12px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+  }
+  .tag {
+    background: rgba(255,255,255,0.22);
+    color: #fff;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    backdrop-filter: blur(4px);
+  }
+  .date-badge {
+    margin-left: auto;
+    background: rgba(0,0,0,0.2);
+    color: #fff;
+    padding: 6px 16px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    align-self: flex-start;
+  }
+
+  /* ===== 内容容器 ===== */
+  .container { max-width: 960px; margin: 0 auto; }
+
+  /* ===== 分区卡片 ===== */
+  .section-card {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 16px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+    backdrop-filter: blur(10px);
+  }
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 18px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+  }
+  .section-icon { font-size: 1.3rem; }
+
+  /* ===== 核心洞见 ===== */
+  .insight-box {
+    background: linear-gradient(135deg, rgba(232,160,74,0.18), rgba(168,93,14,0.1));
+    border-left: 4px solid #e8a04a;
+    border-radius: 0 12px 12px 0;
+    padding: 16px 20px;
+    font-size: 0.97rem;
+    line-height: 1.85;
+    color: #f0d8b0;
+  }
+
+  /* ===== 思维导图主体 ===== */
+  .mindmap-wrap {
+    background: rgba(0,0,0,0.25);
+    border-radius: 14px;
+    padding: 20px 16px;
+    overflow-x: auto;
+  }
+  .mindmap {
+    min-width: 600px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+  /* 根节点 */
+  .root-node {
+    background: linear-gradient(135deg, #e8a04a, #c67c22);
+    color: #fff;
+    border-radius: 50px;
+    padding: 14px 36px;
+    font-size: 1.15rem;
+    font-weight: 800;
+    text-align: center;
+    box-shadow: 0 6px 20px rgba(200,120,30,0.5);
+    position: relative;
+    z-index: 2;
+  }
+  /* 垂直连接线 */
+  .v-line {
+    width: 2px;
+    height: 24px;
+    background: rgba(232,160,74,0.5);
+    margin: 0 auto;
+  }
+  /* 四大支柱行 */
+  .pillar-row {
+    display: flex;
+    gap: 16px;
+    width: 100%;
+    justify-content: center;
+  }
+  /* 单个支柱 */
+  .pillar {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .pillar-node {
+    width: 100%;
+    text-align: center;
+    padding: 10px 8px;
+    border-radius: 12px;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #fff;
+    position: relative;
+    z-index: 2;
+  }
+  .p1 { background: linear-gradient(135deg, #6c63ff, #4a42c8); }
+  .p2 { background: linear-gradient(135deg, #f7794b, #d4552a); }
+  .p3 { background: linear-gradient(135deg, #26d0ce, #1a8c8a); }
+  .p4 { background: linear-gradient(135deg, #f7b731, #c89010); }
+
+  .pillar-v { width: 2px; height: 16px; margin: 0 auto; }
+  .pv1 { background: rgba(108,99,255,0.5); }
+  .pv2 { background: rgba(247,121,75,0.5); }
+  .pv3 { background: rgba(38,208,206,0.5); }
+  .pv4 { background: rgba(247,183,49,0.5); }
+
+  .leaf-list {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .leaf {
+    border-radius: 8px;
+    padding: 7px 10px;
+    font-size: 0.8rem;
+    line-height: 1.4;
+    color: #e8e8e8;
+    text-align: center;
+  }
+  .l1 { background: rgba(108,99,255,0.2); border: 1px solid rgba(108,99,255,0.35); }
+  .l2 { background: rgba(247,121,75,0.2); border: 1px solid rgba(247,121,75,0.35); }
+  .l3 { background: rgba(38,208,206,0.2); border: 1px solid rgba(38,208,206,0.35); }
+  .l4 { background: rgba(247,183,49,0.2); border: 1px solid rgba(247,183,49,0.35); }
+
+  /* ===== 知识点网格 ===== */
+  .knowledge-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 14px;
+  }
+  .know-card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 14px 16px;
+    transition: transform 0.2s, background 0.2s;
+  }
+  .know-card:hover {
+    transform: translateY(-3px);
+    background: rgba(255,255,255,0.1);
+  }
+  .know-card .kc-icon { font-size: 1.6rem; margin-bottom: 8px; }
+  .know-card .kc-title { font-size: 0.92rem; font-weight: 700; color: #e8a04a; margin-bottom: 6px; }
+  .know-card .kc-desc { font-size: 0.82rem; color: #bbb; line-height: 1.6; }
+
+  /* ===== 金句 ===== */
+  .quote-list { display: flex; flex-direction: column; gap: 14px; }
+  .quote-item {
+    background: linear-gradient(135deg, rgba(108,99,255,0.12), rgba(232,160,74,0.08));
+    border-left: 4px solid #6c63ff;
+    border-radius: 0 12px 12px 0;
+    padding: 14px 18px;
+  }
+  .quote-text {
+    font-size: 0.97rem;
+    color: #d8c8ff;
+    line-height: 1.75;
+    font-style: italic;
+  }
+  .quote-source {
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.45);
+    margin-top: 6px;
+    text-align: right;
+  }
+
+  /* ===== 行动建议 ===== */
+  .action-list { display: flex; flex-direction: column; gap: 12px; }
+  .action-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 12px;
+    padding: 14px 16px;
+  }
+  .action-num {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, #e8a04a, #c67c22);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: #fff;
+  }
+  .action-content .act-title { font-size: 0.94rem; font-weight: 700; color: #e8c88a; margin-bottom: 4px; }
+  .action-content .act-desc { font-size: 0.84rem; color: #aaa; line-height: 1.65; }
+
+  /* ===== 底部 ===== */
+  .footer {
+    text-align: center;
+    margin-top: 30px;
+    padding-bottom: 16px;
+    color: rgba(255,255,255,0.3);
+    font-size: 0.78rem;
+  }
+
+  @media (max-width: 600px) {
+    .header-card { flex-direction: column; text-align: center; padding: 22px 18px; }
+    .header-text h1 { font-size: 1.5rem; }
+    .pillar-row { gap: 8px; }
+    .pillar-node { font-size: 0.76rem; padding: 8px 4px; }
+    .leaf { font-size: 0.72rem; padding: 6px 6px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- 顶部标题卡 -->
+<div class="header-card">
+  <div class="book-icon">📚</div>
+  <div class="header-text">
+    <h1>穷查理宝典</h1>
+    <div class="subtitle">Poor Charlie's Almanack — 查理·芒格的普世智慧</div>
+    <div class="meta">
+      <span class="tag">🧠 思维模型</span>
+      <span class="tag">💡 多元框架</span>
+      <span class="tag">📈 决策智慧</span>
+      <span class="tag">🎯 个人成长</span>
+    </div>
+  </div>
+  <div class="date-badge">📅 2026-04-09</div>
+</div>
+
+<div class="container">
+
+  <!-- 核心洞见 -->
+  <div class="section-card">
+    <div class="section-title" style="color:#e8a04a;">
+      <span class="section-icon">🔭</span> 核心洞见
+    </div>
+    <div class="insight-box">
+      查理·芒格（Warren Buffett 的黄金搭档）认为：<strong>人类失败的根源往往不是智力不足，而是思维工具的匮乏。</strong>
+      他毕生构建了一套"思维模型格栅"（Latticework of Mental Models）——从物理学、生物学、心理学、经济学等 100+ 学科中提炼出最底层的规律，
+      用多元框架交叉验证同一个问题，从而做出近乎无懈可击的决策。
+      核心主张是：<strong>如果你只有一把锤子，所有问题看起来都像钉子；拥有多把工具，才能看清世界真正的样子。</strong>
+    </div>
+  </div>
+
+  <!-- 思维导图 -->
+  <div class="section-card">
+    <div class="section-title" style="color:#26d0ce;">
+      <span class="section-icon">🗺️</span> 核心框架 · 思维导图
+    </div>
+    <div class="mindmap-wrap">
+      <div class="mindmap">
+        <!-- 根节点 -->
+        <div class="root-node">🧩 穷查理宝典 · 核心体系</div>
+        <div class="v-line"></div>
+        <!-- 四大支柱 -->
+        <div class="pillar-row">
+
+          <!-- P1 多元思维模型 -->
+          <div class="pillar">
+            <div class="pillar-node p1">🔬 多元思维模型</div>
+            <div class="pillar-v pv1"></div>
+            <div class="leaf-list">
+              <div class="leaf l1">复利效应<br>（数学）</div>
+              <div class="leaf l1">临界质量<br>（物理）</div>
+              <div class="leaf l1">生态位竞争<br>（生物）</div>
+              <div class="leaf l1">反转思维<br>（逆向推导）</div>
+            </div>
+          </div>
+
+          <!-- P2 人类误判心理学 -->
+          <div class="pillar">
+            <div class="pillar-node p2">🧠 人类误判心理</div>
+            <div class="pillar-v pv2"></div>
+            <div class="leaf-list">
+              <div class="leaf l2">激励驱动偏差</div>
+              <div class="leaf l2">社会认同偏误</div>
+              <div class="leaf l2">锚定效应</div>
+              <div class="leaf l2">损失厌恶 ×<br>过度乐观</div>
+            </div>
+          </div>
+
+          <!-- P3 决策与投资 -->
+          <div class="pillar">
+            <div class="pillar-node p3">💰 决策与投资</div>
+            <div class="pillar-v pv3"></div>
+            <div class="leaf-list">
+              <div class="leaf l3">能力圈原则</div>
+              <div class="leaf l3">安全边际</div>
+              <div class="leaf l3">等待好机会</div>
+              <div class="leaf l3">避免愚蠢 &gt;<br>追求聪明</div>
+            </div>
+          </div>
+
+          <!-- P4 生活哲学 -->
+          <div class="pillar">
+            <div class="pillar-node p4">🌱 生活哲学</div>
+            <div class="pillar-v pv4"></div>
+            <div class="leaf-list">
+              <div class="leaf l4">终身学习</div>
+              <div class="leaf l4">做值得信任的人</div>
+              <div class="leaf l4">简单&amp;专注</div>
+              <div class="leaf l4">反脆弱心态</div>
+            </div>
+          </div>
+
+        </div><!-- /pillar-row -->
+      </div><!-- /mindmap -->
+    </div>
+  </div>
+
+  <!-- 主要知识点 -->
+  <div class="section-card">
+    <div class="section-title" style="color:#f7b731;">
+      <span class="section-icon">📖</span> 主要知识点
+    </div>
+    <div class="knowledge-grid">
+      <div class="know-card">
+        <div class="kc-icon">🔧</div>
+        <div class="kc-title">思维模型格栅</div>
+        <div class="kc-desc">从 100+ 学科提炼底层规律，交叉验证问题，避免单一视角的盲点。</div>
+      </div>
+      <div class="know-card">
+        <div class="kc-icon">🔄</div>
+        <div class="kc-title">反转原则</div>
+        <div class="kc-desc">"告诉我我会死在哪里，这样我就不会去那儿。"——用反向推演寻找问题解法。</div>
+      </div>
+      <div class="know-card">
+        <div class="kc-icon">📊</div>
+        <div class="kc-title">激励机制的力量</div>
+        <div class="kc-desc">理解一个人/系统的行为，先看激励结构。激励驱动一切，包括你自己的偏见。</div>
+      </div>
+      <div class="know-card">
+        <div class="kc-icon">⭕</div>
+        <div class="kc-title">能力圈原则</div>
+        <div class="kc-desc">不需要知道所有事情，只需要清楚自己知道什么、不知道什么，在边界内做决策。</div>
+      </div>
+      <div class="know-card">
+        <div class="kc-icon">🌊</div>
+        <div class="kc-title">复利的魔力</div>
+        <div class="kc-desc">知识、品德、技能的复利效应与金融复利同构——持续积累，时间是最强的加速器。</div>
+      </div>
+      <div class="know-card">
+        <div class="kc-icon">🐌</div>
+        <div class="kc-title">慢即是快</div>
+        <div class="kc-desc">大多数错误来自仓促决策。宁可错失机会，也不要犯下不可弥补的错误。</div>
+      </div>
+      <div class="know-card">
+        <div class="kc-icon">🎭</div>
+        <div class="kc-title">25个人类误判</div>
+        <div class="kc-desc">芒格系统整理了25种认知偏差，包括奖励/惩罚超级反应、喜爱/讨厌倾向、社会认同等。</div>
+      </div>
+      <div class="know-card">
+        <div class="kc-icon">📚</div>
+        <div class="kc-title">读书即武装</div>
+        <div class="kc-desc">芒格每天至少读书数小时，称自己是"长了双腿的书"。跨学科阅读是最低成本的智识投资。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 金句 -->
+  <div class="section-card">
+    <div class="section-title" style="color:#d8c8ff;">
+      <span class="section-icon">✨</span> 芒格金句
+    </div>
+    <div class="quote-list">
+      <div class="quote-item">
+        <div class="quote-text">"在我能做到的范围内，我想知道所有重要学科的最重要概念，并把它们经常使用——全部使用，而不是只用少数几个。"</div>
+        <div class="quote-source">—— 查理·芒格</div>
+      </div>
+      <div class="quote-item">
+        <div class="quote-text">"反过来想，总是反过来想。"（Invert, always invert.）所有困难问题，都应先问：什么会导致失败？</div>
+        <div class="quote-source">—— 查理·芒格</div>
+      </div>
+      <div class="quote-item">
+        <div class="quote-text">"获得智慧是一种道德责任，而不仅仅是让自己变得更成功的途径。"</div>
+        <div class="quote-source">—— 查理·芒格</div>
+      </div>
+      <div class="quote-item">
+        <div class="quote-text">"我没有什么特别的，我只是比大多数人更理性。"——理性思考，是可以刻意培养的。</div>
+        <div class="quote-source">—— 查理·芒格</div>
+      </div>
+      <div class="quote-item">
+        <div class="quote-text">"如果你想要得到一样东西，最好的办法就是让自己配得上它。"</div>
+        <div class="quote-source">—— 查理·芒格</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 行动建议 -->
+  <div class="section-card">
+    <div class="section-title" style="color:#7ed6df;">
+      <span class="section-icon">🚀</span> 行动建议
+    </div>
+    <div class="action-list">
+      <div class="action-item">
+        <div class="action-num">1</div>
+        <div class="action-content">
+          <div class="act-title">建立你的"思维工具箱"</div>
+          <div class="act-desc">每周学习一个来自不同学科的核心概念（如：概率论、自然选择、边际效用），写下它在生活/工作中的应用场景，持续积累 100 个工具。</div>
+        </div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">2</div>
+        <div class="action-content">
+          <div class="act-title">练习"反转思维"</div>
+          <div class="act-desc">面对任何重要决策，先问：什么情况会让这件事失败？我应该避免哪些行为？把清单写下来，逆向规避风险。</div>
+        </div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">3</div>
+        <div class="action-content">
+          <div class="act-title">标注你的"能力圈边界"</div>
+          <div class="act-desc">在工作/投资/决策前，写下三栏：我确实知道的、我认为知道的、我根本不了解的。只在第一栏范围内大胆行动。</div>
+        </div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">4</div>
+        <div class="action-content">
+          <div class="act-title">每日阅读 ≥ 30 分钟</div>
+          <div class="act-desc">芒格的秘密武器是时间。把每天最清醒的 30 分钟留给跨学科阅读，10 年后你拥有的认知复利，将远超同龄人。</div>
+        </div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">5</div>
+        <div class="action-content">
+          <div class="act-title">检查激励机制</div>
+          <div class="act-desc">当你对别人的行为感到困惑时，先问：他的激励结构是什么？同样，定期审视自己所处系统的激励，警惕它如何扭曲你的判断。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<div class="footer">每日一学 · 2026-04-09 · 穷查理宝典 · Poor Charlie's Almanack · 查理·芒格</div>
+
+</body>
+</html>
