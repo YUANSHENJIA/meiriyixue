@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026-08-06-每日一学-微习惯</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #e4e4e7;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* 标题区域 */
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            margin-bottom: 30px;
+        }
+        
+        .header .date-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #a855f7 0%, #6366f1 100%);
+            padding: 8px 24px;
+            border-radius: 20px;
+            font-size: 14px;
+            margin-bottom: 16px;
+            letter-spacing: 2px;
+        }
+        
+        .header h1 {
+            font-size: 2.8em;
+            background: linear-gradient(135deg, #c084fc 0%, #818cf8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+        }
+        
+        .header .subtitle {
+            font-size: 1.3em;
+            color: #a78bfa;
+            margin-bottom: 8px;
+        }
+        
+        .header .author {
+            color: #94a3b8;
+            font-style: italic;
+        }
+        
+        /* 思维导图容器 */
+        .mindmap-container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 800px;
+            overflow-x: auto;
+        }
+        
+        /* 中心节点 */
+        .center-node {
+            position: absolute;
+            left: 50%;
+            top: 40px;
+            transform: translateX(-50%);
+            z-index: 10;
+        }
+        
+        .center-node .node-box {
+            width: 280px;
+            background: linear-gradient(135deg, #a855f7 0%, #6366f1 100%);
+            border-radius: 20px;
+            padding: 28px 24px;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(168, 85, 247, 0.4);
+            border: 2px solid rgba(255,255,255,0.1);
+        }
+        
+        .center-node .node-box h2 {
+            font-size: 1.5em;
+            color: white;
+            margin-bottom: 8px;
+        }
+        
+        .center-node .node-box p {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        
+        /* SVG连接线 */
+        .connections-svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .connection-line {
+            fill: none;
+            stroke-width: 3;
+            stroke-linecap: round;
+            opacity: 0.6;
+        }
+        
+        /* 分支节点 */
+        .branches {
+            position: relative;
+            width: 1150px;
+            height: 900px;
+            margin-top: 140px;
+        }
+        
+        .branch {
+            position: absolute;
+            width: 240px;
+        }
+        
+        .branch-node {
+            border-radius: 16px;
+            padding: 18px 16px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .branch-node:hover {
+            transform: translateY(-5px);
+        }
+        
+        .branch-node h3 {
+            font-size: 1.05em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .branch-node ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .branch-node li {
+            font-size: 0.82em;
+            padding: 6px 0;
+            padding-left: 18px;
+            position: relative;
+            line-height: 1.5;
+            color: rgba(255,255,255,0.85);
+        }
+        
+        .branch-node li::before {
+            content: "\25B8";
+            position: absolute;
+            left: 0;
+            font-size: 0.75em;
+            opacity: 0.7;
+        }
+        
+        /* 各分支颜色主题 */
+        .branch-1 { top: 0; left: 0; }
+        .branch-1 .branch-node {
+            background: linear-gradient(145deg, #f97316, #ea580c);
+            border: 2px solid rgba(249, 115, 22, 0.3);
+        }
+        
+        .branch-2 { top: 0; right: 0; }
+        .branch-2 .branch-node {
+            background: linear-gradient(145deg, #8b5cf6, #7c3aed);
+            border: 2px solid rgba(139, 92, 246, 0.3);
+        }
+        
+        .branch-3 { top: 260px; left: 0; }
+        .branch-3 .branch-node {
+            background: linear-gradient(145deg, #06b6d4, #0891b2);
+            border: 2px solid rgba(6, 182, 212, 0.3);
+        }
+        
+        .branch-4 { top: 260px; right: 0; }
+        .branch-4 .branch-node {
+            background: linear-gradient(145deg, #10b981, #059669);
+            border: 2px solid rgba(16, 185, 129, 0.3);
+        }
+        
+        .branch-5 { top: 520px; left: 80px; }
+        .branch-5 .branch-node {
+            background: linear-gradient(145deg, #ec4899, #db2777);
+            border: 2px solid rgba(236, 72, 153, 0.3);
+        }
+        
+        .branch-6 { top: 520px; right: 80px; }
+        .branch-6 .branch-node {
+            background: linear-gradient(145deg, #f59e0b, #d97706);
+            border: 2px solid rgba(245, 158, 11, 0.3);
+        }
+        
+        /* 底部金句区域 */
+        .quotes-section {
+            max-width: 900px;
+            margin: 60px auto 40px;
+            padding: 35px;
+            background: linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .quotes-section h2 {
+            text-align: center;
+            font-size: 1.5em;
+            margin-bottom: 25px;
+            color: #fbbf24;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+        
+        .quote-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 18px;
+        }
+        
+        .quote-item {
+            padding: 18px 20px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 12px;
+            border-left: 4px solid #f59e0b;
+            font-style: italic;
+            font-size: 0.95em;
+            line-height: 1.7;
+            color: #e2e8f0;
+            transition: all 0.3s;
+        }
+        
+        .quote-item:hover {
+            background: rgba(255,255,255,0.08);
+            transform: translateX(5px);
+        }
+        
+        .quote-item span {
+            display: block;
+            margin-top: 8px;
+            font-style: normal;
+            font-size: 0.85em;
+            color: #94a3b8;
+        }
+        
+        /* 行动建议区域 */
+        .action-section {
+            max-width: 900px;
+            margin: 0 auto 40px;
+            padding: 35px;
+            background: linear-gradient(145deg, rgba(34, 197, 94, 0.1), rgba(16, 185, 129, 0.05));
+            border-radius: 20px;
+            border: 1px solid rgba(34, 197, 94, 0.2);
+        }
+        
+        .action-section h2 {
+            text-align: center;
+            font-size: 1.5em;
+            margin-bottom: 25px;
+            color: #34d399;
+        }
+        
+        .action-list {
+            display: grid;
+            gap: 16px;
+        }
+        
+        .action-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 18px 20px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 12px;
+            transition: all 0.3s;
+        }
+        
+        .action-item:hover {
+            background: rgba(255,255,255,0.08);
+        }
+        
+        .action-number {
+            flex-shrink: 0;
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        
+        .action-text {
+            flex: 1;
+            line-height: 1.6;
+        }
+        
+        .action-text strong {
+            color: #86efac;
+        }
+        
+        /* 页脚 */
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #64748b;
+            font-size: 0.85em;
+        }
+
+        /* 图标 */
+        .icon { 
+            font-size: 1.2em; 
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 1100px) {
+            .branches {
+                width: 700px;
+                height: 1300px;
+                margin-top: 120px;
+            }
+            
+            .branch {
+                width: 320px;
+                position: static !important;
+                margin-bottom: 25px;
+            }
+            
+            .center-node .node-box {
+                width: 240px;
+                padding: 22px 18px;
+            }
+            
+            .header h1 { font-size: 2em; }
+            
+            .quote-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .header h1 { font-size: 1.6em; }
+            .header .subtitle { font-size: 1em; }
+            .center-node .node-box { width: 200px; padding: 18px 14px; }
+            .branch-node { padding: 14px 12px; }
+            .branch-node li { font-size: 0.78em; padding: 5px 0 5px 16px; }
+            .quotes-section, .action-section { padding: 20px 16px; }
+            .quote-item { padding: 14px 16px; font-size: 0.88em; }
+            .action-item { padding: 14px 16px; flex-direction: column; gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 标题区域 -->
+        <div class="header">
+            <div class="date-badge">📅 2026年8月6日 · 每日一学</div>
+            <h1>《微习惯》</h1>
+            <p class="subtitle">Mini Habits: Smaller Habits, Bigger Results</p>
+            <p class="author">👤 斯蒂芬·盖斯（Stephen Guise）| 🏆 亚马逊自我提升类畅销书</p>
+        </div>
+
+        <!-- 思维导图 -->
+        <div class="mindmap-container">
+            <!-- 中心节点 -->
+            <div class="center-node">
+                <div class="node-box">
+                    <h2>🌱 微习惯</h2>
+                    <p>小到不可能失败的习惯养成法</p>
+                    <p style="margin-top:8px;font-size:0.85em;opacity:0.8;">简单到不可能失败 · 每天只做一点点</p>
+                </div>
+            </div>
+
+            <!-- 分支节点 -->
+            <div class="branches">
+                <!-- 分支1：核心洞见 -->
+                <div class="branch branch-1">
+                    <div class="branch-node">
+                        <h3><span class="icon">💡</span> 核心洞见</h3>
+                        <ul>
+                            <li>把目标缩小到<strong>"小到不可能失败"</strong>的程度</li>
+                            <li>意志力是有限资源，微习惯几乎不消耗意志力</li>
+                            <li>动力不可靠（情绪波动），而微习惯依赖的意志力更稳定</li>
+                            <li>完成微目标后大脑会自动进入"超额模式"</li>
+                            <li>成功的秘诀不是咬牙坚持，而是<strong>降低门槛</strong></li>
+                            <li>大脑抗拒剧烈变化，但接受微小的增量改变</li>
+                            <li>一天一个俯卧撑 > 一周一次健身房</li>
+                            <li>习惯养成的真正敌人不是懒惰，是<strong>完美主义</strong></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 分支2：核心框架/四要素 -->
+                <div class="branch branch-2">
+                    <div class="branch-node">
+                        <h3><span class="icon">📐</span> 四要素/核心框架</h3>
+                        <ul>
+                            <li><strong>微步骤：</strong>目标小到不可能失败（如"写50字"而不是"写2000字"）</li>
+                            <li><strong>意志力节省：</strong>微习惯几乎不消耗意志力，避免决策疲劳</li>
+                            <li><strong>超额完成：</strong>完成微目标获得的成就感触发超额行动——写完50字，自然多写</li>
+                            <li><strong>身份认同：</strong>每天做="我是这样的人"，通过持续行动逐步建立新身份</li>
+                            <li><strong>基底核重塑：</strong>微小重复激活大脑基底核，自动形成新神经回路</li>
+                            <li><strong>多巴胺正循环：</strong>每次完成微目标都是一次小胜利，释放奖励信号</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 分支3：主要知识点 -->
+                <div class="branch branch-3">
+                    <div class="branch-node">
+                        <h3><span class="icon">🧠</span> 主要知识点</h3>
+                        <ul>
+                            <li><strong>意志力 vs 动力：</strong>动力像海浪时高时低，意志力虽有限但通过微习惯可精确保存</li>
+                            <li><strong>前额皮层与基底核：</strong>前额皮层负责决策（短期），基底核负责自动化（长期习惯）</li>
+                            <li><strong>"虚假疲劳"：</strong>大脑在能量远未耗尽时就发送疲劳信号，微步骤可以绕过此防御</li>
+                            <li><strong>21天/30天神话：</strong>习惯养成所需时间因人因行为而异（18-254天），不是固定数字</li>
+                            <li><strong>自我效能感：</strong>每天成功完成微目标逐渐累积"我能行"的信心，形成正向循环</li>
+                            <li><strong>抽象目标 vs 具体目标：</strong>"健身"太抽象，"每天一个俯卧撑"足够具体才能执行</li>
+                            <li><strong>"为什么"驱动：</strong>给每个微习惯附上深层理由，大脑找到意义后才愿意坚持</li>
+                            <li><strong>计划弹性：</strong>微习惯天生抗中断——即使状态极差也能完成"一个俯卧撑"</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 分支4：八大微习惯实施步骤 -->
+                <div class="branch branch-4">
+                    <div class="branch-node">
+                        <h3><span class="icon">📋</span> 核心认知偏差</h3>
+                        <ul>
+                            <li><strong>选择：</strong>挑1-4个最想养成的习惯，每个浓缩为一个微步骤</li>
+                            <li><strong>挖掘价值：</strong>用"为什么"反复追问，找到每个微习惯背后的深层内在动机</li>
+                            <li><strong>明确依据：</strong>定义时间或行为触发条件（如"早饭后"或"刷牙后"）</li>
+                            <li><strong>建立回报：</strong>完成后立刻给自己一个精神奖励（微笑、握拳、说"搞定"）</li>
+                            <li><strong>记录追踪：</strong>用日历或APP每天打勾——视觉化的进度是最强正反馈</li>
+                            <li><strong>微量起步、超额完成：</strong>做完最低额度后，能多做就多做，但永远不要提高最低标准</li>
+                            <li><strong>服从计划、拒绝高期待：</strong>即使连续超额100天，微目标本身绝不上调</li>
+                            <li><strong>留意习惯养成信号：</strong>当行动不再需要意志力、不再有抵触情绪时——习惯已成型</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 分支5：微习惯的科学原理 -->
+                <div class="branch branch-5">
+                    <div class="branch-node">
+                        <h3><span class="icon">🔬</span> 为什么微习惯有效</h3>
+                        <ul>
+                            <li><strong>绕过杏仁核抵抗：</strong>微小变化不会触发大脑"战斗或逃跑"的应激反应</li>
+                            <li><strong>建立"行动惯性"：</strong>牛顿第一定律——静止的身体趋向静止，运动中的身体趋向运动</li>
+                            <li><strong>降低心理启动成本：</strong>从0到1是最难的，微习惯把门槛降到几乎没有</li>
+                            <li><strong>利用一致性偏差：</strong>人类天生希望行为一致——今天做了，明天也倾向于做</li>
+                            <li><strong>避免"什么也没做"的负罪感：</strong>每天都算成功，心态从"失败"翻转为"胜利"</li>
+                            <li><strong>渐进超负荷原理：</strong>类比健身——从不加重量开始，身体适应后自然会加</li>
+                            <li><strong>消除决策疲劳：</strong>不需要每天纠结"做不做"，因为要求低到没有拒绝的理由</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 分支6：常见误区与对策 -->
+                <div class="branch branch-6">
+                    <div class="branch-node">
+                        <h3><span class="icon">⚠️</span> 常见误区与对策</h3>
+                        <ul>
+                            <li><strong>误区：</strong>"一天一个俯卧撑有什么用？"<br><strong>对策：</strong>目的不是一蹴而就，而是<strong>先建立习惯回路</strong>，再自然提升</li>
+                            <li><strong>误区：</strong>偷偷提高最低标准<br><strong>对策：</strong>微目标永不改变。超额是奖励，不是义务</li>
+                            <li><strong>误区：</strong>同时开始太多微习惯<br><strong>对策：</strong>2-3个为佳，最多不超过4个</li>
+                            <li><strong>误区：</strong>依赖动力而不是计划<br><strong>对策：</strong>动力不可靠。固定时间+微步骤 = 可执行的系统</li>
+                            <li><strong>误区：</strong>觉得太简单而放弃<br><strong>对策：</strong>简单才是力量。正是"简单到荒谬"才让坚持成为必然</li>
+                            <li><strong>误区：</strong>不做追踪记录<br><strong>对策：</strong>打勾的仪式感是大脑最原始也最有效的奖励机制</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 金句区域 -->
+        <div class="quotes-section">
+            <h2><span>💬</span> 经典金句</h2>
+            <div class="quote-grid">
+                <div class="quote-item">
+                    "我们总是急于责怪自己没有坚持下去，却从未想过也许是我们把目标定得太高了。"
+                    <span>—— 关于目标设定</span>
+                </div>
+                <div class="quote-item">
+                    "微习惯的力量不在于每一个微步骤，而在于它们永远不会被中断。"
+                    <span>—— 关于持续的力量</span>
+                </div>
+                <div class="quote-item">
+                    "一个俯卧撑比什么都不做强太多了——强的不是次数，而是你选择了行动。"
+                    <span>—— 关于行动的哲学</span>
+                </div>
+                <div class="quote-item">
+                    "大脑不会抗拒那些小到连它都觉得不值得抵抗的变化。"
+                    <span>—— 关于大脑机制</span>
+                </div>
+                <div class="quote-item">
+                    "你的身份不是由你的目标决定的，而是由你每天在做什么决定的。"
+                    <span>—— 关于身份认同</span>
+                </div>
+                <div class="quote-item">
+                    "把标准定得低到荒谬的程度，然后让超额完成成为你每天的小惊喜。"
+                    <span>—— 关于策略设计</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 行动建议 -->
+        <div class="action-section">
+            <h2>🚀 行动建议</h2>
+            <div class="action-list">
+                <div class="action-item">
+                    <div class="action-number">1</div>
+                    <div class="action-text">
+                        <strong>今天开始一个"荒谬到可笑"的微习惯</strong><br>
+                        比如"每天读2页书""每天写50字""每天一个深蹲"。确保它足够小——小到你没有任何借口不做。
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">2</div>
+                    <div class="action-text">
+                        <strong>挖掘"为什么"——给微习惯赋予深层意义</strong><br>
+                        用"为什么"追问三次：我为什么要养成这个习惯？→ 这对我意味着什么？→ 实现后我会成为什么样的人？
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">3</div>
+                    <div class="action-text">
+                        <strong>建立视觉化追踪系统</strong><br>
+                        在墙上贴一张大日历，每天完成后用红笔画一个大勾。不追求连续不断，但追求让空白格子尽可能少。
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">4</div>
+                    <div class="action-text">
+                        <strong>把微习惯嵌入现有日程</strong><br>
+                        格式：在[现有习惯]之后，做[微习惯]。例如："刷完牙后，做1个俯卧撑""喝完早晨第一杯水后，打开书读2页"。
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">5</div>
+                    <div class="action-text">
+                        <strong>永远不要提高最低标准</strong><br>
+                        即使连续100天超额完成，微目标本身永不上调。超额=惊喜，不是新的底线。这是保持系统稳定的关键原则。
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">6</div>
+                    <div class="action-text">
+                        <strong>每周回顾：检查习惯养成信号</strong><br>
+                        每周日问自己：做这件事还需要意志力吗？还有抵触感吗？如果答案都是"否"，恭喜你——这个习惯已经真正属于你了。
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>📚 每日一学 | 持续学习，不断成长 | 2026-08-06</p>
+            <p style="margin-top:8px;">💡 推荐阅读：《微习惯》— 斯蒂芬·盖斯（Stephen Guise）</p>
+        </footer>
+    </div>
+</body>
+</html>
