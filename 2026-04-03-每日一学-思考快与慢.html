@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026-04-03-每日一学-思考快与慢</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #e4e4e7;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* 标题区域 */
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            margin-bottom: 30px;
+        }
+        
+        .header .date-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 8px 24px;
+            border-radius: 20px;
+            font-size: 14px;
+            margin-bottom: 16px;
+            letter-spacing: 2px;
+        }
+        
+        .header h1 {
+            font-size: 2.8em;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+        }
+        
+        .header .subtitle {
+            font-size: 1.3em;
+            color: #a78bfa;
+            margin-bottom: 8px;
+        }
+        
+        .header .author {
+            color: #94a3b8;
+            font-style: italic;
+        }
+        
+        /* 思维导图容器 */
+        .mindmap-container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 800px;
+            overflow-x: auto;
+        }
+        
+        /* 中心节点 */
+        .center-node {
+            position: absolute;
+            left: 50%;
+            top: 40px;
+            transform: translateX(-50%);
+            z-index: 10;
+        }
+        
+        .center-node .node-box {
+            width: 280px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            padding: 28px 24px;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+            border: 2px solid rgba(255,255,255,0.1);
+        }
+        
+        .center-node .node-box h2 {
+            font-size: 1.5em;
+            color: white;
+            margin-bottom: 8px;
+        }
+        
+        .center-node .node-box p {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        
+        /* SVG连接线 */
+        .connections-svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .connection-line {
+            fill: none;
+            stroke-width: 3;
+            stroke-linecap: round;
+            opacity: 0.6;
+        }
+        
+        /* 分支节点 */
+        .branches {
+            position: relative;
+            width: 1150px;
+            height: 900px;
+            margin-top: 140px;
+        }
+        
+        .branch {
+            position: absolute;
+            width: 240px;
+        }
+        
+        .branch-node {
+            border-radius: 16px;
+            padding: 18px 16px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .branch-node:hover {
+            transform: translateY(-5px);
+        }
+        
+        .branch-node h3 {
+            font-size: 1.05em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .branch-node ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .branch-node li {
+            font-size: 0.82em;
+            padding: 6px 0;
+            padding-left: 18px;
+            position: relative;
+            line-height: 1.5;
+            color: rgba(255,255,255,0.85);
+        }
+        
+        .branch-node li::before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            font-size: 0.75em;
+            opacity: 0.7;
+        }
+        
+        /* 各分支颜色主题 */
+        .branch-1 { top: 0; left: 0; }
+        .branch-1 .branch-node {
+            background: linear-gradient(145deg, #e74c3c, #c0392b);
+            border: 2px solid rgba(231, 76, 60, 0.3);
+        }
+        
+        .branch-2 { top: 0; right: 0; }
+        .branch-2 .branch-node {
+            background: linear-gradient(145deg, #3498db, #2980b9);
+            border: 2px solid rgba(52, 152, 219, 0.3);
+        }
+        
+        .branch-3 { top: 260px; left: 0; }
+        .branch-3 .branch-node {
+            background: linear-gradient(145deg, #27ae60, #229954);
+            border: 2px solid rgba(39, 174, 96, 0.3);
+        }
+        
+        .branch-4 { top: 260px; right: 0; }
+        .branch-4 .branch-node {
+            background: linear-gradient(145deg, #f39c12, #d68910);
+            border: 2px solid rgba(243, 156, 18, 0.3);
+        }
+        
+        .branch-5 { top: 520px; left: 80px; }
+        .branch-5 .branch-node {
+            background: linear-gradient(145deg, #9b59b6, #8e44ad);
+            border: 2px solid rgba(155, 89, 182, 0.3);
+        }
+        
+        .branch-6 { top: 520px; right: 80px; }
+        .branch-6 .branch-node {
+            background: linear-gradient(145deg, #1abc9c, #16a085);
+            border: 2px solid rgba(26, 188, 156, 0.3);
+        }
+        
+        /* 底部金句区域 */
+        .quotes-section {
+            max-width: 900px;
+            margin: 60px auto 40px;
+            padding: 35px;
+            background: linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .quotes-section h2 {
+            text-align: center;
+            font-size: 1.5em;
+            margin-bottom: 25px;
+            color: #fbbf24;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+        
+        .quote-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 18px;
+        }
+        
+        .quote-item {
+            padding: 18px 20px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 12px;
+            border-left: 4px solid #f59e0b;
+            font-style: italic;
+            font-size: 0.95em;
+            line-height: 1.7;
+            color: #e2e8f0;
+            transition: all 0.3s;
+        }
+        
+        .quote-item:hover {
+            background: rgba(255,255,255,0.08);
+            transform: translateX(5px);
+        }
+        
+        .quote-item span {
+            display: block;
+            margin-top: 8px;
+            font-style: normal;
+            font-size: 0.85em;
+            color: #94a3b8;
+        }
+        
+        /* 行动建议区域 */
+        .action-section {
+            max-width: 900px;
+            margin: 0 auto 40px;
+            padding: 35px;
+            background: linear-gradient(145deg, rgba(34, 197, 94, 0.1), rgba(16, 185, 129, 0.05));
+            border-radius: 20px;
+            border: 1px solid rgba(34, 197, 94, 0.2);
+        }
+        
+        .action-section h2 {
+            text-align: center;
+            font-size: 1.5em;
+            margin-bottom: 25px;
+            color: #34d399;
+        }
+        
+        .action-list {
+            display: grid;
+            gap: 16px;
+        }
+        
+        .action-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 18px 20px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 12px;
+            transition: all 0.3s;
+        }
+        
+        .action-item:hover {
+            background: rgba(255,255,255,0.08);
+        }
+        
+        .action-number {
+            flex-shrink: 0;
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        
+        .action-text {
+            flex: 1;
+            line-height: 1.6;
+        }
+        
+        .action-text strong {
+            color: #86efac;
+        }
+        
+        /* 页脚 */
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #64748b;
+            font-size: 0.85em;
+        }
+
+        /* 图标 */
+        .icon { 
+            font-size: 1.2em; 
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 1100px) {
+            .branches {
+                width: 700px;
+                height: 1300px;
+                margin-top: 120px;
+            }
+            
+            .branch {
+                width: 320px;
+                position: static !important;
+                margin-bottom: 25px;
+            }
+            
+            .center-node .node-box {
+                width: 240px;
+                padding: 22px 18px;
+            }
+            
+            .header h1 { font-size: 2em; }
+            
+            .quote-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .header h1 { font-size: 1.6em; }
+            .header .subtitle { font-size: 1em; }
+            .center-node .node-box { width: 200px; padding: 18px 14px; }
+            .branch-node { padding: 14px 12px; }
+            .branch-node li { font-size: 0.78em; padding: 5px 0 5px 16px; }
+            .quotes-section, .action-section { padding: 20px 16px; }
+            .quote-item { padding: 14px 16px; font-size: 0.88em; }
+            .action-item { padding: 14px 16px; flex-direction: column; gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 标题区域 -->
+        <div class="header">
+            <div class="date-badge">📅 2026年4月3日 · 每日一学</div>
+            <h1>《思考，快与慢》</h1>
+            <p class="subtitle">Thinking, Fast and Slow</p>
+            <p class="author">👤 丹尼尔·卡尼曼（Daniel Kahneman）| 🏆 诺贝尔经济学奖得主</p>
+        </div>
+
+        <!-- 思维导图 -->
+        <div class="mindmap-container">
+            <!-- 中心节点 -->
+            <div class="center-node">
+                <div class="node-box">
+                    <h2>🧠 思考，快与慢</h2>
+                    <p>人类决策的两大思维系统</p>
+                    <p style="margin-top:8px;font-size:0.85em;opacity:0.8;">系统1 · 系统2</p>
+                </div>
+            </div>
+
+            <!-- 分支节点 -->
+            <div class="branches">
+                <!-- 分支1：系统1 -->
+                <div class="branch branch-1">
+                    <div class="branch-node">
+                        <h3><span class="icon">⚡</span> 系统1：快速思维</h3>
+                        <ul>
+                            <li>运行速度快，自动触发</li>
+                            <li>无意识、不费力运作</li>
+                            <li>依赖直觉和第一印象</li>
+                            <li>擅长模式识别与联想</li>
+                            <li>持续处于活跃状态</li>
+                            <li>无法随意关闭</li>
+                            <li>易受情绪和偏见影响</li>
+                            <li>例：看到2+2立刻知道=4</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 分支2：系统2 -->
+                <div class="branch branch-2">
+                    <div class="branch-node">
+                        <h3><span class="icon">🔍</span> 系统2：慢速思维</h3>
+                        <ul>
+                            <li>运行速度慢，需主动调用</li>
+                            <li>有意识、消耗认知资源</li>
+                            <li>进行逻辑推理与分析</li>
+                            <li>擅长复杂计算与规划</li>
+                            <li>可抑制系统1的冲动</li>
+                            <li>容易疲劳（认知吝啬鬼）</li>
+                            <li>需要专注力才能激活</li>
+                            <li>例：计算17×24的结果</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 分支3：认知偏差 -->
+                <div class="branch branch-3">
+                    <div class="branch-node">
+                        <h3><span class="icon">⚠️</span> 核心认知偏差</h3>
+                        <ul>
+                            <li><strong>锚定效应：</strong>被初始信息过度影响判断</li>
+                            <li><strong>可得性偏差：</strong>高估容易想起事件的概率</li>
+                            <li><strong>代表性偏差：</strong>以貌取人、忽略基础概率</li>
+                            <li><strong>框架效应：</strong>同一问题不同表述导致不同选择</li>
+                            <li><strong>损失厌恶：</strong>失去的痛苦是等量收益的2倍+</li>
+                            <li><strong>确认偏误：</strong>只寻找支持自己观点的证据</li>
+                            <li><strong>后见之明：</strong>"我早就知道了"的错觉</li>
+                            <li><strong>光环效应：</strong>好印象泛化到所有方面</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 分支4：核心理论框架 -->
+                <div class="branch branch-4">
+                    <div class="branch-node">
+                        <h3><span class="icon">📐</span> 四要素/核心框架</h3>
+                        <ul>
+                            <li><strong>双系统理论：</strong>系统1（直觉）+ 系统2（理性）的协作与冲突</li>
+                            <li><strong>前景理论：</strong>人们如何做风险决策，参考点决定得失感知</li>
+                            <li><strong>启发式与偏差：</strong>大脑用简化规则（启发式）处理复杂问题</li>
+                            <li><strong>过度自信：</strong>人类系统性高估自己的判断和能力</li>
+                            <li><strong>禀赋效应：</strong>拥有某物后对其估值显著增加</li>
+                            <li><strong>峰终定律：</strong>对体验的记忆由高峰和结尾决定</li>
+                            <li><strong>心理账户：</strong>钱在不同"账户"中被区别对待</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 分支5：主要知识点 -->
+                <div class="branch branch-5">
+                    <div class="branch-node">
+                        <h3><span class="icon">💡</span> 主要知识点</h3>
+                        <ul>
+                            <li><strong>WYSIATI原则：</strong>"你所见即全貌"，信息不足也下结论</li>
+                            <li><strong>认知放松：</strong>熟悉感→可信感，重复产生好感</li>
+                            <li><strong>因果关系错觉：</strong>大脑强行给随机事件找原因</li>
+                            <li><strong>回归平均值：</strong>极端表现后自然回归正常</li>
+                            <li><strong>规划谬误：</strong>总是低估任务所需时间和成本</li>
+                            <li><strong>乐观偏差：</strong>认为自己比平均更幸运</li>
+                            <li><strong>忽视长尾：</strong>对小概率重大风险准备不足</li>
+                            <li><strong>协因效应：</strong>能力错觉——技能错觉源于熟悉度</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 分支6：核心洞见 -->
+                <div class="branch branch-6">
+                    <div class="branch-node">
+                        <h3><span class="icon">✨</span> 核心洞见</h3>
+                        <ul>
+                            <li>人类<strong>并非理性经济人</strong>，而是有限理性的</li>
+                            <li>直觉虽强大但<strong>不可靠</strong>，需要系统2把关</li>
+                            <li>我们生活在<strong>两个世界</strong>：感觉的世界 vs 真实世界</li>
+                            <li>决策质量取决于<strong>环境设计</strong>（助推/Nudge）</li>
+                            <li><strong>元认知</strong>能力是高级思维的关键</li>
+                            <li>认识自己的认知局限本身就是一种智慧</li>
+                            <li>经验法则在多数场景有效，但在关键决策中危险</li>
+                            <li>慢思考需要<strong>刻意练习</strong>才能成为习惯</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 金句区域 -->
+        <div class="quotes-section">
+            <h2><span>💬</span> 经典金句</h2>
+            <div class="quote-grid">
+                <div class="quote-item">
+                    "没有什么比成功更能让人保持乐观了。"
+                    <span>—— 关于过度自信</span>
+                </div>
+                <div class="quote-item">
+                    "我们对自己所不了解的东西有一种直觉，但这种直觉往往是错的。"
+                    <span>—— 关于认知偏差</span>
+                </div>
+                <div class="quote-item">
+                    "一个令人震惊的事实，一旦被接受，就会迅速变成不那么令人震惊的事实。"
+                    <span>—— 关于习惯化效应</span>
+                </div>
+                <div class="quote-item">
+                    "损失带来的痛苦大约是同等收益带来快乐的两倍。"
+                    <span>—— 关于损失厌恶</span>
+                </div>
+                <div class="quote-item">
+                    "聪明人犯错误不是因为信息不足，而是因为信息处理方式有误。"
+                    <span>—— 关于认知偏差的本质</span>
+                </div>
+                <div class="quote-item">
+                    "你的直觉只是你的系统1在说话，别急着相信它。"
+                    <span>—— 关于双系统协作</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 行动建议 -->
+        <div class="action-section">
+            <h2>🚀 行动建议</h2>
+            <div class="action-list">
+                <div class="action-item">
+                    <div class="action-number">1</div>
+                    <div class="action-text">
+                        <strong>重要决策前强制"暂停"</strong><br>
+                        遇到重大人生/职业决策时，给自己至少24小时的冷静期，让系统2有时间介入。
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">2</div>
+                    <div class="action-text">
+                        <strong>建立"决策清单"</strong><br>
+                        参考外科医生用的清单方法，列出常见偏差检查项（锚定？损失厌恶？），逐条核对。
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">3</div>
+                    <div class="action-text">
+                        <strong>寻找"反面案例"</strong><br>
+                        刻意搜索反对自己观点的证据，主动打破确认偏误，培养批判性思维习惯。
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">4</div>
+                    <div class="action-text">
+                        <strong>使用"外部视角"</strong><br>
+                        做计划时先看同类情况的基准数据（参考类别预测），再结合自身情况调整。
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">5</div>
+                    <div class="action-text">
+                        <strong>记录决策日记</strong><br>
+                        记录每次重要决策时的想法和依据，定期复盘，追踪自己的决策准确率。
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">6</div>
+                    <div class="action-text">
+                        <strong>优化决策环境</strong><br>
+                        减少不必要的认知负荷（如固定日常流程），为真正重要的决策保留精力。
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>📚 每日一学 | 持续学习，不断成长 | 2026-04-03</p>
+            <p style="margin-top:8px;">💡 推荐阅读：《思考，快与慢》— 丹尼尔·卡尼曼</p>
+        </footer>
+    </div>
+</body>
+</html>
