@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026-08-07-每日一学-逆商</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #e4e4e7;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            margin-bottom: 30px;
+        }
+        
+        .header .date-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 8px 24px;
+            border-radius: 20px;
+            font-size: 14px;
+            margin-bottom: 16px;
+            letter-spacing: 2px;
+        }
+        
+        .header h1 {
+            font-size: 2.8em;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+        }
+        
+        .header .subtitle {
+            font-size: 1.3em;
+            color: #a78bfa;
+            margin-bottom: 8px;
+        }
+        
+        .header .author {
+            color: #94a3b8;
+            font-style: italic;
+        }
+        
+        .mindmap-container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 800px;
+            overflow-x: auto;
+        }
+        
+        .center-node {
+            position: absolute;
+            left: 50%;
+            top: 40px;
+            transform: translateX(-50%);
+            z-index: 10;
+        }
+        
+        .center-node .node-box {
+            width: 280px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            padding: 28px 24px;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+            border: 2px solid rgba(255,255,255,0.1);
+        }
+        
+        .center-node .node-box h2 {
+            font-size: 1.5em;
+            color: white;
+            margin-bottom: 8px;
+        }
+        
+        .center-node .node-box p {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        
+        .branches {
+            position: relative;
+            width: 1150px;
+            height: 900px;
+            margin-top: 140px;
+        }
+        
+        .branch {
+            position: absolute;
+            width: 240px;
+        }
+        
+        .branch-node {
+            border-radius: 16px;
+            padding: 18px 16px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .branch-node:hover {
+            transform: translateY(-5px);
+        }
+        
+        .branch-node h3 {
+            font-size: 1.05em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .branch-node ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .branch-node li {
+            font-size: 0.82em;
+            padding: 6px 0;
+            padding-left: 18px;
+            position: relative;
+            line-height: 1.5;
+            color: rgba(255,255,255,0.85);
+        }
+        
+        .branch-node li::before {
+            content: "\25B8";
+            position: absolute;
+            left: 0;
+            font-size: 0.75em;
+            opacity: 0.7;
+        }
+        
+        .branch-1 { top: 0; left: 0; }
+        .branch-1 .branch-node {
+            background: linear-gradient(145deg, #e74c3c, #c0392b);
+            border: 2px solid rgba(231, 76, 60, 0.3);
+        }
+        
+        .branch-2 { top: 0; right: 0; }
+        .branch-2 .branch-node {
+            background: linear-gradient(145deg, #3498db, #2980b9);
+            border: 2px solid rgba(52, 152, 219, 0.3);
+        }
+        
+        .branch-3 { top: 260px; left: 0; }
+        .branch-3 .branch-node {
+            background: linear-gradient(145deg, #27ae60, #229954);
+            border: 2px solid rgba(39, 174, 96, 0.3);
+        }
+        
+        .branch-4 { top: 260px; right: 0; }
+        .branch-4 .branch-node {
+            background: linear-gradient(145deg, #f39c12, #d68910);
+            border: 2px solid rgba(243, 156, 18, 0.3);
+        }
+        
+        .branch-5 { top: 520px; left: 80px; }
+        .branch-5 .branch-node {
+            background: linear-gradient(145deg, #9b59b6, #8e44ad);
+            border: 2px solid rgba(155, 89, 182, 0.3);
+        }
+        
+        .branch-6 { top: 520px; right: 80px; }
+        .branch-6 .branch-node {
+            background: linear-gradient(145deg, #1abc9c, #16a085);
+            border: 2px solid rgba(26, 188, 156, 0.3);
+        }
+        
+        .quotes-section {
+            max-width: 900px;
+            margin: 60px auto 40px;
+            padding: 35px;
+            background: linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .quotes-section h2 {
+            text-align: center;
+            font-size: 1.5em;
+            margin-bottom: 25px;
+            color: #fbbf24;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+        
+        .quote-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 18px;
+        }
+        
+        .quote-item {
+            padding: 18px 20px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 12px;
+            border-left: 4px solid #f59e0b;
+            font-style: italic;
+            font-size: 0.95em;
+            line-height: 1.7;
+            color: #e2e8f0;
+            transition: all 0.3s;
+        }
+        
+        .quote-item:hover {
+            background: rgba(255,255,255,0.08);
+            transform: translateX(5px);
+        }
+        
+        .quote-item span {
+            display: block;
+            margin-top: 8px;
+            font-style: normal;
+            font-size: 0.85em;
+            color: #94a3b8;
+        }
+        
+        .action-section {
+            max-width: 900px;
+            margin: 0 auto 40px;
+            padding: 35px;
+            background: linear-gradient(145deg, rgba(34, 197, 94, 0.1), rgba(16, 185, 129, 0.05));
+            border-radius: 20px;
+            border: 1px solid rgba(34, 197, 94, 0.2);
+        }
+        
+        .action-section h2 {
+            text-align: center;
+            font-size: 1.5em;
+            margin-bottom: 25px;
+            color: #34d399;
+        }
+        
+        .action-list {
+            display: grid;
+            gap: 16px;
+        }
+        
+        .action-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 18px 20px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 12px;
+            transition: all 0.3s;
+        }
+        
+        .action-item:hover {
+            background: rgba(255,255,255,0.08);
+        }
+        
+        .action-number {
+            flex-shrink: 0;
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        
+        .action-text {
+            flex: 1;
+            line-height: 1.6;
+        }
+        
+        .action-text strong {
+            color: #86efac;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #64748b;
+            font-size: 0.85em;
+        }
+
+        .icon { 
+            font-size: 1.2em; 
+        }
+
+        @media (max-width: 1100px) {
+            .branches {
+                width: 700px;
+                height: 1300px;
+                margin-top: 120px;
+            }
+            
+            .branch {
+                width: 320px;
+                position: static !important;
+                margin-bottom: 25px;
+            }
+            
+            .center-node .node-box {
+                width: 240px;
+                padding: 22px 18px;
+            }
+            
+            .header h1 { font-size: 2em; }
+            
+            .quote-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .header h1 { font-size: 1.6em; }
+            .header .subtitle { font-size: 1em; }
+            .center-node .node-box { width: 200px; padding: 18px 14px; }
+            .branch-node { padding: 14px 12px; }
+            .branch-node li { font-size: 0.78em; padding: 5px 0 5px 16px; }
+            .quotes-section, .action-section { padding: 20px 16px; }
+            .quote-item { padding: 14px 16px; font-size: 0.88em; }
+            .action-item { padding: 14px 16px; flex-direction: column; gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="date-badge">📅 2026年8月7日 · 每日一学</div>
+            <h1>《逆商》</h1>
+            <p class="subtitle">Adversity Quotient: Turning Obstacles into Opportunities</p>
+            <p class="author">👤 保罗·斯托兹（Paul G. Stoltz）| 🏆 逆商理论开创者</p>
+        </div>
+
+        <div class="mindmap-container">
+            <div class="center-node">
+                <div class="node-box">
+                    <h2>🏔️ 逆商（AQ）</h2>
+                    <p>在逆境中继续前行的能力</p>
+                    <p style="margin-top:8px;font-size:0.85em;opacity:0.8;">CORE · LEAD · 攀登者</p>
+                </div>
+            </div>
+
+            <div class="branches">
+                <div class="branch branch-1">
+                    <div class="branch-node">
+                        <h3><span class="icon">💡</span> 核心洞见</h3>
+                        <ul>
+                            <li>成功的关键不是智商或情商，而是<strong>面对逆境的反应能力</strong></li>
+                            <li>AQ是可以通过<strong>系统训练</strong>显著提升的</li>
+                            <li>逆境不是命运的终点，而是<strong>成长的跳板</strong></li>
+                            <li>人对逆境的诠释方式决定了<strong>人生的高度</strong></li>
+                            <li>攀登者思维：把每次挫折视为<strong>学习机会</strong></li>
+                            <li>绝望循环可以被LEAD工具打断</li>
+                            <li>组织AQ决定团队与企业的韧性</li>
+                            <li>高AQ者在危机中反而<strong>加速成长</strong></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="branch branch-2">
+                    <div class="branch-node">
+                        <h3><span class="icon">📐</span> CORE四维模型</h3>
+                        <ul>
+                            <li><strong>C - Control（掌控感）：</strong>你觉得自己对逆境有多大控制力？</li>
+                            <li><strong>O - Ownership（担当力）：</strong>你愿意为改善局面担起多大责任？</li>
+                            <li><strong>R - Reach（影响度）：</strong>逆境会蔓延到生活的多大范围？</li>
+                            <li><strong>E - Endurance（持续性）：</strong>逆境及其影响会持续多久？</li>
+                            <li>每个维度可以独立测量和训练</li>
+                            <li>CORE得分越高，应对逆境能力越强</li>
+                            <li>低AQ者在C和O上得分偏低</li>
+                            <li>高AQ者能将R和E控制在合理范围</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="branch branch-3">
+                    <div class="branch-node">
+                        <h3><span class="icon">🧗</span> 三种人格类型</h3>
+                        <ul>
+                            <li><strong>放弃者（Quitter）：</strong>遇到困难就退缩，拒绝挑战</li>
+                            <li>放弃者：习得性无助，认定努力无用</li>
+                            <li><strong>扎营者（Camper）：</strong>爬到一定高度就满足，不再前进</li>
+                            <li>扎营者：满足于舒适区，害怕再冒风险</li>
+                            <li><strong>攀登者（Climber）：</strong>终身追求成长，视逆境为必经之路</li>
+                            <li>攀登者：面对挫折越战越勇，持续进化</li>
+                            <li>同一个人在不同领域可能属于不同类型</li>
+                            <li>从扎营者到攀登者的转化是关键突破</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="branch branch-4">
+                    <div class="branch-node">
+                        <h3><span class="icon">🔧</span> LEAD逆商提升工具</h3>
+                        <ul>
+                            <li><strong>L-Listen（倾听）：</strong>觉察自己对逆境的即时反应</li>
+                            <li><strong>E-Explore（探究）：</strong>厘清逆境的责任归属（哪些是你该担的？）</li>
+                            <li><strong>A-Analyze（分析）：</strong>用证据检验你的灾难化想象是否夸大</li>
+                            <li><strong>D-Do（行动）：</strong>列出可执行的一小步并立刻行动</li>
+                            <li>LEAD是一个可循环使用的完整流程</li>
+                            <li>关键在于从"反应"模式切换到"回应"模式</li>
+                            <li>定期练习LEAD，使其变成潜意识习惯</li>
+                            <li>团队中也可推广LEAD提升组织AQ</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="branch branch-5">
+                    <div class="branch-node">
+                        <h3><span class="icon">📚</span> 主要知识点</h3>
+                        <ul>
+                            <li><strong>习得性无助：</strong>反复失败后放弃尝试的心理状态。可通过成功经验打破</li>
+                            <li><strong>灾难化思维：</strong>把小事放大为全面危机。需用证据挑战其合理性</li>
+                            <li><strong>归因风格：</strong>乐观者将失败归为暂时/外部/特定；悲观者归为永久/内部/普遍</li>
+                            <li><strong>逆境分层：</strong>社会逆境→职场逆境→个人逆境，各层相互影响</li>
+                            <li><strong>AQ与健康：</strong>高AQ者免疫力更强，恢复更快</li>
+                            <li><strong>组织韧性：</strong>团队AQ影响变革成败和创新能力</li>
+                            <li><strong>登顶悖论：</strong>真正的攀登者享受过程而非只追求结果</li>
+                            <li><strong>逆商可测：</strong>ARP问卷可科学量化个人的AQ水平</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="branch branch-6">
+                    <div class="branch-node">
+                        <h3><span class="icon">🌟</span> 应用场景与价值</h3>
+                        <ul>
+                            <li><strong>职场晋升：</strong>高AQ者在裁员和变革中脱颖而出</li>
+                            <li><strong>创业：</strong>创业者90%时间面对拒绝和失败，AQ决定存活率</li>
+                            <li><strong>销售：</strong>面对拒绝仍保持动力的核心素质</li>
+                            <li><strong>亲子教育：</strong>培养孩子的抗挫折能力比成绩更重要</li>
+                            <li><strong>领导力：</strong>领导者的AQ影响整个团队的韧性</li>
+                            <li><strong>人际关系：</strong>高AQ者更能修复破裂的关系</li>
+                            <li><strong>心理健康：</strong>高AQ是抑郁症的重要保护因子</li>
+                            <li><strong>体育竞技：</strong>顶级运动员的天赋差异极小，AQ是分水岭</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quotes-section">
+            <h2><span>💬</span> 经典金句</h2>
+            <div class="quote-grid">
+                <div class="quote-item">
+                    "衡量成功的真正标准，不是你达到了多高的顶峰，而是你在触底后反弹了多高。"
+                    <span>—— 关于逆境反弹力</span>
+                </div>
+                <div class="quote-item">
+                    "放弃者放弃挑战，扎营者满足现状，攀登者永不停歇。"
+                    <span>—— 关于三种人生姿态</span>
+                </div>
+                <div class="quote-item">
+                    "逆境本身不会定义你，你如何回应逆境才会。"
+                    <span>—— 关于选择的力量</span>
+                </div>
+                <div class="quote-item">
+                    "攀登的过程本身就是回报——每一次克服困难都在重塑你的自我认知。"
+                    <span>—— 关于成长的本质</span>
+                </div>
+                <div class="quote-item">
+                    "你无法选择是否遇到逆境，但你可以选择以什么姿态面对它。"
+                    <span>—— 关于掌控感</span>
+                </div>
+                <div class="quote-item">
+                    "习得性无助是一种习惯，而习惯是可以改变的。"
+                    <span>—— 关于改变的希望</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-section">
+            <h2>🚀 行动建议</h2>
+            <div class="action-list">
+                <div class="action-item">
+                    <div class="action-number">1</div>
+                    <div class="action-text">
+                        <strong>完成AQ自测（ARP问卷）</strong><br>
+                        下载逆商测评问卷，了解自己在CORE四个维度上的得分，找到最需要提升的方向。
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">2</div>
+                    <div class="action-text">
+                        <strong>建立"逆境日志"</strong><br>
+                        每次遇到困难时，用LEAD工具记录：听到了什么内部声音→责任归属→证据检验→行动计划。坚持30天形成习惯。
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">3</div>
+                    <div class="action-text">
+                        <strong>挑战灾难化思维</strong><br>
+                        当感到"一切都完了"时，立刻问自己三个问题：有什么证据支持这个结论？最坏的结果发生的概率有多大？我能做什么来改善？
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">4</div>
+                    <div class="action-text">
+                        <strong>刻意练习"小逆境"</strong><br>
+                        每周主动给自己设一个可掌控的小挑战（如公开演讲、学习新技能、冷接触陌生人），在低风险环境中锻炼逆商肌肉。
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">5</div>
+                    <div class="action-text">
+                        <strong>培养"攀登者"叙事</strong><br>
+                        重新定义你生活中的三次重大挫折——用攀登者视角重新讲述这些故事：你从中学到了什么？它如何让你变得更强？
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">6</div>
+                    <div class="action-text">
+                        <strong>搭建支持系统</strong><br>
+                        找到2-3位"高AQ伙伴"，建立定期交流机制。在低谷时互相提醒用LEAD工具分析，用攀登者视角看待问题。
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>📚 每日一学 | 持续学习，不断成长 | 2026-08-07</p>
+            <p style="margin-top:8px;">💡 推荐阅读：《逆商：我们该如何应对坏事件》— 保罗·斯托兹</p>
+        </footer>
+    </div>
+</body>
+</html>
