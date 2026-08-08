@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026-08-08-每日一学-精力管理</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #e4e4e7;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            margin-bottom: 30px;
+        }
+        
+        .header .date-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 8px 24px;
+            border-radius: 20px;
+            font-size: 14px;
+            margin-bottom: 16px;
+            letter-spacing: 2px;
+        }
+        
+        .header h1 {
+            font-size: 2.8em;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+        }
+        
+        .header .subtitle {
+            font-size: 1.3em;
+            color: #a78bfa;
+            margin-bottom: 8px;
+        }
+        
+        .header .author {
+            color: #94a3b8;
+            font-style: italic;
+        }
+        
+        .mindmap-container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 800px;
+            overflow-x: auto;
+        }
+        
+        .center-node {
+            position: absolute;
+            left: 50%;
+            top: 40px;
+            transform: translateX(-50%);
+            z-index: 10;
+        }
+        
+        .center-node .node-box {
+            width: 280px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            padding: 28px 24px;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+            border: 2px solid rgba(255,255,255,0.1);
+        }
+        
+        .center-node .node-box h2 {
+            font-size: 1.5em;
+            color: white;
+            margin-bottom: 8px;
+        }
+        
+        .center-node .node-box p {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        
+        .branches {
+            position: relative;
+            width: 1150px;
+            height: 900px;
+            margin-top: 140px;
+        }
+        
+        .branch {
+            position: absolute;
+            width: 240px;
+        }
+        
+        .branch-node {
+            border-radius: 16px;
+            padding: 18px 16px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .branch-node:hover {
+            transform: translateY(-5px);
+        }
+        
+        .branch-node h3 {
+            font-size: 1.05em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .branch-node ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .branch-node li {
+            font-size: 0.82em;
+            padding: 6px 0;
+            padding-left: 18px;
+            position: relative;
+            line-height: 1.5;
+            color: rgba(255,255,255,0.85);
+        }
+        
+        .branch-node li::before {
+            content: "\25B8";
+            position: absolute;
+            left: 0;
+            font-size: 0.75em;
+            opacity: 0.7;
+        }
+        
+        .branch-1 { top: 0; left: 0; }
+        .branch-1 .branch-node {
+            background: linear-gradient(145deg, #e74c3c, #c0392b);
+            border: 2px solid rgba(231, 76, 60, 0.3);
+        }
+        
+        .branch-2 { top: 0; right: 0; }
+        .branch-2 .branch-node {
+            background: linear-gradient(145deg, #3498db, #2980b9);
+            border: 2px solid rgba(52, 152, 219, 0.3);
+        }
+        
+        .branch-3 { top: 260px; left: 0; }
+        .branch-3 .branch-node {
+            background: linear-gradient(145deg, #27ae60, #229954);
+            border: 2px solid rgba(39, 174, 96, 0.3);
+        }
+        
+        .branch-4 { top: 260px; right: 0; }
+        .branch-4 .branch-node {
+            background: linear-gradient(145deg, #f39c12, #d68910);
+            border: 2px solid rgba(243, 156, 18, 0.3);
+        }
+        
+        .branch-5 { top: 520px; left: 80px; }
+        .branch-5 .branch-node {
+            background: linear-gradient(145deg, #9b59b6, #8e44ad);
+            border: 2px solid rgba(155, 89, 182, 0.3);
+        }
+        
+        .branch-6 { top: 520px; right: 80px; }
+        .branch-6 .branch-node {
+            background: linear-gradient(145deg, #1abc9c, #16a085);
+            border: 2px solid rgba(26, 188, 156, 0.3);
+        }
+        
+        .quotes-section {
+            max-width: 900px;
+            margin: 60px auto 40px;
+            padding: 35px;
+            background: linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .quotes-section h2 {
+            text-align: center;
+            font-size: 1.5em;
+            margin-bottom: 25px;
+            color: #fbbf24;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+        
+        .quote-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 18px;
+        }
+        
+        .quote-item {
+            padding: 18px 20px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 12px;
+            border-left: 4px solid #f59e0b;
+            font-style: italic;
+            font-size: 0.95em;
+            line-height: 1.7;
+            color: #e2e8f0;
+            transition: all 0.3s;
+        }
+        
+        .quote-item:hover {
+            background: rgba(255,255,255,0.08);
+            transform: translateX(5px);
+        }
+        
+        .quote-item span {
+            display: block;
+            margin-top: 8px;
+            font-style: normal;
+            font-size: 0.85em;
+            color: #94a3b8;
+        }
+        
+        .action-section {
+            max-width: 900px;
+            margin: 0 auto 40px;
+            padding: 35px;
+            background: linear-gradient(145deg, rgba(34, 197, 94, 0.1), rgba(16, 185, 129, 0.05));
+            border-radius: 20px;
+            border: 1px solid rgba(34, 197, 94, 0.2);
+        }
+        
+        .action-section h2 {
+            text-align: center;
+            font-size: 1.5em;
+            margin-bottom: 25px;
+            color: #34d399;
+        }
+        
+        .action-list {
+            display: grid;
+            gap: 16px;
+        }
+        
+        .action-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 18px 20px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 12px;
+            transition: all 0.3s;
+        }
+        
+        .action-item:hover {
+            background: rgba(255,255,255,0.08);
+        }
+        
+        .action-number {
+            flex-shrink: 0;
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        
+        .action-text {
+            flex: 1;
+            line-height: 1.6;
+        }
+        
+        .action-text strong {
+            color: #86efac;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #64748b;
+            font-size: 0.85em;
+        }
+
+        .icon { 
+            font-size: 1.2em; 
+        }
+
+        @media (max-width: 1100px) {
+            .branches {
+                width: 700px;
+                height: 1300px;
+                margin-top: 120px;
+            }
+            
+            .branch {
+                width: 320px;
+                position: static !important;
+                margin-bottom: 25px;
+            }
+            
+            .center-node .node-box {
+                width: 240px;
+                padding: 22px 18px;
+            }
+            
+            .header h1 { font-size: 2em; }
+            
+            .quote-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .header h1 { font-size: 1.6em; }
+            .header .subtitle { font-size: 1em; }
+            .center-node .node-box { width: 200px; padding: 18px 14px; }
+            .branch-node { padding: 14px 12px; }
+            .branch-node li { font-size: 0.78em; padding: 5px 0 5px 16px; }
+            .quotes-section, .action-section { padding: 20px 16px; }
+            .quote-item { padding: 14px 16px; font-size: 0.88em; }
+            .action-item { padding: 14px 16px; flex-direction: column; gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="date-badge"> 2026年8月8日 · 每日一学</div>
+            <h1>《精力管理》</h1>
+            <p class="subtitle">The Power of Full Engagement</p>
+            <p class="author"> 吉姆·洛尔（Jim Loehr）& 托尼·施瓦茨（Tony Schwartz）|  高效表现科学的奠基之作</p>
+        </div>
+
+        <div class="mindmap-container">
+            <div class="center-node">
+                <div class="node-box">
+                    <h2>⚡ 精力管理</h2>
+                    <p>管理精力，而非时间，才是高效表现的关键</p>
+                    <p style="margin-top:8px;font-size:0.85em;opacity:0.8;">四维度 · 节律波动 · 仪式习惯</p>
+                </div>
+            </div>
+
+            <div class="branches">
+                <div class="branch branch-1">
+                    <div class="branch-node">
+                        <h3><span class="icon">💡</span> 核心洞见</h3>
+                        <ul>
+                            <li>精力而非时间是<strong>高效表现的基础</strong></li>
+                            <li>全情投入需要四维度精力<strong>共同支撑</strong></li>
+                            <li>压力与恢复的<strong>节律性波动</strong>是核心法则</li>
+                            <li>仪式习惯将好行为<strong>自动化</strong>，减少意志力消耗</li>
+                            <li>突破舒适区的<strong>系统性训练</strong>才能持续增长</li>
+                            <li>积极的<strong>精力仪式</strong>胜过依赖动机和自律</li>
+                            <li>精力消耗过度而不恢复，必然导致<strong>倦怠和崩溃</strong></li>
+                            <li>意义感是意志精力的<strong>终极燃料</strong></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="branch branch-2">
+                    <div class="branch-node">
+                        <h3><span class="icon">📐</span> 精力四维度模型</h3>
+                        <ul>
+                            <li><strong>  体能精力：</strong>饮食、睡眠、运动、呼吸——精力的物理基础</li>
+                            <li><strong>  情感精力：</strong>积极情绪、人际关系、自我悦纳——精力的情感燃料</li>
+                            <li><strong>  思维精力：</strong>专注力、创造力、乐观现实——精力的认知引擎</li>
+                            <li><strong>  意志精力：</strong>价值观、目标意义、深层承诺——精力的精神内核</li>
+                            <li>四个维度相互影响，一荣俱荣、一损俱损</li>
+                            <li>体能精力是基础，意志精力是最高层级</li>
+                            <li>每个维度都需要<strong>消耗-恢复</strong>的周期</li>
+                            <li>精力总量可以像肌肉一样通过训练增长</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="branch branch-3">
+                    <div class="branch-node">
+                        <h3><span class="icon">🌊</span> 节律波动原理</h3>
+                        <ul>
+                            <li><strong>超昼夜节律：</strong>人体每90-120分钟自然经历一次精力波谷</li>
+                            <li><strong>压力+恢复=成长：</strong>像肌肉训练一样，突破→修复→变强</li>
+                            <li>线性消耗模式是<strong>不可持续</strong>的，必须嵌入恢复期</li>
+                            <li>最佳表现=<strong>全情投入</strong>→<strong>彻底断开</strong>→<strong>全情投入</strong>的循环</li>
+                            <li>忽视恢复是<strong>倦怠</strong>的首要原因</li>
+                            <li>工作日内的<strong>小憩、冥想、散步</strong>是战略性恢复</li>
+                            <li>周末和假期不是奢侈，而是<strong>精力的必要投资</strong></li>
+                            <li>长期忽视节律波动会导致<strong>慢性精力透支</strong></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="branch branch-4">
+                    <div class="branch-node">
+                        <h3><span class="icon">🔄</span> 仪式习惯系统</h3>
+                        <ul>
+                            <li><strong>仪式习惯=精准行为+固定时间+自动化：</strong>不消耗意志力</li>
+                            <li><strong>30-60天法则：</strong>建立一个新的精力仪式需要持续练习</li>
+                            <li><strong>由易到难：</strong>先建立体能习惯，再逐步推及意志层面</li>
+                            <li><strong>关键20%：</strong>找到对精力影响最大的少数习惯优先建立</li>
+                            <li>仪式习惯必须<strong>精确具体</strong>（何时、何地、怎么做）</li>
+                            <li>环境设计可以大大降低习惯执行的阻力</li>
+                            <li>用<strong>如果-那么</strong>预案应对不可避免的中断</li>
+                            <li>定期审视和<strong>迭代升级</strong>仪式习惯体系</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="branch branch-5">
+                    <div class="branch-node">
+                        <h3><span class="icon">📚</span> 主要知识点</h3>
+                        <ul>
+                            <li><strong>精力账户：</strong>像理财一样管理精力——知道何时存入（恢复）何时支出（投入）</li>
+                            <li><strong>血糖管理：</strong>低GI饮食+少量多餐，避免血糖过山车导致的精力崩溃</li>
+                            <li><strong>睡眠修复：</strong>7-8小时优质睡眠是精力恢复的第一支柱，不可妥协</li>
+                            <li><strong>间歇训练：</strong>高强度间歇比持续中等强度更能提升精力容量</li>
+                            <li><strong>情绪传染：</strong>积极情绪像氧气——领导者的情绪直接决定团队精力水平</li>
+                            <li><strong>正念恢复：</strong>每天15分钟正念冥想可显著提升思维精力的续航力</li>
+                            <li><strong>价值观驱动：</strong>清晰的目标和意义感能激发超越生理极限的意志精力</li>
+                            <li><strong>精力审计：</strong>定期盘点四维度精力消耗与恢复的平衡度</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="branch branch-6">
+                    <div class="branch-node">
+                        <h3><span class="icon">🌟</span> 应用场景与价值</h3>
+                        <ul>
+                            <li><strong>职场效率：</strong>以90分钟为单位的深度工作冲刺+15分钟恢复循环</li>
+                            <li><strong>领导力：</strong>管理自己的精力能量场，才能感染和激发团队</li>
+                            <li><strong>运动员训练：</strong>顶级选手的精力和普通人一样有限——区别在于恢复策略</li>
+                            <li><strong>亲密关系：</strong>为家人预留恢复后的高质量精力，而非疲惫的残渣</li>
+                            <li><strong>创造力：</strong>灵感往往出现在有意识恢复期（散步、淋浴、休息）</li>
+                            <li><strong>抗压能力：</strong>精力储备越充足，面对突发危机时的韧性越强</li>
+                            <li><strong>终身成长：</strong>将精力管理内化为生活方式，而非短期冲刺技巧</li>
+                            <li><strong>精力转换：</strong>将一个维度的精力优势传导到其他维度</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quotes-section">
+            <h2><span>💬</span> 经典金句</h2>
+            <div class="quote-grid">
+                <div class="quote-item">
+                    "管理精力，而非时间，才是高效、健康和幸福的基础。"
+                    <span>—— 全书核心命题</span>
+                </div>
+                <div class="quote-item">
+                    "全情投入需要身体活跃、情感连通、思维集中，并且意志坚定。"
+                    <span>—— 关于全情投入的四维条件</span>
+                </div>
+                <div class="quote-item">
+                    "我们是波动世界的波动生物。节律性是我们基因的编码。"
+                    <span>—— 关于自然节律的不可违背性</span>
+                </div>
+                <div class="quote-item">
+                    "压力不是问题，缺乏恢复才是。"
+                    <span>—— 关于精力的核心悖论</span>
+                </div>
+                <div class="quote-item">
+                    "仪式习惯的力量在于它们确保了我们在最困难的时候仍能做出正确的行为。"
+                    <span>—— 关于仪式习惯的价值</span>
+                </div>
+                <div class="quote-item">
+                    "当使命感足够强大时，它可以调动体能、情感和思维三个层面的全部精力。"
+                    <span>—— 关于意志精力的统领作用</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-section">
+            <h2>🚀 行动建议</h2>
+            <div class="action-list">
+                <div class="action-item">
+                    <div class="action-number">1</div>
+                    <div class="action-text">
+                        <strong>完成"精力审计"</strong><br>
+                        用四维度模型评估当前精力状态：体能（饮食睡眠运动）、情感（情绪人际）、思维（专注创造）、意志（价值意义）。找出最薄弱的维度作为优先改进方向。
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">2</div>
+                    <div class="action-text">
+                        <strong>启动"90+15"工作模式</strong><br>
+                        将工作日切分为90分钟深度工作冲刺，每段之间安排15分钟彻底断开（散步、站起、远眺、喝水）。用番茄钟或计时器强制执行，一周后评估精力变化。
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">3</div>
+                    <div class="action-text">
+                        <strong>建立"体能基础仪式"</strong><br>
+                        选择三项最基础的体能习惯并精确化：① 固定就寝和起床时间（误差不超过30分）；② 每餐保证蛋白质+低GI碳水+蔬菜；③ 每周三次20分钟以上间歇运动。
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">4</div>
+                    <div class="action-text">
+                        <strong>设计"情感恢复微仪式"</strong><br>
+                        每天安排三段5分钟的情感充电时刻：① 上午给一位朋友发真诚赞美；② 中午听一首让你愉悦的音乐；③ 晚间写出三件值得感恩的小事。
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">5</div>
+                    <div class="action-text">
+                        <strong>书写"意志精力宣言"</strong><br>
+                        用30分钟回答三个问题：我真正看重什么？我当前的工作如何与这些价值观相连？如果精力充沛，我最想把时间和能量投入哪里？将答案贴在可见处。
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">6</div>
+                    <div class="action-text">
+                        <strong>实施"数字断联恢复"</strong><br>
+                        每天设置至少一段90分钟的彻底无屏幕时段（尤其是睡前1小时）。利用这段时间进行真正能恢复精力的活动：阅读、散步、面对面交流、或单纯发呆。
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>  每日一学 | 持续学习，不断成长 | 2026-08-08</p>
+            <p style="margin-top:8px;">  推荐阅读：《精力管理：管理精力，而非时间》— 吉姆·洛尔 & 托尼·施瓦茨</p>
+        </footer>
+    </div>
+</body>
+</html>
