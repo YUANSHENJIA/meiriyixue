@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026-08-10-每日一学-沟通的艺术</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #e4e4e7;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* 标题区域 */
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            margin-bottom: 30px;
+        }
+        
+        .header .date-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 8px 24px;
+            border-radius: 20px;
+            font-size: 14px;
+            margin-bottom: 16px;
+            letter-spacing: 2px;
+        }
+        
+        .header h1 {
+            font-size: 2.8em;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+        }
+        
+        .header .subtitle {
+            font-size: 1.3em;
+            color: #a78bfa;
+            margin-bottom: 8px;
+        }
+        
+        .header .author {
+            color: #94a3b8;
+            font-style: italic;
+        }
+        
+        /* 思维导图容器 */
+        .mindmap-container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 800px;
+            overflow-x: auto;
+        }
+        
+        /* 中心节点 */
+        .center-node {
+            position: absolute;
+            left: 50%;
+            top: 40px;
+            transform: translateX(-50%);
+            z-index: 10;
+        }
+        
+        .center-node .node-box {
+            width: 280px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            padding: 28px 24px;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+            border: 2px solid rgba(255,255,255,0.1);
+        }
+        
+        .center-node .node-box h2 {
+            font-size: 1.5em;
+            color: white;
+            margin-bottom: 8px;
+        }
+        
+        .center-node .node-box p {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        
+        /* SVG连接线 */
+        .connections-svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .connection-line {
+            fill: none;
+            stroke-width: 3;
+            stroke-linecap: round;
+            opacity: 0.6;
+        }
+        
+        /* 分支节点 */
+        .branches {
+            position: relative;
+            width: 1150px;
+            height: 900px;
+            margin-top: 140px;
+        }
+        
+        .branch {
+            position: absolute;
+            width: 240px;
+        }
+        
+        .branch-node {
+            border-radius: 16px;
+            padding: 18px 16px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .branch-node:hover {
+            transform: translateY(-5px);
+        }
+        
+        .branch-node h3 {
+            font-size: 1.05em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .branch-node ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .branch-node li {
+            font-size: 0.82em;
+            padding: 6px 0;
+            padding-left: 18px;
+            position: relative;
+            line-height: 1.5;
+            color: rgba(255,255,255,0.85);
+        }
+        
+        .branch-node li::before {
+            content: "\25B8";
+            position: absolute;
+            left: 0;
+            font-size: 0.75em;
+            opacity: 0.7;
+        }
+        
+        /* 各分支颜色主题 */
+        .branch-1 { top: 0; left: 0; }
+        .branch-1 .branch-node {
+            background: linear-gradient(145deg, #e74c3c, #c0392b);
+            border: 2px solid rgba(231, 76, 60, 0.3);
+        }
+        
+        .branch-2 { top: 0; right: 0; }
+        .branch-2 .branch-node {
+            background: linear-gradient(145deg, #3498db, #2980b9);
+            border: 2px solid rgba(52, 152, 219, 0.3);
+        }
+        
+        .branch-3 { top: 260px; left: 0; }
+        .branch-3 .branch-node {
+            background: linear-gradient(145deg, #27ae60, #229954);
+            border: 2px solid rgba(39, 174, 96, 0.3);
+        }
+        
+        .branch-4 { top: 260px; right: 0; }
+        .branch-4 .branch-node {
+            background: linear-gradient(145deg, #f39c12, #d68910);
+            border: 2px solid rgba(243, 156, 18, 0.3);
+        }
+        
+        .branch-5 { top: 520px; left: 80px; }
+        .branch-5 .branch-node {
+            background: linear-gradient(145deg, #9b59b6, #8e44ad);
+            border: 2px solid rgba(155, 89, 182, 0.3);
+        }
+        
+        .branch-6 { top: 520px; right: 80px; }
+        .branch-6 .branch-node {
+            background: linear-gradient(145deg, #1abc9c, #16a085);
+            border: 2px solid rgba(26, 188, 156, 0.3);
+        }
+        
+        /* 底部金句区域 */
+        .quotes-section {
+            max-width: 900px;
+            margin: 60px auto 40px;
+            padding: 35px;
+            background: linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .quotes-section h2 {
+            text-align: center;
+            font-size: 1.5em;
+            margin-bottom: 25px;
+            color: #fbbf24;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+        
+        .quote-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 18px;
+        }
+        
+        .quote-item {
+            padding: 18px 20px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 12px;
+            border-left: 4px solid #f59e0b;
+            font-style: italic;
+            font-size: 0.95em;
+            line-height: 1.7;
+            color: #e2e8f0;
+            transition: all 0.3s;
+        }
+        
+        .quote-item:hover {
+            background: rgba(255,255,255,0.08);
+            transform: translateX(5px);
+        }
+        
+        .quote-item span {
+            display: block;
+            margin-top: 8px;
+            font-style: normal;
+            font-size: 0.85em;
+            color: #94a3b8;
+        }
+        
+        /* 行动建议区域 */
+        .action-section {
+            max-width: 900px;
+            margin: 0 auto 40px;
+            padding: 35px;
+            background: linear-gradient(145deg, rgba(34, 197, 94, 0.1), rgba(16, 185, 129, 0.05));
+            border-radius: 20px;
+            border: 1px solid rgba(34, 197, 94, 0.2);
+        }
+        
+        .action-section h2 {
+            text-align: center;
+            font-size: 1.5em;
+            margin-bottom: 25px;
+            color: #34d399;
+        }
+        
+        .action-list {
+            display: grid;
+            gap: 16px;
+        }
+        
+        .action-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 18px 20px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 12px;
+            transition: all 0.3s;
+        }
+        
+        .action-item:hover {
+            background: rgba(255,255,255,0.08);
+        }
+        
+        .action-number {
+            flex-shrink: 0;
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        
+        .action-text {
+            flex: 1;
+            line-height: 1.6;
+        }
+        
+        .action-text strong {
+            color: #86efac;
+        }
+        
+        /* 页脚 */
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #64748b;
+            font-size: 0.85em;
+        }
+
+        /* 图标 */
+        .icon { 
+            font-size: 1.2em; 
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 1100px) {
+            .branches {
+                width: 700px;
+                height: 1300px;
+                margin-top: 120px;
+            }
+            
+            .branch {
+                width: 320px;
+                position: static !important;
+                margin-bottom: 25px;
+            }
+            
+            .center-node .node-box {
+                width: 240px;
+                padding: 22px 18px;
+            }
+            
+            .header h1 { font-size: 2em; }
+            
+            .quote-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .header h1 { font-size: 1.6em; }
+            .header .subtitle { font-size: 1em; }
+            .center-node .node-box { width: 200px; padding: 18px 14px; }
+            .branch-node { padding: 14px 12px; }
+            .branch-node li { font-size: 0.78em; padding: 5px 0 5px 16px; }
+            .quotes-section, .action-section { padding: 20px 16px; }
+            .quote-item { padding: 14px 16px; font-size: 0.88em; }
+            .action-item { padding: 14px 16px; flex-direction: column; gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 标题区域 -->
+        <div class="header">
+            <div class="date-badge">📅 2026年8月10日 · 每日一学</div>
+            <h1>《沟通的艺术》</h1>
+            <p class="subtitle">Looking Out, Looking In</p>
+            <p class="author">👤 罗纳德·B·阿德勒（Ronald B. Adler）& 拉塞尔·F·普罗科特（Russell F. Proctor II）| 🏆 全球畅销40年的人际沟通经典</p>
+        </div>
+
+        <!-- 思维导图 -->
+        <div class="mindmap-container">
+            <!-- 中心节点 -->
+            <div class="center-node">
+                <div class="node-box">
+                    <h2>🗣️ 沟通的艺术</h2>
+                    <p>看入人里 · 看出人外 · 看人之间</p>
+                    <p style="margin-top:8px;font-size:0.85em;opacity:0.8;">自我 · 知觉 · 语言 · 非语言 · 倾听 · 关系</p>
+                </div>
+            </div>
+
+            <!-- 分支节点 -->
+            <div class="branches">
+                <!-- 分支1：自我认知 -->
+                <div class="branch branch-1">
+                    <div class="branch-node">
+                        <h3><span class="icon">🪞</span> 自我认知维度</h3>
+                        <ul>
+                            <li><strong>自我概念：</strong>你如何看待自己，决定沟通姿态</li>
+                            <li><strong>认同管理：</strong>在不同情境下呈现不同的"自我"</li>
+                            <li><strong>自我袒露：</strong>适度分享真实想法建立深层连接</li>
+                            <li><strong>自尊影响：</strong>高自尊者更敢于表达与拒绝</li>
+                            <li><strong>乔哈里窗：</strong>开放区、盲区、隐藏区、未知区</li>
+                            <li><strong>参考群体：</strong>亲密他人塑造你的自我评价</li>
+                            <li><strong>自我实现预言：</strong>你相信什么，就会成为什么</li>
+                            <li><strong>自我监控：</strong>观察和调整自身沟通行为的能力</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 分支2：知觉与共情 -->
+                <div class="branch branch-2">
+                    <div class="branch-node">
+                        <h3><span class="icon">👁️</span> 知觉与诠释</h3>
+                        <ul>
+                            <li><strong>知觉过程：</strong>选择→组织→诠释→协商四步循环</li>
+                            <li><strong>知觉偏差：</strong>刻板印象、首因效应影响判断</li>
+                            <li><strong>归因理论：</strong>我们如何解释他人行为的原因</li>
+                            <li><strong>自利偏差：</strong>成功归自己，失败归环境</li>
+                            <li><strong>共情vs同情：</strong>站在对方视角理解而非怜悯</li>
+                            <li><strong>知觉核验：</strong>三步法确认你的理解是否正确</li>
+                            <li><strong>文化滤镜：</strong>不同文化背景导致不同解读</li>
+                            <li><strong>枕头法：</strong>从五个角度看待同一问题</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 分支3：语言沟通 -->
+                <div class="branch branch-3">
+                    <div class="branch-node">
+                        <h3><span class="icon">💬</span> 语言的力量</h3>
+                        <ul>
+                            <li><strong>语言塑造现实：</strong>词汇选择影响思维和关系</li>
+                            <li><strong>"我"语言vs"你"语言：</strong>表达感受而非指责</li>
+                            <li><strong>清晰表达原则：</strong>具体、完整、负责任</li>
+                            <li><strong>语言陷阱：</strong>模糊抽象词、非此即彼、过度概括</li>
+                            <li><strong>性别语言差异：</strong>男女使用语言的目的不同</li>
+                            <li><strong>高/低语境文化：</strong>言外之意vs字面意思</li>
+                            <li><strong>积极语言：</strong>赞美和肯定改变关系氛围</li>
+                            <li><strong>提问的艺术：</strong>开放式问题促进深入对话</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 分支4：非语言沟通 -->
+                <div class="branch branch-4">
+                    <div class="branch-node">
+                        <h3><span class="icon">🤝</span> 非语言沟通</h3>
+                        <ul>
+                            <li><strong>肢体语言：</strong>手势、姿态传递无声信息（占55%+）</li>
+                            <li><strong>面部表情：</strong>全球通用的6种基本情绪</li>
+                            <li><strong>眼神接触：</strong>展示关注、诚意和自信</li>
+                            <li><strong>副语言：</strong>语调、语速、停顿、音量</li>
+                            <li><strong>空间距离：</strong>亲密区→个人区→社交区→公共区</li>
+                            <li><strong>触觉沟通：</strong>触碰传递支持、鼓励和连接</li>
+                            <li><strong>时间信息：</strong>准时/迟到传递态度和尊重</li>
+                            <li><strong>外表管理：</strong>着装和形象影响第一印象</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 分支5：倾听 -->
+                <div class="branch branch-5">
+                    <div class="branch-node">
+                        <h3><span class="icon">👂</span> 倾听的艺术</h3>
+                        <ul>
+                            <li><strong>听vs倾听：</strong>生理接收vs主动理解与回应</li>
+                            <li><strong>倾听类型：</strong>获取信息、评估判断、共情倾听</li>
+                            <li><strong>倾听障碍：</strong>选择性倾听、伪倾听、防卫性倾听</li>
+                            <li><strong>积极倾听：</strong>释义、提问、情感反映</li>
+                            <li><strong>少说多听：</strong>最有效的沟通者首先是好听众</li>
+                            <li><strong>沉默的力量：</strong>给对方面间组织思绪</li>
+                            <li><strong>反馈技巧：</strong>及时、具体、建设性</li>
+                            <li><strong>跨文化倾听：</strong>不同文化对沉默和打断的理解</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 分支6：关系沟通 -->
+                <div class="branch branch-6">
+                    <div class="branch-node">
+                        <h3><span class="icon">🤝</span> 关系与冲突管理</h3>
+                        <ul>
+                            <li><strong>关系阶段：</strong>初始→实验→强化→整合→维系</li>
+                            <li><strong>自我袒露互惠：</strong>关系的深度取决于袒露的深度</li>
+                            <li><strong>沟通氛围：</strong>确认vs不确认信息决定关系质量</li>
+                            <li><strong>冲突风格：</strong>回避、迁就、竞争、妥协、合作</li>
+                            <li><strong>双赢协商：</strong>识别需求→提出方案→达成共识</li>
+                            <li><strong>关系修复：</strong>真诚道歉、承担责任、行为改变</li>
+                            <li><strong>边界设定：</strong>健康关系需要清晰边界</li>
+                            <li><strong>亲密关系沟通：</strong>爱的五种语言与情感账户</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 金句区域 -->
+        <div class="quotes-section">
+            <h2><span>💬</span> 经典金句</h2>
+            <div class="quote-grid">
+                <div class="quote-item">
+                    "沟通中最重要的事情，是听到没有说出来的话。"
+                    <span>—— 关于倾听的力量</span>
+                </div>
+                <div class="quote-item">
+                    "我们看世界的方式，不是世界本来的样子，而是我们自己的样子。"
+                    <span>—— 关于知觉与投射</span>
+                </div>
+                <div class="quote-item">
+                    "你不能不沟通。沉默、回避、面无表情——这些也都是沟通。"
+                    <span>—— 关于沟通的不可回避性</span>
+                </div>
+                <div class="quote-item">
+                    "同理心不是'如果我是你我会怎么办'，而是'我知道这对你意味着什么'。"
+                    <span>—— 关于共情的真谛</span>
+                </div>
+                <div class="quote-item">
+                    "真正的倾听意味着暂时放下自己的世界观，走进对方的世界。"
+                    <span>—— 关于倾听的本质</span>
+                </div>
+                <div class="quote-item">
+                    "冲突本身不是问题，如何处理冲突才是。"
+                    <span>—— 关于冲突管理</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 行动建议 -->
+        <div class="action-section">
+            <h2>🚀 行动建议</h2>
+            <div class="action-list">
+                <div class="action-item">
+                    <div class="action-number">1</div>
+                    <div class="action-text">
+                        <strong>练习"知觉核验"三步法</strong><br>
+                        每天选择一次重要对话，用"行为描述 + 两种诠释 + 请求澄清"的结构确认你是否真正理解了对方的意思。
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">2</div>
+                    <div class="action-text">
+                        <strong>将"你语言"转化为"我语言"</strong><br>
+                        把"你总是迟到"改为"当你迟到时，我感到不被重视"。表达自己的感受和需求，而非指责对方。
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">3</div>
+                    <div class="action-text">
+                        <strong>实践"三分钟不打断"倾听</strong><br>
+                        每次与人交谈时，有意识地在对方讲话的前三分钟内只听不说，用点头和眼神表示关注。
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">4</div>
+                    <div class="action-text">
+                        <strong>绘制自己的乔哈里窗</strong><br>
+                        列出开放区（自己知道别人也知道）、盲区（别人知道自己不知道）、隐藏区、未知区，主动向信任的人寻求盲区反馈。
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">5</div>
+                    <div class="action-text">
+                        <strong>每日一条"积极确认信息"</strong><br>
+                        每天至少给一个重要的人发送一条真诚的肯定或赞美——认可对方的存在、观点或感受（非空洞夸奖）。
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">6</div>
+                    <div class="action-text">
+                        <strong>在冲突中优先使用"合作模式"</strong><br>
+                        下次面对分歧时，先问"你的深层需求是什么？"，再问"我们怎样才能同时满足双方的核心需求？"
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>📚 每日一学 | 持续学习，不断成长 | 2026-08-10</p>
+            <p style="margin-top:8px;">💡 推荐阅读：《沟通的艺术》— 罗纳德·B·阿德勒 & 拉塞尔·F·普罗科特</p>
+        </footer>
+    </div>
+</body>
+</html>
