@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026-08-09-每日一学-全新思维</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #e4e4e7;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            margin-bottom: 30px;
+        }
+        
+        .header .date-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 8px 24px;
+            border-radius: 20px;
+            font-size: 14px;
+            margin-bottom: 16px;
+            letter-spacing: 2px;
+        }
+        
+        .header h1 {
+            font-size: 2.8em;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+        }
+        
+        .header .subtitle {
+            font-size: 1.3em;
+            color: #a78bfa;
+            margin-bottom: 8px;
+        }
+        
+        .header .author {
+            color: #94a3b8;
+            font-style: italic;
+        }
+        
+        .mindmap-container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 800px;
+            overflow-x: auto;
+        }
+        
+        .center-node {
+            position: absolute;
+            left: 50%;
+            top: 40px;
+            transform: translateX(-50%);
+            z-index: 10;
+        }
+        
+        .center-node .node-box {
+            width: 280px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            padding: 28px 24px;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+            border: 2px solid rgba(255,255,255,0.1);
+        }
+        
+        .center-node .node-box h2 {
+            font-size: 1.5em;
+            color: white;
+            margin-bottom: 8px;
+        }
+        
+        .center-node .node-box p {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        
+        .branches {
+            position: relative;
+            width: 1150px;
+            height: 900px;
+            margin-top: 140px;
+        }
+        
+        .branch {
+            position: absolute;
+            width: 240px;
+        }
+        
+        .branch-node {
+            border-radius: 16px;
+            padding: 18px 16px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .branch-node:hover {
+            transform: translateY(-5px);
+        }
+        
+        .branch-node h3 {
+            font-size: 1.05em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .branch-node ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .branch-node li {
+            font-size: 0.82em;
+            padding: 6px 0;
+            padding-left: 18px;
+            position: relative;
+            line-height: 1.5;
+            color: rgba(255,255,255,0.85);
+        }
+        
+        .branch-node li::before {
+            content: "\25B8";
+            position: absolute;
+            left: 0;
+            font-size: 0.75em;
+            opacity: 0.7;
+        }
+        
+        .branch-1 { top: 0; left: 0; }
+        .branch-1 .branch-node {
+            background: linear-gradient(145deg, #e74c3c, #c0392b);
+            border: 2px solid rgba(231, 76, 60, 0.3);
+        }
+        
+        .branch-2 { top: 0; right: 0; }
+        .branch-2 .branch-node {
+            background: linear-gradient(145deg, #3498db, #2980b9);
+            border: 2px solid rgba(52, 152, 219, 0.3);
+        }
+        
+        .branch-3 { top: 260px; left: 0; }
+        .branch-3 .branch-node {
+            background: linear-gradient(145deg, #27ae60, #229954);
+            border: 2px solid rgba(39, 174, 96, 0.3);
+        }
+        
+        .branch-4 { top: 260px; right: 0; }
+        .branch-4 .branch-node {
+            background: linear-gradient(145deg, #f39c12, #d68910);
+            border: 2px solid rgba(243, 156, 18, 0.3);
+        }
+        
+        .branch-5 { top: 520px; left: 80px; }
+        .branch-5 .branch-node {
+            background: linear-gradient(145deg, #9b59b6, #8e44ad);
+            border: 2px solid rgba(155, 89, 182, 0.3);
+        }
+        
+        .branch-6 { top: 520px; right: 80px; }
+        .branch-6 .branch-node {
+            background: linear-gradient(145deg, #1abc9c, #16a085);
+            border: 2px solid rgba(26, 188, 156, 0.3);
+        }
+        
+        .quotes-section {
+            max-width: 900px;
+            margin: 60px auto 40px;
+            padding: 35px;
+            background: linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .quotes-section h2 {
+            text-align: center;
+            font-size: 1.5em;
+            margin-bottom: 25px;
+            color: #fbbf24;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+        
+        .quote-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 18px;
+        }
+        
+        .quote-item {
+            padding: 18px 20px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 12px;
+            border-left: 4px solid #f59e0b;
+            font-style: italic;
+            font-size: 0.95em;
+            line-height: 1.7;
+            color: #e2e8f0;
+            transition: all 0.3s;
+        }
+        
+        .quote-item:hover {
+            background: rgba(255,255,255,0.08);
+            transform: translateX(5px);
+        }
+        
+        .quote-item span {
+            display: block;
+            margin-top: 8px;
+            font-style: normal;
+            font-size: 0.85em;
+            color: #94a3b8;
+        }
+        
+        .action-section {
+            max-width: 900px;
+            margin: 0 auto 40px;
+            padding: 35px;
+            background: linear-gradient(145deg, rgba(34, 197, 94, 0.1), rgba(16, 185, 129, 0.05));
+            border-radius: 20px;
+            border: 1px solid rgba(34, 197, 94, 0.2);
+        }
+        
+        .action-section h2 {
+            text-align: center;
+            font-size: 1.5em;
+            margin-bottom: 25px;
+            color: #34d399;
+        }
+        
+        .action-list {
+            display: grid;
+            gap: 16px;
+        }
+        
+        .action-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 18px 20px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 12px;
+            transition: all 0.3s;
+        }
+        
+        .action-item:hover {
+            background: rgba(255,255,255,0.08);
+        }
+        
+        .action-number {
+            flex-shrink: 0;
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        
+        .action-text {
+            flex: 1;
+            line-height: 1.6;
+        }
+        
+        .action-text strong {
+            color: #86efac;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #64748b;
+            font-size: 0.85em;
+        }
+
+        .icon { 
+            font-size: 1.2em; 
+        }
+
+        @media (max-width: 1100px) {
+            .branches {
+                width: 700px;
+                height: 1300px;
+                margin-top: 120px;
+            }
+            
+            .branch {
+                width: 320px;
+                position: static !important;
+                margin-bottom: 25px;
+            }
+            
+            .center-node .node-box {
+                width: 240px;
+                padding: 22px 18px;
+            }
+            
+            .header h1 { font-size: 2em; }
+            
+            .quote-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .header h1 { font-size: 1.6em; }
+            .header .subtitle { font-size: 1em; }
+            .center-node .node-box { width: 200px; padding: 18px 14px; }
+            .branch-node { padding: 14px 12px; }
+            .branch-node li { font-size: 0.78em; padding: 5px 0 5px 16px; }
+            .quotes-section, .action-section { padding: 20px 16px; }
+            .quote-item { padding: 14px 16px; font-size: 0.88em; }
+            .action-item { padding: 14px 16px; flex-direction: column; gap: 10px; }
+        }
+    
+
+        /* === LAYOUT FIX: Prevent card overlap with CSS Grid === */
+        .mindmap-container {
+            display: block;
+            position: relative;
+            padding-top: 60px;
+            margin-bottom: 30px;
+            min-height: auto;
+            overflow-x: visible;
+        }
+
+        .center-node {
+            position: static;
+            left: auto;
+            top: auto;
+            transform: none;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 50px;
+        }
+
+        .branches {
+            position: static;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            max-width: 900px;
+            width: auto;
+            height: auto;
+            margin: 0 auto;
+        }
+
+        .branch {
+            position: static;
+            width: 100%;
+        }
+
+        .branch-1, .branch-2, .branch-3, .branch-4, .branch-5, .branch-6 {
+            top: auto;
+            left: auto;
+            right: auto;
+        }
+
+        .branch .branch-node {
+            height: 100%;
+        }
+
+        @media (max-width: 1100px) {
+            .mindmap-container { padding-top: 40px; }
+            .branches {
+                width: auto;
+                height: auto;
+                margin-top: 0;
+                grid-template-columns: 1fr;
+                max-width: 600px;
+            }
+            .branch {
+                position: static !important;
+                width: 100%;
+                margin-bottom: 0;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="date-badge"> 2026年8月9日 · 每日一学</div>
+            <h1>《全新思维》</h1>
+            <p class="subtitle">A Whole New Mind</p>
+            <p class="author"> 丹尼尔·平克（Daniel H. Pink）|  决胜未来的六大能力</p>
+        </div>
+
+        <div class="mindmap-container">
+            <div class="center-node">
+                <div class="node-box">
+                    <h2>🧠 全新思维</h2>
+                    <p>概念时代，右脑思维将决定谁领先</p>
+                    <p style="margin-top:8px;font-size:0.85em;opacity:0.8;">三感三力 · 左右脑融合 · 意义革命</p>
+                </div>
+            </div>
+
+            <div class="branches">
+                <div class="branch branch-1">
+                    <div class="branch-node">
+                        <h3><span class="icon">💡</span> 核心洞见</h3>
+                        <ul>
+                            <li>人类正从<strong>信息时代</strong>迈向<strong>概念时代</strong></li>
+                            <li>物质丰裕+自动化+亚洲外包，左脑思维的<strong>比较优势正在消失</strong></li>
+                            <li>未来属于"高概念"和"高感性"的<strong>创新型人才</strong></li>
+                            <li>左脑思维让生活成为可能，右脑思维让生活<strong>值得过</strong></li>
+                            <li>六大能力（三感三力）是概念时代<strong>必备的生存技能</strong></li>
+                            <li>任何能被流程化、自动化、外包的工作都将<strong>持续贬值</strong></li>
+                            <li>MFA（艺术硕士）正在成为<strong>新的MBA</strong></li>
+                            <li>意义感是知识工作者在丰裕时代的<strong>终极生产力</strong></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="branch branch-2">
+                    <div class="branch-node">
+                        <h3><span class="icon">📐</span> 六大能力模型（三感三力）</h3>
+                        <ul>
+                            <li><strong>🎨 设计感：</strong>不只追求实用功能，还要创造美感和情感体验</li>
+                            <li><strong>📖 故事力：</strong>不只罗列事实数据，还要用叙事打动人心</li>
+                            <li><strong>🎻 交响力：</strong>不只看孤立局部，还要发现系统关联和整合创新</li>
+                            <li><strong>🤝 共情力：</strong>不只依赖逻辑分析，还要理解他人情感需求</li>
+                            <li><strong>🎮 娱乐感：</strong>不只严肃认真，还要融入游戏精神和幽默</li>
+                            <li><strong>🌈 意义感：</strong>不只追求物质积累，还要寻找生命的深层目的</li>
+                            <li>前三者偏向"高概念"（创造美与情感），后三者偏向"高感性"（洞察人性）</li>
+                            <li>六力并非替代左脑思维，而是<strong>补充和超越</strong></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="branch branch-3">
+                    <div class="branch-node">
+                        <h3><span class="icon">🌊</span> 时代转变与三大推力</h3>
+                        <ul>
+                            <li><strong>物质丰裕（Abundance）：</strong>生存需求已满足，消费者追求设计、美感与体验</li>
+                            <li><strong>亚洲外包（Asia）：</strong>标准化知识工作可被外包，留下的必须是不可替代的创意</li>
+                            <li><strong>自动化（Automation）：</strong>AI和算法正在取代一切程式化的左脑工作</li>
+                            <li>三大推力叠加，宣告了纯粹<strong>逻辑分析型人才的黄昏</strong></li>
+                            <li>但同时也为右脑型能力创造了<strong>前所未有的溢价空间</strong></li>
+                            <li>从"功能性满足"到"体验性追求"的消费升级不可逆转</li>
+                            <li>IBM深蓝→AlphaGo→ChatGPT，左脑取代正以<strong>指数级加速</strong></li>
+                            <li>唯有设计、故事、交响、共情、娱乐、意义<strong>暂时无法被机器完全复制</strong></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="branch branch-4">
+                    <div class="branch-node">
+                        <h3><span class="icon">🔄</span> 左右脑协作原理</h3>
+                        <ul>
+                            <li><strong>左脑：</strong>逻辑、顺序、分析、细节——负责"做什么"和"怎么做"</li>
+                            <li><strong>右脑：</strong>整体、直觉、综合、共情——负责"为什么"和"感受什么"</li>
+                            <li>信息时代<strong>过度偏重</strong>左脑思维，概念时代需要<strong>重新平衡</strong></li>
+                            <li><strong>全脑思维：</strong>不是用右脑替代左脑，而是将两者融合为完整版</li>
+                            <li>最佳决策=/=纯理性分析，而是<strong>逻辑直觉二合一</strong></li>
+                            <li>右脑处理整体、背景、隐喻的能力正在变得<strong>比左脑处理细节更稀缺</strong></li>
+                            <li>创造力的本质是<strong>右脑发散+左脑收敛</strong>的交替循环</li>
+                            <li>跨界融合（交响力）是右脑综合能力的最高表现</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="branch branch-5">
+                    <div class="branch-node">
+                        <h3><span class="icon">📚</span> 主要知识点</h3>
+                        <ul>
+                            <li><strong>六大能力测评：</strong>每人天生在六力上有不同倾向，短板可后天刻意训练</li>
+                            <li><strong>设计思维（Design Thinking）：</strong>以用户为中心的创新方法论，设计不再只是美化</li>
+                            <li><strong>意义 ROI：</strong>为产品注入意义的品牌溢价远超功能差异带来的溢价</li>
+                            <li><strong>故事型领导力：</strong>用叙事替代说教——故事是传递价值观最有力的载体</li>
+                            <li><strong>交响力培养：</strong>隐喻、类比、跨界阅读、T型人才——连接看似无关的领域</li>
+                            <li><strong>共情经济：</strong>医疗、教育、服务行业中——共情力就是核心竞争力</li>
+                            <li><strong>游戏化思维：</strong>将游戏机制（积分、挑战、反馈）应用于严肃领域提升参与度</li>
+                            <li><strong>幸福经济学：</strong>人均GDP超过一定阈值后，幸福与金钱增长脱钩，意义感取而代之</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="branch branch-6">
+                    <div class="branch-node">
+                        <h3><span class="icon">🌟</span> 应用场景与价值</h3>
+                        <ul>
+                            <li><strong>职业转型：</strong>评估当前工作中被自动化和外包的风险，主动培养不可替代的六力</li>
+                            <li><strong>产品设计：</strong>从"解决什么问题"升级为"创造什么体验"——设计感+故事力</li>
+                            <li><strong>团队管理：</strong>用共情力理解团队情绪，用意义感统一愿景，用娱乐感激发创造力</li>
+                            <li><strong>教育变革：</strong>从左脑应试教育转向全脑能力培养——设计、探索、叙述、共情</li>
+                            <li><strong>品牌建设：</strong>最好的品牌不卖产品，卖的是故事和意义——如苹果、耐克</li>
+                            <li><strong>个人成长：</strong>用交响力整合碎片化知识，用意义感锚定长期方向</li>
+                            <li><strong>亲密关系：</strong>共情力和故事力是深度连接的两大支柱</li>
+                            <li><strong>人生设计：</strong>将人生看作设计项目而非待解决的程序问题——注入美感与意义</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quotes-section">
+            <h2><span>💬</span> 经典金句</h2>
+            <div class="quote-grid">
+                <div class="quote-item">
+                    "未来属于那些拥有全新思维的人——设计师、发明家、咨询师、讲故事的人、看护者和意义缔造者。"
+                    <span>—— 全书核心判断</span>
+                </div>
+                <div class="quote-item">
+                    "左脑思维让生活成为可能，右脑思维让生活值得过。"
+                    <span>—— 关于左右脑分工的本质区分</span>
+                </div>
+                <div class="quote-item">
+                    "在概念时代，MFA就是新的MBA。"
+                    <span>—— 关于创意资本崛起的著名论断</span>
+                </div>
+                <div class="quote-item">
+                    "不要只是把事情做对，要做对的事情。"
+                    <span>—— 从左脑效率到右脑价值的转变宣言</span>
+                </div>
+                <div class="quote-item">
+                    "故事是高概念和高感性的交汇点——它既需要结构（左脑），也需要情感（右脑）。"
+                    <span>—— 关于故事力的全脑整合本质</span>
+                </div>
+                <div class="quote-item">
+                    "意义感已经成为我们工作和生活的核心追求——当生存不再是问题时，意义就是一切。"
+                    <span>—— 关于概念时代的人类深层动机</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-section">
+            <h2>🚀 行动建议</h2>
+            <div class="action-list">
+                <div class="action-item">
+                    <div class="action-number">1</div>
+                    <div class="action-text">
+                        <strong>设计感练习——每周"设计观察日记"</strong><br>
+                        每天记录一个让你感到愉悦的设计（产品、空间、界面或服务），用三句话描述它为什么好——是功能巧妙？形式优美？还是触动了某种情感？坚持一个月，你会重新看见世界。
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">2</div>
+                    <div class="action-text">
+                        <strong>故事力训练——将周报写成"微型故事"</strong><br>
+                        不要写成任务清单。用STAR模式重构你的一周：你遇到了什么挑战（情境）？你面临什么选择（冲突）？你做了什么？带来了什么改变？一个好故事让人记住你十年，一份清单让人忘记你十秒。
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">3</div>
+                    <div class="action-text">
+                        <strong>交响力培养——每月跨界阅读一本"异类"</strong><br>
+                        如果你是工程师，读一本诗歌集；如果你是设计师，读一本生物学；如果你是销售，读一本哲学。跨界不是消遣，而是训练大脑发现深层连接的能力。灵感从不诞生于已有的边界内。
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">4</div>
+                    <div class="action-text">
+                        <strong>共情力提升——每周一次"深度倾听"</strong><br>
+                        找一个人，用15分钟只听不说。不打断，不评判，不给建议。只是点头，只是理解，只是让对方感到被真正看见。你会惊讶地发现：大多数人际冲突的根源不是意见不同，而是没有被听见。
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">5</div>
+                    <div class="action-text">
+                        <strong>娱乐感注入——每周安排一次"纯粹有趣"</strong><br>
+                        玩桌游、画涂鸦、即兴表演、去游乐场——任何让你忘记时间、不产生任何"生产力"的活动。这不是浪费时间，这是在滋养创造力的土壤。最严肃的问题，往往需要用最轻松的心态来破解。
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">6</div>
+                    <div class="action-text">
+                        <strong>意义感锚定——写下你的"个人使命宣言矩阵"</strong><br>
+                        拿出一张纸，画出四个象限：① 什么事情让我感到骄傲？② 什么时刻让我忘记时间？③ 什么话题我可以聊三天三夜？④ 什么是我愿意为之受苦的？交集处就是你的意义锚点。每周看一次。
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>  每日一学 | 持续学习，不断成长 | 2026-08-09</p>
+            <p style="margin-top:8px;">  推荐阅读：《全新思维：决胜未来的六大能力》— 丹尼尔·平克（Daniel H. Pink）</p>
+        </footer>
+    </div>
+</body>
+</html>
