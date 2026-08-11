@@ -338,6 +338,70 @@
             .quote-item { padding: 14px 16px; font-size: 0.88em; }
             .action-item { padding: 14px 16px; flex-direction: column; gap: 10px; }
         }
+    
+
+        /* === LAYOUT FIX: Prevent card overlap with CSS Grid === */
+        .mindmap-container {
+            display: block;
+            position: relative;
+            padding-top: 60px;
+            margin-bottom: 30px;
+            min-height: auto;
+            overflow-x: visible;
+        }
+
+        .center-node {
+            position: static;
+            left: auto;
+            top: auto;
+            transform: none;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 50px;
+        }
+
+        .branches {
+            position: static;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            max-width: 900px;
+            width: auto;
+            height: auto;
+            margin: 0 auto;
+        }
+
+        .branch {
+            position: static;
+            width: 100%;
+        }
+
+        .branch-1, .branch-2, .branch-3, .branch-4, .branch-5, .branch-6 {
+            top: auto;
+            left: auto;
+            right: auto;
+        }
+
+        .branch .branch-node {
+            height: 100%;
+        }
+
+        @media (max-width: 1100px) {
+            .mindmap-container { padding-top: 40px; }
+            .branches {
+                width: auto;
+                height: auto;
+                margin-top: 0;
+                grid-template-columns: 1fr;
+                max-width: 600px;
+            }
+            .branch {
+                position: static !important;
+                width: 100%;
+                margin-bottom: 0;
+            }
+        }
+
     </style>
 </head>
 <body>
