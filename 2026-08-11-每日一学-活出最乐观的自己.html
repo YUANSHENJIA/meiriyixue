@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026-08-11-每日一学-活出最乐观的自己</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #e4e4e7;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            margin-bottom: 30px;
+        }
+        
+        .header .date-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            padding: 8px 24px;
+            border-radius: 20px;
+            font-size: 14px;
+            margin-bottom: 16px;
+            letter-spacing: 2px;
+        }
+        
+        .header h1 {
+            font-size: 2.8em;
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+        }
+        
+        .header .subtitle {
+            font-size: 1.3em;
+            color: #fcd34d;
+            margin-bottom: 8px;
+        }
+        
+        .header .author {
+            color: #94a3b8;
+            font-style: italic;
+        }
+        
+        .mindmap-container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 800px;
+            overflow-x: auto;
+        }
+        
+        .center-node {
+            position: absolute;
+            left: 50%;
+            top: 40px;
+            transform: translateX(-50%);
+            z-index: 10;
+        }
+        
+        .center-node .node-box {
+            width: 280px;
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            border-radius: 20px;
+            padding: 28px 24px;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(245, 158, 11, 0.4);
+            border: 2px solid rgba(255,255,255,0.1);
+        }
+        
+        .center-node .node-box h2 {
+            font-size: 1.5em;
+            color: white;
+            margin-bottom: 8px;
+        }
+        
+        .center-node .node-box p {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        
+        .branches {
+            position: relative;
+            width: 1150px;
+            height: 900px;
+            margin-top: 140px;
+        }
+        
+        .branch {
+            position: absolute;
+            width: 240px;
+        }
+        
+        .branch-node {
+            border-radius: 16px;
+            padding: 18px 16px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .branch-node:hover {
+            transform: translateY(-5px);
+        }
+        
+        .branch-node h3 {
+            font-size: 1.05em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .branch-node ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .branch-node li {
+            font-size: 0.82em;
+            padding: 6px 0;
+            padding-left: 18px;
+            position: relative;
+            line-height: 1.5;
+            color: rgba(255,255,255,0.85);
+        }
+        
+        .branch-node li::before {
+            content: "\25B8";
+            position: absolute;
+            left: 0;
+            font-size: 0.75em;
+            opacity: 0.7;
+        }
+        
+        .branch-1 { top: 0; left: 0; }
+        .branch-1 .branch-node {
+            background: linear-gradient(145deg, #e74c3c, #c0392b);
+            border: 2px solid rgba(231, 76, 60, 0.3);
+        }
+        
+        .branch-2 { top: 0; right: 0; }
+        .branch-2 .branch-node {
+            background: linear-gradient(145deg, #3498db, #2980b9);
+            border: 2px solid rgba(52, 152, 219, 0.3);
+        }
+        
+        .branch-3 { top: 260px; left: 0; }
+        .branch-3 .branch-node {
+            background: linear-gradient(145deg, #27ae60, #229954);
+            border: 2px solid rgba(39, 174, 96, 0.3);
+        }
+        
+        .branch-4 { top: 260px; right: 0; }
+        .branch-4 .branch-node {
+            background: linear-gradient(145deg, #f39c12, #d68910);
+            border: 2px solid rgba(243, 156, 18, 0.3);
+        }
+        
+        .branch-5 { top: 520px; left: 80px; }
+        .branch-5 .branch-node {
+            background: linear-gradient(145deg, #9b59b6, #8e44ad);
+            border: 2px solid rgba(155, 89, 182, 0.3);
+        }
+        
+        .branch-6 { top: 520px; right: 80px; }
+        .branch-6 .branch-node {
+            background: linear-gradient(145deg, #1abc9c, #16a085);
+            border: 2px solid rgba(26, 188, 156, 0.3);
+        }
+        
+        .quotes-section {
+            max-width: 900px;
+            margin: 60px auto 40px;
+            padding: 35px;
+            background: linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .quotes-section h2 {
+            text-align: center;
+            font-size: 1.5em;
+            margin-bottom: 25px;
+            color: #fbbf24;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+        
+        .quote-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 18px;
+        }
+        
+        .quote-item {
+            padding: 18px 20px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 12px;
+            border-left: 4px solid #f59e0b;
+            font-style: italic;
+            font-size: 0.95em;
+            line-height: 1.7;
+            color: #e2e8f0;
+            transition: all 0.3s;
+        }
+        
+        .quote-item:hover {
+            background: rgba(255,255,255,0.08);
+            transform: translateX(5px);
+        }
+        
+        .quote-item span {
+            display: block;
+            margin-top: 8px;
+            font-style: normal;
+            font-size: 0.85em;
+            color: #94a3b8;
+        }
+        
+        .action-section {
+            max-width: 900px;
+            margin: 0 auto 40px;
+            padding: 35px;
+            background: linear-gradient(145deg, rgba(34, 197, 94, 0.1), rgba(16, 185, 129, 0.05));
+            border-radius: 20px;
+            border: 1px solid rgba(34, 197, 94, 0.2);
+        }
+        
+        .action-section h2 {
+            text-align: center;
+            font-size: 1.5em;
+            margin-bottom: 25px;
+            color: #34d399;
+        }
+        
+        .action-list {
+            display: grid;
+            gap: 16px;
+        }
+        
+        .action-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 18px 20px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 12px;
+            transition: all 0.3s;
+        }
+        
+        .action-item:hover {
+            background: rgba(255,255,255,0.08);
+        }
+        
+        .action-number {
+            flex-shrink: 0;
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        
+        .action-text {
+            flex: 1;
+            line-height: 1.6;
+        }
+        
+        .action-text strong {
+            color: #86efac;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #64748b;
+            font-size: 0.85em;
+        }
+
+        .icon { 
+            font-size: 1.2em; 
+        }
+
+        @media (max-width: 1100px) {
+            .branches {
+                width: 700px;
+                height: 1300px;
+                margin-top: 120px;
+            }
+            
+            .branch {
+                width: 320px;
+                position: static !important;
+                margin-bottom: 25px;
+            }
+            
+            .center-node .node-box {
+                width: 240px;
+                padding: 22px 18px;
+            }
+            
+            .header h1 { font-size: 2em; }
+            
+            .quote-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .header h1 { font-size: 1.6em; }
+            .header .subtitle { font-size: 1em; }
+            .center-node .node-box { width: 200px; padding: 18px 14px; }
+            .branch-node { padding: 14px 12px; }
+            .branch-node li { font-size: 0.78em; padding: 5px 0 5px 16px; }
+            .quotes-section, .action-section { padding: 20px 16px; }
+            .quote-item { padding: 14px 16px; font-size: 0.88em; }
+            .action-item { padding: 14px 16px; flex-direction: column; gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="date-badge">📅 2026年8月11日 · 每日一学</div>
+            <h1>《活出最乐观的自己》</h1>
+            <p class="subtitle">Learned Optimism</p>
+            <p class="author">👤 马丁·塞利格曼（Martin E.P. Seligman）| 🏆 积极心理学之父 · 30年实证研究的智慧结晶</p>
+        </div>
+
+        <div class="mindmap-container">
+            <div class="center-node">
+                <div class="node-box">
+                    <h2>🌞 活出最乐观的自己</h2>
+                    <p>习得性乐观 · 解释风格 · 认知重塑</p>
+                    <p style="margin-top:8px;font-size:0.85em;opacity:0.8;">永久性 · 普遍性 · 人格化 · ABCDE模型</p>
+                </div>
+            </div>
+
+            <div class="branches">
+                <div class="branch branch-1">
+                    <div class="branch-node">
+                        <h3><span class="icon">⚡</span> 习得性无助</h3>
+                        <ul>
+                            <li><strong>经典实验：</strong>狗在不可逃避电击后放弃尝试，即使门已打开</li>
+                            <li><strong>人类也会习得无助：</strong>反复失败后停止努力</li>
+                            <li><strong>核心机制：</strong>认为自身行为无法改变结果的信念</li>
+                            <li><strong>三大表现：</strong>动机缺失、情绪低落、认知僵化</li>
+                            <li><strong>抑郁模型：</strong>习得性无助是抑郁的核心成因之一</li>
+                            <li><strong>关键发现：</strong>不是所有人都会无助——1/3的人天生免疫</li>
+                            <li><strong>可逆性：</strong>练习可控经验可以逆转习得性无助</li>
+                            <li><strong>免疫力：</strong>早期掌控经验建立心理免疫力</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="branch branch-2">
+                    <div class="branch-node">
+                        <h3><span class="icon">🔍</span> 解释风格三要素</h3>
+                        <ul>
+                            <li><strong>永久性（Permanence）：</strong>坏事是暂时的还是永久的？</li>
+                            <li><strong>普遍性（Pervasiveness）：</strong>坏事影响一切还是仅限于此？</li>
+                            <li><strong>人格化（Personalization）：</strong>是谁的错——我、他人还是运气？</li>
+                            <li><strong>乐观者：</strong>坏事=暂时+特定+外部原因</li>
+                            <li><strong>悲观者：</strong>坏事=永久+普遍+自己的错</li>
+                            <li><strong>对好事的态度相反：</strong>乐观者认为好事是永久+普遍+自身努力</li>
+                            <li><strong>可测量：</strong>CAVE技术和ASQ问卷量化解释风格</li>
+                            <li><strong>稳定特质：</strong>解释风格从8岁后相对稳定但可改变</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="branch branch-3">
+                    <div class="branch-node">
+                        <h3><span class="icon">🧠</span> ABCDE认知重塑法</h3>
+                        <ul>
+                            <li><strong>A（Adversity）逆境：</strong>发生了什么不好的事</li>
+                            <li><strong>B（Belief）信念：</strong>你自动产生的想法和解释</li>
+                            <li><strong>C（Consequence）后果：</strong>这些信念带来的情绪和行为后果</li>
+                            <li><strong>D（Disputation）反驳：</strong>用证据挑战消极信念</li>
+                            <li><strong>E（Energization）激发：</strong>成功反驳后的积极转变</li>
+                            <li><strong>反驳四策略：</strong>找证据、找替代、找影响、找用处</li>
+                            <li><strong>外部化声音：</strong>把反驳当作与一个悲观朋友对话</li>
+                            <li><strong>刻意练习：</strong>每天记录ABC并进行D反驳</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="branch branch-4">
+                    <div class="branch-node">
+                        <h3><span class="icon">💪</span> 乐观的实际回报</h3>
+                        <ul>
+                            <li><strong>身体健康：</strong>乐观者免疫系统更强，寿命更长</li>
+                            <li><strong>职业成功：</strong>保险销售员乐观组业绩高出37%</li>
+                            <li><strong>学业表现：</strong>乐观新生更不易辍学</li>
+                            <li><strong>政治竞选：</strong>乐观的竞选言论更受选民青睐</li>
+                            <li><strong>体育竞技：</strong>乐观运动员在失败后反弹更快</li>
+                            <li><strong>抑郁症预防：</strong>习得乐观可降低抑郁复发率50%</li>
+                            <li><strong>人际关系：</strong>乐观者更具吸引力，婚姻更稳定</li>
+                            <li><strong>心理韧性：</strong>在挫折后更快恢复并继续前进</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="branch branch-5">
+                    <div class="branch-node">
+                        <h3><span class="icon">⚖️</span> 灵活乐观主义</h3>
+                        <ul>
+                            <li><strong>不是盲目乐观：</strong>塞利格曼强调"灵活乐观"而非"盲目乐观"</li>
+                            <li><strong>何时用乐观：</strong>成就情境、克服抑郁、提升士气</li>
+                            <li><strong>何时用悲观：</strong>高风险决策、需要准确评估代价时</li>
+                            <li><strong>成本意识：</strong>过分乐观可能低估风险</li>
+                            <li><strong>情境适配：</strong>根据"失败的代价"切换解释风格</li>
+                            <li><strong>现实检验：</strong>乐观解释仍需基于事实和数据</li>
+                            <li><strong>平衡之道：</strong>日常多用乐观，重大决策增加审慎</li>
+                            <li><strong>核心能力：</strong>学会判断何时乐观何时悲观</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="branch branch-6">
+                    <div class="branch-node">
+                        <h3><span class="icon">🌱</span> 培养乐观的实践</h3>
+                        <ul>
+                            <li><strong>捕捉自动思维：</strong>留意坏事发生瞬间的内心独白</li>
+                            <li><strong>记录与反思：</strong>每日ABC日记，追踪解释模式</li>
+                            <li><strong>反驳练习：</strong>写下至少3条反驳悲观信念的证据</li>
+                            <li><strong>替代解释：</strong>为每件坏事找到3种不同的原因</li>
+                            <li><strong>去灾难化：</strong>问自己"最坏能坏到哪？然后呢？"</li>
+                            <li><strong>转移注意力：</strong>在无法反驳时先暂停，稍后再处理</li>
+                            <li><strong>培养掌控感：</strong>从小事做起，积累成功经验</li>
+                            <li><strong>社交支持：</strong>请他人帮你识别并挑战悲观思维</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quotes-section">
+            <h2><span>💬</span> 经典金句</h2>
+            <div class="quote-grid">
+                <div class="quote-item">
+                    "乐观不是一种与生俱来的特质，而是一种可以通过刻意练习获得的技能。"
+                    <span>—— 关于习得性乐观的核心主张</span>
+                </div>
+                <div class="quote-item">
+                    "成功需要足够的乐观来维持动力，也需要足够的悲观来预见风险。"
+                    <span>—— 关于灵活乐观主义的平衡智慧</span>
+                </div>
+                <div class="quote-item">
+                    "悲观主义者的诅咒是：即便坏事结束，他们也认为它永远在继续。"
+                    <span>—— 关于解释风格中永久性维度</span>
+                </div>
+                <div class="quote-item">
+                    "改变你对自己说的话，就是改变你的命运。"
+                    <span>—— 关于ABCDE认知重塑的力量</span>
+                </div>
+                <div class="quote-item">
+                    "人生中的挫折并不决定你是谁——你对挫折的解释才决定你是谁。"
+                    <span>—— 关于解释风格塑造人生</span>
+                </div>
+                <div class="quote-item">
+                    "悲观可以是一种有效的策略，但乐观才是让你在长跑中胜出的燃料。"
+                    <span>—— 关于乐观与悲观的功能性差异</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-section">
+            <h2>🚀 行动建议</h2>
+            <div class="action-list">
+                <div class="action-item">
+                    <div class="action-number">1</div>
+                    <div class="action-text">
+                        <strong>开启ABC日记练习</strong><br>
+                        每天睡前记录一件不顺利的事（A）、当时自动产生的想法（B）、以及随之而来的情绪后果（C）。坚持一周，观察自己的解释风格模式。
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">2</div>
+                    <div class="action-text">
+                        <strong>实践"反驳悲观信念"</strong><br>
+                        针对日记中识别到的悲观信念，用四种反驳策略逐一挑战：找证据（这是真的吗？）、找替代（还有其他解释吗？）、找影响（即使为真，后果真那么严重吗？）、找用处（反复想这个对我有帮助吗？）。
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">3</div>
+                    <div class="action-text">
+                        <strong>训练"去灾难化"思维</strong><br>
+                        每次陷入"完蛋了"的灾难化思维时，问自己三个问题：(1) 最坏能坏到什么程度？(2) 最好会是什么结果？(3) 最可能是什么结果？用理性数据替代情绪化猜测。
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">4</div>
+                    <div class="action-text">
+                        <strong>建立"掌控感"小习惯</strong><br>
+                        每天完成一件确定能完成的小事并记录（如整理桌面、步行15分钟），积累掌控经验以建立对习得性无助的免疫力。
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">5</div>
+                    <div class="action-text">
+                        <strong>重构"好事"的解释方式</strong><br>
+                        当好事发生时，有意识地将原因归因于"永久性因素"（我擅长这个）、"普遍性"（这对我各方面都有帮助）、"个人因素"（这是我的努力和能力的结果），而非"运气"或"别人帮我"。
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">6</div>
+                    <div class="action-text">
+                        <strong>运用"灵活乐观"决策法</strong><br>
+                        在行动前自问："如果这件事失败了，代价有多大？"——代价小时大胆乐观投入，代价大时先做悲观分析再行动。这是塞利格曼最推荐的实用策略。
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>📚 每日一学 | 持续学习，不断成长 | 2026-08-11</p>
+            <p style="margin-top:8px;">💡 推荐阅读：《活出最乐观的自己》— 马丁·塞利格曼（Martin E.P. Seligman）</p>
+        </footer>
+    </div>
+</body>
+</html>
