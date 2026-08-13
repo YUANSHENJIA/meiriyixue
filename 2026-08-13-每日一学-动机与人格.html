@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026-08-13-每日一学-动机与人格</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #e4e4e7;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            margin-bottom: 30px;
+        }
+        
+        .header .date-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            padding: 8px 24px;
+            border-radius: 20px;
+            font-size: 14px;
+            margin-bottom: 16px;
+            letter-spacing: 2px;
+        }
+        
+        .header h1 {
+            font-size: 2.8em;
+            background: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+        }
+        
+        .header .subtitle {
+            font-size: 1.3em;
+            color: #c4b5fd;
+            margin-bottom: 8px;
+        }
+        
+        .header .author {
+            color: #94a3b8;
+            font-style: italic;
+        }
+        
+        .mindmap-container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 800px;
+            overflow-x: auto;
+        }
+        
+        .center-node {
+            position: absolute;
+            left: 50%;
+            top: 40px;
+            transform: translateX(-50%);
+            z-index: 10;
+        }
+        
+        .center-node .node-box {
+            width: 280px;
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            border-radius: 20px;
+            padding: 28px 24px;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(139, 92, 246, 0.4);
+            border: 2px solid rgba(255,255,255,0.1);
+        }
+        
+        .center-node .node-box h2 {
+            font-size: 1.5em;
+            color: white;
+            margin-bottom: 8px;
+        }
+        
+        .center-node .node-box p {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        
+        .branches {
+            position: relative;
+            width: 1150px;
+            height: 900px;
+            margin-top: 140px;
+        }
+        
+        .branch {
+            position: absolute;
+            width: 240px;
+        }
+        
+        .branch-node {
+            border-radius: 16px;
+            padding: 18px 16px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .branch-node:hover {
+            transform: translateY(-5px);
+        }
+        
+        .branch-node h3 {
+            font-size: 1.05em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .branch-node ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .branch-node li {
+            font-size: 0.82em;
+            padding: 6px 0;
+            padding-left: 18px;
+            position: relative;
+            line-height: 1.5;
+            color: rgba(255,255,255,0.85);
+        }
+        
+        .branch-node li::before {
+            content: "\25B8";
+            position: absolute;
+            left: 0;
+            font-size: 0.75em;
+            opacity: 0.7;
+        }
+        
+        .branch-1 { top: 0; left: 0; }
+        .branch-1 .branch-node {
+            background: linear-gradient(145deg, #e74c3c, #c0392b);
+            border: 2px solid rgba(231, 76, 60, 0.3);
+        }
+        
+        .branch-2 { top: 0; right: 0; }
+        .branch-2 .branch-node {
+            background: linear-gradient(145deg, #3498db, #2980b9);
+            border: 2px solid rgba(52, 152, 219, 0.3);
+        }
+        
+        .branch-3 { top: 260px; left: 0; }
+        .branch-3 .branch-node {
+            background: linear-gradient(145deg, #27ae60, #229954);
+            border: 2px solid rgba(39, 174, 96, 0.3);
+        }
+        
+        .branch-4 { top: 260px; right: 0; }
+        .branch-4 .branch-node {
+            background: linear-gradient(145deg, #f39c12, #d68910);
+            border: 2px solid rgba(243, 156, 18, 0.3);
+        }
+        
+        .branch-5 { top: 520px; left: 80px; }
+        .branch-5 .branch-node {
+            background: linear-gradient(145deg, #9b59b6, #8e44ad);
+            border: 2px solid rgba(155, 89, 182, 0.3);
+        }
+        
+        .branch-6 { top: 520px; right: 80px; }
+        .branch-6 .branch-node {
+            background: linear-gradient(145deg, #1abc9c, #16a085);
+            border: 2px solid rgba(26, 188, 156, 0.3);
+        }
+        
+        .quotes-section {
+            max-width: 900px;
+            margin: 60px auto 40px;
+            padding: 35px;
+            background: linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .quotes-section h2 {
+            text-align: center;
+            font-size: 1.5em;
+            margin-bottom: 25px;
+            color: #a78bfa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+        
+        .quote-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 18px;
+        }
+        
+        .quote-item {
+            padding: 18px 20px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 12px;
+            border-left: 4px solid #8b5cf6;
+            font-style: italic;
+            font-size: 0.95em;
+            line-height: 1.7;
+            color: #e2e8f0;
+            transition: all 0.3s;
+        }
+        
+        .quote-item:hover {
+            background: rgba(255,255,255,0.08);
+            transform: translateX(5px);
+        }
+        
+        .quote-item span {
+            display: block;
+            margin-top: 8px;
+            font-style: normal;
+            font-size: 0.85em;
+            color: #94a3b8;
+        }
+        
+        .action-section {
+            max-width: 900px;
+            margin: 0 auto 40px;
+            padding: 35px;
+            background: linear-gradient(145deg, rgba(34, 197, 94, 0.1), rgba(16, 185, 129, 0.05));
+            border-radius: 20px;
+            border: 1px solid rgba(34, 197, 94, 0.2);
+        }
+        
+        .action-section h2 {
+            text-align: center;
+            font-size: 1.5em;
+            margin-bottom: 25px;
+            color: #34d399;
+        }
+        
+        .action-list {
+            display: grid;
+            gap: 16px;
+        }
+        
+        .action-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 18px 20px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 12px;
+            transition: all 0.3s;
+        }
+        
+        .action-item:hover {
+            background: rgba(255,255,255,0.08);
+        }
+        
+        .action-number {
+            flex-shrink: 0;
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        
+        .action-text {
+            flex: 1;
+            line-height: 1.6;
+        }
+        
+        .action-text strong {
+            color: #86efac;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #64748b;
+            font-size: 0.85em;
+        }
+
+        .icon { 
+            font-size: 1.2em; 
+        }
+
+        @media (max-width: 1100px) {
+            .branches {
+                width: 700px;
+                height: 1300px;
+                margin-top: 120px;
+            }
+            
+            .branch {
+                width: 320px;
+                position: static !important;
+                margin-bottom: 25px;
+            }
+            
+            .center-node .node-box {
+                width: 240px;
+                padding: 22px 18px;
+            }
+            
+            .header h1 { font-size: 2em; }
+            
+            .quote-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .header h1 { font-size: 1.6em; }
+            .header .subtitle { font-size: 1em; }
+            .center-node .node-box { width: 200px; padding: 18px 14px; }
+            .branch-node { padding: 14px 12px; }
+            .branch-node li { font-size: 0.78em; padding: 5px 0 5px 16px; }
+            .quotes-section, .action-section { padding: 20px 16px; }
+            .quote-item { padding: 14px 16px; font-size: 0.88em; }
+            .action-item { padding: 14px 16px; flex-direction: column; gap: 10px; }
+        }
+    
+
+        /* === LAYOUT FIX: Prevent card overlap with CSS Grid === */
+        .mindmap-container {
+            display: block;
+            position: relative;
+            padding-top: 60px;
+            margin-bottom: 30px;
+            min-height: auto;
+            overflow-x: visible;
+        }
+
+        .center-node {
+            position: static;
+            left: auto;
+            top: auto;
+            transform: none;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 50px;
+        }
+
+        .branches {
+            position: static;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            max-width: 900px;
+            width: auto;
+            height: auto;
+            margin: 0 auto;
+        }
+
+        .branch {
+            position: static;
+            width: 100%;
+        }
+
+        .branch-1, .branch-2, .branch-3, .branch-4, .branch-5, .branch-6 {
+            top: auto;
+            left: auto;
+            right: auto;
+        }
+
+        .branch .branch-node {
+            height: 100%;
+        }
+
+        @media (max-width: 1100px) {
+            .mindmap-container { padding-top: 40px; }
+            .branches {
+                width: auto;
+                height: auto;
+                margin-top: 0;
+                grid-template-columns: 1fr;
+                max-width: 600px;
+            }
+            .branch {
+                position: static !important;
+                width: 100%;
+                margin-bottom: 0;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="date-badge">📅 2026年8月13日 · 每日一学</div>
+            <h1>《动机与人格》</h1>
+            <p class="subtitle">Motivation and Personality · 人本主义心理学的奠基之作</p>
+            <p class="author">👤 亚伯拉罕·马斯洛（Abraham H. Maslow）| 🏆 人本主义心理学之父 · 需求层次理论的开创者</p>
+        </div>
+
+        <div class="mindmap-container">
+            <div class="center-node">
+                <div class="node-box">
+                    <h2>🧠 动机与人格</h2>
+                    <p>需求层次 · 自我实现 · 高峰体验</p>
+                    <p style="margin-top:8px;font-size:0.85em;opacity:0.8;">匮乏性需要 · 成长性需要 · 存在价值 · 元动机</p>
+                </div>
+            </div>
+
+            <div class="branches">
+                <div class="branch branch-1">
+                    <div class="branch-node">
+                        <h3><span class="icon">🔺</span> 需求层次金字塔</h3>
+                        <ul>
+                            <li><strong>生理需求：</strong>食物、水、睡眠、空气——生存的基础，力量最强</li>
+                            <li><strong>安全需求：</strong>人身安全、稳定、秩序、免受威胁与恐惧</li>
+                            <li><strong>归属与爱：</strong>亲情、友谊、亲密关系、群体归属感</li>
+                            <li><strong>尊重需求：</strong>自尊、自信、成就，以及他人的认可与尊重</li>
+                            <li><strong>自我实现：</strong>发挥全部潜能、成为自己所能成为的人</li>
+                            <li><strong>层次越低力量越强：</strong>越底层的需要越具支配性，满足后才能释放高层动机</li>
+                            <li><strong>层次非僵化：</strong>可跳级、可重叠，受文化与个体差异影响</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="branch branch-2">
+                    <div class="branch-node">
+                        <h3><span class="icon">⚖️</span> 两类动机</h3>
+                        <ul>
+                            <li><strong>匮乏性动机（D-motivation）：</strong>源于缺失，为填补缺口而行动</li>
+                            <li><strong>成长性动机（B-motivation）：</strong>源于自我实现的渴望，越满足越强烈</li>
+                            <li><strong>匮乏性需要：</strong>长期不满足会致病，一旦满足动机即消退</li>
+                            <li><strong>成长性需要：</strong>不满足不致"病"，但满足会带来更深的成长与喜悦</li>
+                            <li><strong>关键区别：</strong>匮乏是"减少痛苦"，成长是"增加丰富"</li>
+                            <li><strong>管理启示：</strong>仅靠加薪无法持续激励，成长空间才是高级动力源</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="branch branch-3">
+                    <div class="branch-node">
+                        <h3><span class="icon">🌟</span> 自我实现者的特质</h3>
+                        <ul>
+                            <li><strong>客观感知现实：</strong>不被主观偏见扭曲，看得更准</li>
+                            <li><strong>接纳自我与他人：</strong>坦然接受人性中的不完美</li>
+                            <li><strong>自发自然：</strong>不矫饰、不伪装，内外一致</li>
+                            <li><strong>以问题为中心：</strong>专注于使命与问题，而非自我形象</li>
+                            <li><strong>超然独立：</strong>享受独处，不依赖他人认可</li>
+                            <li><strong>自主：</strong>价值观独立，不受环境与文化裹挟</li>
+                            <li><strong>清新的鉴赏力：</strong>对熟悉事物常看常新，保持惊叹</li>
+                            <li><strong>高频高峰体验：</strong>更易进入忘我的圆满瞬间</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="branch branch-4">
+                    <div class="branch-node">
+                        <h3><span class="icon">✨</span> 高峰体验与存在价值</h3>
+                        <ul>
+                            <li><strong>高峰体验：</strong>极度幸福、狂喜、圆满、敬畏的瞬间</li>
+                            <li><strong>存在价值（B-values）：</strong>真、善、美、完整、独特、正义、秩序等</li>
+                            <li><strong>自我意识消融：</strong>高峰体验中人与对象合一，遗忘时间与自我</li>
+                            <li><strong>暂时摆脱匮乏：</strong>在高峰体验中，匮乏性需要暂时被超越</li>
+                            <li><strong>普遍可及：</strong>任何人都可能经历，程度与频率因人而异</li>
+                            <li><strong>价值意义：</strong>高峰体验是心理健康与创造力的重要标志</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="branch branch-5">
+                    <div class="branch-node">
+                        <h3><span class="icon">📈</span> 成长与元动机</h3>
+                        <ul>
+                            <li><strong>元需要（meta-needs）：</strong>对真善美、意义、完整等存在价值的追求</li>
+                            <li><strong>元病理（meta-pathology）：</strong>元需要被剥夺会引发空虚、无意义感、玩世不恭</li>
+                            <li><strong>成长是连续过程：</strong>自我实现不是终点，而是一连串持续的选择</li>
+                            <li><strong>动机随满足演进：</strong>低级需要满足后，高级动机自然浮现</li>
+                            <li><strong>满足是前提：</strong>长期匮乏者难以关注高层需要，应先补基础</li>
+                            <li><strong>现代社会的困境：</strong>物质丰裕下，意义感缺失成为核心"元病理"</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="branch branch-6">
+                    <div class="branch-node">
+                        <h3><span class="icon">🛠️</span> 实践与应用</h3>
+                        <ul>
+                            <li><strong>诊断需求层次：</strong>找到自己当前所处层次与卡点</li>
+                            <li><strong>区分两类动机：</strong>问"我在逃避匮乏，还是追求成长？"</li>
+                            <li><strong>以问题为中心：</strong>把注意力从"我怎么看"转向"问题怎么解"</li>
+                            <li><strong>培育高峰体验：</strong>专注投入热爱之事，创造忘我时刻</li>
+                            <li><strong>警惕"锤子定律"：</strong>扩充工具箱，避免用单一方法套所有问题</li>
+                            <li><strong>管理中的应用：</strong>为员工创造尊重与成长空间，而非仅物质激励</li>
+                            <li><strong>育儿与教育：</strong>先满足安全与归属，再谈纪律与成就</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quotes-section">
+            <h2><span>💬</span> 经典金句</h2>
+            <div class="quote-grid">
+                <div class="quote-item">
+                    "如果你唯一的工具是一把锤子，你往往会把所有问题都看成钉子。"
+                    <span>—— 关于思维工具的局限（锤子定律）</span>
+                </div>
+                <div class="quote-item">
+                    "一个人能够成为什么，就必须成为什么。"
+                    <span>—— 关于自我实现需要的定义</span>
+                </div>
+                <div class="quote-item">
+                    "自我实现的人能更客观、更准确地认识现实。"
+                    <span>—— 关于客观感知现实的特质</span>
+                </div>
+                <div class="quote-item">
+                    "需求层次越低，力量越强；层次越高，越能体现人的独特性。"
+                    <span>—— 关于需求层次的内在规律</span>
+                </div>
+                <div class="quote-item">
+                    "高峰体验是一种暂时摆脱了匮乏性需要、纯粹的存在的瞬间。"
+                    <span>—— 关于高峰体验的本质</span>
+                </div>
+                <div class="quote-item">
+                    "成长不是需要的终点，而是需要满足后自然涌现的新的渴望。"
+                    <span>—— 关于成长性动机</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-section">
+            <h2>🚀 行动建议</h2>
+            <div class="action-list">
+                <div class="action-item">
+                    <div class="action-number">1</div>
+                    <div class="action-text">
+                        <strong>定位你的需求层次</strong><br>
+                        对照需求金字塔，诚实地问自己：当前最迫切、最有支配力的是哪一层需要？是安全感、归属感，还是尊重与认可？只有先看清卡点，才能对症下药，避免在错误的层次上用力。
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">2</div>
+                    <div class="action-text">
+                        <strong>区分"匮乏"与"成长"两种动机</strong><br>
+                        今天做每一件重要的事时，多问一句："我是在逃避某种匮乏，还是在追求某种成长？" 匮乏驱动让你避免痛苦，成长驱动让你靠近意义——识别它们，才能主动调配自己的精力。
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">3</div>
+                    <div class="action-text">
+                        <strong>记录你的高峰体验</strong><br>
+                        回想最近一次让你忘记时间、浑然忘我的时刻——那往往就是你的高峰体验，指向你的天赋与热爱所在。把它写下来，并思考如何让这种时刻更多地出现在日常生活中。
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">4</div>
+                    <div class="action-text">
+                        <strong>从"以自我为中心"转向"以问题为中心"</strong><br>
+                        选一个正在困扰你的问题，尝试把关注点从"别人怎么看我""我会不会丢脸"转移到"这个问题本身怎么解决"。自我实现者的一个核心特质，就是专注问题而非自我形象。
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">5</div>
+                    <div class="action-text">
+                        <strong>培养一项"自我实现者特质"</strong><br>
+                        从马斯洛列出的特质中挑一项（如"清新的鉴赏力"或"接纳自我"），本周刻意练习。例如：每天在熟悉的事物中发现一个值得惊叹的细节，重拾对世界的新鲜感。
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">6</div>
+                    <div class="action-text">
+                        <strong>警惕"锤子定律"，扩充你的工具箱</strong><br>
+                        审视自己是否总在用同一种方法应对所有问题——总是加班、总是指责、总是回避。列出你手头"唯一的那把锤子"，然后有意识地去学习一个新工具、新视角，避免思维的单一化。
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>📚 每日一学 | 持续学习，不断成长 | 2026-08-13</p>
+            <p style="margin-top:8px;">💡 推荐阅读：《动机与人格》— 亚伯拉罕·马斯洛（Abraham H. Maslow），人本主义心理学的奠基之作</p>
+        </footer>
+    </div>
+</body>
+</html>
