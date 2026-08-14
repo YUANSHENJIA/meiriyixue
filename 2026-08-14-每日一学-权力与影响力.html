@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026-08-14-每日一学-权力与影响力</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #e4e4e7;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            margin-bottom: 30px;
+        }
+        
+        .header .date-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            padding: 8px 24px;
+            border-radius: 20px;
+            font-size: 14px;
+            margin-bottom: 16px;
+            letter-spacing: 2px;
+        }
+        
+        .header h1 {
+            font-size: 2.8em;
+            background: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+        }
+        
+        .header .subtitle {
+            font-size: 1.3em;
+            color: #c4b5fd;
+            margin-bottom: 8px;
+        }
+        
+        .header .author {
+            color: #94a3b8;
+            font-style: italic;
+        }
+        
+        .mindmap-container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 800px;
+            overflow-x: auto;
+        }
+        
+        .center-node {
+            position: absolute;
+            left: 50%;
+            top: 40px;
+            transform: translateX(-50%);
+            z-index: 10;
+        }
+        
+        .center-node .node-box {
+            width: 280px;
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            border-radius: 20px;
+            padding: 28px 24px;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(139, 92, 246, 0.4);
+            border: 2px solid rgba(255,255,255,0.1);
+        }
+        
+        .center-node .node-box h2 {
+            font-size: 1.5em;
+            color: white;
+            margin-bottom: 8px;
+        }
+        
+        .center-node .node-box p {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        
+        .branches {
+            position: relative;
+            width: 1150px;
+            height: 900px;
+            margin-top: 140px;
+        }
+        
+        .branch {
+            position: absolute;
+            width: 240px;
+        }
+        
+        .branch-node {
+            border-radius: 16px;
+            padding: 18px 16px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .branch-node:hover {
+            transform: translateY(-5px);
+        }
+        
+        .branch-node h3 {
+            font-size: 1.05em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .branch-node ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .branch-node li {
+            font-size: 0.82em;
+            padding: 6px 0;
+            padding-left: 18px;
+            position: relative;
+            line-height: 1.5;
+            color: rgba(255,255,255,0.85);
+        }
+        
+        .branch-node li::before {
+            content: "\25B8";
+            position: absolute;
+            left: 0;
+            font-size: 0.75em;
+            opacity: 0.7;
+        }
+        
+        .branch-1 { top: 0; left: 0; }
+        .branch-1 .branch-node {
+            background: linear-gradient(145deg, #e74c3c, #c0392b);
+            border: 2px solid rgba(231, 76, 60, 0.3);
+        }
+        
+        .branch-2 { top: 0; right: 0; }
+        .branch-2 .branch-node {
+            background: linear-gradient(145deg, #3498db, #2980b9);
+            border: 2px solid rgba(52, 152, 219, 0.3);
+        }
+        
+        .branch-3 { top: 260px; left: 0; }
+        .branch-3 .branch-node {
+            background: linear-gradient(145deg, #27ae60, #229954);
+            border: 2px solid rgba(39, 174, 96, 0.3);
+        }
+        
+        .branch-4 { top: 260px; right: 0; }
+        .branch-4 .branch-node {
+            background: linear-gradient(145deg, #f39c12, #d68910);
+            border: 2px solid rgba(243, 156, 18, 0.3);
+        }
+        
+        .branch-5 { top: 520px; left: 80px; }
+        .branch-5 .branch-node {
+            background: linear-gradient(145deg, #9b59b6, #8e44ad);
+            border: 2px solid rgba(155, 89, 182, 0.3);
+        }
+        
+        .branch-6 { top: 520px; right: 80px; }
+        .branch-6 .branch-node {
+            background: linear-gradient(145deg, #1abc9c, #16a085);
+            border: 2px solid rgba(26, 188, 156, 0.3);
+        }
+        
+        .quotes-section {
+            max-width: 900px;
+            margin: 60px auto 40px;
+            padding: 35px;
+            background: linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .quotes-section h2 {
+            text-align: center;
+            font-size: 1.5em;
+            margin-bottom: 25px;
+            color: #a78bfa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+        
+        .quote-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 18px;
+        }
+        
+        .quote-item {
+            padding: 18px 20px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 12px;
+            border-left: 4px solid #8b5cf6;
+            font-style: italic;
+            font-size: 0.95em;
+            line-height: 1.7;
+            color: #e2e8f0;
+            transition: all 0.3s;
+        }
+        
+        .quote-item:hover {
+            background: rgba(255,255,255,0.08);
+            transform: translateX(5px);
+        }
+        
+        .quote-item span {
+            display: block;
+            margin-top: 8px;
+            font-style: normal;
+            font-size: 0.85em;
+            color: #94a3b8;
+        }
+        
+        .action-section {
+            max-width: 900px;
+            margin: 0 auto 40px;
+            padding: 35px;
+            background: linear-gradient(145deg, rgba(34, 197, 94, 0.1), rgba(16, 185, 129, 0.05));
+            border-radius: 20px;
+            border: 1px solid rgba(34, 197, 94, 0.2);
+        }
+        
+        .action-section h2 {
+            text-align: center;
+            font-size: 1.5em;
+            margin-bottom: 25px;
+            color: #34d399;
+        }
+        
+        .action-list {
+            display: grid;
+            gap: 16px;
+        }
+        
+        .action-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 18px 20px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 12px;
+            transition: all 0.3s;
+        }
+        
+        .action-item:hover {
+            background: rgba(255,255,255,0.08);
+        }
+        
+        .action-number {
+            flex-shrink: 0;
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        
+        .action-text {
+            flex: 1;
+            line-height: 1.6;
+        }
+        
+        .action-text strong {
+            color: #86efac;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #64748b;
+            font-size: 0.85em;
+        }
+
+        .icon { 
+            font-size: 1.2em; 
+        }
+
+        @media (max-width: 1100px) {
+            .branches {
+                width: 700px;
+                height: 1300px;
+                margin-top: 120px;
+            }
+            
+            .branch {
+                width: 320px;
+                position: static !important;
+                margin-bottom: 25px;
+            }
+            
+            .center-node .node-box {
+                width: 240px;
+                padding: 22px 18px;
+            }
+            
+            .header h1 { font-size: 2em; }
+            
+            .quote-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .header h1 { font-size: 1.6em; }
+            .header .subtitle { font-size: 1em; }
+            .center-node .node-box { width: 200px; padding: 18px 14px; }
+            .branch-node { padding: 14px 12px; }
+            .branch-node li { font-size: 0.78em; padding: 5px 0 5px 16px; }
+            .quotes-section, .action-section { padding: 20px 16px; }
+            .quote-item { padding: 14px 16px; font-size: 0.88em; }
+            .action-item { padding: 14px 16px; flex-direction: column; gap: 10px; }
+        }
+    
+
+        /* === LAYOUT FIX: Prevent card overlap with CSS Grid === */
+        .mindmap-container {
+            display: block;
+            position: relative;
+            padding-top: 60px;
+            margin-bottom: 30px;
+            min-height: auto;
+            overflow-x: visible;
+        }
+
+        .center-node {
+            position: static;
+            left: auto;
+            top: auto;
+            transform: none;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 50px;
+        }
+
+        .branches {
+            position: static;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            max-width: 900px;
+            width: auto;
+            height: auto;
+            margin: 0 auto;
+        }
+
+        .branch {
+            position: static;
+            width: 100%;
+        }
+
+        .branch-1, .branch-2, .branch-3, .branch-4, .branch-5, .branch-6 {
+            top: auto;
+            left: auto;
+            right: auto;
+        }
+
+        .branch .branch-node {
+            height: 100%;
+        }
+
+        @media (max-width: 1100px) {
+            .mindmap-container { padding-top: 40px; }
+            .branches {
+                width: auto;
+                height: auto;
+                margin-top: 0;
+                grid-template-columns: 1fr;
+                max-width: 600px;
+            }
+            .branch {
+                position: static !important;
+                width: 100%;
+                margin-bottom: 0;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="date-badge">📅 2026年8月14日 · 每日一学</div>
+            <h1>《权力与影响力》</h1>
+            <p class="subtitle">Power and Influence · 超越正式职权的组织生存与领导之道</p>
+            <p class="author">👤 约翰·科特（John P. Kotter）| 🏆 哈佛商学院教授 · 领导力与变革管理大师</p>
+        </div>
+
+        <div class="mindmap-container">
+            <div class="center-node">
+                <div class="node-box">
+                    <h2>🧭 权力与影响力</h2>
+                    <p>超越职权 · 管理依赖 · 赢得人心</p>
+                    <p style="margin-top:8px;font-size:0.85em;opacity:0.8;">权力差距 · 职位权力 · 个人权力 · 关系网络</p>
+                </div>
+            </div>
+
+            <div class="branches">
+                <div class="branch branch-1">
+                    <div class="branch-node">
+                        <h3><span class="icon">🎯</span> 核心洞见：权力差距</h3>
+                        <ul>
+                            <li><strong>相互依赖的现实：</strong>组织中任何重要工作都需要他人协作，无法单枪匹马完成</li>
+                            <li><strong>权力差距（Power Gap）：</strong>正式职权小于完成任务所需的影响力，二者之差即"权力差距"</li>
+                            <li><strong>依赖决定权力：</strong>谁被需要、谁掌握稀缺资源，谁就拥有权力</li>
+                            <li><strong>权力是中性工具：</strong>本身无善恶，关键在于运用的目的与方式</li>
+                            <li><strong>超越正式权威：</strong>真正的影响力来自职权之外的信任、专业与关系</li>
+                            <li><strong>终身课题：</strong>权力差距永远存在，需持续经营而非一劳永逸</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="branch branch-2">
+                    <div class="branch-node">
+                        <h3><span class="icon">⚡</span> 权力的两大来源</h3>
+                        <ul>
+                            <li><strong>职位权力（Position Power）：</strong>组织赋予的正式职权、奖惩权、资源与信息控制权</li>
+                            <li><strong>个人权力（Personal Power）：</strong>专业能力、人格魅力、信誉口碑、关系网络</li>
+                            <li><strong>职位权力的局限：</strong>随职位而存亡，且常不足以覆盖全部依赖关系</li>
+                            <li><strong>个人权力的持久性：</strong>不随头衔消失，是长期影响力的根基</li>
+                            <li><strong>专家权力：</strong>稀缺知识技能带来的不可替代性</li>
+                            <li><strong>参照权力：</strong>他人因认同、尊敬、信任而自愿追随</li>
+                            <li><strong>最佳组合：</strong>职位权力打开门，个人权力让合作真正发生</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="branch branch-3">
+                    <div class="branch-node">
+                        <h3><span class="icon">🤝</span> 三种关键关系</h3>
+                        <ul>
+                            <li><strong>向上管理（上司）：</strong>理解上司目标与压力，主动汇报、建立信任，帮助上司成功</li>
+                            <li><strong>向下管理（下属）：</strong>明确愿景、充分授权、培养成长，而非命令控制</li>
+                            <li><strong>横向影响（同事/同侪）：</strong>建立联盟、互惠合作、跨部门协调</li>
+                            <li><strong>外部关系：</strong>客户、供应商、合作方同样构成依赖网络</li>
+                            <li><strong>关系是资产：</strong>每一段关系都需要长期投入与维护</li>
+                            <li><strong>共赢思维：</strong>影响力不是零和博弈，而是创造共同价值</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="branch branch-4">
+                    <div class="branch-node">
+                        <h3><span class="icon">🧩</span> 影响力策略</h3>
+                        <ul>
+                            <li><strong>建立信任：</strong>兑现承诺、言行一致，信任是影响力的货币</li>
+                            <li><strong>关系网络：</strong>主动经营人脉，构建支持你的联盟</li>
+                            <li><strong>用事实与逻辑：</strong>以数据和清晰逻辑说服，而非仅靠权威压服</li>
+                            <li><strong>理解他人利益：</strong>换位思考，找到对方真正关心的"为什么"</li>
+                            <li><strong>创造共赢方案：</strong>让合作方看到"帮我=帮他自己"</li>
+                            <li><strong>借力与协调：</strong>善用关键人物的支持，化解阻力</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="branch branch-5">
+                    <div class="branch-node">
+                        <h3><span class="icon">⚠️</span> 权力的陷阱</h3>
+                        <ul>
+                            <li><strong>过度依赖职位权力：</strong>动辄"我是领导"，透支权威而失去人心</li>
+                            <li><strong>忽视依赖关系：</strong>狂妄自大，误以为成功全靠自己</li>
+                            <li><strong>手段异化为目的：</strong>为权力而权力，迷失方向</li>
+                            <li><strong>权力导致自利：</strong>研究显示权力会削弱同理心与自我认知</li>
+                            <li><strong>信息孤岛：</strong>身边只剩讨好者，听不到真话</li>
+                            <li><strong>短视投机：</strong>用权术换取眼前利益，毁掉长期信誉</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="branch branch-6">
+                    <div class="branch-node">
+                        <h3><span class="icon">🛠️</span> 实践与应用</h3>
+                        <ul>
+                            <li><strong>绘制依赖地图：</strong>列出关键任务，标注依赖的人与资源</li>
+                            <li><strong>盘点权力资产：</strong>厘清自己的职位权力与个人权力</li>
+                            <li><strong>补齐个人权力：</strong>投资专业、信誉与关系网络</li>
+                            <li><strong>主动向上管理：</strong>了解上司KPI与压力，成为可信赖的助手</li>
+                            <li><strong>定期维护关系：</strong>对关键人保持真诚、持续的连接</li>
+                            <li><strong>领导而非只管理：</strong>设定方向、沟通愿景、激励他人</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quotes-section">
+            <h2><span>💬</span> 经典金句</h2>
+            <div class="quote-grid">
+                <div class="quote-item">
+                    "管理是应对复杂性，领导是应对变革。"
+                    <span>—— 关于管理与领导的经典区分</span>
+                </div>
+                <div class="quote-item">
+                    "权力的本质，是让事情发生的能力，而非发号施令的头衔。"
+                    <span>—— 关于权力的本质</span>
+                </div>
+                <div class="quote-item">
+                    "你的成就，取决于你管理依赖关系的能力。"
+                    <span>—— 关于依赖关系</span>
+                </div>
+                <div class="quote-item">
+                    "影响力不是零和博弈，而是创造共同价值。"
+                    <span>—— 关于共赢思维</span>
+                </div>
+                <div class="quote-item">
+                    "职位权力能打开门，个人权力才能让人愿意跟随你走进去。"
+                    <span>—— 关于两类权力</span>
+                </div>
+                <div class="quote-item">
+                    "真正危险的，不是拥有权力，而是对权力失去敬畏与自我认知。"
+                    <span>—— 关于权力的陷阱</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-section">
+            <h2>🚀 行动建议</h2>
+            <div class="action-list">
+                <div class="action-item">
+                    <div class="action-number">1</div>
+                    <div class="action-text">
+                        <strong>绘制你的"依赖地图"</strong><br>
+                        列出本周最关键的一项任务，标注完成它需要依赖谁、需要哪些资源，找出你与所需影响力之间的"权力差距"——这是所有影响力的起点。
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">2</div>
+                    <div class="action-text">
+                        <strong>盘点两类权力资产</strong><br>
+                        用一张纸左栏写"职位权力"（头衔、资源、奖惩），右栏写"个人权力"（专业、信誉、关系），看看哪边需要补强，避免过度押注单一来源。
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">3</div>
+                    <div class="action-text">
+                        <strong>主动经营一段向上关系</strong><br>
+                        找机会了解你上司当前最关注的目标与压力，思考你能如何帮他成功，并主动提供价值——向上管理不是讨好，而是创造共赢。
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">4</div>
+                    <div class="action-text">
+                        <strong>建立一个横向联盟</strong><br>
+                        找一个跨部门或跨团队的合作对象，深入了解他的利益诉求，提出一个能让他"双赢"的小合作方案，练习横向影响力。
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">5</div>
+                    <div class="action-text">
+                        <strong>用事实而非权威说服</strong><br>
+                        下一次需要推动一件事时，放弃"我是领导/我是对的"的姿态，改用数据、逻辑和对方的利益点来说服，检验你个人权力的真实成色。
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">6</div>
+                    <div class="action-text">
+                        <strong>警惕权力的腐蚀</strong><br>
+                        反思自己是否有过度依赖头衔、听不进不同意见的时刻，主动邀请一位可信的人给你真实反馈，守住权力之下的自我认知。
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>📚 每日一学 | 持续学习，不断成长 | 2026-08-14</p>
+            <p style="margin-top:8px;">💡 推荐阅读：《权力与影响力》— 约翰·科特（John P. Kotter），超越正式职权的组织生存与领导之道</p>
+        </footer>
+    </div>
+</body>
+</html>
