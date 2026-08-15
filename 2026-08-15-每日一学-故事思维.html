@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026-08-15-每日一学-故事思维</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #e4e4e7;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            margin-bottom: 30px;
+        }
+        
+        .header .date-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            padding: 8px 24px;
+            border-radius: 20px;
+            font-size: 14px;
+            margin-bottom: 16px;
+            letter-spacing: 2px;
+        }
+        
+        .header h1 {
+            font-size: 2.8em;
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+        }
+        
+        .header .subtitle {
+            font-size: 1.3em;
+            color: #fcd34d;
+            margin-bottom: 8px;
+        }
+        
+        .header .author {
+            color: #94a3b8;
+            font-style: italic;
+        }
+        
+        .mindmap-container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 800px;
+            overflow-x: auto;
+        }
+        
+        .center-node {
+            position: absolute;
+            left: 50%;
+            top: 40px;
+            transform: translateX(-50%);
+            z-index: 10;
+        }
+        
+        .center-node .node-box {
+            width: 280px;
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            border-radius: 20px;
+            padding: 28px 24px;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(245, 158, 11, 0.4);
+            border: 2px solid rgba(255,255,255,0.1);
+        }
+        
+        .center-node .node-box h2 {
+            font-size: 1.5em;
+            color: white;
+            margin-bottom: 8px;
+        }
+        
+        .center-node .node-box p {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        
+        .branches {
+            position: relative;
+            width: 1150px;
+            height: 900px;
+            margin-top: 140px;
+        }
+        
+        .branch {
+            position: absolute;
+            width: 240px;
+        }
+        
+        .branch-node {
+            border-radius: 16px;
+            padding: 18px 16px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .branch-node:hover {
+            transform: translateY(-5px);
+        }
+        
+        .branch-node h3 {
+            font-size: 1.05em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .branch-node ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .branch-node li {
+            font-size: 0.82em;
+            padding: 6px 0;
+            padding-left: 18px;
+            position: relative;
+            line-height: 1.5;
+            color: rgba(255,255,255,0.85);
+        }
+        
+        .branch-node li::before {
+            content: "\25B8";
+            position: absolute;
+            left: 0;
+            font-size: 0.75em;
+            opacity: 0.7;
+        }
+        
+        .branch-1 { top: 0; left: 0; }
+        .branch-1 .branch-node {
+            background: linear-gradient(145deg, #e74c3c, #c0392b);
+            border: 2px solid rgba(231, 76, 60, 0.3);
+        }
+        
+        .branch-2 { top: 0; right: 0; }
+        .branch-2 .branch-node {
+            background: linear-gradient(145deg, #3498db, #2980b9);
+            border: 2px solid rgba(52, 152, 219, 0.3);
+        }
+        
+        .branch-3 { top: 260px; left: 0; }
+        .branch-3 .branch-node {
+            background: linear-gradient(145deg, #27ae60, #229954);
+            border: 2px solid rgba(39, 174, 96, 0.3);
+        }
+        
+        .branch-4 { top: 260px; right: 0; }
+        .branch-4 .branch-node {
+            background: linear-gradient(145deg, #f39c12, #d68910);
+            border: 2px solid rgba(243, 156, 18, 0.3);
+        }
+        
+        .branch-5 { top: 520px; left: 80px; }
+        .branch-5 .branch-node {
+            background: linear-gradient(145deg, #9b59b6, #8e44ad);
+            border: 2px solid rgba(155, 89, 182, 0.3);
+        }
+        
+        .branch-6 { top: 520px; right: 80px; }
+        .branch-6 .branch-node {
+            background: linear-gradient(145deg, #1abc9c, #16a085);
+            border: 2px solid rgba(26, 188, 156, 0.3);
+        }
+        
+        .quotes-section {
+            max-width: 900px;
+            margin: 60px auto 40px;
+            padding: 35px;
+            background: linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .quotes-section h2 {
+            text-align: center;
+            font-size: 1.5em;
+            margin-bottom: 25px;
+            color: #fbbf24;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+        
+        .quote-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 18px;
+        }
+        
+        .quote-item {
+            padding: 18px 20px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 12px;
+            border-left: 4px solid #f59e0b;
+            font-style: italic;
+            font-size: 0.95em;
+            line-height: 1.7;
+            color: #e2e8f0;
+            transition: all 0.3s;
+        }
+        
+        .quote-item:hover {
+            background: rgba(255,255,255,0.08);
+            transform: translateX(5px);
+        }
+        
+        .quote-item span {
+            display: block;
+            margin-top: 8px;
+            font-style: normal;
+            font-size: 0.85em;
+            color: #94a3b8;
+        }
+        
+        .action-section {
+            max-width: 900px;
+            margin: 0 auto 40px;
+            padding: 35px;
+            background: linear-gradient(145deg, rgba(34, 197, 94, 0.1), rgba(16, 185, 129, 0.05));
+            border-radius: 20px;
+            border: 1px solid rgba(34, 197, 94, 0.2);
+        }
+        
+        .action-section h2 {
+            text-align: center;
+            font-size: 1.5em;
+            margin-bottom: 25px;
+            color: #34d399;
+        }
+        
+        .action-list {
+            display: grid;
+            gap: 16px;
+        }
+        
+        .action-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 18px 20px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 12px;
+            transition: all 0.3s;
+        }
+        
+        .action-item:hover {
+            background: rgba(255,255,255,0.08);
+        }
+        
+        .action-number {
+            flex-shrink: 0;
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        
+        .action-text {
+            flex: 1;
+            line-height: 1.6;
+        }
+        
+        .action-text strong {
+            color: #86efac;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #64748b;
+            font-size: 0.85em;
+        }
+
+        .icon { 
+            font-size: 1.2em; 
+        }
+
+        @media (max-width: 1100px) {
+            .branches {
+                width: 700px;
+                height: 1300px;
+                margin-top: 120px;
+            }
+            
+            .branch {
+                width: 320px;
+                position: static !important;
+                margin-bottom: 25px;
+            }
+            
+            .center-node .node-box {
+                width: 240px;
+                padding: 22px 18px;
+            }
+            
+            .header h1 { font-size: 2em; }
+            
+            .quote-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .header h1 { font-size: 1.6em; }
+            .header .subtitle { font-size: 1em; }
+            .center-node .node-box { width: 200px; padding: 18px 14px; }
+            .branch-node { padding: 14px 12px; }
+            .branch-node li { font-size: 0.78em; padding: 5px 0 5px 16px; }
+            .quotes-section, .action-section { padding: 20px 16px; }
+            .quote-item { padding: 14px 16px; font-size: 0.88em; }
+            .action-item { padding: 14px 16px; flex-direction: column; gap: 10px; }
+        }
+    
+
+        /* === LAYOUT FIX: Prevent card overlap with CSS Grid === */
+        .mindmap-container {
+            display: block;
+            position: relative;
+            padding-top: 60px;
+            margin-bottom: 30px;
+            min-height: auto;
+            overflow-x: visible;
+        }
+
+        .center-node {
+            position: static;
+            left: auto;
+            top: auto;
+            transform: none;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 50px;
+        }
+
+        .branches {
+            position: static;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            max-width: 900px;
+            width: auto;
+            height: auto;
+            margin: 0 auto;
+        }
+
+        .branch {
+            position: static;
+            width: 100%;
+        }
+
+        .branch-1, .branch-2, .branch-3, .branch-4, .branch-5, .branch-6 {
+            top: auto;
+            left: auto;
+            right: auto;
+        }
+
+        .branch .branch-node {
+            height: 100%;
+        }
+
+        @media (max-width: 1100px) {
+            .mindmap-container { padding-top: 40px; }
+            .branches {
+                width: auto;
+                height: auto;
+                margin-top: 0;
+                grid-template-columns: 1fr;
+                max-width: 600px;
+            }
+            .branch {
+                position: static !important;
+                width: 100%;
+                margin-bottom: 0;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="date-badge">📅 2026年8月15日 · 每日一学</div>
+            <h1>《故事思维》</h1>
+            <p class="subtitle">The Story Factor · 用故事打动人心、赢得信任的影响力之道</p>
+            <p class="author">👤 安妮特·西蒙斯（Annette Simmons）| 🏆 影响力与叙事沟通领域经典之作</p>
+        </div>
+
+        <div class="mindmap-container">
+            <div class="center-node">
+                <div class="node-box">
+                    <h2>📖 故事思维</h2>
+                    <p>用故事打动人心 · 建立信任 · 影响他人</p>
+                    <p style="margin-top:8px;font-size:0.85em;opacity:0.8;">事实 vs 故事 · 六种故事 · 信任 · 情感共鸣</p>
+                </div>
+            </div>
+
+            <div class="branches">
+                <div class="branch branch-1">
+                    <div class="branch-node">
+                        <h3><span class="icon">✨</span> 核心洞见</h3>
+                        <ul>
+                            <li><strong>故事是最古老的武器：</strong>先于逻辑与文字，深植于人类本能</li>
+                            <li><strong>事实让人思考，故事让人行动：</strong>数据说服大脑，故事打动心灵</li>
+                            <li><strong>影响力始于信任：</strong>而信任始于一个好故事</li>
+                            <li><strong>故事绕过理性防御：</strong>直达情感与潜意识，不被反驳</li>
+                            <li><strong>人们记住故事，忘记数据：</strong>故事是记忆最牢固的载体</li>
+                            <li><strong>讲故事是可习得的能力：</strong>不是天赋，而是刻意练习的技能</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="branch branch-2">
+                    <div class="branch-node">
+                        <h3><span class="icon">🧭</span> 六种故事类型（核心框架）</h3>
+                        <ul>
+                            <li><strong>“我是谁”的故事：</strong>真诚袒露，让人了解并信任你</li>
+                            <li><strong>“我为什么在这里”的故事：</strong>表明动机，化解戒备</li>
+                            <li><strong>“愿景”的故事：</strong>描绘未来，激发共同行动</li>
+                            <li><strong>“教学”的故事：</strong>用真实经历传递经验，让人自己领悟</li>
+                            <li><strong>“行动价值”的故事：</strong>用具体事例示范抽象价值观</li>
+                            <li><strong>“我知道你在想什么”的故事：</strong>提前回应疑虑，拉近距离</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="branch branch-3">
+                    <div class="branch-node">
+                        <h3><span class="icon">🧩</span> 故事的四大要素</h3>
+                        <ul>
+                            <li><strong>人物：</strong>有血有肉、有弱点与欲望的真实角色</li>
+                            <li><strong>情节：</strong>有起伏、有因果推进的发展线索</li>
+                            <li><strong>冲突/张力：</strong>推动故事前行的核心矛盾与阻力</li>
+                            <li><strong>转折与启发：</strong>让听众自己得出感悟的收尾</li>
+                            <li><strong>细节与画面：</strong>感官描写让听众“看见”故事</li>
+                            <li><strong>情感真实：</strong>真实在于情感，而非细节精确</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="branch branch-4">
+                    <div class="branch-node">
+                        <h3><span class="icon">💡</span> 主要知识点</h3>
+                        <ul>
+                            <li><strong>信任是影响力的货币：</strong>故事是铸造信任的方式</li>
+                            <li><strong>情感共鸣 &gt; 逻辑说服：</strong>先建立连接，再传递观点</li>
+                            <li><strong>用“展示”代替“说教”：</strong>让结论从故事中自然浮现</li>
+                            <li><strong>留白的力量：</strong>让听众自己补全，参与感更强</li>
+                            <li><strong>倾听是讲故事的前提：</strong>先理解再表达</li>
+                            <li><strong>真诚与一致性：</strong>讲述者自身决定故事的可信度</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="branch branch-5">
+                    <div class="branch-node">
+                        <h3><span class="icon">⚠️</span> 技巧与误区</h3>
+                        <ul>
+                            <li><strong>技巧：</strong>多用第一人称真实经历，增强可信度</li>
+                            <li><strong>技巧：</strong>制造悬念与转折，牢牢抓住注意力</li>
+                            <li><strong>技巧：</strong>口语化表达，像聊天而非演讲</li>
+                            <li><strong>技巧：</strong>控制节奏，善用停顿制造张力</li>
+                            <li><strong>误区：</strong>堆砌数据与道理，忽视情感</li>
+                            <li><strong>误区：</strong>讲“正确的废话”，缺乏真实细节</li>
+                            <li><strong>误区：</strong>只顾自己表达，忽视听众感受</li>
+                            <li><strong>误区：</strong>把故事当作操纵工具，而非真诚分享</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="branch branch-6">
+                    <div class="branch-node">
+                        <h3><span class="icon">🛠️</span> 实践与应用</h3>
+                        <ul>
+                            <li><strong>建立个人故事库：</strong>收集打动过自己的故事，随时取用</li>
+                            <li><strong>练习“我是谁”的故事：</strong>用一次失败或转折袒露真实的自己</li>
+                            <li><strong>故事开场替代数据开场：</strong>先抓注意力，再给数据</li>
+                            <li><strong>沉淀“教学故事”：</strong>把踩坑与成功经验写成故事分享</li>
+                            <li><strong>先倾听再表达：</strong>理解他人诉求，再选合适故事回应</li>
+                            <li><strong>准备“愿景故事”：</strong>用“成功后的样子”凝聚共识、激发行动</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quotes-section">
+            <h2><span>💬</span> 经典金句</h2>
+            <div class="quote-grid">
+                <div class="quote-item">
+                    “事实是砖块，故事才是让砖块立起来的水泥。”
+                    <span>—— 关于故事与事实的关系</span>
+                </div>
+                <div class="quote-item">
+                    “人们不会相信你说了什么，除非他们先相信你这个人。”
+                    <span>—— 关于信任的基础</span>
+                </div>
+                <div class="quote-item">
+                    “好的故事不是讲给别人听的，而是邀请别人走进来的。”
+                    <span>—— 关于故事的留白与参与</span>
+                </div>
+                <div class="quote-item">
+                    “数据说服大脑，故事打动心灵。”
+                    <span>—— 关于情感共鸣的力量</span>
+                </div>
+                <div class="quote-item">
+                    “信任是所有影响力的基石，而故事是赢得信任最快的方式。”
+                    <span>—— 关于影响力与信任</span>
+                </div>
+                <div class="quote-item">
+                    “你不必讲一个完美的故事，你只需讲一个真实的故事。”
+                    <span>—— 关于真诚的力量</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-section">
+            <h2>🚀 行动建议</h2>
+            <div class="action-list">
+                <div class="action-item">
+                    <div class="action-number">1</div>
+                    <div class="action-text">
+                        <strong>建立你的“个人故事库”</strong><br>
+                        回想三个影响你人生的关键经历，用“人物—情节—冲突—转折”四要素整理成故事，写进笔记本，随时取用——这是你影响力的原始弹药。
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">2</div>
+                    <div class="action-text">
+                        <strong>写一个“我是谁”的故事</strong><br>
+                        用300字讲述一个让你成为今天的你的经历，真诚地袒露一个弱点或一次失败，练习用故事而非头衔来建立信任。
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">3</div>
+                    <div class="action-text">
+                        <strong>用故事开场代替数据开场</strong><br>
+                        下一次汇报或说服时，先用一个30秒的真实故事抓住注意力，再引出你的观点和数据，检验故事比道理更能拉近距离。
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">4</div>
+                    <div class="action-text">
+                        <strong>练习一个“教学故事”</strong><br>
+                        把最近一次踩坑或成功的经验写成小故事，在团队里分享，代替说教式的“你应该怎么做”，让人自己悟出道理。
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">5</div>
+                    <div class="action-text">
+                        <strong>先倾听，再表达</strong><br>
+                        与人沟通时，先认真听完对方的故事和诉求，再选择合适的故事回应，避免自说自话——倾听本身就是最好的故事开场。
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">6</div>
+                    <div class="action-text">
+                        <strong>准备一个“愿景故事”</strong><br>
+                        思考你希望推动的一件事，写一个描绘“如果成功了会是什么样子”的愿景故事，用它来凝聚共识、激发他人行动。
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>📚 每日一学 | 持续学习，不断成长 | 2026-08-15</p>
+            <p style="margin-top:8px;">💡 推荐阅读：《故事思维》— 安妮特·西蒙斯（Annette Simmons），用故事打动人心、赢得信任的影响力之道</p>
+        </footer>
+    </div>
+</body>
+</html>
