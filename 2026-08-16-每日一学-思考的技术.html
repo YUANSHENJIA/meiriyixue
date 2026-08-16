@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026-08-16-每日一学-思考的技术</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #312e81 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #e4e4e7;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            margin-bottom: 30px;
+        }
+        
+        .header .date-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            padding: 8px 24px;
+            border-radius: 20px;
+            font-size: 14px;
+            margin-bottom: 16px;
+            letter-spacing: 2px;
+        }
+        
+        .header h1 {
+            font-size: 2.8em;
+            background: linear-gradient(135deg, #a5b4fc 0%, #c4b5fd 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+        }
+        
+        .header .subtitle {
+            font-size: 1.3em;
+            color: #a78bfa;
+            margin-bottom: 8px;
+        }
+        
+        .header .author {
+            color: #94a3b8;
+            font-style: italic;
+        }
+        
+        .mindmap-container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 800px;
+            overflow-x: auto;
+        }
+        
+        .center-node {
+            position: absolute;
+            left: 50%;
+            top: 40px;
+            transform: translateX(-50%);
+            z-index: 10;
+        }
+        
+        .center-node .node-box {
+            width: 280px;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            border-radius: 20px;
+            padding: 28px 24px;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(99, 102, 241, 0.4);
+            border: 2px solid rgba(255,255,255,0.1);
+        }
+        
+        .center-node .node-box h2 {
+            font-size: 1.5em;
+            color: white;
+            margin-bottom: 8px;
+        }
+        
+        .center-node .node-box p {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        
+        .branches {
+            position: relative;
+            width: 1150px;
+            height: 900px;
+            margin-top: 140px;
+        }
+        
+        .branch {
+            position: absolute;
+            width: 240px;
+        }
+        
+        .branch-node {
+            border-radius: 16px;
+            padding: 18px 16px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .branch-node:hover {
+            transform: translateY(-5px);
+        }
+        
+        .branch-node h3 {
+            font-size: 1.05em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .branch-node ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .branch-node li {
+            font-size: 0.82em;
+            padding: 6px 0;
+            padding-left: 18px;
+            position: relative;
+            line-height: 1.5;
+            color: rgba(255,255,255,0.85);
+        }
+        
+        .branch-node li::before {
+            content: "\25B8";
+            position: absolute;
+            left: 0;
+            font-size: 0.75em;
+            opacity: 0.7;
+        }
+        
+        .branch-1 { top: 0; left: 0; }
+        .branch-1 .branch-node {
+            background: linear-gradient(145deg, #e74c3c, #c0392b);
+            border: 2px solid rgba(231, 76, 60, 0.3);
+        }
+        
+        .branch-2 { top: 0; right: 0; }
+        .branch-2 .branch-node {
+            background: linear-gradient(145deg, #3498db, #2980b9);
+            border: 2px solid rgba(52, 152, 219, 0.3);
+        }
+        
+        .branch-3 { top: 260px; left: 0; }
+        .branch-3 .branch-node {
+            background: linear-gradient(145deg, #27ae60, #229954);
+            border: 2px solid rgba(39, 174, 96, 0.3);
+        }
+        
+        .branch-4 { top: 260px; right: 0; }
+        .branch-4 .branch-node {
+            background: linear-gradient(145deg, #f39c12, #d68910);
+            border: 2px solid rgba(243, 156, 18, 0.3);
+        }
+        
+        .branch-5 { top: 520px; left: 80px; }
+        .branch-5 .branch-node {
+            background: linear-gradient(145deg, #9b59b6, #8e44ad);
+            border: 2px solid rgba(155, 89, 182, 0.3);
+        }
+        
+        .branch-6 { top: 520px; right: 80px; }
+        .branch-6 .branch-node {
+            background: linear-gradient(145deg, #1abc9c, #16a085);
+            border: 2px solid rgba(26, 188, 156, 0.3);
+        }
+        
+        .quotes-section {
+            max-width: 900px;
+            margin: 60px auto 40px;
+            padding: 35px;
+            background: linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .quotes-section h2 {
+            text-align: center;
+            font-size: 1.5em;
+            margin-bottom: 25px;
+            color: #fbbf24;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+        
+        .quote-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 18px;
+        }
+        
+        .quote-item {
+            padding: 18px 20px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 12px;
+            border-left: 4px solid #f59e0b;
+            font-style: italic;
+            font-size: 0.95em;
+            line-height: 1.7;
+            color: #e2e8f0;
+            transition: all 0.3s;
+        }
+        
+        .quote-item:hover {
+            background: rgba(255,255,255,0.08);
+            transform: translateX(5px);
+        }
+        
+        .quote-item span {
+            display: block;
+            margin-top: 8px;
+            font-style: normal;
+            font-size: 0.85em;
+            color: #94a3b8;
+        }
+        
+        .action-section {
+            max-width: 900px;
+            margin: 0 auto 40px;
+            padding: 35px;
+            background: linear-gradient(145deg, rgba(34, 197, 94, 0.1), rgba(16, 185, 129, 0.05));
+            border-radius: 20px;
+            border: 1px solid rgba(34, 197, 94, 0.2);
+        }
+        
+        .action-section h2 {
+            text-align: center;
+            font-size: 1.5em;
+            margin-bottom: 25px;
+            color: #34d399;
+        }
+        
+        .action-list {
+            display: grid;
+            gap: 16px;
+        }
+        
+        .action-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 18px 20px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 12px;
+            transition: all 0.3s;
+        }
+        
+        .action-item:hover {
+            background: rgba(255,255,255,0.08);
+        }
+        
+        .action-number {
+            flex-shrink: 0;
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        
+        .action-text {
+            flex: 1;
+            line-height: 1.6;
+        }
+        
+        .action-text strong {
+            color: #86efac;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #64748b;
+            font-size: 0.85em;
+        }
+
+        .icon { 
+            font-size: 1.2em; 
+        }
+
+        @media (max-width: 1100px) {
+            .branches {
+                width: 700px;
+                height: 1300px;
+                margin-top: 120px;
+            }
+            
+            .branch {
+                width: 320px;
+                position: static !important;
+                margin-bottom: 25px;
+            }
+            
+            .center-node .node-box {
+                width: 240px;
+                padding: 22px 18px;
+            }
+            
+            .header h1 { font-size: 2em; }
+            
+            .quote-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .header h1 { font-size: 1.6em; }
+            .header .subtitle { font-size: 1em; }
+            .center-node .node-box { width: 200px; padding: 18px 14px; }
+            .branch-node { padding: 14px 12px; }
+            .branch-node li { font-size: 0.78em; padding: 5px 0 5px 16px; }
+            .quotes-section, .action-section { padding: 20px 16px; }
+            .quote-item { padding: 14px 16px; font-size: 0.88em; }
+            .action-item { padding: 14px 16px; flex-direction: column; gap: 10px; }
+        }
+    
+
+        /* === LAYOUT FIX: Prevent card overlap with CSS Grid === */
+        .mindmap-container {
+            display: block;
+            position: relative;
+            padding-top: 60px;
+            margin-bottom: 30px;
+            min-height: auto;
+            overflow-x: visible;
+        }
+
+        .center-node {
+            position: static;
+            left: auto;
+            top: auto;
+            transform: none;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 50px;
+        }
+
+        .branches {
+            position: static;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            max-width: 900px;
+            width: auto;
+            height: auto;
+            margin: 0 auto;
+        }
+
+        .branch {
+            position: static;
+            width: 100%;
+        }
+
+        .branch-1, .branch-2, .branch-3, .branch-4, .branch-5, .branch-6 {
+            top: auto;
+            left: auto;
+            right: auto;
+        }
+
+        .branch .branch-node {
+            height: 100%;
+        }
+
+        @media (max-width: 1100px) {
+            .mindmap-container { padding-top: 40px; }
+            .branches {
+                width: auto;
+                height: auto;
+                margin-top: 0;
+                grid-template-columns: 1fr;
+                max-width: 600px;
+            }
+            .branch {
+                position: static !important;
+                width: 100%;
+                margin-bottom: 0;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="date-badge">📅 2026年8月16日 · 每日一学</div>
+            <h1>《思考的技术》</h1>
+            <p class="subtitle">把思考变成可以训练的技术 · 逻辑思考与问题解决之道</p>
+            <p class="author">👤 大前研一（Kenichi Ohmae）| 🏆 麦肯锡日本前董事长、全球顶级战略顾问</p>
+        </div>
+
+        <div class="mindmap-container">
+            <div class="center-node">
+                <div class="node-box">
+                    <h2>🧠 思考的技术</h2>
+                    <p>逻辑思考 · 假设验证 · 问题解决</p>
+                    <p style="margin-top:8px;font-size:0.85em;opacity:0.8;">思考力是可训练的技术，而非天赋</p>
+                </div>
+            </div>
+
+            <div class="branches">
+                <div class="branch branch-1">
+                    <div class="branch-node">
+                        <h3><span class="icon">✨</span> 核心洞见</h3>
+                        <ul>
+                            <li><strong>思考是可训练的技术：</strong>逻辑思考力是后天习得的能力，人人可练</li>
+                            <li><strong>答案藏在问题设定中：</strong>问题设定错了，再努力也找不到对的答案</li>
+                            <li><strong>先假设，后验证：</strong>思考的本质是提出可被验证的假设</li>
+                            <li><strong>事实与意见严格区分：</strong>未经事实检验的意见只是"想当然"</li>
+                            <li><strong>从"为什么"出发：</strong>真正的思考始于追问原因，而非急于"怎么办"</li>
+                            <li><strong>思考力=深入思考的能力：</strong>而非知识数量的简单堆砌</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="branch branch-2">
+                    <div class="branch-node">
+                        <h3><span class="icon">📐</span> 核心框架</h3>
+                        <ul>
+                            <li><strong>假设—验证法：</strong>大胆提出假设，再搜集证据验证或推翻</li>
+                            <li><strong>金字塔结构：</strong>结论先行、以上统下、逻辑层层递进</li>
+                            <li><strong>连续追问法：</strong>反复追问"为什么"，直抵问题本质</li>
+                            <li><strong>非线性思考：</strong>突破直线思维，从多角度重构问题</li>
+                            <li><strong>MECE 原则：</strong>相互独立、完全穷尽地拆解问题</li>
+                            <li><strong>现场主义：</strong>到现场去，用一手事实说话，而非凭想象</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="branch branch-3">
+                    <div class="branch-node">
+                        <h3><span class="icon">💡</span> 主要知识点</h3>
+                        <ul>
+                            <li><strong>逻辑思考：</strong>让结论与论据之间建立清晰的因果链</li>
+                            <li><strong>批判性思考：</strong>对观点背后的前提保持质疑与审视</li>
+                            <li><strong>区分"事实"与"意见"：</strong>意见必须经事实验证才可靠</li>
+                            <li><strong>问题解决四步：</strong>定义问题→分析原因→提出方案→验证</li>
+                            <li><strong>训练思考力：</strong>每天给自己出题、写"思考日记"</li>
+                            <li><strong>学会提问：</strong>提出正确的问题比找到答案更重要</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="branch branch-4">
+                    <div class="branch-node">
+                        <h3><span class="icon">⚠️</span> 常见思维陷阱</h3>
+                        <ul>
+                            <li><strong>经验主义：</strong>用过去的成功套用今天的问题</li>
+                            <li><strong>先入为主：</strong>先有结论，再倒过来找理由辩护</li>
+                            <li><strong>混淆相关与因果：</strong>把同时发生当成因果联系</li>
+                            <li><strong>以偏概全：</strong>用个例或局部经验推导普遍结论</li>
+                            <li><strong>过度依赖权威：</strong>不加验证地接受"专家"的说法</li>
+                            <li><strong>思维惰性：</strong>习惯"想当然"，不愿深入追问</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="branch branch-5">
+                    <div class="branch-node">
+                        <h3><span class="icon">🛠️</span> 训练方法</h3>
+                        <ul>
+                            <li><strong>每日一题：</strong>每天挑一个现象，训练连续追问"为什么"</li>
+                            <li><strong>假设先行：</strong>遇到问题先写 3 个假设，再验证</li>
+                            <li><strong>思考日记：</strong>记录解决问题的完整思考过程并复盘</li>
+                            <li><strong>事实/意见标记：</strong>读新闻时标出事实与观点</li>
+                            <li><strong>金字塔表达：</strong>汇报时结论先行，再展开论据</li>
+                            <li><strong>现场调研：</strong>做判断前收集一手信息，避免臆断</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="branch branch-6">
+                    <div class="branch-node">
+                        <h3><span class="icon">🎯</span> 价值与应用</h3>
+                        <ul>
+                            <li><strong>提升决策质量：</strong>用逻辑代替直觉，减少误判</li>
+                            <li><strong>增强说服力：</strong>结构化表达让他人更容易信服</li>
+                            <li><strong>看清问题本质：</strong>不被表面现象和噪音带偏</li>
+                            <li><strong>持续自我迭代：</strong>把思考变成可复用的方法论</li>
+                            <li><strong>适应快速变化：</strong>在不确定性中快速假设与验证</li>
+                            <li><strong>终身受益：</strong>思考力是穿越一切周期的底层能力</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quotes-section">
+            <h2><span>💬</span> 经典金句</h2>
+            <div class="quote-grid">
+                <div class="quote-item">
+                    "思考力是一种可以训练的技术。"
+                    <span>—— 关于思考的本质</span>
+                </div>
+                <div class="quote-item">
+                    "问题的答案往往不在问题本身，而在问题的设定方式上。"
+                    <span>—— 关于问题设定</span>
+                </div>
+                <div class="quote-item">
+                    "如果没有假设，就无法进行验证。"
+                    <span>—— 关于假设—验证法</span>
+                </div>
+                <div class="quote-item">
+                    "不要把'意见'当成'事实'。"
+                    <span>—— 关于事实与意见的区分</span>
+                </div>
+                <div class="quote-item">
+                    "真正优秀的人，是能够对'理所当然'产生怀疑的人。"
+                    <span>—— 关于批判性思考</span>
+                </div>
+                <div class="quote-item">
+                    "思考的目的不是寻找答案，而是锻炼寻找答案的能力。"
+                    <span>—— 关于思考力的养成</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-section">
+            <h2>🚀 行动建议</h2>
+            <div class="action-list">
+                <div class="action-item">
+                    <div class="action-number">1</div>
+                    <div class="action-text">
+                        <strong>每天训练一个"为什么"</strong><br>
+                        选一个日常现象（为什么同事不配合？为什么客户流失？），连续追问 5 层"为什么"，直抵根本原因，把思考当成每天 10 分钟的习惯。
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">2</div>
+                    <div class="action-text">
+                        <strong>练习"假设—验证"</strong><br>
+                        遇到下一个问题前，先不急着找答案，而是写下 3 个可能的假设，再逐条搜集证据验证或推翻，训练结构化思考的肌肉。
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">3</div>
+                    <div class="action-text">
+                        <strong>建立"思考日记"</strong><br>
+                        每天记录一个你认真思考过的问题：问题是什么、你的假设、验证过程、最终结论，周末复盘一次，追踪思考质量的提升。
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">4</div>
+                    <div class="action-text">
+                        <strong>刻意区分"事实"与"意见"</strong><br>
+                        阅读新闻或开会时，随手标出哪些是客观事实、哪些是主观观点，训练自己不被包装成事实的意见带偏。
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">5</div>
+                    <div class="action-text">
+                        <strong>用金字塔结构表达</strong><br>
+                        下一次汇报或写作时，先抛出结论，再用"论点—论据—数据"层层展开，让表达更有逻辑、更有说服力。
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">6</div>
+                    <div class="action-text">
+                        <strong>做判断前"到现场去"</strong><br>
+                        下一个重要决策前，先收集一手信息（访谈、观察、数据），而不是凭经验和想象下结论，用事实说话。
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>📚 每日一学 | 持续学习，不断成长 | 2026-08-16</p>
+            <p style="margin-top:8px;">💡 推荐阅读：《思考的技术》— 大前研一（Kenichi Ohmae），把思考变成可以训练的技术</p>
+        </footer>
+    </div>
+</body>
+</html>
