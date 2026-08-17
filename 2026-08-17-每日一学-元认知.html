@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 元认知</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    min-height: 100vh;
+    color: #e0e0e0;
+    padding: 20px;
+  }
+  .header {
+    text-align: center;
+    padding: 40px 20px 30px;
+    animation: fadeInDown 0.8s ease;
+  }
+  .date-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 20px;
+    padding: 6px 18px;
+    font-size: 13px;
+    color: #a0c4ff;
+    margin-bottom: 16px;
+    letter-spacing: 1px;
+  }
+  .book-title {
+    font-size: 42px;
+    font-weight: 700;
+    background: linear-gradient(90deg, #a0c4ff, #c9b8ff, #ffd6a5);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+  }
+  .book-subtitle {
+    font-size: 16px;
+    color: #9ab0d0;
+    margin-bottom: 6px;
+  }
+  .book-author {
+    font-size: 14px;
+    color: #7a8fa6;
+  }
+  .mind-map {
+    max-width: 1100px;
+    margin: 30px auto;
+    position: relative;
+  }
+  .center-node {
+    background: linear-gradient(135deg, #7c4dff, #4a90d9);
+    border-radius: 20px;
+    padding: 24px 36px;
+    text-align: center;
+    margin: 0 auto 40px;
+    width: fit-content;
+    max-width: 400px;
+    box-shadow: 0 8px 32px rgba(124,77,255,0.4);
+    position: relative;
+    animation: pulse 3s infinite;
+  }
+  @keyframes pulse {
+    0%,100%{ box-shadow: 0 8px 32px rgba(124,77,255,0.4); }
+    50%{ box-shadow: 0 8px 48px rgba(124,77,255,0.7); }
+  }
+  .center-node h2 { font-size: 22px; color: #fff; font-weight: 700; }
+  .center-node p { font-size: 13px; color: rgba(255,255,255,0.75); margin-top: 6px; }
+  .branches {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 10px;
+  }
+  .branch {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 22px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    animation: fadeInUp 0.6s ease both;
+  }
+  .branch:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 36px rgba(0,0,0,0.3);
+  }
+  .branch:nth-child(1) { border-left: 4px solid #ff6b9d; animation-delay: 0.1s; }
+  .branch:nth-child(2) { border-left: 4px solid #a0c4ff; animation-delay: 0.2s; }
+  .branch:nth-child(3) { border-left: 4px solid #ffd6a5; animation-delay: 0.3s; }
+  .branch:nth-child(4) { border-left: 4px solid #9bf6a8; animation-delay: 0.4s; }
+  .branch:nth-child(5) { border-left: 4px solid #c9b8ff; animation-delay: 0.5s; }
+  .branch:nth-child(6) { border-left: 4px solid #ffb3b3; animation-delay: 0.6s; }
+  .branch-title {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .branch-icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .b1 .branch-icon { background: rgba(255,107,157,0.2); }
+  .b2 .branch-icon { background: rgba(160,196,255,0.2); }
+  .b3 .branch-icon { background: rgba(255,214,165,0.2); }
+  .b4 .branch-icon { background: rgba(155,246,168,0.2); }
+  .b5 .branch-icon { background: rgba(201,184,255,0.2); }
+  .b6 .branch-icon { background: rgba(255,179,179,0.2); }
+  .leaf-list { list-style: none; padding: 0; }
+  .leaf-list li {
+    padding: 7px 0 7px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    font-size: 14px;
+    color: #c8d8e8;
+    line-height: 1.6;
+    position: relative;
+  }
+  .leaf-list li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: rgba(255,255,255,0.3);
+    font-size: 11px;
+    top: 9px;
+  }
+  .leaf-list li:last-child { border-bottom: none; }
+  .leaf-list li strong { color: #e8f0ff; }
+  .quote-section {
+    max-width: 1100px;
+    margin: 24px auto;
+    background: linear-gradient(135deg, rgba(124,77,255,0.15), rgba(74,144,217,0.15));
+    border: 1px solid rgba(124,77,255,0.3);
+    border-radius: 16px;
+    padding: 30px;
+    animation: fadeInUp 0.6s ease 0.7s both;
+  }
+  .quote-section h3 {
+    font-size: 16px;
+    color: #c9b8ff;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .quote-item {
+    padding: 14px 20px;
+    margin: 10px 0;
+    background: rgba(255,255,255,0.04);
+    border-radius: 10px;
+    border-left: 3px solid #c9b8ff;
+    font-size: 15px;
+    font-style: italic;
+    color: #dde8f8;
+    line-height: 1.7;
+  }
+  .action-section {
+    max-width: 1100px;
+    margin: 24px auto;
+    background: rgba(155,246,168,0.06);
+    border: 1px solid rgba(155,246,168,0.2);
+    border-radius: 16px;
+    padding: 30px;
+    animation: fadeInUp 0.6s ease 0.8s both;
+  }
+  .action-section h3 {
+    font-size: 16px;
+    color: #9bf6a8;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .action-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 14px;
+  }
+  .action-card {
+    background: rgba(155,246,168,0.08);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+  }
+  .action-number {
+    width: 28px; height: 28px;
+    background: rgba(155,246,168,0.2);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    color: #9bf6a8;
+    font-weight: 700;
+    margin: 0 auto 10px;
+  }
+  .action-card p {
+    font-size: 13px;
+    color: #c0d8c8;
+    line-height: 1.6;
+  }
+  .footer {
+    text-align: center;
+    padding: 30px 20px;
+    color: #5a7a9a;
+    font-size: 13px;
+    animation: fadeIn 1s ease 1s both;
+  }
+  @keyframes fadeInDown { from { opacity:0; transform:translateY(-20px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes fadeInUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+
+  @media (max-width: 700px) {
+    .branches { grid-template-columns: 1fr; }
+    .book-title { font-size: 28px; }
+    .action-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="date-badge">📅 2026年08月17日 · 每日一学</div>
+  <div class="book-title">元认知</div>
+  <div class="book-subtitle">元认知：改变大脑的顽固思维</div>
+  <div class="book-author">作者：David DiSalvo（大卫·迪萨尔沃）</div>
+</div>
+
+<div class="mind-map">
+  <div class="center-node">
+    <h2>🧠 元认知</h2>
+    <p>对思考的思考 · 跳出思维看思维的能力</p>
+  </div>
+
+  <div class="branches">
+
+    <!-- 核心洞见 -->
+    <div class="branch b1">
+      <div class="branch-title">
+        <div class="branch-icon">💡</div>
+        <span style="color:#ff6b9d">核心洞见</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>元认知是"对思考的思考"</strong>：跳出思维审视思维本身，是人类独有的高阶能力</li>
+        <li><strong>大脑首要目标是"舒服"而非"正确"</strong>：它偏爱节能、求稳、走捷径，常被偏差悄悄劫持</li>
+        <li><strong>觉察偏差是改变的第一步</strong>：看不见"思维在骗我"，就无从纠正</li>
+        <li><strong>元认知可通过训练提升</strong>：借由反馈回路持续练习，成为应对复杂世界的核心竞争力</li>
+      </ul>
+    </div>
+
+    <!-- 四要素框架 -->
+    <div class="branch b2">
+      <div class="branch-title">
+        <div class="branch-icon">🧭</div>
+        <span style="color:#a0c4ff">元认知回路 · 四要素</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>觉察（Awareness）</strong> — 识别当下正在发生的思维与情绪</li>
+        <li><strong>反思（Reflection）</strong> — 审视思维的过程、假设与依据</li>
+        <li><strong>监控（Monitoring）</strong> — 实时追踪思考是否偏离目标</li>
+        <li><strong>调控（Control）</strong> — 主动调整认知策略、纠正偏差</li>
+      </ul>
+    </div>
+
+    <!-- 认知偏差 -->
+    <div class="branch b3">
+      <div class="branch-title">
+        <div class="branch-icon">⚙️</div>
+        <span style="color:#ffd6a5">主要知识点 · 认知偏差</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>确认偏误</strong>：只寻找支持既有观点的证据，自动过滤反证</li>
+        <li><strong>损失厌恶</strong>：对失去的痛苦远大于得到的快乐，导致保守或冒险失衡</li>
+        <li><strong>锚定效应</strong>：最先接触的信息会成为判断的"锚"，难以挣脱</li>
+        <li><strong>可得性启发</strong>：越容易想到的越被高估概率，被近期事件误导</li>
+      </ul>
+    </div>
+
+    <!-- 心智化与大脑 -->
+    <div class="branch b4">
+      <div class="branch-title">
+        <div class="branch-icon">❤️</div>
+        <span style="color:#9bf6a8">主要知识点 · 心智与大脑</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>启发式（Heuristics）</strong>：大脑为省能量走捷径，多数高效、关键处会出错</li>
+        <li><strong>心智化（Mentalizing）</strong>：理解自己与他人的心智状态，是元认知的重要组成</li>
+        <li><strong>前额叶皮层</strong>：负责执行功能与自我监控，是元认知的生理基础</li>
+        <li><strong>反馈回路</strong>：元认知不是一次判断，而是"觉察→反思→监控→调控"的循环</li>
+      </ul>
+    </div>
+
+    <!-- 常见思维陷阱 -->
+    <div class="branch b5">
+      <div class="branch-title">
+        <div class="branch-icon">🚧</div>
+        <span style="color:#c9b8ff">常见思维陷阱</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>情绪即时接管</strong>：杏仁核先于前额叶反应，冲动压制理性</li>
+        <li><strong>惯性思维</strong>：对熟悉情境套用旧脚本，忽视新信息</li>
+        <li><strong>事后诸葛亮</strong>：结果发生后误以为"我早就知道"，高估预见力</li>
+        <li><strong>过度自信</strong>：对自己的判断盲目确信，缺乏概率意识</li>
+      </ul>
+    </div>
+
+    <!-- 提升元认知 -->
+    <div class="branch b6">
+      <div class="branch-title">
+        <div class="branch-icon">✨</div>
+        <span style="color:#ffb3b3">提升元认知的方法</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>思维复盘</strong>：记录关键决策，追问"我为什么这样想、依据是什么"</li>
+        <li><strong>正念觉察</strong>：练习旁观念头，把自动反应变成有意识选择</li>
+        <li><strong>主动找反证</strong>：用"我凭什么这么确定"质疑自动思维</li>
+        <li><strong>偏差清单对照</strong>：重要判断前逐条自查是否中招</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<!-- 金句 -->
+<div class="quote-section">
+  <h3>💬 核心金句</h3>
+  <div class="quote-item">"大脑追求的不是正确，而是舒服。"</div>
+  <div class="quote-item">"元认知，就是对思考的思考。"</div>
+  <div class="quote-item">"你无法改变你看不见的东西。"</div>
+  <div class="quote-item">"我们最大的认知盲区，恰恰是以为自己没有盲区。"</div>
+  <div class="quote-item">"觉知，是一切改变的起点。"</div>
+</div>
+
+<!-- 行动建议 -->
+<div class="action-section">
+  <h3>🎯 五条行动建议</h3>
+  <div class="action-grid">
+    <div class="action-card">
+      <div class="action-number">1</div>
+      <p>每天做一次<strong>思维复盘</strong>：记录一个关键决策，追问"我当时为什么这样想？依据是什么？"</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">2</div>
+      <p>遇到强烈情绪时，练习<strong>命名情绪 + 暂停10秒</strong>，把自动反应变成有意识选择</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">3</div>
+      <p>建立一份<strong>认知偏差清单</strong>，重要判断前逐条对照自己是否中招</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">4</div>
+      <p>用"<strong>我凭什么这么确定</strong>"质疑自动思维，主动寻找反证</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">5</div>
+      <p>每周做几次<strong>正念练习</strong>，训练"旁观念头"的能力，提升觉察力</p>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <p>📚 每日一学 · 元认知 · 2026年08月17日</p>
+  <p style="margin-top:6px">看见自己的思维，才真正开始掌控人生</p>
+</div>
+
+</body>
+</html>
