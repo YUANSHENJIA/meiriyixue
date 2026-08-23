@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 提问的艺术</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    min-height: 100vh;
+    color: #e0e0e0;
+    padding: 20px;
+  }
+  .header {
+    text-align: center;
+    padding: 40px 20px 30px;
+    animation: fadeInDown 0.8s ease;
+  }
+  .date-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 20px;
+    padding: 6px 18px;
+    font-size: 13px;
+    color: #a0c4ff;
+    margin-bottom: 16px;
+    letter-spacing: 1px;
+  }
+  .book-title {
+    font-size: 42px;
+    font-weight: 700;
+    background: linear-gradient(90deg, #a0c4ff, #c9b8ff, #ffd6a5);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+  }
+  .book-subtitle {
+    font-size: 16px;
+    color: #9ab0d0;
+    margin-bottom: 6px;
+  }
+  .book-author {
+    font-size: 14px;
+    color: #7a8fa6;
+  }
+  .mind-map {
+    max-width: 1100px;
+    margin: 30px auto;
+    position: relative;
+  }
+  .center-node {
+    background: linear-gradient(135deg, #7c4dff, #4a90d9);
+    border-radius: 20px;
+    padding: 24px 36px;
+    text-align: center;
+    margin: 0 auto 40px;
+    width: fit-content;
+    max-width: 400px;
+    box-shadow: 0 8px 32px rgba(124,77,255,0.4);
+    position: relative;
+    animation: pulse 3s infinite;
+  }
+  @keyframes pulse {
+    0%,100%{ box-shadow: 0 8px 32px rgba(124,77,255,0.4); }
+    50%{ box-shadow: 0 8px 48px rgba(124,77,255,0.7); }
+  }
+  .center-node h2 { font-size: 22px; color: #fff; font-weight: 700; }
+  .center-node p { font-size: 13px; color: rgba(255,255,255,0.75); margin-top: 6px; }
+  .branches {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 10px;
+  }
+  .branch {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 22px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    animation: fadeInUp 0.6s ease both;
+  }
+  .branch:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 36px rgba(0,0,0,0.3);
+  }
+  .branch:nth-child(1) { border-left: 4px solid #ff6b9d; animation-delay: 0.1s; }
+  .branch:nth-child(2) { border-left: 4px solid #a0c4ff; animation-delay: 0.2s; }
+  .branch:nth-child(3) { border-left: 4px solid #ffd6a5; animation-delay: 0.3s; }
+  .branch:nth-child(4) { border-left: 4px solid #9bf6a8; animation-delay: 0.4s; }
+  .branch:nth-child(5) { border-left: 4px solid #c9b8ff; animation-delay: 0.5s; }
+  .branch:nth-child(6) { border-left: 4px solid #ffb3b3; animation-delay: 0.6s; }
+  .branch-title {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .branch-icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .b1 .branch-icon { background: rgba(255,107,157,0.2); }
+  .b2 .branch-icon { background: rgba(160,196,255,0.2); }
+  .b3 .branch-icon { background: rgba(255,214,165,0.2); }
+  .b4 .branch-icon { background: rgba(155,246,168,0.2); }
+  .b5 .branch-icon { background: rgba(201,184,255,0.2); }
+  .b6 .branch-icon { background: rgba(255,179,179,0.2); }
+  .leaf-list { list-style: none; padding: 0; }
+  .leaf-list li {
+    padding: 7px 0 7px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    font-size: 14px;
+    color: #c8d8e8;
+    line-height: 1.6;
+    position: relative;
+  }
+  .leaf-list li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: rgba(255,255,255,0.3);
+    font-size: 11px;
+    top: 9px;
+  }
+  .leaf-list li:last-child { border-bottom: none; }
+  .leaf-list li strong { color: #e8f0ff; }
+  .quote-section {
+    max-width: 1100px;
+    margin: 24px auto;
+    background: linear-gradient(135deg, rgba(124,77,255,0.15), rgba(74,144,217,0.15));
+    border: 1px solid rgba(124,77,255,0.3);
+    border-radius: 16px;
+    padding: 30px;
+    animation: fadeInUp 0.6s ease 0.7s both;
+  }
+  .quote-section h3 {
+    font-size: 16px;
+    color: #c9b8ff;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .quote-item {
+    padding: 14px 20px;
+    margin: 10px 0;
+    background: rgba(255,255,255,0.04);
+    border-radius: 10px;
+    border-left: 3px solid #c9b8ff;
+    font-size: 15px;
+    font-style: italic;
+    color: #dde8f8;
+    line-height: 1.7;
+  }
+  .action-section {
+    max-width: 1100px;
+    margin: 24px auto;
+    background: rgba(155,246,168,0.06);
+    border: 1px solid rgba(155,246,168,0.2);
+    border-radius: 16px;
+    padding: 30px;
+    animation: fadeInUp 0.6s ease 0.8s both;
+  }
+  .action-section h3 {
+    font-size: 16px;
+    color: #9bf6a8;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .action-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 14px;
+  }
+  .action-card {
+    background: rgba(155,246,168,0.08);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+  }
+  .action-number {
+    width: 28px; height: 28px;
+    background: rgba(155,246,168,0.2);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    color: #9bf6a8;
+    font-weight: 700;
+    margin: 0 auto 10px;
+  }
+  .action-card p {
+    font-size: 13px;
+    color: #c0d8c8;
+    line-height: 1.6;
+  }
+  .footer {
+    text-align: center;
+    padding: 30px 20px;
+    color: #5a7a9a;
+    font-size: 13px;
+    animation: fadeIn 1s ease 1s both;
+  }
+  @keyframes fadeInDown { from { opacity:0; transform:translateY(-20px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes fadeInUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+
+  @media (max-width: 700px) {
+    .branches { grid-template-columns: 1fr; }
+    .book-title { font-size: 28px; }
+    .action-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="date-badge">📅 2026年08月23日 · 每日一学</div>
+  <div class="book-title">提问的艺术</div>
+  <div class="book-subtitle">一个美的问题，如何改变世界 · A More Beautiful Question</div>
+  <div class="book-author">作者：沃伦·贝格尔（Warren Berger）</div>
+</div>
+
+<div class="mind-map">
+  <div class="center-node">
+    <h2>❓ 提问的艺术</h2>
+    <p>为什么 · 如果 · 怎样 —— 用问题驱动思考</p>
+  </div>
+
+  <div class="branches">
+
+    <!-- 核心洞见 -->
+    <div class="branch b1">
+      <div class="branch-title">
+        <div class="branch-icon">💡</div>
+        <span style="color:#ff6b9d">核心洞见</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>提问是创新的引擎</strong>：几乎所有伟大创新，都始于一个"美的问题"</li>
+        <li><strong>答案会过时，问题永不过时</strong>：在答案唾手可得的时代，提问能力才是真正的稀缺品</li>
+        <li><strong>提问被教育压抑</strong>：4岁孩子每天问上百个问题，长大后却越问越少</li>
+        <li><strong>提问是段式引擎</strong>："为什么-如果-怎样"推动从理解到行动</li>
+      </ul>
+    </div>
+
+    <!-- 核心框架：提问四要素 -->
+    <div class="branch b2">
+      <div class="branch-title">
+        <div class="branch-icon">🧭</div>
+        <span style="color:#a0c4ff">核心框架 · 提问四要素</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>① 为什么</strong> — Why：追问本质，理解现状背后的根因</li>
+        <li><strong>② 如果</strong> — What If：发散假设，打开可能性空间</li>
+        <li><strong>③ 怎样</strong> — How：收敛行动，把想法变成可执行方案</li>
+        <li><strong>④ 追问</strong> — Question More：持续提问，把提问变成习惯与思维方式</li>
+      </ul>
+    </div>
+
+    <!-- 主要知识点：提问的力量 -->
+    <div class="branch b3">
+      <div class="branch-title">
+        <div class="branch-icon">🚀</div>
+        <span style="color:#ffd6a5">主要知识点 · 提问的力量</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>提问驱动创新</strong>：Google、Netflix、Airbnb 都始于一个"如果……会怎样"</li>
+        <li><strong>提问重塑思维</strong>：好问题能打破认知边界，跳出思维定势</li>
+        <li><strong>提问激发行动</strong>：一个有力的"怎样"能把愿景转化为行动</li>
+        <li><strong>提问建立连接</strong>：真诚的好奇心能拉近人与人之间的距离</li>
+      </ul>
+    </div>
+
+    <!-- 主要知识点：提问的障碍 -->
+    <div class="branch b4">
+      <div class="branch-title">
+        <div class="branch-icon">🧱</div>
+        <span style="color:#9bf6a8">主要知识点 · 提问的障碍</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>教育的答案导向</strong>：学校奖励标准答案，惩罚"无知"</li>
+        <li><strong>恐惧暴露无知</strong>：成年人害怕显得"不懂"，选择沉默</li>
+        <li><strong>效率文化</strong>：快节奏下"先做再说"，跳过思考环节</li>
+        <li><strong>权威压力</strong>：不敢质疑上级与专家，错失关键问题</li>
+      </ul>
+    </div>
+
+    <!-- 主要知识点：三类美的问题 -->
+    <div class="branch b5">
+      <div class="branch-title">
+        <div class="branch-icon">🔍</div>
+        <span style="color:#c9b8ff">主要知识点 · 三类美的问题</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>为什么（Why）</strong>：从现象追问本质，找到问题根因</li>
+        <li><strong>如果（What If）</strong>：打破既定假设，打开全新可能</li>
+        <li><strong>怎样（How）</strong>：把模糊想法落地为清晰路径</li>
+        <li><strong>组合使用</strong>：先理解、再想象、后行动，形成完整闭环</li>
+      </ul>
+    </div>
+
+    <!-- 提问者的行动循环 -->
+    <div class="branch b6">
+      <div class="branch-title">
+        <div class="branch-icon">✨</div>
+        <span style="color:#ffb3b3">提问者的行动循环</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>观察</strong>：留意身边的不合理与好奇点</li>
+        <li><strong>追问</strong>：连问五个"为什么"挖到根因</li>
+        <li><strong>假设</strong>：用"如果……会怎样"打开可能</li>
+        <li><strong>落地</strong>：用"怎样才能……"转化为行动</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<!-- 金句 -->
+<div class="quote-section">
+  <h3>💬 核心金句</h3>
+  <div class="quote-item">"一个美丽的问题，是一个可以改变世界的问题。"</div>
+  <div class="quote-item">"答案会过时，问题却永远新鲜。"</div>
+  <div class="quote-item">"在这个答案唾手可得的时代，提出好问题的能力，才是真正的稀缺品。"</div>
+  <div class="quote-item">"如果你不能提出好问题，你就得不到好答案。"</div>
+  <div class="quote-item">"不要停止提问，因为正是问题让我们成为人。"</div>
+</div>
+
+<!-- 行动建议 -->
+<div class="action-section">
+  <h3>🎯 五条行动建议</h3>
+  <div class="action-grid">
+    <div class="action-card">
+      <div class="action-number">1</div>
+      <p>每天记录一个<strong>「美的问题」</strong>，建立自己的问题清单</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">2</div>
+      <p>遇到难题时先连问<strong>五个「为什么」</strong>，找到根因再行动</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">3</div>
+      <p>用<strong>「如果……会怎样」</strong>做一次头脑风暴，打开可能性</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">4</div>
+      <p>重要决策前，用<strong>「怎样才能……」</strong>把想法转成可执行方案</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">5</div>
+      <p>主动向他人提出<strong>开放性问题</strong>，持续训练提问肌肉</p>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <p>📚 每日一学 · 提问的艺术 · 2026年08月23日</p>
+  <p style="margin-top:6px">学会提问，就学会了思考的方式</p>
+</div>
+
+</body>
+</html>
