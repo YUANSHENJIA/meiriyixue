@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 心智探奇</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    min-height: 100vh;
+    color: #e0e0e0;
+    padding: 20px;
+  }
+  .header {
+    text-align: center;
+    padding: 40px 20px 30px;
+    animation: fadeInDown 0.8s ease;
+  }
+  .date-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 20px;
+    padding: 6px 18px;
+    font-size: 13px;
+    color: #a0c4ff;
+    margin-bottom: 16px;
+    letter-spacing: 1px;
+  }
+  .book-title {
+    font-size: 42px;
+    font-weight: 700;
+    background: linear-gradient(90deg, #a0c4ff, #c9b8ff, #ffd6a5);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+  }
+  .book-subtitle {
+    font-size: 16px;
+    color: #9ab0d0;
+    margin-bottom: 6px;
+  }
+  .book-author {
+    font-size: 14px;
+    color: #7a8fa6;
+  }
+  .mind-map {
+    max-width: 1100px;
+    margin: 30px auto;
+    position: relative;
+  }
+  .center-node {
+    background: linear-gradient(135deg, #7c4dff, #4a90d9);
+    border-radius: 20px;
+    padding: 24px 36px;
+    text-align: center;
+    margin: 0 auto 40px;
+    width: fit-content;
+    max-width: 400px;
+    box-shadow: 0 8px 32px rgba(124,77,255,0.4);
+    position: relative;
+    animation: pulse 3s infinite;
+  }
+  @keyframes pulse {
+    0%,100%{ box-shadow: 0 8px 32px rgba(124,77,255,0.4); }
+    50%{ box-shadow: 0 8px 48px rgba(124,77,255,0.7); }
+  }
+  .center-node h2 { font-size: 22px; color: #fff; font-weight: 700; }
+  .center-node p { font-size: 13px; color: rgba(255,255,255,0.75); margin-top: 6px; }
+  .branches {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 10px;
+  }
+  .branch {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 22px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    animation: fadeInUp 0.6s ease both;
+  }
+  .branch:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 36px rgba(0,0,0,0.3);
+  }
+  .branch:nth-child(1) { border-left: 4px solid #ff6b9d; animation-delay: 0.1s; }
+  .branch:nth-child(2) { border-left: 4px solid #a0c4ff; animation-delay: 0.2s; }
+  .branch:nth-child(3) { border-left: 4px solid #ffd6a5; animation-delay: 0.3s; }
+  .branch:nth-child(4) { border-left: 4px solid #9bf6a8; animation-delay: 0.4s; }
+  .branch:nth-child(5) { border-left: 4px solid #c9b8ff; animation-delay: 0.5s; }
+  .branch:nth-child(6) { border-left: 4px solid #ffb3b3; animation-delay: 0.6s; }
+  .branch-title {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .branch-icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .b1 .branch-icon { background: rgba(255,107,157,0.2); }
+  .b2 .branch-icon { background: rgba(160,196,255,0.2); }
+  .b3 .branch-icon { background: rgba(255,214,165,0.2); }
+  .b4 .branch-icon { background: rgba(155,246,168,0.2); }
+  .b5 .branch-icon { background: rgba(201,184,255,0.2); }
+  .b6 .branch-icon { background: rgba(255,179,179,0.2); }
+  .leaf-list { list-style: none; padding: 0; }
+  .leaf-list li {
+    padding: 7px 0 7px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    font-size: 14px;
+    color: #c8d8e8;
+    line-height: 1.6;
+    position: relative;
+  }
+  .leaf-list li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: rgba(255,255,255,0.3);
+    font-size: 11px;
+    top: 9px;
+  }
+  .leaf-list li:last-child { border-bottom: none; }
+  .leaf-list li strong { color: #e8f0ff; }
+  .quote-section {
+    max-width: 1100px;
+    margin: 24px auto;
+    background: linear-gradient(135deg, rgba(124,77,255,0.15), rgba(74,144,217,0.15));
+    border: 1px solid rgba(124,77,255,0.3);
+    border-radius: 16px;
+    padding: 30px;
+    animation: fadeInUp 0.6s ease 0.7s both;
+  }
+  .quote-section h3 {
+    font-size: 16px;
+    color: #c9b8ff;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .quote-item {
+    padding: 14px 20px;
+    margin: 10px 0;
+    background: rgba(255,255,255,0.04);
+    border-radius: 10px;
+    border-left: 3px solid #c9b8ff;
+    font-size: 15px;
+    font-style: italic;
+    color: #dde8f8;
+    line-height: 1.7;
+  }
+  .action-section {
+    max-width: 1100px;
+    margin: 24px auto;
+    background: rgba(155,246,168,0.06);
+    border: 1px solid rgba(155,246,168,0.2);
+    border-radius: 16px;
+    padding: 30px;
+    animation: fadeInUp 0.6s ease 0.8s both;
+  }
+  .action-section h3 {
+    font-size: 16px;
+    color: #9bf6a8;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .action-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 14px;
+  }
+  .action-card {
+    background: rgba(155,246,168,0.08);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+  }
+  .action-number {
+    width: 28px; height: 28px;
+    background: rgba(155,246,168,0.2);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    color: #9bf6a8;
+    font-weight: 700;
+    margin: 0 auto 10px;
+  }
+  .action-card p {
+    font-size: 13px;
+    color: #c0d8c8;
+    line-height: 1.6;
+  }
+  .footer {
+    text-align: center;
+    padding: 30px 20px;
+    color: #5a7a9a;
+    font-size: 13px;
+    animation: fadeIn 1s ease 1s both;
+  }
+  @keyframes fadeInDown { from { opacity:0; transform:translateY(-20px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes fadeInUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+
+  @media (max-width: 700px) {
+    .branches { grid-template-columns: 1fr; }
+    .book-title { font-size: 28px; }
+    .action-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="date-badge">📅 2026年08月24日 · 每日一学</div>
+  <div class="book-title">心智探奇</div>
+  <div class="book-subtitle">理解我们是如何思考的 · How the Mind Works</div>
+  <div class="book-author">作者：史蒂芬·平克（Steven Pinker）</div>
+</div>
+
+<div class="mind-map">
+  <div class="center-node">
+    <h2>🧠 心智探奇</h2>
+    <p>计算心智理论 —— 逆向工程我们的大脑</p>
+  </div>
+
+  <div class="branches">
+
+    <!-- 核心洞见 -->
+    <div class="branch b1">
+      <div class="branch-title">
+        <div class="branch-icon">💡</div>
+        <span style="color:#ff6b9d">核心洞见</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>心智是进化的产物</strong>：思考、情感、语言等能力都是自然选择塑造的适应器</li>
+        <li><strong>大脑是"计算器官"</strong>：心智处理信息，本质上是一台生物计算机</li>
+        <li><strong>心智不是"空白石板"</strong>：人天生就带着大量预设的认知结构来到世界</li>
+        <li><strong>理解心智，就是理解自己</strong>：认清思维的机制，是优化决策与自我成长的前提</li>
+      </ul>
+    </div>
+
+    <!-- 核心框架：计算心智四要素 -->
+    <div class="branch b2">
+      <div class="branch-title">
+        <div class="branch-icon">🧭</div>
+        <span style="color:#a0c4ff">核心框架 · 计算心智四要素</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>① 计算</strong> — 心智即信息处理：思维是对符号与表征的运算</li>
+        <li><strong>② 模块</strong> — 大脑由许多专门化的"心理模块"组成（视觉、语言、直觉物理…）</li>
+        <li><strong>③ 进化</strong> — 模块是为解决祖先环境中的生存与繁衍问题而设计的</li>
+        <li><strong>④ 逆向工程</strong> — 理解心智要问："这个能力是为了解决什么问题进化出来的？"</li>
+      </ul>
+    </div>
+
+    <!-- 主要知识点：心智的模块 -->
+    <div class="branch b3">
+      <div class="branch-title">
+        <div class="branch-icon">🚀</div>
+        <span style="color:#ffd6a5">主要知识点 · 心智的模块</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>视觉系统</strong>：求解"逆光学问题"，把二维光影重建为三维世界</li>
+        <li><strong>语言系统</strong>：先天语法机制，让儿童能快速习得母语</li>
+        <li><strong>直觉物理学</strong>：天生理解物体、运动与因果的朴素物理观</li>
+        <li><strong>直觉心理学</strong>：自动推断他人意图与信念的"读心术"</li>
+      </ul>
+    </div>
+
+    <!-- 主要知识点：进化与设计 -->
+    <div class="branch b4">
+      <div class="branch-title">
+        <div class="branch-icon">🧬</div>
+        <span style="color:#9bf6a8">主要知识点 · 进化与设计</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>情绪是优先级系统</strong>：恐惧、愤怒、爱都是进化设定的行动排序器</li>
+        <li><strong>认知偏差有根源</strong>：许多"非理性"其实是适应祖先环境的理性</li>
+        <li><strong>心智与环境错配</strong>：石器时代的大脑生活在信息时代，产生种种不适</li>
+        <li><strong>逆向工程思维</strong>：追问功能，才能理解行为背后的深层逻辑</li>
+      </ul>
+    </div>
+
+    <!-- 主要知识点：意识的难题 -->
+    <div class="branch b5">
+      <div class="branch-title">
+        <div class="branch-icon">🔍</div>
+        <span style="color:#c9b8ff">主要知识点 · 意识的难题</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>信息获取问题</strong>：大脑如何把信息变成"可被主体使用"的知识</li>
+        <li><strong>感受质之谜</strong>：主观体验（如"红色的红"）难以被计算解释</li>
+        <li><strong>意识≠行为</strong>：很多心智活动在意识之外自动运行</li>
+        <li><strong>思想语言</strong>：思考依赖一种非自然语言的"心语"（mentalese）</li>
+      </ul>
+    </div>
+
+    <!-- 认识心智的行动闭环 -->
+    <div class="branch b6">
+      <div class="branch-title">
+        <div class="branch-icon">✨</div>
+        <span style="color:#ffb3b3">认识心智的行动闭环</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>观察</strong>：留意自己的情绪与直觉如何自动触发</li>
+        <li><strong>追问</strong>：用"这个反应要解决什么进化问题"来解码行为</li>
+        <li><strong>校准</strong>：识别直觉的局限，用科学思维修正第一反应</li>
+        <li><strong>合作</strong>：与情绪协作而非对抗，让直觉与理性各司其职</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<!-- 金句 -->
+<div class="quote-section">
+  <h3>💬 核心金句</h3>
+  <div class="quote-item">"心智是一套计算器官，由自然选择设计出来，用以解决我们祖先所面临的生存与繁衍问题。"</div>
+  <div class="quote-item">"大脑不是一台通用计算机，而是一套专用模块的集合。"</div>
+  <div class="quote-item">"我们并不直接看见世界，我们看见的是大脑构建出来的世界。"</div>
+  <div class="quote-item">"语言并非思想本身，而只是思想的外衣。"</div>
+  <div class="quote-item">"理解心智如何运作，是理解我们自己最深刻的途径。"</div>
+</div>
+
+<!-- 行动建议 -->
+<div class="action-section">
+  <h3>🎯 五条行动建议</h3>
+  <div class="action-grid">
+    <div class="action-card">
+      <div class="action-number">1</div>
+      <p>记录一次<strong>情绪冲动</strong>，追问它想帮你解决什么「进化问题」</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">2</div>
+      <p>遇到直觉判断时，先<strong>暂停三秒</strong>，问「这是直觉还是证据」</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">3</div>
+      <p>每天做一次<strong>元认知复盘</strong>：观察自己刚才的思维过程</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">4</div>
+      <p>用<strong>「逆向工程」</strong>分析一个他人行为，找它背后的功能逻辑</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">5</div>
+      <p>与情绪<strong>合作而非对抗</strong>：让理性做舵手，让情绪做引擎</p>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <p>📚 每日一学 · 心智探奇 · 2026年08月24日</p>
+  <p style="margin-top:6px">理解心智，就是理解我们自己</p>
+</div>
+
+</body>
+</html>
