@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 第二曲线</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    min-height: 100vh;
+    color: #e0e0e0;
+    padding: 20px;
+  }
+  .header {
+    text-align: center;
+    padding: 40px 20px 30px;
+    animation: fadeInDown 0.8s ease;
+  }
+  .date-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 20px;
+    padding: 6px 18px;
+    font-size: 13px;
+    color: #a0c4ff;
+    margin-bottom: 16px;
+    letter-spacing: 1px;
+  }
+  .book-title {
+    font-size: 42px;
+    font-weight: 700;
+    background: linear-gradient(90deg, #a0c4ff, #c9b8ff, #ffd6a5);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+  }
+  .book-subtitle {
+    font-size: 16px;
+    color: #9ab0d0;
+    margin-bottom: 6px;
+  }
+  .book-author {
+    font-size: 14px;
+    color: #7a8fa6;
+  }
+  .mind-map {
+    max-width: 1100px;
+    margin: 30px auto;
+    position: relative;
+  }
+  .center-node {
+    background: linear-gradient(135deg, #7c4dff, #4a90d9);
+    border-radius: 20px;
+    padding: 24px 36px;
+    text-align: center;
+    margin: 0 auto 40px;
+    width: fit-content;
+    max-width: 400px;
+    box-shadow: 0 8px 32px rgba(124,77,255,0.4);
+    position: relative;
+    animation: pulse 3s infinite;
+  }
+  @keyframes pulse {
+    0%,100%{ box-shadow: 0 8px 32px rgba(124,77,255,0.4); }
+    50%{ box-shadow: 0 8px 48px rgba(124,77,255,0.7); }
+  }
+  .center-node h2 { font-size: 22px; color: #fff; font-weight: 700; }
+  .center-node p { font-size: 13px; color: rgba(255,255,255,0.75); margin-top: 6px; }
+  .branches {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 10px;
+  }
+  .branch {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 22px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    animation: fadeInUp 0.6s ease both;
+  }
+  .branch:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 36px rgba(0,0,0,0.3);
+  }
+  .branch:nth-child(1) { border-left: 4px solid #ff6b9d; animation-delay: 0.1s; }
+  .branch:nth-child(2) { border-left: 4px solid #a0c4ff; animation-delay: 0.2s; }
+  .branch:nth-child(3) { border-left: 4px solid #ffd6a5; animation-delay: 0.3s; }
+  .branch:nth-child(4) { border-left: 4px solid #9bf6a8; animation-delay: 0.4s; }
+  .branch:nth-child(5) { border-left: 4px solid #c9b8ff; animation-delay: 0.5s; }
+  .branch:nth-child(6) { border-left: 4px solid #ffb3b3; animation-delay: 0.6s; }
+  .branch-title {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .branch-icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .b1 .branch-icon { background: rgba(255,107,157,0.2); }
+  .b2 .branch-icon { background: rgba(160,196,255,0.2); }
+  .b3 .branch-icon { background: rgba(255,214,165,0.2); }
+  .b4 .branch-icon { background: rgba(155,246,168,0.2); }
+  .b5 .branch-icon { background: rgba(201,184,255,0.2); }
+  .b6 .branch-icon { background: rgba(255,179,179,0.2); }
+  .leaf-list { list-style: none; padding: 0; }
+  .leaf-list li {
+    padding: 7px 0 7px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    font-size: 14px;
+    color: #c8d8e8;
+    line-height: 1.6;
+    position: relative;
+  }
+  .leaf-list li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: rgba(255,255,255,0.3);
+    font-size: 11px;
+    top: 9px;
+  }
+  .leaf-list li:last-child { border-bottom: none; }
+  .leaf-list li strong { color: #e8f0ff; }
+  .quote-section {
+    max-width: 1100px;
+    margin: 24px auto;
+    background: linear-gradient(135deg, rgba(124,77,255,0.15), rgba(74,144,217,0.15));
+    border: 1px solid rgba(124,77,255,0.3);
+    border-radius: 16px;
+    padding: 30px;
+    animation: fadeInUp 0.6s ease 0.7s both;
+  }
+  .quote-section h3 {
+    font-size: 16px;
+    color: #c9b8ff;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .quote-item {
+    padding: 14px 20px;
+    margin: 10px 0;
+    background: rgba(255,255,255,0.04);
+    border-radius: 10px;
+    border-left: 3px solid #c9b8ff;
+    font-size: 15px;
+    font-style: italic;
+    color: #dde8f8;
+    line-height: 1.7;
+  }
+  .action-section {
+    max-width: 1100px;
+    margin: 24px auto;
+    background: rgba(155,246,168,0.06);
+    border: 1px solid rgba(155,246,168,0.2);
+    border-radius: 16px;
+    padding: 30px;
+    animation: fadeInUp 0.6s ease 0.8s both;
+  }
+  .action-section h3 {
+    font-size: 16px;
+    color: #9bf6a8;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .action-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 14px;
+  }
+  .action-card {
+    background: rgba(155,246,168,0.08);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+  }
+  .action-number {
+    width: 28px; height: 28px;
+    background: rgba(155,246,168,0.2);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    color: #9bf6a8;
+    font-weight: 700;
+    margin: 0 auto 10px;
+  }
+  .action-card p {
+    font-size: 13px;
+    color: #c0d8c8;
+    line-height: 1.6;
+  }
+  .footer {
+    text-align: center;
+    padding: 30px 20px;
+    color: #5a7a9a;
+    font-size: 13px;
+    animation: fadeIn 1s ease 1s both;
+  }
+  @keyframes fadeInDown { from { opacity:0; transform:translateY(-20px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes fadeInUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+
+  @media (max-width: 700px) {
+    .branches { grid-template-columns: 1fr; }
+    .book-title { font-size: 28px; }
+    .action-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="date-badge">📅 2026年08月26日 · 每日一学</div>
+  <div class="book-title">第二曲线</div>
+  <div class="book-subtitle">在第一曲线见顶之前，开启你的二次增长 · The Second Curve</div>
+  <div class="book-author">作者：查尔斯·汉迪（Charles Handy）</div>
+</div>
+
+<div class="mind-map">
+  <div class="center-node">
+    <h2>🌀 第二曲线</h2>
+    <p>顺境中主动求变，逆境中才不被迫改变</p>
+  </div>
+
+  <div class="branches">
+
+    <!-- 核心洞见 -->
+    <div class="branch b1">
+      <div class="branch-title">
+        <div class="branch-icon">💡</div>
+        <span style="color:#ff6b9d">核心洞见</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>一切增长都有S曲线</strong>：事业、能力、模式都遵循起步—上升—顶峰—衰退的规律</li>
+        <li><strong>顺境中求变</strong>：真正的智慧，是在第一曲线仍上升时就着手孕育第二曲线</li>
+        <li><strong>窗口稍纵即逝</strong>：等第一曲线见顶才行动，就只剩被迫应变的余地</li>
+        <li><strong>下降是必经之路</strong>：第二曲线起步往往先下滑，需第一曲线的资源反哺</li>
+      </ul>
+    </div>
+
+    <!-- 核心框架：S型曲线模型 -->
+    <div class="branch b2">
+      <div class="branch-title">
+        <div class="branch-icon">🧭</div>
+        <span style="color:#a0c4ff">核心框架 · S型曲线四要素</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>① 第一曲线</strong> — 当前赖以生存的主业、能力或模式</li>
+        <li><strong>② 第二曲线</strong> — 未来的增长点，须在第一曲线见顶前启动</li>
+        <li><strong>③ 破局时机</strong> — 在接近但未到达顶点时启动，而非顶点之后</li>
+        <li><strong>④ 谷底跨越</strong> — 两曲线交会时的下降期，靠资源与信念坚持过去</li>
+      </ul>
+    </div>
+
+    <!-- 主要知识点：曲线规律 -->
+    <div class="branch b3">
+      <div class="branch-title">
+        <div class="branch-icon">🚀</div>
+        <span style="color:#ffd6a5">主要知识点 · 曲线规律</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>S曲线三阶段</strong>：缓慢爬升期 → 快速增长期 → 平台衰退期</li>
+        <li><strong>顶峰即拐点</strong>：第一曲线到达顶峰的瞬间，就是衰落的开始</li>
+        <li><strong>增长有极限</strong>：任何模式都有天花板，无法无限延长</li>
+        <li><strong>非线性思维</strong>：放弃"一直涨"的线性假设，预见拐点</li>
+      </ul>
+    </div>
+
+    <!-- 主要知识点：时机与转型 -->
+    <div class="branch b4">
+      <div class="branch-title">
+        <div class="branch-icon">🧬</div>
+        <span style="color:#9bf6a8">主要知识点 · 时机与转型</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>有余力时启动</strong>：第二曲线须在第一曲线仍健康时开始，那时才有资源</li>
+        <li><strong>下降错觉</strong>：新曲线投入期会先下滑，需耐心而非恐慌</li>
+        <li><strong>悖论思维</strong>：同时经营"现在"与"未来"，在矛盾中求平衡</li>
+        <li><strong>主动求变</strong>：在巅峰时刻居安思危，而非在低谷被动应变</li>
+      </ul>
+    </div>
+
+    <!-- 主要知识点：组合式人生 -->
+    <div class="branch b5">
+      <div class="branch-title">
+        <div class="branch-icon">🔍</div>
+        <span style="color:#c9b8ff">主要知识点 · 组合式人生</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>组合式人生</strong>：不只依赖一条曲线，同时经营职业、兴趣、家庭等多条曲线</li>
+        <li><strong>两条线并行</strong>：把精力分成"经营当下"与"投资未来"两部分</li>
+        <li><strong>持续学习</strong>：让新技能成为第二曲线的种子，随时备用</li>
+        <li><strong>多点支撑</strong>：多条曲线互为备份，降低单点失效的风险</li>
+      </ul>
+    </div>
+
+    <!-- 开启第二曲线的行动闭环 -->
+    <div class="branch b6">
+      <div class="branch-title">
+        <div class="branch-icon">✨</div>
+        <span style="color:#ffb3b3">开启第二曲线的行动闭环</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>定位</strong>：画出自己当前领域的S曲线，判断所处阶段</li>
+        <li><strong>预警</strong>：判断第一曲线是否接近顶峰，提前拉响警报</li>
+        <li><strong>布局</strong>：提前培育第二曲线（新技能、副业、新关系）</li>
+        <li><strong>跨越</strong>：接受投入期的下降，坚持走过谷底</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<!-- 金句 -->
+<div class="quote-section">
+  <h3>💬 核心金句</h3>
+  <div class="quote-item">"如果你不在上升期开启第二曲线，就只能在下降期被迫开始。"</div>
+  <div class="quote-item">"第一曲线达到顶峰的那一刻，往往就是衰落的开始。"</div>
+  <div class="quote-item">"第二曲线必须在你第一曲线仍然健康时启动，因为那时你才有余力。"</div>
+  <div class="quote-item">"人生不是一条直线，而是由多条S曲线组成的组合。"</div>
+  <div class="quote-item">"真正的智慧，是在顺境中主动求变，而非在逆境中被迫改变。"</div>
+</div>
+
+<!-- 行动建议 -->
+<div class="action-section">
+  <h3>🎯 五条行动建议</h3>
+  <div class="action-grid">
+    <div class="action-card">
+      <div class="action-number">1</div>
+      <p>画出自己当前职业/能力的<strong>「S曲线」</strong>，标出你正处在哪一阶段</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">2</div>
+      <p>判断你的<strong>「第一曲线」</strong>是否已接近顶峰，若是，立刻开始规划第二曲线</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">3</div>
+      <p>每天固定<strong>「30分钟投资未来」</strong>：学新技能、深耕兴趣或经营人脉</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">4</div>
+      <p>用<strong>「组合式人生」</strong>思维，盘点并主动经营你的多条曲线</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">5</div>
+      <p>面对转型初期的<strong>「下降错觉」</strong>，提醒自己这是跨越谷底的必经之路</p>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <p>📚 每日一学 · 第二曲线 · 2026年08月26日</p>
+  <p style="margin-top:6px">在上升期播种，才能在下坡时收获</p>
+</div>
+
+</body>
+</html>
