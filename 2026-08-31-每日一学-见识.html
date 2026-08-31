@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 见识</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    min-height: 100vh;
+    color: #e0e0e0;
+    padding: 20px;
+  }
+  .header {
+    text-align: center;
+    padding: 40px 20px 30px;
+    animation: fadeInDown 0.8s ease;
+  }
+  .date-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 20px;
+    padding: 6px 18px;
+    font-size: 13px;
+    color: #a0c4ff;
+    margin-bottom: 16px;
+    letter-spacing: 1px;
+  }
+  .book-title {
+    font-size: 42px;
+    font-weight: 700;
+    background: linear-gradient(90deg, #a0c4ff, #c9b8ff, #ffd6a5);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+  }
+  .book-subtitle {
+    font-size: 16px;
+    color: #9ab0d0;
+    margin-bottom: 6px;
+  }
+  .book-author {
+    font-size: 14px;
+    color: #7a8fa6;
+  }
+  .mind-map {
+    max-width: 1100px;
+    margin: 30px auto;
+    position: relative;
+  }
+  .center-node {
+    background: linear-gradient(135deg, #7c4dff, #4a90d9);
+    border-radius: 20px;
+    padding: 24px 36px;
+    text-align: center;
+    margin: 0 auto 40px;
+    width: fit-content;
+    max-width: 400px;
+    box-shadow: 0 8px 32px rgba(124,77,255,0.4);
+    position: relative;
+    animation: pulse 3s infinite;
+  }
+  @keyframes pulse {
+    0%,100%{ box-shadow: 0 8px 32px rgba(124,77,255,0.4); }
+    50%{ box-shadow: 0 8px 48px rgba(124,77,255,0.7); }
+  }
+  .center-node h2 { font-size: 22px; color: #fff; font-weight: 700; }
+  .center-node p { font-size: 13px; color: rgba(255,255,255,0.75); margin-top: 6px; }
+  .branches {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 10px;
+  }
+  .branch {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 22px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    animation: fadeInUp 0.6s ease both;
+  }
+  .branch:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 36px rgba(0,0,0,0.3);
+  }
+  .branch:nth-child(1) { border-left: 4px solid #ff6b9d; animation-delay: 0.1s; }
+  .branch:nth-child(2) { border-left: 4px solid #a0c4ff; animation-delay: 0.2s; }
+  .branch:nth-child(3) { border-left: 4px solid #ffd6a5; animation-delay: 0.3s; }
+  .branch:nth-child(4) { border-left: 4px solid #9bf6a8; animation-delay: 0.4s; }
+  .branch:nth-child(5) { border-left: 4px solid #c9b8ff; animation-delay: 0.5s; }
+  .branch:nth-child(6) { border-left: 4px solid #ffb3b3; animation-delay: 0.6s; }
+  .branch-title {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .branch-icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .b1 .branch-icon { background: rgba(255,107,157,0.2); }
+  .b2 .branch-icon { background: rgba(160,196,255,0.2); }
+  .b3 .branch-icon { background: rgba(255,214,165,0.2); }
+  .b4 .branch-icon { background: rgba(155,246,168,0.2); }
+  .b5 .branch-icon { background: rgba(201,184,255,0.2); }
+  .b6 .branch-icon { background: rgba(255,179,179,0.2); }
+  .leaf-list { list-style: none; padding: 0; }
+  .leaf-list li {
+    padding: 7px 0 7px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    font-size: 14px;
+    color: #c8d8e8;
+    line-height: 1.6;
+    position: relative;
+  }
+  .leaf-list li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: rgba(255,255,255,0.3);
+    font-size: 11px;
+    top: 9px;
+  }
+  .leaf-list li:last-child { border-bottom: none; }
+  .leaf-list li strong { color: #e8f0ff; }
+  .quote-section {
+    max-width: 1100px;
+    margin: 24px auto;
+    background: linear-gradient(135deg, rgba(124,77,255,0.15), rgba(74,144,217,0.15));
+    border: 1px solid rgba(124,77,255,0.3);
+    border-radius: 16px;
+    padding: 30px;
+    animation: fadeInUp 0.6s ease 0.7s both;
+  }
+  .quote-section h3 {
+    font-size: 16px;
+    color: #c9b8ff;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .quote-item {
+    padding: 14px 20px;
+    margin: 10px 0;
+    background: rgba(255,255,255,0.04);
+    border-radius: 10px;
+    border-left: 3px solid #c9b8ff;
+    font-size: 15px;
+    font-style: italic;
+    color: #dde8f8;
+    line-height: 1.7;
+  }
+  .action-section {
+    max-width: 1100px;
+    margin: 24px auto;
+    background: rgba(155,246,168,0.06);
+    border: 1px solid rgba(155,246,168,0.2);
+    border-radius: 16px;
+    padding: 30px;
+    animation: fadeInUp 0.6s ease 0.8s both;
+  }
+  .action-section h3 {
+    font-size: 16px;
+    color: #9bf6a8;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .action-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 14px;
+  }
+  .action-card {
+    background: rgba(155,246,168,0.08);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+  }
+  .action-number {
+    width: 28px; height: 28px;
+    background: rgba(155,246,168,0.2);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    color: #9bf6a8;
+    font-weight: 700;
+    margin: 0 auto 10px;
+  }
+  .action-card p {
+    font-size: 13px;
+    color: #c0d8c8;
+    line-height: 1.6;
+  }
+  .footer {
+    text-align: center;
+    padding: 30px 20px;
+    color: #5a7a9a;
+    font-size: 13px;
+    animation: fadeIn 1s ease 1s both;
+  }
+  @keyframes fadeInDown { from { opacity:0; transform:translateY(-20px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes fadeInUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+
+  @media (max-width: 700px) {
+    .branches { grid-template-columns: 1fr; }
+    .book-title { font-size: 28px; }
+    .action-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="date-badge">📅 2026年08月31日 · 每日一学</div>
+  <div class="book-title">见识</div>
+  <div class="book-subtitle">商业的本质与人生的智慧 · 你能走多远，取决于你的见识</div>
+  <div class="book-author">作者：吴军</div>
+</div>
+
+<div class="mind-map">
+  <div class="center-node">
+    <h2>🌏 见识</h2>
+    <p>命运 = 环境 × 思维方式，提升见识就是改写命运</p>
+  </div>
+
+  <div class="branches">
+
+    <!-- 核心洞见 -->
+    <div class="branch b1">
+      <div class="branch-title">
+        <div class="branch-icon">💡</div>
+        <span style="color:#ff6b9d">核心洞见</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>见识决定上限</strong>：决定人能走多远的，不是智商与努力，而是见识的层次与格局</li>
+        <li><strong>命运可控</strong>：命运 = 环境 × 思维方式，环境难选，但思维完全由自己掌控</li>
+        <li><strong>选择大于努力</strong>：在正确的方向上努力才有意义，方向错了越努力越远</li>
+        <li><strong>长期主义</strong>：用"三年后回头看"的视角做选择，不被短期得失左右</li>
+      </ul>
+    </div>
+
+    <!-- 核心框架：命运公式 -->
+    <div class="branch b2">
+      <div class="branch-title">
+        <div class="branch-icon">🧭</div>
+        <span style="color:#a0c4ff">核心框架 · 命运公式四要素</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>① 环境因素</strong> — 出身、时代、平台、贵人，无法选择但可主动借力</li>
+        <li><strong>② 思维方式</strong> — 看问题的角度与层次，是唯一完全由自己掌控的变量</li>
+        <li><strong>③ 知识结构</strong> — 跨学科的知识储备，决定你能调用多少"解题工具"</li>
+        <li><strong>④ 行为习惯</strong> — 日拱一卒的积累，把见识落地为长期复利</li>
+      </ul>
+    </div>
+
+    <!-- 主要知识点：增长见识的路径 -->
+    <div class="branch b3">
+      <div class="branch-title">
+        <div class="branch-icon">📚</div>
+        <span style="color:#ffd6a5">主要知识点 · 增长见识的路径</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>向高人学习</strong>：读一流人物的书与传记，站在巨人肩膀上</li>
+        <li><strong>跨界阅读</strong>：打破单一学科的局限，建立多元视角</li>
+        <li><strong>深度思考</strong>：不满足于表象，追问底层逻辑</li>
+        <li><strong>主动选择环境</strong>：把自己放进更优秀的圈子与平台</li>
+      </ul>
+    </div>
+
+    <!-- 主要知识点：思维方式的升级 -->
+    <div class="branch b4">
+      <div class="branch-title">
+        <div class="branch-icon">🔍</div>
+        <span style="color:#9bf6a8">主要知识点 · 思维方式的升级</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>时间观</strong>：用长期主义看待选择，追求复利而非速成</li>
+        <li><strong>概率观</strong>：接受不确定性，追求长期期望值而非单次结果</li>
+        <li><strong>减法思维</strong>：少即是多，聚焦最重要的几件事</li>
+        <li><strong>反脆弱</strong>：从变化与挫折中获益，而非仅仅承受</li>
+      </ul>
+    </div>
+
+    <!-- 主要知识点：关于工作与选择 -->
+    <div class="branch b5">
+      <div class="branch-title">
+        <div class="branch-icon">🧩</div>
+        <span style="color:#c9b8ff">主要知识点 · 关于工作与选择</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>第一性原理</strong>：回到问题的本质去思考，不被表象束缚</li>
+        <li><strong>避免伪勤奋</strong>：不要用战术的勤奋，掩盖战略的懒惰</li>
+        <li><strong>重要不紧急</strong>：把时间优先投向"重要但不紧急"的事</li>
+        <li><strong>价值创造</strong>：衡量工作的标准，是你创造了多少价值</li>
+      </ul>
+    </div>
+
+    <!-- 用见识指导行动 -->
+    <div class="branch b6">
+      <div class="branch-title">
+        <div class="branch-icon">✨</div>
+        <span style="color:#ffb3b3">用见识指导行动</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>读书</strong>：每周读一本一流人物的书，向高手借见识</li>
+        <li><strong>复盘</strong>：用第一性原理复盘决策，回到本质</li>
+        <li><strong>选择</strong>：重大选择前，先问"三年后哪个更重要"</li>
+        <li><strong>升级</strong>：主动靠近更优秀的圈子，改变信息输入质量</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<!-- 金句 -->
+<div class="quote-section">
+  <h3>💬 核心金句</h3>
+  <div class="quote-item">"你能走多远，取决于你的见识。"</div>
+  <div class="quote-item">"命运在很大程度上，取决于我们的思维方式。"</div>
+  <div class="quote-item">"很多时候，成败的关键不在于你有多努力，而在于你是否做对了选择。"</div>
+  <div class="quote-item">"最好的投资，是对自己见识的投资。"</div>
+  <div class="quote-item">"不要用战术上的勤奋，掩盖战略上的懒惰。"</div>
+</div>
+
+<!-- 行动建议 -->
+<div class="action-section">
+  <h3>🎯 五条行动建议</h3>
+  <div class="action-grid">
+    <div class="action-card">
+      <div class="action-number">1</div>
+      <p>每周读一本<strong>「一流人物」</strong>的书或传记，向高手借见识</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">2</div>
+      <p>建立<strong>「重要但不紧急」</strong>清单，把时间优先投向长期复利</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">3</div>
+      <p>重大选择前先问<strong>「三年后哪个更重要」</strong></p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">4</div>
+      <p>用<strong>「第一性原理」</strong>复盘一个近期决策：本质是什么？</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">5</div>
+      <p>主动升级环境：加入一个<strong>「更优秀的圈子」</strong></p>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <p>📚 每日一学 · 见识 · 2026年08月31日</p>
+  <p style="margin-top:6px">你能走多远，取决于你的见识</p>
+</div>
+
+</body>
+</html>
