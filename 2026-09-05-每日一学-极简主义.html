@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 《极简主义》思维导图</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 20px 50px;
+  }
+
+  /* 顶部标题区 */
+  .header {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+  .header .tag {
+    display: inline-block;
+    background: linear-gradient(90deg, #f7971e, #ffd200);
+    color: #1a1a2e;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+  .header h1 {
+    font-size: 32px;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.2;
+  }
+  .header h1 span {
+    background: linear-gradient(90deg, #f7971e, #ffd200);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .header .subtitle {
+    margin-top: 8px;
+    font-size: 14px;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 1px;
+  }
+
+  /* 书籍简介卡片 */
+  .book-card {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 20px;
+    padding: 24px 28px;
+    max-width: 860px;
+    width: 100%;
+    margin-bottom: 36px;
+    backdrop-filter: blur(10px);
+  }
+  .book-cover {
+    flex-shrink: 0;
+    width: 80px;
+    height: 105px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #f7971e, #ffd200);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    color: #1a1a2e;
+    text-align: center;
+    line-height: 1.4;
+    padding: 6px;
+    box-shadow: 0 8px 24px rgba(247,151,30,0.4);
+  }
+  .book-cover .cover-icon { font-size: 28px; margin-bottom: 6px; }
+  .book-info h2 { font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+  .book-info .author { font-size: 13px; color: #ffd200; margin-bottom: 10px; }
+  .book-info .desc { font-size: 13px; color: rgba(255,255,255,0.7); line-height: 1.8; }
+  .book-info .stars { margin-top: 10px; color: #ffd200; font-size: 16px; letter-spacing: 2px; }
+
+  /* 思维导图容器 */
+  .mindmap-wrapper {
+    max-width: 1100px;
+    width: 100%;
+  }
+
+  /* 中心节点 */
+  .center-node {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  .center-node .node-box {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(135deg, #f7971e, #ffd200);
+    color: #1a1a2e;
+    padding: 18px 40px;
+    border-radius: 50px;
+    font-size: 20px;
+    font-weight: 800;
+    box-shadow: 0 10px 40px rgba(247,151,30,0.5);
+    position: relative;
+  }
+  .center-node .node-box::after {
+    content: '';
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 20px;
+    background: rgba(255,255,255,0.3);
+  }
+  .center-node .node-sub { font-size: 12px; font-weight: 500; opacity: 0.7; margin-top: 4px; }
+
+  /* 分支区域 */
+  .branches {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  @media (max-width: 800px) {
+    .branches { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 520px) {
+    .branches { grid-template-columns: 1fr; }
+    .book-card { flex-direction: column; text-align: center; }
+  }
+
+  /* 分支卡片 */
+  .branch {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: transform 0.25s, box-shadow 0.25s;
+  }
+  .branch:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.35);
+  }
+
+  .branch-header {
+    padding: 16px 18px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .branch-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .branch-title { font-size: 15px; font-weight: 700; color: #fff; }
+  .branch-title-en { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 2px; }
+
+  .branch-body { padding: 14px 18px 16px; }
+
+  /* 子节点 */
+  .sub-node {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .sub-node:last-child { margin-bottom: 0; }
+  .sub-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    margin-top: 6px;
+    flex-shrink: 0;
+  }
+  .sub-node-title { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.9); margin-bottom: 3px; }
+  .sub-node-desc { font-size: 12px; color: rgba(255,255,255,0.5); line-height: 1.6; }
+
+  /* 配色主题 */
+  .theme-orange .branch-icon { background: rgba(247,151,30,0.2); }
+  .theme-orange .sub-dot { background: #f7971e; }
+  .theme-orange .branch-header { border-left: 3px solid #f7971e; }
+
+  .theme-blue .branch-icon { background: rgba(99,179,237,0.2); }
+  .theme-blue .sub-dot { background: #63b3ed; }
+  .theme-blue .branch-header { border-left: 3px solid #63b3ed; }
+
+  .theme-green .branch-icon { background: rgba(104,211,145,0.2); }
+  .theme-green .sub-dot { background: #68d391; }
+  .theme-green .branch-header { border-left: 3px solid #68d391; }
+
+  .theme-purple .branch-icon { background: rgba(183,148,246,0.2); }
+  .theme-purple .sub-dot { background: #b794f6; }
+  .theme-purple .branch-header { border-left: 3px solid #b794f6; }
+
+  .theme-red .branch-icon { background: rgba(252,129,129,0.2); }
+  .theme-red .sub-dot { background: #fc8181; }
+  .theme-red .branch-header { border-left: 3px solid #fc8181; }
+
+  .theme-teal .branch-icon { background: rgba(129,230,217,0.2); }
+  .theme-teal .sub-dot { background: #81e6d9; }
+  .theme-teal .branch-header { border-left: 3px solid #81e6d9; }
+
+  /* 金句 */
+  .quote-box {
+    max-width: 860px;
+    width: 100%;
+    margin: 32px 0 0;
+    background: rgba(247,151,30,0.08);
+    border: 1px solid rgba(247,151,30,0.25);
+    border-radius: 16px;
+    padding: 20px 28px;
+    text-align: center;
+  }
+  .quote-box .quote-label { font-size: 11px; color: #ffd200; letter-spacing: 3px; font-weight: 600; margin-bottom: 12px; }
+  .quote-box blockquote { font-size: 15px; color: rgba(255,255,255,0.85); line-height: 1.9; font-style: italic; }
+  .quote-box .quote-source { margin-top: 10px; font-size: 12px; color: rgba(255,255,255,0.4); }
+
+  /* 页脚 */
+  .footer {
+    margin-top: 40px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.25);
+    letter-spacing: 1px;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<!-- 顶部标题 -->
+<div class="header">
+  <div class="tag">📚 每日一学 · 2026.09.05</div>
+  <h1>今日书单推荐</h1>
+  <p class="subtitle">每天一本好书，点亮思维，精进认知</p>
+</div>
+
+<!-- 书籍简介 -->
+<div class="book-card">
+  <div class="book-cover">
+    <div class="cover-icon">🧘</div>
+    极简<br>主义
+  </div>
+  <div class="book-info">
+    <h2>《极简主义》</h2>
+    <div class="author">作者：乔舒亚·菲尔茨·米尔本 &amp; 瑞安·尼科迪默斯 · "极简主义者"（The Minimalists）</div>
+    <div class="desc">
+      两位高薪白领曾拥有别人羡慕的一切——房子、车子、昂贵的物品，
+      却发现自己并不幸福。他们最终卖掉大半物品，走上极简之路。
+      本书的核心不是"扔东西"，而是<strong style="color:#ffd200">摆脱生活中多余的部分，
+      为真正有价值的五大领域腾出空间</strong>：<strong style="color:#68d391">健康、人际关系、热情、成长、贡献</strong>。
+      少即是多，专注即自由。
+    </div>
+    <div class="stars">★★★★★</div>
+  </div>
+</div>
+
+<!-- 中心节点 -->
+<div class="mindmap-wrapper">
+  <div class="center-node">
+    <div class="node-box">
+      🧘 极简主义
+      <div class="node-sub">Minimalism · 活出生命真意的五大价值</div>
+    </div>
+  </div>
+
+  <!-- 六大分支 -->
+  <div class="branches">
+
+    <!-- 分支1：极简的本质 -->
+    <div class="branch theme-orange">
+      <div class="branch-header">
+        <div class="branch-icon">✂️</div>
+        <div>
+          <div class="branch-title">极简的本质</div>
+          <div class="branch-title-en">What Minimalism Is</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">不是"拥有更少"</div>
+            <div class="sub-node-desc">极简主义是工具，帮你摆脱多余事物，聚焦真正重要的东西</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">物品≠幸福</div>
+            <div class="sub-node-desc">用物质填补内心空虚，只会带来短暂的满足与长期的负担</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">重新定义身份</div>
+            <div class="sub-node-desc">你拥有的东西不等于你，身份由价值观和行动定义</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支2：健康 -->
+    <div class="branch theme-green">
+      <div class="branch-header">
+        <div class="branch-icon">💪</div>
+        <div>
+          <div class="branch-title">健康：第一价值</div>
+          <div class="branch-title-en">Health</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">饮食与锻炼</div>
+            <div class="sub-node-desc">简单可持续的习惯胜过极端计划：少加工食品，每天动起来</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">睡眠是基础</div>
+            <div class="sub-node-desc">规律作息不是浪费时间，是一切精力的底层供给</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">情绪健康</div>
+            <div class="sub-node-desc">写日记、冥想、直面过去创伤，情绪同样需要"断舍离"</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支3：人际关系 -->
+    <div class="branch theme-blue">
+      <div class="branch-header">
+        <div class="branch-icon">🤝</div>
+        <div>
+          <div class="branch-title">人际关系</div>
+          <div class="branch-title-en">Relationships</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">检视你的关系</div>
+            <div class="sub-node-desc">列出关系清单，问自己：这段关系让我成为更好的人吗？</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">三类关系</div>
+            <div class="sub-node-desc">首要、次要、外围——把时间投给能彼此成就的少数人</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">质量大于数量</div>
+            <div class="sub-node-desc">与其维护一百个点赞之交，不如深耕几段真诚关系</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支4：热情 -->
+    <div class="branch theme-purple">
+      <div class="branch-header">
+        <div class="branch-icon">🔥</div>
+        <div>
+          <div class="branch-title">热情与使命</div>
+          <div class="branch-title-en">Passion</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">找到你的热爱</div>
+            <div class="sub-node-desc">热情不是等来的，是在持续投入一件事的过程中培养出来的</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">无聊与消费陷阱</div>
+            <div class="sub-node-desc">人们用购物、刷屏填补无聊——真正的解药是有意义的投入</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">时间不再被出卖</div>
+            <div class="sub-node-desc">减少物欲 = 减少对收入的依赖 = 换回属于自己的时间</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支5：成长 -->
+    <div class="branch theme-red">
+      <div class="branch-header">
+        <div class="branch-icon">📈</div>
+        <div>
+          <div class="branch-title">持续成长</div>
+          <div class="branch-title-en">Growth</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">每天进步一点点</div>
+            <div class="sub-node-desc">微小改进的复利效应：每天1%，一年后是37倍的自己</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">离开舒适区</div>
+            <div class="sub-node-desc">刻意让改变"不方便"一点，成长恰恰发生在不适区</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">把改变变成习惯</div>
+            <div class="sub-node-desc">靠意志力维持的改变必然反弹，靠系统与习惯才能持久</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支6：贡献 -->
+    <div class="branch theme-teal">
+      <div class="branch-header">
+        <div class="branch-icon">🎁</div>
+        <div>
+          <div class="branch-title">贡献与意义</div>
+          <div class="branch-title-en">Contribution</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">为他人创造价值</div>
+            <div class="sub-node-desc">帮助他人是幸福感最深、最持久的来源之一</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">分享即加倍</div>
+            <div class="sub-node-desc">知识、经验与善意，分享出去不会减少，反而放大</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">做有影响力的人</div>
+            <div class="sub-node-desc">不必伟大，只需在自己的圈层里持续输出正向价值</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- 金句 -->
+<div class="quote-box">
+  <div class="quote-label">✦ 今日金句</div>
+  <blockquote>
+    "极简主义不是追求更少，而是腾出空间，去追求更好的生活。<br>
+    多余的物品挤占的不是房间，而是你的注意力。"
+  </blockquote>
+  <div class="quote-source">— 乔舒亚·菲尔茨·米尔本 &amp; 瑞安·尼科迪默斯《极简主义》</div>
+</div>
+
+<!-- 页脚 -->
+<div class="footer">
+  每日一学 · WorkBuddy 自动推送 · 2026-09-05 &nbsp;|&nbsp; 五大价值：健康 · 人际关系 · 热情 · 成长 · 贡献
+</div>
+
+</body>
+</html>
