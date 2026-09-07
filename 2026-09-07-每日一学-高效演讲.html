@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 《高效演讲》思维导图</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 20px 50px;
+  }
+
+  /* 顶部标题区 */
+  .header {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+  .header .tag {
+    display: inline-block;
+    background: linear-gradient(90deg, #f7971e, #ffd200);
+    color: #1a1a2e;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+  .header h1 {
+    font-size: 32px;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.2;
+  }
+  .header h1 span {
+    background: linear-gradient(90deg, #f7971e, #ffd200);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .header .subtitle {
+    margin-top: 8px;
+    font-size: 14px;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 1px;
+  }
+
+  /* 书籍简介卡片 */
+  .book-card {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 20px;
+    padding: 24px 28px;
+    max-width: 860px;
+    width: 100%;
+    margin-bottom: 36px;
+    backdrop-filter: blur(10px);
+  }
+  .book-cover {
+    flex-shrink: 0;
+    width: 80px;
+    height: 105px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #f7971e, #ffd200);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    color: #1a1a2e;
+    text-align: center;
+    line-height: 1.4;
+    padding: 6px;
+    box-shadow: 0 8px 24px rgba(247,151,30,0.4);
+  }
+  .book-cover .cover-icon { font-size: 28px; margin-bottom: 6px; }
+  .book-info h2 { font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+  .book-info .author { font-size: 13px; color: #ffd200; margin-bottom: 10px; }
+  .book-info .desc { font-size: 13px; color: rgba(255,255,255,0.7); line-height: 1.8; }
+  .book-info .stars { margin-top: 10px; color: #ffd200; font-size: 16px; letter-spacing: 2px; }
+
+  /* 思维导图容器 */
+  .mindmap-wrapper {
+    max-width: 1100px;
+    width: 100%;
+  }
+
+  /* 中心节点 */
+  .center-node {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  .center-node .node-box {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(135deg, #f7971e, #ffd200);
+    color: #1a1a2e;
+    padding: 18px 40px;
+    border-radius: 50px;
+    font-size: 20px;
+    font-weight: 800;
+    box-shadow: 0 10px 40px rgba(247,151,30,0.5);
+    position: relative;
+  }
+  .center-node .node-box::after {
+    content: '';
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 20px;
+    background: rgba(255,255,255,0.3);
+  }
+  .center-node .node-sub { font-size: 12px; font-weight: 500; opacity: 0.7; margin-top: 4px; }
+
+  /* 分支区域 */
+  .branches {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  @media (max-width: 800px) {
+    .branches { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 520px) {
+    .branches { grid-template-columns: 1fr; }
+    .book-card { flex-direction: column; text-align: center; }
+  }
+
+  /* 分支卡片 */
+  .branch {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: transform 0.25s, box-shadow 0.25s;
+  }
+  .branch:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.35);
+  }
+
+  .branch-header {
+    padding: 16px 18px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .branch-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .branch-title { font-size: 15px; font-weight: 700; color: #fff; }
+  .branch-title-en { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 2px; }
+
+  .branch-body { padding: 14px 18px 16px; }
+
+  /* 子节点 */
+  .sub-node {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .sub-node:last-child { margin-bottom: 0; }
+  .sub-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    margin-top: 6px;
+    flex-shrink: 0;
+  }
+  .sub-node-title { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.9); margin-bottom: 3px; }
+  .sub-node-desc { font-size: 12px; color: rgba(255,255,255,0.5); line-height: 1.6; }
+
+  /* 配色主题 */
+  .theme-orange .branch-icon { background: rgba(247,151,30,0.2); }
+  .theme-orange .sub-dot { background: #f7971e; }
+  .theme-orange .branch-header { border-left: 3px solid #f7971e; }
+
+  .theme-blue .branch-icon { background: rgba(99,179,237,0.2); }
+  .theme-blue .sub-dot { background: #63b3ed; }
+  .theme-blue .branch-header { border-left: 3px solid #63b3ed; }
+
+  .theme-green .branch-icon { background: rgba(104,211,145,0.2); }
+  .theme-green .sub-dot { background: #68d391; }
+  .theme-green .branch-header { border-left: 3px solid #68d391; }
+
+  .theme-purple .branch-icon { background: rgba(183,148,246,0.2); }
+  .theme-purple .sub-dot { background: #b794f6; }
+  .theme-purple .branch-header { border-left: 3px solid #b794f6; }
+
+  .theme-red .branch-icon { background: rgba(252,129,129,0.2); }
+  .theme-red .sub-dot { background: #fc8181; }
+  .theme-red .branch-header { border-left: 3px solid #fc8181; }
+
+  .theme-teal .branch-icon { background: rgba(129,230,217,0.2); }
+  .theme-teal .sub-dot { background: #81e6d9; }
+  .theme-teal .branch-header { border-left: 3px solid #81e6d9; }
+
+  /* 金句 */
+  .quote-box {
+    max-width: 860px;
+    width: 100%;
+    margin: 32px 0 0;
+    background: rgba(247,151,30,0.08);
+    border: 1px solid rgba(247,151,30,0.25);
+    border-radius: 16px;
+    padding: 20px 28px;
+    text-align: center;
+  }
+  .quote-box .quote-label { font-size: 11px; color: #ffd200; letter-spacing: 3px; font-weight: 600; margin-bottom: 12px; }
+  .quote-box blockquote { font-size: 15px; color: rgba(255,255,255,0.85); line-height: 1.9; font-style: italic; }
+  .quote-box .quote-source { margin-top: 10px; font-size: 12px; color: rgba(255,255,255,0.4); }
+
+  /* 页脚 */
+  .footer {
+    margin-top: 40px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.25);
+    letter-spacing: 1px;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<!-- 顶部标题 -->
+<div class="header">
+  <div class="tag">📚 每日一学 · 2026.09.07</div>
+  <h1>今日书单推荐</h1>
+  <p class="subtitle">每天一本好书，点亮思维，精进认知</p>
+</div>
+
+<!-- 书籍简介 -->
+<div class="book-card">
+  <div class="book-cover">
+    <div class="cover-icon">🎤</div>
+    高效<br>演讲
+  </div>
+  <div class="book-info">
+    <h2>《高效演讲》</h2>
+    <div class="author">作者：彼得·迈尔斯（Peter Meyers）· 斯坦福大学沟通与演讲课程讲师</div>
+    <div class="desc">
+      多数人把演讲当成"表演"，于是紧张、背诵、害怕出错。彼得·迈尔斯提出截然不同的视角：
+      <strong style="color:#ffd200">演讲不是表演，而是送礼</strong>——把有价值的思想送给听众。
+      从精心准备到"坡道-发现-甜点"结构，再到声音、身体语言与临场应对，
+      这本书把高效演讲拆解成一套任何人都能练习的<strong style="color:#68d391">可复制方法</strong>。
+    </div>
+    <div class="stars">★★★★★</div>
+  </div>
+</div>
+
+<!-- 中心节点 -->
+<div class="mindmap-wrapper">
+  <div class="center-node">
+    <div class="node-box">
+      🎤 高效演讲
+      <div class="node-sub">Power Speaking · 把表达变成可复制的技能</div>
+    </div>
+  </div>
+
+  <!-- 六大分支 -->
+  <div class="branches">
+
+    <!-- 分支1：演讲的本质 -->
+    <div class="branch theme-orange">
+      <div class="branch-header">
+        <div class="branch-icon">🎁</div>
+        <div>
+          <div class="branch-title">演讲的本质</div>
+          <div class="branch-title-en">What Speaking Is</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">演讲是送礼，不是表演</div>
+            <div class="sub-node-desc">把思想当作礼物送给听众，而非展示自己有多厉害</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">听众永远第一</div>
+            <div class="sub-node-desc">先问：他们是谁？他们关心什么？我能给ta们带来什么</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">紧张不是敌人</div>
+            <div class="sub-node-desc">紧张是身体的能量准备，学会引导而非压制</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支2：精心准备 -->
+    <div class="branch theme-blue">
+      <div class="branch-header">
+        <div class="branch-icon">📝</div>
+        <div>
+          <div class="branch-title">精心准备</div>
+          <div class="branch-title-en">Preparation</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">以终为始定结果</div>
+            <div class="sub-node-desc">明确听众听完会想什么、感受什么、做什么</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">从听众出发</div>
+            <div class="sub-node-desc">用ta们的语言、讲ta们的场景，而非自说自话</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">先列要点再写稿</div>
+            <div class="sub-node-desc">准备提纲而非背诵全文，留出即兴呼吸的空间</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支3：坡道-发现-甜点 -->
+    <div class="branch theme-green">
+      <div class="branch-header">
+        <div class="branch-icon">🍰</div>
+        <div>
+          <div class="branch-title">万能结构</div>
+          <div class="branch-title-en">Ramp · Discover · Dessert</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">坡道（开头）</div>
+            <div class="sub-node-desc">7秒抓住注意力：提问、讲故事、抛惊人事实</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">发现（主体）</div>
+            <div class="sub-node-desc">3个要点为佳，逻辑递进，边讲边给听众"好处"</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">甜点（收尾）</div>
+            <div class="sub-node-desc">用情感或愿景收束，让听众带着行动与回味离开</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支4：内容与表达 -->
+    <div class="branch theme-purple">
+      <div class="branch-header">
+        <div class="branch-icon">🧠</div>
+        <div>
+          <div class="branch-title">内容与故事力</div>
+          <div class="branch-title-en">Content</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">故事是最强载体</div>
+            <div class="sub-node-desc">观点让人理解，故事让人记住，画面感引发共情</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">数据要配类比</div>
+            <div class="sub-node-desc">抽象数字难以感知，用听众熟悉的场景翻译它</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">一个核心主题</div>
+            <div class="sub-node-desc">贪多是演讲的大忌，一次只让听众带走一个洞见</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支5：声音与身体 -->
+    <div class="branch theme-red">
+      <div class="branch-header">
+        <div class="branch-icon">🎵</div>
+        <div>
+          <div class="branch-title">声音与身体语言</div>
+          <div class="branch-title-en">Voice &amp; Body</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">停顿是力量</div>
+            <div class="sub-node-desc">关键句前后留白，比语速快更有说服力</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">目光与手势</div>
+            <div class="sub-node-desc">逐区扫视听众，开放式手势扩大气场</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">改掉口头禅</div>
+            <div class="sub-node-desc">用录屏/录音回放，刻意去除"嗯、然后、那个"</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支6：临场与练习 -->
+    <div class="branch theme-teal">
+      <div class="branch-header">
+        <div class="branch-icon">🛡️</div>
+        <div>
+          <div class="branch-title">临场与刻意练习</div>
+          <div class="branch-title-en">Practice</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">预演比背诵重要</div>
+            <div class="sub-node-desc">多次小声试讲，模拟真实场景而非逐字背稿</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">应急预案</div>
+            <div class="sub-node-desc">忘词时用提问过渡，冷场时抛一个故事补位</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">每次只改一件事</div>
+            <div class="sub-node-desc">演讲能力靠迭代：复盘记录，一轮聚焦一个改进点</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- 金句 -->
+<div class="quote-box">
+  <div class="quote-label">✦ 今日金句</div>
+  <blockquote>
+    "演讲不是表演，而是送礼——把有价值的思想送给听众。<br>
+    当你不再想着赢过听众，你就赢得了听众。"
+  </blockquote>
+  <div class="quote-source">— 彼得·迈尔斯《高效演讲》</div>
+</div>
+
+<!-- 页脚 -->
+<div class="footer">
+  每日一学 · WorkBuddy 自动推送 · 2026-09-07 &nbsp;|&nbsp; 结构：坡道 → 发现 → 甜点
+</div>
+
+</body>
+</html>
