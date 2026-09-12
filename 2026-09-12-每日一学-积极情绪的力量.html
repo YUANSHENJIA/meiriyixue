@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 《积极情绪的力量》思维导图</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 20px 50px;
+  }
+
+  /* 顶部标题区 */
+  .header {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+  .header .tag {
+    display: inline-block;
+    background: linear-gradient(90deg, #f7971e, #ffd200);
+    color: #1a1a2e;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+  .header h1 {
+    font-size: 32px;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.2;
+  }
+  .header h1 span {
+    background: linear-gradient(90deg, #f7971e, #ffd200);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .header .subtitle {
+    margin-top: 8px;
+    font-size: 14px;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 1px;
+  }
+
+  /* 书籍简介卡片 */
+  .book-card {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 20px;
+    padding: 24px 28px;
+    max-width: 860px;
+    width: 100%;
+    margin-bottom: 36px;
+    backdrop-filter: blur(10px);
+  }
+  .book-cover {
+    flex-shrink: 0;
+    width: 80px;
+    height: 105px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #f7971e, #ffd200);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    color: #1a1a2e;
+    text-align: center;
+    line-height: 1.4;
+    padding: 6px;
+    box-shadow: 0 8px 24px rgba(247,151,30,0.4);
+  }
+  .book-cover .cover-icon { font-size: 28px; margin-bottom: 6px; }
+  .book-info h2 { font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+  .book-info .author { font-size: 13px; color: #ffd200; margin-bottom: 10px; }
+  .book-info .desc { font-size: 13px; color: rgba(255,255,255,0.7); line-height: 1.8; }
+  .book-info .stars { margin-top: 10px; color: #ffd200; font-size: 16px; letter-spacing: 2px; }
+
+  /* 思维导图容器 */
+  .mindmap-wrapper {
+    max-width: 1100px;
+    width: 100%;
+  }
+
+  /* 中心节点 */
+  .center-node {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  .center-node .node-box {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(135deg, #f7971e, #ffd200);
+    color: #1a1a2e;
+    padding: 18px 40px;
+    border-radius: 50px;
+    font-size: 20px;
+    font-weight: 800;
+    box-shadow: 0 10px 40px rgba(247,151,30,0.5);
+    position: relative;
+  }
+  .center-node .node-box::after {
+    content: '';
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 20px;
+    background: rgba(255,255,255,0.3);
+  }
+  .center-node .node-sub { font-size: 12px; font-weight: 500; opacity: 0.7; margin-top: 4px; }
+
+  /* 分支区域 */
+  .branches {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  @media (max-width: 800px) {
+    .branches { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 520px) {
+    .branches { grid-template-columns: 1fr; }
+    .book-card { flex-direction: column; text-align: center; }
+  }
+
+  /* 分支卡片 */
+  .branch {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: transform 0.25s, box-shadow 0.25s;
+  }
+  .branch:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.35);
+  }
+
+  .branch-header {
+    padding: 16px 18px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .branch-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .branch-title { font-size: 15px; font-weight: 700; color: #fff; }
+  .branch-title-en { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 2px; }
+
+  .branch-body { padding: 14px 18px 16px; }
+
+  /* 子节点 */
+  .sub-node {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .sub-node:last-child { margin-bottom: 0; }
+  .sub-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    margin-top: 6px;
+    flex-shrink: 0;
+  }
+  .sub-node-title { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.9); margin-bottom: 3px; }
+  .sub-node-desc { font-size: 12px; color: rgba(255,255,255,0.5); line-height: 1.6; }
+
+  /* 配色主题 */
+  .theme-orange .branch-icon { background: rgba(247,151,30,0.2); }
+  .theme-orange .sub-dot { background: #f7971e; }
+  .theme-orange .branch-header { border-left: 3px solid #f7971e; }
+
+  .theme-blue .branch-icon { background: rgba(99,179,237,0.2); }
+  .theme-blue .sub-dot { background: #63b3ed; }
+  .theme-blue .branch-header { border-left: 3px solid #63b3ed; }
+
+  .theme-green .branch-icon { background: rgba(104,211,145,0.2); }
+  .theme-green .sub-dot { background: #68d391; }
+  .theme-green .branch-header { border-left: 3px solid #68d391; }
+
+  .theme-purple .branch-icon { background: rgba(183,148,246,0.2); }
+  .theme-purple .sub-dot { background: #b794f6; }
+  .theme-purple .branch-header { border-left: 3px solid #b794f6; }
+
+  .theme-red .branch-icon { background: rgba(252,129,129,0.2); }
+  .theme-red .sub-dot { background: #fc8181; }
+  .theme-red .branch-header { border-left: 3px solid #fc8181; }
+
+  .theme-teal .branch-icon { background: rgba(129,230,217,0.2); }
+  .theme-teal .sub-dot { background: #81e6d9; }
+  .theme-teal .branch-header { border-left: 3px solid #81e6d9; }
+
+  /* 金句 */
+  .quote-box {
+    max-width: 860px;
+    width: 100%;
+    margin: 32px 0 0;
+    background: rgba(247,151,30,0.08);
+    border: 1px solid rgba(247,151,30,0.25);
+    border-radius: 16px;
+    padding: 20px 28px;
+    text-align: center;
+  }
+  .quote-box .quote-label { font-size: 11px; color: #ffd200; letter-spacing: 3px; font-weight: 600; margin-bottom: 12px; }
+  .quote-box blockquote { font-size: 15px; color: rgba(255,255,255,0.85); line-height: 1.9; font-style: italic; }
+  .quote-box .quote-source { margin-top: 10px; font-size: 12px; color: rgba(255,255,255,0.4); }
+
+  /* 页脚 */
+  .footer {
+    margin-top: 40px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.25);
+    letter-spacing: 1px;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<!-- 顶部标题 -->
+<div class="header">
+  <div class="tag">📚 每日一学 · 2026.09.12</div>
+  <h1>今日书单推荐</h1>
+  <p class="subtitle">每天一本好书，点亮思维，精进认知</p>
+</div>
+
+<!-- 书籍简介 -->
+<div class="book-card">
+  <div class="book-cover">
+    <div class="cover-icon">🌞</div>
+    积极<br>情绪
+  </div>
+  <div class="book-info">
+    <h2>《积极情绪的力量》</h2>
+    <div class="author">作者：芭芭拉·弗雷德里克森（Barbara L. Fredrickson）· 积极心理学领军学者</div>
+    <div class="desc">
+      积极情绪不只是"感觉好"，而是一种<strong style="color:#ffd200">拓展与建构的资源</strong>：
+      它在瞬间拓展我们的思维与行动范围，并在岁月中累积身心与社会资本。
+      弗雷德里克森用严谨研究给出一个可测量的标尺——
+      <strong style="color:#68d391">3:1 积极率</strong>：让积极情绪至少三倍于消极情绪，
+      你就能从"勉强维持"走向"欣欣向荣"。
+    </div>
+    <div class="stars">★★★★★</div>
+  </div>
+</div>
+
+<!-- 中心节点 -->
+<div class="mindmap-wrapper">
+  <div class="center-node">
+    <div class="node-box">
+      🌞 积极情绪的力量
+      <div class="node-sub">Positivity · 拓展-建构理论与 3:1 黄金比例</div>
+    </div>
+  </div>
+
+  <!-- 六大分支 -->
+  <div class="branches">
+
+    <!-- 分支1：何为积极情绪 -->
+    <div class="branch theme-orange">
+      <div class="branch-header">
+        <div class="branch-icon">🌈</div>
+        <div>
+          <div class="branch-title">何为积极情绪</div>
+          <div class="branch-title-en">Ten Forms of Positivity</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">十种形态</div>
+            <div class="sub-node-desc">喜悦、感激、宁静、兴趣、希望、自豪、逗趣、激励、敬畏、爱</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">爱是万变之源</div>
+            <div class="sub-node-desc">爱是其他九种情绪在安全关系中的组合，是最强的积极情绪</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">短暂却有复利</div>
+            <div class="sub-node-desc">单个积极情绪转瞬即逝，但其累积效应改变人生轨迹</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支2：拓展-建构理论 -->
+    <div class="branch theme-blue">
+      <div class="branch-header">
+        <div class="branch-icon">🔭</div>
+        <div>
+          <div class="branch-title">拓展-建构理论</div>
+          <div class="branch-title-en">Broaden &amp; Build</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">拓展</div>
+            <div class="sub-node-desc">积极情绪即时扩大注意与思维范围，让人看见更多可能性</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">建构</div>
+            <div class="sub-node-desc">日积月累，构建心理韧性、社会支持与身体健康资源</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">上行螺旋</div>
+            <div class="sub-node-desc">积极情绪带来开放，开放带来更多积极情绪，形成正向循环</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支3：消极情绪的代价 -->
+    <div class="branch theme-red">
+      <div class="branch-header">
+        <div class="branch-icon">⛈️</div>
+        <div>
+          <div class="branch-title">消极情绪的代价</div>
+          <div class="branch-title-en">The Cost of Negativity</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">1:1 是情绪死亡线</div>
+            <div class="sub-node-desc">积极与消极情绪一比一时，人会陷入抑郁式的僵滞状态</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">像液态毒素</div>
+            <div class="sub-node-desc">长期消极情绪侵蚀心血管、免疫与睡眠，加速身心损耗</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">虚假积极有害</div>
+            <div class="sub-node-desc">强迫式的"假装开心"不产生拓展效应，真诚是前提</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支4：3:1 积极率 -->
+    <div class="branch theme-green">
+      <div class="branch-header">
+        <div class="branch-icon">⚖️</div>
+        <div>
+          <div class="branch-title">3:1 积极率</div>
+          <div class="branch-title-en">The Positivity Ratio</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">繁荣的临界点</div>
+            <div class="sub-node-desc">积极:消极 ≥ 3:1 时，个体与团队进入"欣欣向荣"区间</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">可以测量</div>
+            <div class="sub-node-desc">每天记录好事与坏事的比例，让情绪变成可优化的指标</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">并非越多越好</div>
+            <div class="sub-node-desc">超过 11:1 反而失去根基——消极情绪也有生存价值</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支5：提升积极情绪 -->
+    <div class="branch theme-purple">
+      <div class="branch-header">
+        <div class="branch-icon">🌱</div>
+        <div>
+          <div class="branch-title">提升积极情绪</div>
+          <div class="branch-title-en">Ways to Create Positivity</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">数福气 · 行善意</div>
+            <div class="sub-node-desc">感恩日记记录三件好事；每天主动做一件小善举</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">优势与激情</div>
+            <div class="sub-node-desc">识别个人优势并在新场景中使用；追随让时间消失的热爱</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">品味与连接</div>
+            <div class="sub-node-desc">慢下来品味美好瞬间；经营关系、亲近自然、练习正念</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支6：降低消极情绪 -->
+    <div class="branch theme-teal">
+      <div class="branch-header">
+        <div class="branch-icon">🧘</div>
+        <div>
+          <div class="branch-title">降低消极情绪</div>
+          <div class="branch-title-en">Deal with Negativity</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">质疑消极想法</div>
+            <div class="sub-node-desc">觉察并检验"必须如此"的灾难化解读，寻找更真实的解释</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">打破反刍</div>
+            <div class="sub-node-desc">识别反复咀嚼负面事件的模式，用转移与行动中断它</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">选择性摄入</div>
+            <div class="sub-node-desc">审视媒体、场景与对话，减少制造消极情绪的输入源</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- 金句 -->
+<div class="quote-box">
+  <div class="quote-label">✦ 今日金句</div>
+  <blockquote>
+    "积极情绪让我们像花儿一样绽放。<br>
+    你不是天气的被动承受者，而是自己情绪的总设计师。"
+  </blockquote>
+  <div class="quote-source">— 芭芭拉·弗雷德里克森《积极情绪的力量》</div>
+</div>
+
+<!-- 页脚 -->
+<div class="footer">
+  每日一学 · WorkBuddy 自动推送 · 2026-09-12 &nbsp;|&nbsp; 3:1 积极率——从勉强维持到欣欣向荣
+</div>
+
+</body>
+</html>
