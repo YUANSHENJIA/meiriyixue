@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 《创新与企业家精神》思维导图</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 20px 50px;
+  }
+
+  /* 顶部标题区 */
+  .header {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+  .header .tag {
+    display: inline-block;
+    background: linear-gradient(90deg, #f7971e, #ffd200);
+    color: #1a1a2e;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+  .header h1 {
+    font-size: 32px;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.2;
+  }
+  .header h1 span {
+    background: linear-gradient(90deg, #f7971e, #ffd200);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .header .subtitle {
+    margin-top: 8px;
+    font-size: 14px;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 1px;
+  }
+
+  /* 书籍简介卡片 */
+  .book-card {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 20px;
+    padding: 24px 28px;
+    max-width: 860px;
+    width: 100%;
+    margin-bottom: 36px;
+    backdrop-filter: blur(10px);
+  }
+  .book-cover {
+    flex-shrink: 0;
+    width: 80px;
+    height: 105px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #f7971e, #ffd200);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    color: #1a1a2e;
+    text-align: center;
+    line-height: 1.4;
+    padding: 6px;
+    box-shadow: 0 8px 24px rgba(247,151,30,0.4);
+  }
+  .book-cover .cover-icon { font-size: 28px; margin-bottom: 6px; }
+  .book-info h2 { font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+  .book-info .author { font-size: 13px; color: #ffd200; margin-bottom: 10px; }
+  .book-info .desc { font-size: 13px; color: rgba(255,255,255,0.7); line-height: 1.8; }
+  .book-info .stars { margin-top: 10px; color: #ffd200; font-size: 16px; letter-spacing: 2px; }
+
+  /* 思维导图容器 */
+  .mindmap-wrapper {
+    max-width: 1100px;
+    width: 100%;
+  }
+
+  /* 中心节点 */
+  .center-node {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  .center-node .node-box {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(135deg, #f7971e, #ffd200);
+    color: #1a1a2e;
+    padding: 18px 40px;
+    border-radius: 50px;
+    font-size: 20px;
+    font-weight: 800;
+    box-shadow: 0 10px 40px rgba(247,151,30,0.5);
+    position: relative;
+  }
+  .center-node .node-box::after {
+    content: '';
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 20px;
+    background: rgba(255,255,255,0.3);
+  }
+  .center-node .node-sub { font-size: 12px; font-weight: 500; opacity: 0.7; margin-top: 4px; }
+
+  /* 分支区域 */
+  .branches {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  @media (max-width: 800px) {
+    .branches { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 520px) {
+    .branches { grid-template-columns: 1fr; }
+    .book-card { flex-direction: column; text-align: center; }
+  }
+
+  /* 分支卡片 */
+  .branch {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: transform 0.25s, box-shadow 0.25s;
+  }
+  .branch:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.35);
+  }
+
+  .branch-header {
+    padding: 16px 18px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .branch-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .branch-title { font-size: 15px; font-weight: 700; color: #fff; }
+  .branch-title-en { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 2px; }
+
+  .branch-body { padding: 14px 18px 16px; }
+
+  /* 子节点 */
+  .sub-node {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .sub-node:last-child { margin-bottom: 0; }
+  .sub-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    margin-top: 6px;
+    flex-shrink: 0;
+  }
+  .sub-node-title { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.9); margin-bottom: 3px; }
+  .sub-node-desc { font-size: 12px; color: rgba(255,255,255,0.5); line-height: 1.6; }
+
+  /* 配色主题 */
+  .theme-orange .branch-icon { background: rgba(247,151,30,0.2); }
+  .theme-orange .sub-dot { background: #f7971e; }
+  .theme-orange .branch-header { border-left: 3px solid #f7971e; }
+
+  .theme-blue .branch-icon { background: rgba(99,179,237,0.2); }
+  .theme-blue .sub-dot { background: #63b3ed; }
+  .theme-blue .branch-header { border-left: 3px solid #63b3ed; }
+
+  .theme-green .branch-icon { background: rgba(104,211,145,0.2); }
+  .theme-green .sub-dot { background: #68d391; }
+  .theme-green .branch-header { border-left: 3px solid #68d391; }
+
+  .theme-purple .branch-icon { background: rgba(183,148,246,0.2); }
+  .theme-purple .sub-dot { background: #b794f6; }
+  .theme-purple .branch-header { border-left: 3px solid #b794f6; }
+
+  .theme-red .branch-icon { background: rgba(252,129,129,0.2); }
+  .theme-red .sub-dot { background: #fc8181; }
+  .theme-red .branch-header { border-left: 3px solid #fc8181; }
+
+  .theme-teal .branch-icon { background: rgba(129,230,217,0.2); }
+  .theme-teal .sub-dot { background: #81e6d9; }
+  .theme-teal .branch-header { border-left: 3px solid #81e6d9; }
+
+  /* 金句 */
+  .quote-box {
+    max-width: 860px;
+    width: 100%;
+    margin: 32px 0 0;
+    background: rgba(247,151,30,0.08);
+    border: 1px solid rgba(247,151,30,0.25);
+    border-radius: 16px;
+    padding: 20px 28px;
+    text-align: center;
+  }
+  .quote-box .quote-label { font-size: 11px; color: #ffd200; letter-spacing: 3px; font-weight: 600; margin-bottom: 12px; }
+  .quote-box blockquote { font-size: 15px; color: rgba(255,255,255,0.85); line-height: 1.9; font-style: italic; }
+  .quote-box .quote-source { margin-top: 10px; font-size: 12px; color: rgba(255,255,255,0.4); }
+
+  /* 页脚 */
+  .footer {
+    margin-top: 40px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.25);
+    letter-spacing: 1px;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<!-- 顶部标题 -->
+<div class="header">
+  <div class="tag">📚 每日一学 · 2026.09.13</div>
+  <h1>今日书单推荐</h1>
+  <p class="subtitle">每天一本好书，点亮思维，精进认知</p>
+</div>
+
+<!-- 书籍简介 -->
+<div class="book-card">
+  <div class="book-cover">
+    <div class="cover-icon">💡</div>
+    创新与<br>企业家精神
+  </div>
+  <div class="book-info">
+    <h2>《创新与企业家精神》</h2>
+    <div class="author">作者：彼得·德鲁克（Peter F. Drucker）· 现代管理学之父</div>
+    <div class="desc">
+      创新不是天才的灵光一现，而是<strong style="color:#ffd200">可以学习、可以传授的系统化实践</strong>。
+      德鲁克把创新拆解为七大来源与四大企业家战略：
+      从最容易获得却最常被忽视的<strong style="color:#68d391">意外事件</strong>，
+      到风险最高但回报最大的<strong style="color:#68d391">新知识</strong>。
+      企业家精神是一种纪律——有目的、有组织、系统化地寻找变革的机会。
+    </div>
+    <div class="stars">★★★★★</div>
+  </div>
+</div>
+
+<!-- 中心节点 -->
+<div class="mindmap-wrapper">
+  <div class="center-node">
+    <div class="node-box">
+      💡 创新与企业家精神
+      <div class="node-sub">Innovation and Entrepreneurship · 系统化的创新纪律</div>
+    </div>
+  </div>
+
+  <!-- 六大分支 -->
+  <div class="branches">
+
+    <!-- 分支1：创新的本质 -->
+    <div class="branch theme-orange">
+      <div class="branch-header">
+        <div class="branch-icon">⚙️</div>
+        <div>
+          <div class="branch-title">创新的本质</div>
+          <div class="branch-title-en">Innovation as Discipline</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">不是灵感是纪律</div>
+            <div class="sub-node-desc">创新是可以作为一门学科来学习与传授的实践工作</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">为变革创造价值</div>
+            <div class="sub-node-desc">创新是赋予资源新的创造财富的能力，而不只是发明</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">人人可为</div>
+            <div class="sub-node-desc">企业家精神是一种行为方式，与性格天赋无关</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支2：内部创新来源 -->
+    <div class="branch theme-blue">
+      <div class="branch-header">
+        <div class="branch-icon">🏭</div>
+        <div>
+          <div class="branch-title">创新来源 · 机构内部</div>
+          <div class="branch-title-en">Four Sources Within</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">意外事件</div>
+            <div class="sub-node-desc">意外的成功与失败是最可靠的创新信号，却最易被忽视</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">不协调</div>
+            <div class="sub-node-desc">现实与假设、投入与产出之间的落差即机会</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">程序需要 + 结构变化</div>
+            <div class="sub-node-desc">流程的薄弱环节；产业、市场结构的松动时刻</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支3：外部创新来源 -->
+    <div class="branch theme-green">
+      <div class="branch-header">
+        <div class="branch-icon">🌍</div>
+        <div>
+          <div class="branch-title">创新来源 · 外部环境</div>
+          <div class="branch-title-en">Three Sources Beyond</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">人口结构变化</div>
+            <div class="sub-node-desc">年龄、职业、教育结构的变化，最可预测却最少被研究</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">观念变化</div>
+            <div class="sub-node-desc">人们对自身处境的认知与情绪改变，打开新市场</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">新知识</div>
+            <div class="sub-node-desc">基于科学的创新：风险最高、周期最长、回报最大</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支4：创新三原则 -->
+    <div class="branch theme-purple">
+      <div class="branch-header">
+        <div class="branch-icon">📐</div>
+        <div>
+          <div class="branch-title">创新三原则</div>
+          <div class="branch-title-en">Principles of Innovation</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">有目的的分析</div>
+            <div class="sub-node-desc">系统化审视七大来源，而不是坐等灵感降临</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">从小而专注开始</div>
+            <div class="sub-node-desc">有效的创新都从小规模、单一利基的具体事情做起</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">瞄准领导地位</div>
+            <div class="sub-node-desc">不争取领导地位的创新，只是在为竞争者创造机会</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支5：企业家战略 -->
+    <div class="branch theme-red">
+      <div class="branch-header">
+        <div class="branch-icon">♟️</div>
+        <div>
+          <div class="branch-title">企业家战略</div>
+          <div class="branch-title-en">Entrepreneurial Strategies</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">孤注一掷</div>
+            <div class="sub-node-desc">全力锁定新市场主导权，高风险高回报的豪赌</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">攻其软肋</div>
+            <div class="sub-node-desc">创造性模仿与企业家柔道——以巧破力抢占先机者的破绽</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">生态利基</div>
+            <div class="sub-node-desc">垄断小环节/专门技能/专门市场，做小而不可替代</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">改变价值与效用</div>
+            <div class="sub-node-desc">重新定义定价、顾客现实与价值主张</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支6：实践要点与陷阱 -->
+    <div class="branch theme-teal">
+      <div class="branch-header">
+        <div class="branch-icon">🛠️</div>
+        <div>
+          <div class="branch-title">实践要点与陷阱</div>
+          <div class="branch-title-en">Do &amp; Avoid</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">要简单聚焦</div>
+            <div class="sub-node-desc">创新要简单，一件小事做到极致，别贪大求全</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">别为未来创新</div>
+            <div class="sub-node-desc">为当下未满足的需求创新，过度超前容易夭折</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">新业务分开管理</div>
+            <div class="sub-node-desc">新项目别塞进老组织，用独立团队、独立考核保护它</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- 金句 -->
+<div class="quote-box">
+  <div class="quote-label">✦ 今日金句</div>
+  <blockquote>
+    "创新是可以作为一门学科来学习与传授的。<br>
+    不争取领导地位的创新，只是在为竞争者创造机会。"
+  </blockquote>
+  <div class="quote-source">— 彼得·德鲁克《创新与企业家精神》</div>
+</div>
+
+<!-- 页脚 -->
+<div class="footer">
+  每日一学 · WorkBuddy 自动推送 · 2026-09-13 &nbsp;|&nbsp; 创新是系统化的纪律，不是天才的灵光一现
+</div>
+
+</body>
+</html>
