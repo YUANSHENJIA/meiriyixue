@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 《决策陷阱》思维导图</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 20px 50px;
+  }
+
+  /* 顶部标题区 */
+  .header {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+  .header .tag {
+    display: inline-block;
+    background: linear-gradient(90deg, #f7971e, #ffd200);
+    color: #1a1a2e;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+  .header h1 {
+    font-size: 32px;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.2;
+  }
+  .header h1 span {
+    background: linear-gradient(90deg, #f7971e, #ffd200);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .header .subtitle {
+    margin-top: 8px;
+    font-size: 14px;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 1px;
+  }
+
+  /* 书籍简介卡片 */
+  .book-card {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 20px;
+    padding: 24px 28px;
+    max-width: 860px;
+    width: 100%;
+    margin-bottom: 36px;
+    backdrop-filter: blur(10px);
+  }
+  .book-cover {
+    flex-shrink: 0;
+    width: 80px;
+    height: 105px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #f7971e, #ffd200);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    color: #1a1a2e;
+    text-align: center;
+    line-height: 1.4;
+    padding: 6px;
+    box-shadow: 0 8px 24px rgba(247,151,30,0.4);
+  }
+  .book-cover .cover-icon { font-size: 28px; margin-bottom: 6px; }
+  .book-info h2 { font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+  .book-info .author { font-size: 13px; color: #ffd200; margin-bottom: 10px; }
+  .book-info .desc { font-size: 13px; color: rgba(255,255,255,0.7); line-height: 1.8; }
+  .book-info .stars { margin-top: 10px; color: #ffd200; font-size: 16px; letter-spacing: 2px; }
+
+  /* 思维导图容器 */
+  .mindmap-wrapper {
+    max-width: 1100px;
+    width: 100%;
+  }
+
+  /* 中心节点 */
+  .center-node {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  .center-node .node-box {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(135deg, #f7971e, #ffd200);
+    color: #1a1a2e;
+    padding: 18px 40px;
+    border-radius: 50px;
+    font-size: 20px;
+    font-weight: 800;
+    box-shadow: 0 10px 40px rgba(247,151,30,0.5);
+    position: relative;
+  }
+  .center-node .node-box::after {
+    content: '';
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 20px;
+    background: rgba(255,255,255,0.3);
+  }
+  .center-node .node-sub { font-size: 12px; font-weight: 500; opacity: 0.7; margin-top: 4px; }
+
+  /* 分支区域 */
+  .branches {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  @media (max-width: 800px) {
+    .branches { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 520px) {
+    .branches { grid-template-columns: 1fr; }
+    .book-card { flex-direction: column; text-align: center; }
+  }
+
+  /* 分支卡片 */
+  .branch {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: transform 0.25s, box-shadow 0.25s;
+  }
+  .branch:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.35);
+  }
+
+  .branch-header {
+    padding: 16px 18px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .branch-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .branch-title { font-size: 15px; font-weight: 700; color: #fff; }
+  .branch-title-en { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 2px; }
+
+  .branch-body { padding: 14px 18px 16px; }
+
+  /* 子节点 */
+  .sub-node {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .sub-node:last-child { margin-bottom: 0; }
+  .sub-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    margin-top: 6px;
+    flex-shrink: 0;
+  }
+  .sub-node-title { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.9); margin-bottom: 3px; }
+  .sub-node-desc { font-size: 12px; color: rgba(255,255,255,0.5); line-height: 1.6; }
+
+  /* 配色主题 */
+  .theme-orange .branch-icon { background: rgba(247,151,30,0.2); }
+  .theme-orange .sub-dot { background: #f7971e; }
+  .theme-orange .branch-header { border-left: 3px solid #f7971e; }
+
+  .theme-blue .branch-icon { background: rgba(99,179,237,0.2); }
+  .theme-blue .sub-dot { background: #63b3ed; }
+  .theme-blue .branch-header { border-left: 3px solid #63b3ed; }
+
+  .theme-green .branch-icon { background: rgba(104,211,145,0.2); }
+  .theme-green .sub-dot { background: #68d391; }
+  .theme-green .branch-header { border-left: 3px solid #68d391; }
+
+  .theme-purple .branch-icon { background: rgba(183,148,246,0.2); }
+  .theme-purple .sub-dot { background: #b794f6; }
+  .theme-purple .branch-header { border-left: 3px solid #b794f6; }
+
+  .theme-red .branch-icon { background: rgba(252,129,129,0.2); }
+  .theme-red .sub-dot { background: #fc8181; }
+  .theme-red .branch-header { border-left: 3px solid #fc8181; }
+
+  .theme-teal .branch-icon { background: rgba(129,230,217,0.2); }
+  .theme-teal .sub-dot { background: #81e6d9; }
+  .theme-teal .branch-header { border-left: 3px solid #81e6d9; }
+
+  /* 金句 */
+  .quote-box {
+    max-width: 860px;
+    width: 100%;
+    margin: 32px 0 0;
+    background: rgba(247,151,30,0.08);
+    border: 1px solid rgba(247,151,30,0.25);
+    border-radius: 16px;
+    padding: 20px 28px;
+    text-align: center;
+  }
+  .quote-box .quote-label { font-size: 11px; color: #ffd200; letter-spacing: 3px; font-weight: 600; margin-bottom: 12px; }
+  .quote-box blockquote { font-size: 15px; color: rgba(255,255,255,0.85); line-height: 1.9; font-style: italic; }
+  .quote-box .quote-source { margin-top: 10px; font-size: 12px; color: rgba(255,255,255,0.4); }
+
+  /* 页脚 */
+  .footer {
+    margin-top: 40px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.25);
+    letter-spacing: 1px;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<!-- 顶部标题 -->
+<div class="header">
+  <div class="tag">📚 每日一学 · 2026.09.17</div>
+  <h1>今日书单推荐</h1>
+  <p class="subtitle">每天一本好书，点亮思维，精进认知</p>
+</div>
+
+<!-- 书籍简介 -->
+<div class="book-card">
+  <div class="book-cover">
+    <div class="cover-icon">⚖️</div>
+    决策陷阱
+  </div>
+  <div class="book-info">
+    <h2>《决策陷阱》</h2>
+    <div class="author">作者：J. 爱德华·鲁索 & 保罗·J. H. 舒梅克（J. E. Russo & P. J. H. Schoemaker）· 决策科学领域权威学者</div>
+    <div class="desc">
+      人不是理性的计算机器——锚定效应、框架效应、过度自信、证实偏差，
+      十大思维陷阱潜伏在每一次判断里。
+      本书是决策科学的奠基之作：<strong style="color:#ffd200">决策质量 = 思维质量 × 判断质量</strong>，
+      好决策不是靠"想得更多"，而是靠<strong style="color:#68d391">可复制的流程、外部视角与系统纠偏</strong>。
+      与《决策的艺术》并称决策学双璧。
+    </div>
+    <div class="stars">★★★★★</div>
+  </div>
+</div>
+
+<!-- 中心节点 -->
+<div class="mindmap-wrapper">
+  <div class="center-node">
+    <div class="node-box">
+      ⚖️ 决策陷阱
+      <div class="node-sub">Winning Decisions · 如何做出更好的决策</div>
+    </div>
+  </div>
+
+  <!-- 六大分支 -->
+  <div class="branches">
+
+    <!-- 分支1：决策的本质 -->
+    <div class="branch theme-orange">
+      <div class="branch-header">
+        <div class="branch-icon">🧭</div>
+        <div>
+          <div class="branch-title">决策的本质</div>
+          <div class="branch-title-en">Nature of Decisions</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">决策质量公式</div>
+            <div class="sub-node-desc">好结果 ≠ 好决策；用过程质量而非结果论英雄</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">直觉的两面性</div>
+            <div class="sub-node-desc">直觉快而省力，但在无反馈领域极易失灵</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">系统一与系统二</div>
+            <div class="sub-node-desc">识别何时该信直觉、何时该启动慢思考</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支2：十大思维陷阱 -->
+    <div class="branch theme-red">
+      <div class="branch-header">
+        <div class="branch-icon">🕳️</div>
+        <div>
+          <div class="branch-title">十大思维陷阱</div>
+          <div class="branch-title-en">Ten Decision Traps</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">锚定与框架</div>
+            <div class="sub-node-desc">初始数字与表述方式悄悄设定判断的起点</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">过度自信与证实偏差</div>
+            <div class="sub-node-desc">只搜集支持自己观点的证据，低估不确定性</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">沉没成本与可得性</div>
+            <div class="sub-node-desc">为过去的投入追加筹码；越容易想起的事越被高估</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支3：框架的力量 -->
+    <div class="branch theme-blue">
+      <div class="branch-header">
+        <div class="branch-icon">🖼️</div>
+        <div>
+          <div class="branch-title">框架的力量</div>
+          <div class="branch-title-en">Framing</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">问题即框架</div>
+            <div class="sub-node-desc">如何定义问题，已决定一半的答案</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">得失不对称</div>
+            <div class="sub-node-desc">"90% 存活"与"10% 死亡"是同一事实，感受天差地别</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">多重框架检验</div>
+            <div class="sub-node-desc">重要决策至少用三种视角重新框定一次</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支4：情报收集 -->
+    <div class="branch theme-green">
+      <div class="branch-header">
+        <div class="branch-icon">📊</div>
+        <div>
+          <div class="branch-title">情报收集</div>
+          <div class="branch-title-en">Intelligence Gathering</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">外部视角优先</div>
+            <div class="sub-node-desc">先看同类事情的基线比率，再谈自身特殊性</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">警惕选择性信息</div>
+            <div class="sub-node-desc">样本偏差与幸存者偏差让数据自带立场</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">为分歧设价值</div>
+            <div class="sub-node-desc">信息值得买多少？用决策价值决定搜集力度</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支5：得出结论 -->
+    <div class="branch theme-purple">
+      <div class="branch-header">
+        <div class="branch-icon">🧮</div>
+        <div>
+          <div class="branch-title">得出结论</div>
+          <div class="branch-title-en">Coming to Conclusions</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">先立标准再比选项</div>
+            <div class="sub-node-desc">明确权重与目标，避免被单一亮点带跑</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">简单规则胜过直觉</div>
+            <div class="sub-node-desc">加权记分卡等简单量化法，常胜过专家拍脑袋</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">对冲不确定性</div>
+            <div class="sub-node-desc">用概率思维表达判断，预留可逆的退路</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支6：从错误中学习 -->
+    <div class="branch theme-teal">
+      <div class="branch-header">
+        <div class="branch-icon">🔄</div>
+        <div>
+          <div class="branch-title">从错误中学习</div>
+          <div class="branch-title-en">Learning from Mistakes</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">决策日志</div>
+            <div class="sub-node-desc">记录决策时的理由与预期，事后对照复盘</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">区分运气与实力</div>
+            <div class="sub-node-desc">好决策可能坏结果；坏决策可能侥幸成功</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">组织级纠偏</div>
+            <div class="sub-node-desc">用事前验尸、魔鬼代言人把纠偏制度化</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- 金句 -->
+<div class="quote-box">
+  <div class="quote-label">✦ 今日金句</div>
+  <blockquote>
+    "人们不是不擅长思考，而是不擅长在思考时<br>
+    意识到自己正在犯哪一类错误。"
+  </blockquote>
+  <div class="quote-source">— 鲁索 & 舒梅克《决策陷阱》</div>
+</div>
+
+<!-- 页脚 -->
+<div class="footer">
+  每日一学 · WorkBuddy 自动推送 · 2026-09-17 &nbsp;|&nbsp; 好决策靠的是流程，不是运气
+</div>
+
+</body>
+</html>
