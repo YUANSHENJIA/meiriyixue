@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 《另一种选择》思维导图</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(135deg, #1a0f2e, #3d1f4a, #241832);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 20px 50px;
+  }
+
+  /* 顶部标题区 */
+  .header {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+  .header .tag {
+    display: inline-block;
+    background: linear-gradient(90deg, #ff6b9d, #ffb26b);
+    color: #1a1a2e;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+  .header h1 {
+    font-size: 32px;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.2;
+  }
+  .header h1 span {
+    background: linear-gradient(90deg, #ff6b9d, #ffb26b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .header .subtitle {
+    margin-top: 8px;
+    font-size: 14px;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 1px;
+  }
+
+  /* 书籍简介卡片 */
+  .book-card {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 20px;
+    padding: 24px 28px;
+    max-width: 860px;
+    width: 100%;
+    margin-bottom: 36px;
+    backdrop-filter: blur(10px);
+  }
+  .book-cover {
+    flex-shrink: 0;
+    width: 80px;
+    height: 105px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #ff6b9d, #ffb26b);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    color: #1a1a2e;
+    text-align: center;
+    line-height: 1.4;
+    padding: 6px;
+    box-shadow: 0 8px 24px rgba(255,107,157,0.4);
+  }
+  .book-cover .cover-icon { font-size: 28px; margin-bottom: 6px; }
+  .book-info h2 { font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+  .book-info .author { font-size: 13px; color: #ffb26b; margin-bottom: 10px; }
+  .book-info .desc { font-size: 13px; color: rgba(255,255,255,0.7); line-height: 1.8; }
+  .book-info .stars { margin-top: 10px; color: #ffb26b; font-size: 16px; letter-spacing: 2px; }
+
+  /* 思维导图容器 */
+  .mindmap-wrapper {
+    max-width: 1100px;
+    width: 100%;
+  }
+
+  /* 中心节点 */
+  .center-node {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  .center-node .node-box {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(135deg, #ff6b9d, #ffb26b);
+    color: #1a1a2e;
+    padding: 18px 40px;
+    border-radius: 50px;
+    font-size: 20px;
+    font-weight: 800;
+    box-shadow: 0 10px 40px rgba(255,107,157,0.5);
+    position: relative;
+  }
+  .center-node .node-box::after {
+    content: '';
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 20px;
+    background: rgba(255,255,255,0.3);
+  }
+  .center-node .node-sub { font-size: 12px; font-weight: 500; opacity: 0.7; margin-top: 4px; }
+
+  /* 分支区域 */
+  .branches {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  @media (max-width: 800px) {
+    .branches { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 520px) {
+    .branches { grid-template-columns: 1fr; }
+    .book-card { flex-direction: column; text-align: center; }
+  }
+
+  /* 分支卡片 */
+  .branch {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: transform 0.25s, box-shadow 0.25s;
+  }
+  .branch:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.35);
+  }
+
+  .branch-header {
+    padding: 16px 18px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .branch-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .branch-title { font-size: 15px; font-weight: 700; color: #fff; }
+  .branch-title-en { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 2px; }
+
+  .branch-body { padding: 14px 18px 16px; }
+
+  /* 子节点 */
+  .sub-node {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .sub-node:last-child { margin-bottom: 0; }
+  .sub-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    margin-top: 6px;
+    flex-shrink: 0;
+  }
+  .sub-node-title { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.9); margin-bottom: 3px; }
+  .sub-node-desc { font-size: 12px; color: rgba(255,255,255,0.5); line-height: 1.6; }
+
+  /* 配色主题 */
+  .theme-pink .branch-icon { background: rgba(255,107,157,0.2); }
+  .theme-pink .sub-dot { background: #ff6b9d; }
+  .theme-pink .branch-header { border-left: 3px solid #ff6b9d; }
+
+  .theme-blue .branch-icon { background: rgba(99,179,237,0.2); }
+  .theme-blue .sub-dot { background: #63b3ed; }
+  .theme-blue .branch-header { border-left: 3px solid #63b3ed; }
+
+  .theme-green .branch-icon { background: rgba(104,211,145,0.2); }
+  .theme-green .sub-dot { background: #68d391; }
+  .theme-green .branch-header { border-left: 3px solid #68d391; }
+
+  .theme-purple .branch-icon { background: rgba(183,148,246,0.2); }
+  .theme-purple .sub-dot { background: #b794f6; }
+  .theme-purple .branch-header { border-left: 3px solid #b794f6; }
+
+  .theme-red .branch-icon { background: rgba(252,129,129,0.2); }
+  .theme-red .sub-dot { background: #fc8181; }
+  .theme-red .branch-header { border-left: 3px solid #fc8181; }
+
+  .theme-teal .branch-icon { background: rgba(129,230,217,0.2); }
+  .theme-teal .sub-dot { background: #81e6d9; }
+  .theme-teal .branch-header { border-left: 3px solid #81e6d9; }
+
+  .theme-amber .branch-icon { background: rgba(255,178,107,0.2); }
+  .theme-amber .sub-dot { background: #ffb26b; }
+  .theme-amber .branch-header { border-left: 3px solid #ffb26b; }
+
+  /* 金句 */
+  .quote-box {
+    max-width: 860px;
+    width: 100%;
+    margin: 32px 0 0;
+    background: rgba(255,107,157,0.08);
+    border: 1px solid rgba(255,107,157,0.25);
+    border-radius: 16px;
+    padding: 20px 28px;
+    text-align: center;
+  }
+  .quote-box .quote-label { font-size: 11px; color: #ffb26b; letter-spacing: 3px; font-weight: 600; margin-bottom: 12px; }
+  .quote-box blockquote { font-size: 15px; color: rgba(255,255,255,0.85); line-height: 1.9; font-style: italic; }
+  .quote-box .quote-source { margin-top: 10px; font-size: 12px; color: rgba(255,255,255,0.4); }
+
+  /* 页脚 */
+  .footer {
+    margin-top: 40px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.25);
+    letter-spacing: 1px;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<!-- 顶部标题 -->
+<div class="header">
+  <div class="tag">📚 每日一学 · 2026.09.29</div>
+  <h1>今日书单推荐</h1>
+  <p class="subtitle">每天一本好书，点亮思维，精进认知</p>
+</div>
+
+<!-- 书籍简介 -->
+<div class="book-card">
+  <div class="book-cover">
+    <div class="cover-icon">🌱</div>
+    另一种选择
+  </div>
+  <div class="book-info">
+    <h2>《另一种选择》</h2>
+    <div class="author">作者：谢丽尔·桑德伯格 &amp; 亚当·格兰特（Option B）· 脸书前 COO × 沃顿组织心理学教授</div>
+    <div class="desc">
+      丈夫猝然离世后，桑德伯格一度以为自己和孩子的幸福将永远被掏空。她与心理学家格兰特一起，
+      把这段亲身经历与前沿研究写成了一本关于复原力的书：<strong style="color:#ffb26b">痛苦无法避免，但我们能选择如何回应它</strong>。
+      复原力不是天生的性格，而是可以像肌肉一样被训练的能力。
+    </div>
+    <div class="stars">★★★★★</div>
+  </div>
+</div>
+
+<!-- 中心节点 -->
+<div class="mindmap-wrapper">
+  <div class="center-node">
+    <div class="node-box">
+      🌱 另一种选择
+      <div class="node-sub">Option B · 直面逆境、培养复原力、重拾快乐</div>
+    </div>
+  </div>
+
+  <!-- 六大分支 -->
+  <div class="branches">
+
+    <!-- 分支1：3P 陷阱 -->
+    <div class="branch theme-pink">
+      <div class="branch-header">
+        <div class="branch-icon">🕳️</div>
+        <div>
+          <div class="branch-title">3P 陷阱</div>
+          <div class="branch-title-en">The Three P's</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">个人化 Personalization</div>
+            <div class="sub-node-desc">把不幸全归咎于自己——「都是我的错」</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">普遍性 Pervasiveness</div>
+            <div class="sub-node-desc">认为糟糕会影响生活的每个角落，看不到例外</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">永久性 Permanence</div>
+            <div class="sub-node-desc">认定痛苦会永远持续，把「此刻」误读为「一生」</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支2：从「我」到「我们」 -->
+    <div class="branch theme-blue">
+      <div class="branch-header">
+        <div class="branch-icon">🤝</div>
+        <div>
+          <div class="branch-title">从「我」到「我们」</div>
+          <div class="branch-title-en">Support That Works</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">打破沉默的共谋</div>
+            <div class="sub-node-desc">不回避痛苦的话题，直接问「你今天感觉怎么样」</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">有效的支持</div>
+            <div class="sub-node-desc">不说「需要什么告诉我」，而是直接做具体的事</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">自我关怀</div>
+            <div class="sub-node-desc">像安慰朋友一样对自己说话，停止自我谴责</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支3：复原力的三大来源 -->
+    <div class="branch theme-green">
+      <div class="branch-header">
+        <div class="branch-icon">💪</div>
+        <div>
+          <div class="branch-title">复原力的三大来源</div>
+          <div class="branch-title-en">Sources of Resilience</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">感恩</div>
+            <div class="sub-node-desc">每天记录三件好事，训练大脑注意积极面</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">意义感</div>
+            <div class="sub-node-desc">把创伤转化为帮助他人的力量，找回价值坐标</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">成长视角</div>
+            <div class="sub-node-desc">相信自己能够学习、改变，并在创伤后获得成长</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支4：创伤后成长 -->
+    <div class="branch theme-purple">
+      <div class="branch-header">
+        <div class="branch-icon">🌤️</div>
+        <div>
+          <div class="branch-title">创伤后成长</div>
+          <div class="branch-title-en">Post-Traumatic Growth</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">找到个人力量</div>
+            <div class="sub-node-desc">「原来我比想象中更能扛」——逆境揭示被忽略的能力</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">深化关系</div>
+            <div class="sub-node-desc">经历失去后，人与人之间的连接反而更真实、更珍贵</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">重排人生优先级</div>
+            <div class="sub-node-desc">创伤迫使人重新思考什么才真正重要</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支5：重拾快乐 -->
+    <div class="branch theme-red">
+      <div class="branch-header">
+        <div class="branch-icon">🎈</div>
+        <div>
+          <div class="branch-title">重拾快乐与自信</div>
+          <div class="branch-title-en">Reclaiming Joy</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">允许自己快乐</div>
+            <div class="sub-node-desc">内疚不会带来忠诚；快乐不是对逝去的背叛</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">小步重启</div>
+            <div class="sub-node-desc">从一件小事开始重建掌控感，记录「我做对了什么」</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">重建自信</div>
+            <div class="sub-node-desc">把注意力从「我做不到」转向「我已经做到了什么」</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支6：组织与家庭 -->
+    <div class="branch theme-teal">
+      <div class="branch-header">
+        <div class="branch-icon">🏠</div>
+        <div>
+          <div class="branch-title">组织与家庭中的韧性</div>
+          <div class="branch-title-en">Resilient Teams &amp; Families</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">共同叙事</div>
+            <div class="sub-node-desc">团队与家庭讲清「我们是谁、经历过什么」，才有韧性</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">允许谈论失败</div>
+            <div class="sub-node-desc">组织公开讨论挫折，才能从失败中学习而非掩盖</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">陪孩子面对逆境</div>
+            <div class="sub-node-desc">不替孩子屏蔽痛苦，而是陪他一起面对、一起复原</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- 金句 -->
+<div class="quote-box">
+  <div class="quote-label">✦ 今日金句</div>
+  <blockquote>
+    "我们无法选择命运，但可以选择如何回应命运——<br>
+    当 Option A 不复存在，就去拥抱 Option B。"
+  </blockquote>
+  <div class="quote-source">— 谢丽尔·桑德伯格 &amp; 亚当·格兰特《另一种选择》</div>
+</div>
+
+<!-- 页脚 -->
+<div class="footer">
+  每日一学 · WorkBuddy 自动推送 · 2026-09-29 &nbsp;|&nbsp; 复原力是一种可以训练的能力
+</div>
+
+</body>
+</html>
