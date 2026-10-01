@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 《怪诞行为学》思维导图</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(135deg, #0b1026, #1b2a4a, #0f1e33);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 20px 50px;
+  }
+
+  /* 顶部标题区 */
+  .header {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+  .header .tag {
+    display: inline-block;
+    background: linear-gradient(90deg, #5b8cff, #38d9c4);
+    color: #0b1026;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+  .header h1 {
+    font-size: 32px;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.2;
+  }
+  .header h1 span {
+    background: linear-gradient(90deg, #5b8cff, #38d9c4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .header .subtitle {
+    margin-top: 8px;
+    font-size: 14px;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 1px;
+  }
+
+  /* 书籍简介卡片 */
+  .book-card {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 20px;
+    padding: 24px 28px;
+    max-width: 860px;
+    width: 100%;
+    margin-bottom: 36px;
+    backdrop-filter: blur(10px);
+  }
+  .book-cover {
+    flex-shrink: 0;
+    width: 80px;
+    height: 105px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #5b8cff, #38d9c4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    color: #0b1026;
+    text-align: center;
+    line-height: 1.4;
+    padding: 6px;
+    box-shadow: 0 8px 24px rgba(91,140,255,0.4);
+  }
+  .book-cover .cover-icon { font-size: 28px; margin-bottom: 6px; }
+  .book-info h2 { font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+  .book-info .author { font-size: 13px; color: #38d9c4; margin-bottom: 10px; }
+  .book-info .desc { font-size: 13px; color: rgba(255,255,255,0.7); line-height: 1.8; }
+  .book-info .stars { margin-top: 10px; color: #38d9c4; font-size: 16px; letter-spacing: 2px; }
+
+  /* 思维导图容器 */
+  .mindmap-wrapper {
+    max-width: 1100px;
+    width: 100%;
+  }
+
+  /* 中心节点 */
+  .center-node {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  .center-node .node-box {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(135deg, #5b8cff, #38d9c4);
+    color: #0b1026;
+    padding: 18px 40px;
+    border-radius: 50px;
+    font-size: 20px;
+    font-weight: 800;
+    box-shadow: 0 10px 40px rgba(91,140,255,0.5);
+    position: relative;
+  }
+  .center-node .node-box::after {
+    content: '';
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 20px;
+    background: rgba(255,255,255,0.3);
+  }
+  .center-node .node-sub { font-size: 12px; font-weight: 500; opacity: 0.7; margin-top: 4px; }
+
+  /* 分支区域 */
+  .branches {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  @media (max-width: 800px) {
+    .branches { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 520px) {
+    .branches { grid-template-columns: 1fr; }
+    .book-card { flex-direction: column; text-align: center; }
+  }
+
+  /* 分支卡片 */
+  .branch {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: transform 0.25s, box-shadow 0.25s;
+  }
+  .branch:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.35);
+  }
+
+  .branch-header {
+    padding: 16px 18px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .branch-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .branch-title { font-size: 15px; font-weight: 700; color: #fff; }
+  .branch-title-en { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 2px; }
+
+  .branch-body { padding: 14px 18px 16px; }
+
+  /* 子节点 */
+  .sub-node {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .sub-node:last-child { margin-bottom: 0; }
+  .sub-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    margin-top: 6px;
+    flex-shrink: 0;
+  }
+  .sub-node-title { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.9); margin-bottom: 3px; }
+  .sub-node-desc { font-size: 12px; color: rgba(255,255,255,0.5); line-height: 1.6; }
+
+  /* 配色主题 */
+  .theme-blue .branch-icon { background: rgba(91,140,255,0.2); }
+  .theme-blue .sub-dot { background: #5b8cff; }
+  .theme-blue .branch-header { border-left: 3px solid #5b8cff; }
+
+  .theme-cyan .branch-icon { background: rgba(56,217,196,0.2); }
+  .theme-cyan .sub-dot { background: #38d9c4; }
+  .theme-cyan .branch-header { border-left: 3px solid #38d9c4; }
+
+  .theme-green .branch-icon { background: rgba(104,211,145,0.2); }
+  .theme-green .sub-dot { background: #68d391; }
+  .theme-green .branch-header { border-left: 3px solid #68d391; }
+
+  .theme-purple .branch-icon { background: rgba(183,148,246,0.2); }
+  .theme-purple .sub-dot { background: #b794f6; }
+  .theme-purple .branch-header { border-left: 3px solid #b794f6; }
+
+  .theme-red .branch-icon { background: rgba(252,129,129,0.2); }
+  .theme-red .sub-dot { background: #fc8181; }
+  .theme-red .branch-header { border-left: 3px solid #fc8181; }
+
+  .theme-amber .branch-icon { background: rgba(255,193,107,0.2); }
+  .theme-amber .sub-dot { background: #ffc16b; }
+  .theme-amber .branch-header { border-left: 3px solid #ffc16b; }
+
+  /* 金句 */
+  .quote-box {
+    max-width: 860px;
+    width: 100%;
+    margin: 32px 0 0;
+    background: rgba(91,140,255,0.08);
+    border: 1px solid rgba(91,140,255,0.25);
+    border-radius: 16px;
+    padding: 20px 28px;
+    text-align: center;
+  }
+  .quote-box .quote-label { font-size: 11px; color: #38d9c4; letter-spacing: 3px; font-weight: 600; margin-bottom: 12px; }
+  .quote-box blockquote { font-size: 15px; color: rgba(255,255,255,0.85); line-height: 1.9; font-style: italic; }
+  .quote-box .quote-source { margin-top: 10px; font-size: 12px; color: rgba(255,255,255,0.4); }
+
+  /* 页脚 */
+  .footer {
+    margin-top: 40px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.25);
+    letter-spacing: 1px;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<!-- 顶部标题 -->
+<div class="header">
+  <div class="tag">📚 每日一学 · 2026.10.01</div>
+  <h1>今日书单推荐</h1>
+  <p class="subtitle">每天一本好书，点亮思维，精进认知</p>
+</div>
+
+<!-- 书籍简介 -->
+<div class="book-card">
+  <div class="book-cover">
+    <div class="cover-icon">🧠</div>
+    怪诞行为学
+  </div>
+  <div class="book-info">
+    <h2>《怪诞行为学》</h2>
+    <div class="author">作者：丹·艾瑞里（Dan Ariely）· 杜克大学行为经济学教授</div>
+    <div class="desc">
+      我们自认为是理性的决策者，可现实是：同样的咖啡换个价格标签就变得更好喝，免费的赠品让我们排队到手软，
+      「原价 999，现价 199」让我们忘了自己根本不需要它。<strong style="color:#38d9c4">人类并不随机地犯错，而是可预测地非理性</strong>——
+      艾瑞里用一系列精巧实验，把非理性变成一门可以理解、也可以防御的科学。
+    </div>
+    <div class="stars">★★★★★</div>
+  </div>
+</div>
+
+<!-- 中心节点 -->
+<div class="mindmap-wrapper">
+  <div class="center-node">
+    <div class="node-box">
+      🧠 怪诞行为学
+      <div class="node-sub">Predictably Irrational · 可预测的非理性</div>
+    </div>
+  </div>
+
+  <!-- 六大分支 -->
+  <div class="branches">
+
+    <!-- 分支1：相对性陷阱 -->
+    <div class="branch theme-blue">
+      <div class="branch-header">
+        <div class="branch-icon">⚖️</div>
+        <div>
+          <div class="branch-title">相对性陷阱</div>
+          <div class="branch-title-en">Everything Is Relative</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">比较的暴政</div>
+            <div class="sub-node-desc">我们很少判断绝对价值，只看「和什么比」——同款杂志被高价版面衬得更划算</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">诱饵效应</div>
+            <div class="sub-node-desc">一个没人会选的选项，只为让另一个选项显得更优</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">锚定与羊群</div>
+            <div class="sub-node-desc">第一个价格、第一个数字，长期绑架后续判断</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支2：免费的代价 -->
+    <div class="branch theme-cyan">
+      <div class="branch-header">
+        <div class="branch-icon">🎁</div>
+        <div>
+          <div class="branch-title">免费的代价</div>
+          <div class="branch-title-en">The Cost of Zero</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">零价格魔力</div>
+            <div class="sub-node-desc">免费让理智失效：0 元巧克力 vs 1 分巧克力，多数人选了并不更喜欢的那块</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">免费的隐性成本</div>
+            <div class="sub-node-desc">免费 App、免费课程背后，是时间、注意力与数据的支付</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">换算成代价再决定</div>
+            <div class="sub-node-desc">把「免费」改写成「我真正要付出什么」，非理性立刻退潮</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支3：社会规范 vs 市场规范 -->
+    <div class="branch theme-green">
+      <div class="branch-header">
+        <div class="branch-icon">🤝</div>
+        <div>
+          <div class="branch-title">社会规范 vs 市场规范</div>
+          <div class="branch-title-en">Social vs Market Norms</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">两套规则不能混用</div>
+            <div class="sub-node-desc">朋友帮忙是情谊，一旦开始谈钱，情谊就贬值</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">谈钱伤感情</div>
+            <div class="sub-node-desc">用市场规范激励志愿行为，反而让人不愿再来</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">激励的正确用法</div>
+            <div class="sub-node-desc">想留住长期关系，用社会规范；想完成明确交易，才用市场规范</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支4：拖延与自我控制 -->
+    <div class="branch theme-purple">
+      <div class="branch-header">
+        <div class="branch-icon">⏳</div>
+        <div>
+          <div class="branch-title">拖延与自我控制</div>
+          <div class="branch-title-en">Procrastination &amp; Self-Control</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">两个自我</div>
+            <div class="sub-node-desc">「现在想要」与「长期想要」持续拉锯，理智常在当下输给冲动</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">预先承诺</div>
+            <div class="sub-node-desc">主动设置截止时间与外部约束，把选择权提前锁死——艾瑞里学生的论文实验证实有效</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">奖励替代</div>
+            <div class="sub-node-desc">用即时奖励替换即时诱惑，把长期目标变成当下可感受到的收益</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支5：所有权与选择的代价 -->
+    <div class="branch theme-red">
+      <div class="branch-header">
+        <div class="branch-icon">🔒</div>
+        <div>
+          <div class="branch-title">所有权与选择的代价</div>
+          <div class="branch-title-en">Ownership &amp; Keeping Doors Open</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">禀赋效应</div>
+            <div class="sub-node-desc">一旦拥有就高估其价值：同一张票，卖方要价远高于买方愿付</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">虚设的所有权</div>
+            <div class="sub-node-desc">试用、虚拟购物车都会提前激发占有欲，让人更难放手</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">保留选择的代价</div>
+            <div class="sub-node-desc">为「不关任何一扇门」付出的精力，常大于专注一件事的收益</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支6：期望与信念 -->
+    <div class="branch theme-amber">
+      <div class="branch-header">
+        <div class="branch-icon">✨</div>
+        <div>
+          <div class="branch-title">期望与信念的力量</div>
+          <div class="branch-title-en">Expectation &amp; Belief</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">期望塑造体验</div>
+            <div class="sub-node-desc">同样的啤酒加醋，事先告知的人反而觉得更好喝——预期改变真实感受</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">安慰剂与价格</div>
+            <div class="sub-node-desc">更贵的止痛药更有效；品牌与价格本身就在改写生理体验</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">防御非理性</div>
+            <div class="sub-node-desc">识别诱饵、警惕免费、分开决策与诱惑、给冲动设置冷静期</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- 金句 -->
+<div class="quote-box">
+  <div class="quote-label">✦ 今日金句</div>
+  <blockquote>
+    "我们并非随机地犯错，<br>
+    而是可预测地、有规律地非理性。"
+  </blockquote>
+  <div class="quote-source">— 丹·艾瑞里《怪诞行为学》</div>
+</div>
+
+<!-- 页脚 -->
+<div class="footer">
+  每日一学 · WorkBuddy 自动推送 · 2026-10-01 &nbsp;|&nbsp; 认识可预测的非理性
+</div>
+
+</body>
+</html>
