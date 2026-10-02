@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 《金钱心理学》思维导图</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(135deg, #0a1f1a, #12332a, #0d241f);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 20px 50px;
+  }
+
+  /* 顶部标题区 */
+  .header {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+  .header .tag {
+    display: inline-block;
+    background: linear-gradient(90deg, #ffd45e, #3fd68f);
+    color: #0a1f1a;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+  .header h1 {
+    font-size: 32px;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.2;
+  }
+  .header h1 span {
+    background: linear-gradient(90deg, #ffd45e, #3fd68f);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .header .subtitle {
+    margin-top: 8px;
+    font-size: 14px;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 1px;
+  }
+
+  /* 书籍简介卡片 */
+  .book-card {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 20px;
+    padding: 24px 28px;
+    max-width: 860px;
+    width: 100%;
+    margin-bottom: 36px;
+    backdrop-filter: blur(10px);
+  }
+  .book-cover {
+    flex-shrink: 0;
+    width: 80px;
+    height: 105px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #ffd45e, #3fd68f);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    color: #0a1f1a;
+    text-align: center;
+    line-height: 1.4;
+    padding: 6px;
+    box-shadow: 0 8px 24px rgba(255,212,94,0.4);
+  }
+  .book-cover .cover-icon { font-size: 28px; margin-bottom: 6px; }
+  .book-info h2 { font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+  .book-info .author { font-size: 13px; color: #ffd45e; margin-bottom: 10px; }
+  .book-info .desc { font-size: 13px; color: rgba(255,255,255,0.7); line-height: 1.8; }
+  .book-info .stars { margin-top: 10px; color: #ffd45e; font-size: 16px; letter-spacing: 2px; }
+
+  /* 思维导图容器 */
+  .mindmap-wrapper {
+    max-width: 1100px;
+    width: 100%;
+  }
+
+  /* 中心节点 */
+  .center-node {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  .center-node .node-box {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(135deg, #ffd45e, #3fd68f);
+    color: #0a1f1a;
+    padding: 18px 40px;
+    border-radius: 50px;
+    font-size: 20px;
+    font-weight: 800;
+    box-shadow: 0 10px 40px rgba(255,212,94,0.5);
+    position: relative;
+  }
+  .center-node .node-box::after {
+    content: '';
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 20px;
+    background: rgba(255,255,255,0.3);
+  }
+  .center-node .node-sub { font-size: 12px; font-weight: 500; opacity: 0.7; margin-top: 4px; }
+
+  /* 分支区域 */
+  .branches {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  @media (max-width: 800px) {
+    .branches { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 520px) {
+    .branches { grid-template-columns: 1fr; }
+    .book-card { flex-direction: column; text-align: center; }
+  }
+
+  /* 分支卡片 */
+  .branch {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: transform 0.25s, box-shadow 0.25s;
+  }
+  .branch:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.35);
+  }
+
+  .branch-header {
+    padding: 16px 18px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .branch-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .branch-title { font-size: 15px; font-weight: 700; color: #fff; }
+  .branch-title-en { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 2px; }
+
+  .branch-body { padding: 14px 18px 16px; }
+
+  /* 子节点 */
+  .sub-node {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .sub-node:last-child { margin-bottom: 0; }
+  .sub-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    margin-top: 6px;
+    flex-shrink: 0;
+  }
+  .sub-node-title { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.9); margin-bottom: 3px; }
+  .sub-node-desc { font-size: 12px; color: rgba(255,255,255,0.5); line-height: 1.6; }
+
+  /* 配色主题 */
+  .theme-gold .branch-icon { background: rgba(255,212,94,0.2); }
+  .theme-gold .sub-dot { background: #ffd45e; }
+  .theme-gold .branch-header { border-left: 3px solid #ffd45e; }
+
+  .theme-green .branch-icon { background: rgba(63,214,143,0.2); }
+  .theme-green .sub-dot { background: #3fd68f; }
+  .theme-green .branch-header { border-left: 3px solid #3fd68f; }
+
+  .theme-blue .branch-icon { background: rgba(99,179,237,0.2); }
+  .theme-blue .sub-dot { background: #63b3ed; }
+  .theme-blue .branch-header { border-left: 3px solid #63b3ed; }
+
+  .theme-purple .branch-icon { background: rgba(183,148,246,0.2); }
+  .theme-purple .sub-dot { background: #b794f6; }
+  .theme-purple .branch-header { border-left: 3px solid #b794f6; }
+
+  .theme-red .branch-icon { background: rgba(252,129,129,0.2); }
+  .theme-red .sub-dot { background: #fc8181; }
+  .theme-red .branch-header { border-left: 3px solid #fc8181; }
+
+  .theme-teal .branch-icon { background: rgba(129,230,217,0.2); }
+  .theme-teal .sub-dot { background: #81e6d9; }
+  .theme-teal .branch-header { border-left: 3px solid #81e6d9; }
+
+  /* 金句 */
+  .quote-box {
+    max-width: 860px;
+    width: 100%;
+    margin: 32px 0 0;
+    background: rgba(255,212,94,0.08);
+    border: 1px solid rgba(255,212,94,0.25);
+    border-radius: 16px;
+    padding: 20px 28px;
+    text-align: center;
+  }
+  .quote-box .quote-label { font-size: 11px; color: #ffd45e; letter-spacing: 3px; font-weight: 600; margin-bottom: 12px; }
+  .quote-box blockquote { font-size: 15px; color: rgba(255,255,255,0.85); line-height: 1.9; font-style: italic; }
+  .quote-box .quote-source { margin-top: 10px; font-size: 12px; color: rgba(255,255,255,0.4); }
+
+  /* 页脚 */
+  .footer {
+    margin-top: 40px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.25);
+    letter-spacing: 1px;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<!-- 顶部标题 -->
+<div class="header">
+  <div class="tag">📚 每日一学 · 2026.10.02</div>
+  <h1>今日书单推荐</h1>
+  <p class="subtitle">每天一本好书，点亮思维，精进认知</p>
+</div>
+
+<!-- 书籍简介 -->
+<div class="book-card">
+  <div class="book-cover">
+    <div class="cover-icon">💰</div>
+    金钱心理学
+  </div>
+  <div class="book-info">
+    <h2>《金钱心理学》</h2>
+    <div class="author">作者：摩根·豪泽尔（Morgan Housel）· 风投基金合伙人、财经作家</div>
+    <div class="desc">
+      门捷列夫与爱因斯坦的知识加起来，也不如一个水管工攒下的家底——因为理财结果与智商关系不大，
+      与行为习惯关系极大。<strong style="color:#ffd45e">做好金钱决策，靠的不是金融知识，而是对人性的理解</strong>。
+      豪泽尔用 20 个故事讲透一个道理：财富是看不见的东西，是耐心、知足与时间共同制造的复利。
+    </div>
+    <div class="stars">★★★★★</div>
+  </div>
+</div>
+
+<!-- 中心节点 -->
+<div class="mindmap-wrapper">
+  <div class="center-node">
+    <div class="node-box">
+      💰 金钱心理学
+      <div class="node-sub">The Psychology of Money · 财富、贪婪与幸福的永恒课程</div>
+    </div>
+  </div>
+
+  <!-- 六大分支 -->
+  <div class="branches">
+
+    <!-- 分支1：金钱观即人性观 -->
+    <div class="branch theme-gold">
+      <div class="branch-header">
+        <div class="branch-icon">🧭</div>
+        <div>
+          <div class="branch-title">金钱观即人性观</div>
+          <div class="branch-title-en">Money Is Behavior</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">行为 &gt; 智商</div>
+            <div class="sub-node-desc">理财成败主要取决于行为习惯，而非金融知识的多寡</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">没有人真的疯狂</div>
+            <div class="sub-node-desc">每个人的金钱决策都「有道理」——由各自的成长经历塑造</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">合乎情理 &gt; 绝对理性</div>
+            <div class="sub-node-desc">能坚持执行的「次优」策略，胜过做不到的「最优」策略</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支2：运气与风险 -->
+    <div class="branch theme-teal">
+      <div class="branch-header">
+        <div class="branch-icon">🎲</div>
+        <div>
+          <div class="branch-title">运气与风险</div>
+          <div class="branch-title-en">Luck &amp; Risk</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">结果 ≠ 努力</div>
+            <div class="sub-node-desc">世界过于复杂，同样的努力可能带来完全不同的结果</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">少看极端案例</div>
+            <div class="sub-node-desc">别拿最成功的人当模板，也别拿最失败的人当教训</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">留出安全边际</div>
+            <div class="sub-node-desc">计划的首要目标不是最高回报，而是活到长期到来</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支3：知足与尾巴事件 -->
+    <div class="branch theme-green">
+      <div class="branch-header">
+        <div class="branch-icon">🌱</div>
+        <div>
+          <div class="branch-title">知足与尾巴事件</div>
+          <div class="branch-title-en">Enough &amp; Tails</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">知足是最高技能</div>
+            <div class="sub-node-desc">最难的理财技能：让目标在达到后就此打住</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">少数事件决定一切</div>
+            <div class="sub-node-desc">投资回报集中在极少数关键时刻，别因个别失败否定整个策略</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">别赌上一切</div>
+            <div class="sub-node-desc">为赢钱冒失去一切的险，是最糟糕的不对称交易</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支4：存钱与自由 -->
+    <div class="branch theme-blue">
+      <div class="branch-header">
+        <div class="branch-icon">🏦</div>
+        <div>
+          <div class="branch-title">存钱与自由</div>
+          <div class="branch-title-en">Savings &amp; Freedom</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">财富是看不见的</div>
+            <div class="sub-node-desc">炫富的人往往已把钱花掉；真正的财富是没买的东西</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">储蓄不需要理由</div>
+            <div class="sub-node-desc">存钱不只为特定目标，而是为未知的人生买灵活性</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">储蓄 = 收入 − 自我</div>
+            <div class="sub-node-desc">节制欲望与提升收入同样能扩大储蓄，且前者更快</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支5：时间与复利 -->
+    <div class="branch theme-purple">
+      <div class="branch-header">
+        <div class="branch-icon">🕰️</div>
+        <div>
+          <div class="branch-title">时间与复利</div>
+          <div class="branch-title-en">Time &amp; Compounding</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">复利的暴力美学</div>
+            <div class="sub-node-desc">巴菲特 800 多亿美元中，约 700 亿来自 65 岁之后——时间才是最大变量</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">好投资不靠最高回报</div>
+            <div class="sub-node-desc">靠的是能持续最长时间的回报——可重复性胜过爆发力</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">给计划留余地</div>
+            <div class="sub-node-desc">预测都会错，目标不是精确，而是留出容错的缓冲空间</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支6：金钱与幸福 -->
+    <div class="branch theme-red">
+      <div class="branch-header">
+        <div class="branch-icon">🕊️</div>
+        <div>
+          <div class="branch-title">金钱与幸福</div>
+          <div class="branch-title-en">Money &amp; Happiness</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">买回控制感</div>
+            <div class="sub-node-desc">金钱最高的红利：能在任何时间做想做的事、和喜欢的人在一起</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">炫耀是无声的求认同</div>
+            <div class="sub-node-desc">用消费换取尊敬，往往既花掉钱又得不到尊敬</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">一切都有价格</div>
+            <div class="sub-node-desc">高收入职业、加杠杆投资的成功，代价常是家庭与时间——先想清楚愿意付多少</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- 金句 -->
+<div class="quote-box">
+  <div class="quote-label">✦ 今日金句</div>
+  <blockquote>
+    "财富是你看不见的东西——<br>
+    是那些没有拿来消费、换车、换表的钱。"
+  </blockquote>
+  <div class="quote-source">— 摩根·豪泽尔《金钱心理学》</div>
+</div>
+
+<!-- 页脚 -->
+<div class="footer">
+  每日一学 · WorkBuddy 自动推送 · 2026-10-02 &nbsp;|&nbsp; 做好金钱决策，靠的不是知识，而是人性
+</div>
+
+</body>
+</html>
