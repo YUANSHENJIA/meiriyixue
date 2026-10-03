@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 《谈判力》思维导图</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(135deg, #101d33, #1a2c4e, #0e1a30);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 20px 50px;
+  }
+
+  /* 顶部标题区 */
+  .header {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+  .header .tag {
+    display: inline-block;
+    background: linear-gradient(90deg, #ffc46e, #6fb3ff);
+    color: #101d33;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+  .header h1 {
+    font-size: 32px;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.2;
+  }
+  .header h1 span {
+    background: linear-gradient(90deg, #ffc46e, #6fb3ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .header .subtitle {
+    margin-top: 8px;
+    font-size: 14px;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 1px;
+  }
+
+  /* 书籍简介卡片 */
+  .book-card {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 20px;
+    padding: 24px 28px;
+    max-width: 860px;
+    width: 100%;
+    margin-bottom: 36px;
+    backdrop-filter: blur(10px);
+  }
+  .book-cover {
+    flex-shrink: 0;
+    width: 80px;
+    height: 105px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #ffc46e, #6fb3ff);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    color: #101d33;
+    text-align: center;
+    line-height: 1.4;
+    padding: 6px;
+    box-shadow: 0 8px 24px rgba(111,179,255,0.4);
+  }
+  .book-cover .cover-icon { font-size: 28px; margin-bottom: 6px; }
+  .book-info h2 { font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+  .book-info .author { font-size: 13px; color: #ffc46e; margin-bottom: 10px; }
+  .book-info .desc { font-size: 13px; color: rgba(255,255,255,0.7); line-height: 1.8; }
+  .book-info .stars { margin-top: 10px; color: #ffc46e; font-size: 16px; letter-spacing: 2px; }
+
+  /* 思维导图容器 */
+  .mindmap-wrapper {
+    max-width: 1100px;
+    width: 100%;
+  }
+
+  /* 中心节点 */
+  .center-node {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  .center-node .node-box {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(135deg, #ffc46e, #6fb3ff);
+    color: #101d33;
+    padding: 18px 40px;
+    border-radius: 50px;
+    font-size: 20px;
+    font-weight: 800;
+    box-shadow: 0 10px 40px rgba(111,179,255,0.5);
+    position: relative;
+  }
+  .center-node .node-box::after {
+    content: '';
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 20px;
+    background: rgba(255,255,255,0.3);
+  }
+  .center-node .node-sub { font-size: 12px; font-weight: 500; opacity: 0.7; margin-top: 4px; }
+
+  /* 分支区域 */
+  .branches {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  @media (max-width: 800px) {
+    .branches { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 520px) {
+    .branches { grid-template-columns: 1fr; }
+    .book-card { flex-direction: column; text-align: center; }
+  }
+
+  /* 分支卡片 */
+  .branch {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: transform 0.25s, box-shadow 0.25s;
+  }
+  .branch:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.35);
+  }
+
+  .branch-header {
+    padding: 16px 18px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .branch-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .branch-title { font-size: 15px; font-weight: 700; color: #fff; }
+  .branch-title-en { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 2px; }
+
+  .branch-body { padding: 14px 18px 16px; }
+
+  /* 子节点 */
+  .sub-node {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .sub-node:last-child { margin-bottom: 0; }
+  .sub-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    margin-top: 6px;
+    flex-shrink: 0;
+  }
+  .sub-node-title { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.9); margin-bottom: 3px; }
+  .sub-node-desc { font-size: 12px; color: rgba(255,255,255,0.5); line-height: 1.6; }
+
+  /* 配色主题 */
+  .theme-gold .branch-icon { background: rgba(255,196,110,0.2); }
+  .theme-gold .sub-dot { background: #ffc46e; }
+  .theme-gold .branch-header { border-left: 3px solid #ffc46e; }
+
+  .theme-green .branch-icon { background: rgba(63,214,143,0.2); }
+  .theme-green .sub-dot { background: #3fd68f; }
+  .theme-green .branch-header { border-left: 3px solid #3fd68f; }
+
+  .theme-blue .branch-icon { background: rgba(111,179,255,0.2); }
+  .theme-blue .sub-dot { background: #6fb3ff; }
+  .theme-blue .branch-header { border-left: 3px solid #6fb3ff; }
+
+  .theme-purple .branch-icon { background: rgba(183,148,246,0.2); }
+  .theme-purple .sub-dot { background: #b794f6; }
+  .theme-purple .branch-header { border-left: 3px solid #b794f6; }
+
+  .theme-red .branch-icon { background: rgba(252,129,129,0.2); }
+  .theme-red .sub-dot { background: #fc8181; }
+  .theme-red .branch-header { border-left: 3px solid #fc8181; }
+
+  .theme-teal .branch-icon { background: rgba(129,230,217,0.2); }
+  .theme-teal .sub-dot { background: #81e6d9; }
+  .theme-teal .branch-header { border-left: 3px solid #81e6d9; }
+
+  /* 金句 */
+  .quote-box {
+    max-width: 860px;
+    width: 100%;
+    margin: 32px 0 0;
+    background: rgba(255,196,110,0.08);
+    border: 1px solid rgba(255,196,110,0.25);
+    border-radius: 16px;
+    padding: 20px 28px;
+    text-align: center;
+  }
+  .quote-box .quote-label { font-size: 11px; color: #ffc46e; letter-spacing: 3px; font-weight: 600; margin-bottom: 12px; }
+  .quote-box blockquote { font-size: 15px; color: rgba(255,255,255,0.85); line-height: 1.9; font-style: italic; }
+  .quote-box .quote-source { margin-top: 10px; font-size: 12px; color: rgba(255,255,255,0.4); }
+
+  /* 页脚 */
+  .footer {
+    margin-top: 40px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.25);
+    letter-spacing: 1px;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<!-- 顶部标题 -->
+<div class="header">
+  <div class="tag">📚 每日一学 · 2026.10.03</div>
+  <h1>今日书单推荐</h1>
+  <p class="subtitle">每天一本好书，点亮思维，精进认知</p>
+</div>
+
+<!-- 书籍简介 -->
+<div class="book-card">
+  <div class="book-cover">
+    <div class="cover-icon">🤝</div>
+    谈判力
+  </div>
+  <div class="book-info">
+    <h2>《谈判力》</h2>
+    <div class="author">作者：罗杰·费希尔 & 威廉·尤里（Roger Fisher & William Ury）· 哈佛谈判项目创始人</div>
+    <div class="desc">
+      你以为谈判是意志的较量，靠嗓门大、撑得久就能赢？哈佛谈判项目给出相反的答案：
+      谈判是<strong style="color:#ffc46e">各方共同解决问题</strong>的过程。立场上讨价还价，赢了条款往往输了关系；
+      原则谈判则把人从问题中分离，聚焦真实利益，用客观标准代替意志比拼——
+      无论对手强硬还是友善，无论你嗓门大小，这套方法都能帮双方达成更聪明、更持久的协议。
+    </div>
+    <div class="stars">★★★★★</div>
+  </div>
+</div>
+
+<!-- 中心节点 -->
+<div class="mindmap-wrapper">
+  <div class="center-node">
+    <div class="node-box">
+      🤝 谈判力
+      <div class="node-sub">Getting to Yes · 哈佛谈判四要素：原则谈判而非立场较量</div>
+    </div>
+  </div>
+
+  <!-- 六大分支 -->
+  <div class="branches">
+
+    <!-- 分支1：破除立场之争 -->
+    <div class="branch theme-gold">
+      <div class="branch-header">
+        <div class="branch-icon">🧭</div>
+        <div>
+          <div class="branch-title">破除立场之争</div>
+          <div class="branch-title-en">Beyond Positions</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">立场 ≠ 利益</div>
+            <div class="sub-node-desc">立场是你「要什么」，利益是你「为什么要」——谈判应聚焦后者</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">立场谈判的代价</div>
+            <div class="sub-node-desc">硬碰硬让协议更难达成，还搭上双方的关系与时间</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">第三条路</div>
+            <div class="sub-node-desc">原则谈判：把分歧当作共同问题，与事实硬碰硬，与人商量着来</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支2：把人和问题分开 -->
+    <div class="branch theme-teal">
+      <div class="branch-header">
+        <div class="branch-icon">💞</div>
+        <div>
+          <div class="branch-title">要素一：人事分开</div>
+          <div class="branch-title-en">Separate the People from the Problem</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">对方也是人</div>
+            <div class="sub-node-desc">情绪、误解、自我感是三大谈判障碍，要先「处理人」，再谈事</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">对事强硬，对人温和</div>
+            <div class="sub-node-desc">把攻击性留给问题本身，让对方始终保住面子</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">让对方参与答案</div>
+            <div class="sub-node-desc">人更容易接受自己参与制定的方案，而非被说服接受的方案</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支3：着眼利益 -->
+    <div class="branch theme-green">
+      <div class="branch-header">
+        <div class="branch-icon">🎯</div>
+        <div>
+          <div class="branch-title">要素二：着眼利益</div>
+          <div class="branch-title-en">Focus on Interests, Not Positions</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">连问五个为什么</div>
+            <div class="sub-node-desc">对方坚持的立场背后，藏着未被满足的真实利益</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">利益 ≠ 一份需求</div>
+            <div class="sub-node-desc">安全、经济、归属、被认可、自主权，人人都有多重基本利益</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">坚持利益，放下方案</div>
+            <div class="sub-node-desc">对利益强硬、对方案灵活，同一利益常有多种满足路径</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支4：创造备选方案 -->
+    <div class="branch theme-blue">
+      <div class="branch-header">
+        <div class="branch-icon">💡</div>
+        <div>
+          <div class="branch-title">要素三：创造备选方案</div>
+          <div class="branch-title-en">Invent Options for Mutual Gain</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">蛋糕不是固定的</div>
+            <div class="sub-node-desc">别急着分蛋糕——先一起把蛋糕做大，常有双赢空间</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">先发散，再收敛</div>
+            <div class="sub-node-desc">把「发明方案」和「做决定」分开，先头脑风暴再评估筛选</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">差异是资源</div>
+            <div class="sub-node-desc">时间观、预期、风险偏好不同，恰恰让交换成为可能</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支5：坚持客观标准 -->
+    <div class="branch theme-purple">
+      <div class="branch-header">
+        <div class="branch-icon">⚖️</div>
+        <div>
+          <div class="branch-title">要素四：客观标准</div>
+          <div class="branch-title-en">Insist on Objective Criteria</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">用标准代替意志</div>
+            <div class="sub-node-desc">市场价、先例、专家意见、行业惯例——让谈判比的不是谁更能熬</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">先谈标准再谈方案</div>
+            <div class="sub-node-desc">标准有冲突时，先谈「用什么标准来选标准」，可引入第三方程序</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">经得起第三方检验</div>
+            <div class="sub-node-desc">好的方案，应让一个明智的局外人也觉得公平合理</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支6：应对强硬对手 -->
+    <div class="branch theme-red">
+      <div class="branch-header">
+        <div class="branch-icon">🛡️</div>
+        <div>
+          <div class="branch-title">应对强硬对手</div>
+          <div class="branch-title-en">When They Won't Play</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">BATNA 护城河</div>
+            <div class="sub-node-desc">谈判力来自最佳替代方案——先想清楚「不成交我还有哪些路」</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">谈判柔术</div>
+            <div class="sub-node-desc">不正面还击攻击，而是把攻击引向问题：追问理由、请对方批评你的方案</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">敢于离席</div>
+            <div class="sub-node-desc">随时可以走开的底气，正是留在谈判桌上最好的筹码</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- 金句 -->
+<div class="quote-box">
+  <div class="quote-label">✦ 今日金句</div>
+  <blockquote>
+    "对问题要强硬，对人要温和——<br>
+    你的谈判力，来自你知道自己随时可以走开。"
+  </blockquote>
+  <div class="quote-source">— 罗杰·费希尔 & 威廉·尤里《谈判力》</div>
+</div>
+
+<!-- 页脚 -->
+<div class="footer">
+  每日一学 · WorkBuddy 自动推送 · 2026-10-03 &nbsp;|&nbsp; 谈判的目标不是赢过对方，而是共同赢得问题
+</div>
+
+</body>
+</html>
