@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 《搞定》思维导图</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(135deg, #0d211a, #173a30, #0a1913);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 20px 50px;
+  }
+
+  /* 顶部标题区 */
+  .header {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+  .header .tag {
+    display: inline-block;
+    background: linear-gradient(90deg, #4fe0b0, #a8e063);
+    color: #0d211a;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+  .header h1 {
+    font-size: 32px;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.2;
+  }
+  .header h1 span {
+    background: linear-gradient(90deg, #4fe0b0, #a8e063);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .header .subtitle {
+    margin-top: 8px;
+    font-size: 14px;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 1px;
+  }
+
+  /* 书籍简介卡片 */
+  .book-card {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 20px;
+    padding: 24px 28px;
+    max-width: 860px;
+    width: 100%;
+    margin-bottom: 36px;
+    backdrop-filter: blur(10px);
+  }
+  .book-cover {
+    flex-shrink: 0;
+    width: 80px;
+    height: 105px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #4fe0b0, #a8e063);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    color: #0d211a;
+    text-align: center;
+    line-height: 1.4;
+    padding: 6px;
+    box-shadow: 0 8px 24px rgba(79,224,176,0.4);
+  }
+  .book-cover .cover-icon { font-size: 28px; margin-bottom: 6px; }
+  .book-info h2 { font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+  .book-info .author { font-size: 13px; color: #4fe0b0; margin-bottom: 10px; }
+  .book-info .desc { font-size: 13px; color: rgba(255,255,255,0.7); line-height: 1.8; }
+  .book-info .stars { margin-top: 10px; color: #4fe0b0; font-size: 16px; letter-spacing: 2px; }
+
+  /* 思维导图容器 */
+  .mindmap-wrapper {
+    max-width: 1100px;
+    width: 100%;
+  }
+
+  /* 中心节点 */
+  .center-node {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  .center-node .node-box {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(135deg, #4fe0b0, #a8e063);
+    color: #0d211a;
+    padding: 18px 40px;
+    border-radius: 50px;
+    font-size: 20px;
+    font-weight: 800;
+    box-shadow: 0 10px 40px rgba(79,224,176,0.5);
+    position: relative;
+  }
+  .center-node .node-box::after {
+    content: '';
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 20px;
+    background: rgba(255,255,255,0.3);
+  }
+  .center-node .node-sub { font-size: 12px; font-weight: 500; opacity: 0.7; margin-top: 4px; }
+
+  /* 分支区域 */
+  .branches {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  @media (max-width: 800px) {
+    .branches { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 520px) {
+    .branches { grid-template-columns: 1fr; }
+    .book-card { flex-direction: column; text-align: center; }
+  }
+
+  /* 分支卡片 */
+  .branch {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: transform 0.25s, box-shadow 0.25s;
+  }
+  .branch:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.35);
+  }
+
+  .branch-header {
+    padding: 16px 18px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .branch-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .branch-title { font-size: 15px; font-weight: 700; color: #fff; }
+  .branch-title-en { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 2px; }
+
+  .branch-body { padding: 14px 18px 16px; }
+
+  /* 子节点 */
+  .sub-node {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .sub-node:last-child { margin-bottom: 0; }
+  .sub-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    margin-top: 6px;
+    flex-shrink: 0;
+  }
+  .sub-node-title { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.9); margin-bottom: 3px; }
+  .sub-node-desc { font-size: 12px; color: rgba(255,255,255,0.5); line-height: 1.6; }
+
+  /* 配色主题 */
+  .theme-gold .branch-icon { background: rgba(255,212,94,0.2); }
+  .theme-gold .sub-dot { background: #ffd45e; }
+  .theme-gold .branch-header { border-left: 3px solid #ffd45e; }
+
+  .theme-green .branch-icon { background: rgba(168,224,99,0.2); }
+  .theme-green .sub-dot { background: #a8e063; }
+  .theme-green .branch-header { border-left: 3px solid #a8e063; }
+
+  .theme-blue .branch-icon { background: rgba(99,179,237,0.2); }
+  .theme-blue .sub-dot { background: #63b3ed; }
+  .theme-blue .branch-header { border-left: 3px solid #63b3ed; }
+
+  .theme-purple .branch-icon { background: rgba(183,148,246,0.2); }
+  .theme-purple .sub-dot { background: #b794f6; }
+  .theme-purple .branch-header { border-left: 3px solid #b794f6; }
+
+  .theme-red .branch-icon { background: rgba(252,129,129,0.2); }
+  .theme-red .sub-dot { background: #fc8181; }
+  .theme-red .branch-header { border-left: 3px solid #fc8181; }
+
+  .theme-teal .branch-icon { background: rgba(79,224,176,0.2); }
+  .theme-teal .sub-dot { background: #4fe0b0; }
+  .theme-teal .branch-header { border-left: 3px solid #4fe0b0; }
+
+  /* 金句 */
+  .quote-box {
+    max-width: 860px;
+    width: 100%;
+    margin: 32px 0 0;
+    background: rgba(79,224,176,0.08);
+    border: 1px solid rgba(79,224,176,0.25);
+    border-radius: 16px;
+    padding: 20px 28px;
+    text-align: center;
+  }
+  .quote-box .quote-label { font-size: 11px; color: #4fe0b0; letter-spacing: 3px; font-weight: 600; margin-bottom: 12px; }
+  .quote-box blockquote { font-size: 15px; color: rgba(255,255,255,0.85); line-height: 1.9; font-style: italic; }
+  .quote-box .quote-source { margin-top: 10px; font-size: 12px; color: rgba(255,255,255,0.4); }
+
+  /* 页脚 */
+  .footer {
+    margin-top: 40px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.25);
+    letter-spacing: 1px;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<!-- 顶部标题 -->
+<div class="header">
+  <div class="tag">📚 每日一学 · 2026.10.04</div>
+  <h1>今日书单推荐</h1>
+  <p class="subtitle">每天一本好书，点亮思维，精进认知</p>
+</div>
+
+<!-- 书籍简介 -->
+<div class="book-card">
+  <div class="book-cover">
+    <div class="cover-icon">📥</div>
+    搞定
+  </div>
+  <div class="book-info">
+    <h2>《搞定 I：无压工作的艺术》</h2>
+    <div class="author">作者：戴维·艾伦（David Allen）· 全球最有影响力的生产力思想家之一</div>
+    <div class="desc">
+      忙碌不等于高效，焦虑也不来自事情太多，而来自大脑里悬而未决的「承诺」。
+      GTD（Getting Things Done）用一套 <strong style="color:#4fe0b0">收集→理清→整理→回顾→执行</strong> 的系统，
+      把脑中所有事项转移到可信的外部系统中，再逐一转化为具体的下一步行动——
+      让你心如止水地工作：该专注时心无旁骛，该放松时彻底放松。
+    </div>
+    <div class="stars">★★★★★</div>
+  </div>
+</div>
+
+<!-- 中心节点 -->
+<div class="mindmap-wrapper">
+  <div class="center-node">
+    <div class="node-box">
+      📥 搞定
+      <div class="node-sub">Getting Things Done · 无压工作的艺术：GTD 五步法</div>
+    </div>
+  </div>
+
+  <!-- 六大分支 -->
+  <div class="branches">
+
+    <!-- 分支1：压力的真相 -->
+    <div class="branch theme-gold">
+      <div class="branch-header">
+        <div class="branch-icon">🧠</div>
+        <div>
+          <div class="branch-title">压力的真相</div>
+          <div class="branch-title-en">Why You Feel Overwhelmed</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">开放回路</div>
+            <div class="sub-node-desc">每个没处理完的事都在后台占用注意力，像无数小闹钟同时响</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">大脑是 CPU 不是硬盘</div>
+            <div class="sub-node-desc">大脑擅长思考和处理，不擅长存储——记忆会丢、会碎、会半夜跳出来</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">焦虑 = 未兑现的协议</div>
+            <div class="sub-node-desc">压力来自你与自己签订却未履约的承诺，撕毁协议或兑现它</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支2：五步法 -->
+    <div class="branch theme-teal">
+      <div class="branch-header">
+        <div class="branch-icon">🔄</div>
+        <div>
+          <div class="branch-title">核心框架：GTD 五步法</div>
+          <div class="branch-title-en">The Five Steps</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">收集 → 理清 → 整理</div>
+            <div class="sub-node-desc">100% 抓取事项，判断是什么、要不要做，归入对应清单</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">回顾 → 执行</div>
+            <div class="sub-node-desc">定期校准系统保持可信，再依情境从容选择当下行动</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">五步是一个循环</div>
+            <div class="sub-node-desc">不是一次性整理，而是每天运转的工作流，缺一步就失灵</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支3：收集与理清 -->
+    <div class="branch theme-green">
+      <div class="branch-header">
+        <div class="branch-icon">📥</div>
+        <div>
+          <div class="branch-title">收集与理清</div>
+          <div class="branch-title-en">Capture &amp; Clarify</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">100% 收集</div>
+            <div class="sub-node-desc">所有事项进收件箱：工作、家务、灵感、待买……一个不留</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">先问「可行吗」</div>
+            <div class="sub-node-desc">不可行→删除/ someday 清单/参考资料；可行→找下一步</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">两分钟原则</div>
+            <div class="sub-node-desc">两分钟能办完的事立刻办——记录与切换的成本比做更高</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支4：整理四大清单 -->
+    <div class="branch theme-blue">
+      <div class="branch-header">
+        <div class="branch-icon">🗂️</div>
+        <div>
+          <div class="branch-title">整理：四大清单</div>
+          <div class="branch-title-en">Organize</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">下一步行动 + 项目</div>
+            <div class="sub-node-desc">多步事项升级为「项目」，每个项目绑定一个具体下一步</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">日历是圣地</div>
+            <div class="sub-node-desc">只放有明确时间的事，不做每日待办清单——做完不完就是失败感</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">等待 &amp; 将来/也许</div>
+            <div class="sub-node-desc">委派出去的事盯「等待清单」；暂时不做但不想丢的进 someday</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支5：每周回顾 -->
+    <div class="branch theme-purple">
+      <div class="branch-header">
+        <div class="branch-icon">🔍</div>
+        <div>
+          <div class="branch-title">每周回顾</div>
+          <div class="branch-title-en">Weekly Review</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">系统的生命线</div>
+            <div class="sub-node-desc">不回顾的系统两周就失效——回顾让大脑重新信任清单</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">三件事</div>
+            <div class="sub-node-desc">收散落（钱包、笔记、邮件）→ 清收件箱 → 过一遍清单更新下一步</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">更高视角</div>
+            <div class="sub-node-desc">从项目、承诺、目标到愿景，逐层确认方向没有偏</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支6：无压执行 -->
+    <div class="branch theme-red">
+      <div class="branch-header">
+        <div class="branch-icon">🎯</div>
+        <div>
+          <div class="branch-title">无压执行</div>
+          <div class="branch-title-en">Engage</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">四标准选行动</div>
+            <div class="sub-node-desc">情境、可用时间、当前精力、重要性——动态选择，而非死守清单</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">动词开头的下一步</div>
+            <div class="sub-node-desc">「处理供应商问题」是项目；「给王经理打电话问报价」才是行动</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">心如止水</div>
+            <div class="sub-node-desc">系统可信之后，「选择做」取代「不得不做」——专注与放松都更彻底</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- 金句 -->
+<div class="quote-box">
+  <div class="quote-label">✦ 今日金句</div>
+  <blockquote>
+    "你的大脑是用来产生想法的，<br>
+    而不是存储想法的。"
+  </blockquote>
+  <div class="quote-source">— 戴维·艾伦《搞定 I：无压工作的艺术》</div>
+</div>
+
+<!-- 页脚 -->
+<div class="footer">
+  每日一学 · WorkBuddy 自动推送 · 2026-10-04 &nbsp;|&nbsp; 压力不是来自事情多，而是来自悬而未决的承诺
+</div>
+
+</body>
+</html>
