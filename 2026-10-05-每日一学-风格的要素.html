@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 《风格的要素》思维导图</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(135deg, #1a1625, #241f36, #150f1f);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 20px 50px;
+  }
+
+  /* 顶部标题区 */
+  .header {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+  .header .tag {
+    display: inline-block;
+    background: linear-gradient(90deg, #ffd45e, #b794f6);
+    color: #1a1625;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+  .header h1 {
+    font-size: 32px;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.2;
+  }
+  .header h1 span {
+    background: linear-gradient(90deg, #ffd45e, #b794f6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .header .subtitle {
+    margin-top: 8px;
+    font-size: 14px;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 1px;
+  }
+
+  /* 书籍简介卡片 */
+  .book-card {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 20px;
+    padding: 24px 28px;
+    max-width: 860px;
+    width: 100%;
+    margin-bottom: 36px;
+    backdrop-filter: blur(10px);
+  }
+  .book-cover {
+    flex-shrink: 0;
+    width: 80px;
+    height: 105px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #ffd45e, #b794f6);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    color: #1a1625;
+    text-align: center;
+    line-height: 1.4;
+    padding: 6px;
+    box-shadow: 0 8px 24px rgba(183,148,246,0.4);
+  }
+  .book-cover .cover-icon { font-size: 28px; margin-bottom: 6px; }
+  .book-info h2 { font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+  .book-info .author { font-size: 13px; color: #ffd45e; margin-bottom: 10px; }
+  .book-info .desc { font-size: 13px; color: rgba(255,255,255,0.7); line-height: 1.8; }
+  .book-info .stars { margin-top: 10px; color: #ffd45e; font-size: 16px; letter-spacing: 2px; }
+
+  /* 思维导图容器 */
+  .mindmap-wrapper {
+    max-width: 1100px;
+    width: 100%;
+  }
+
+  /* 中心节点 */
+  .center-node {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  .center-node .node-box {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(135deg, #ffd45e, #b794f6);
+    color: #1a1625;
+    padding: 18px 40px;
+    border-radius: 50px;
+    font-size: 20px;
+    font-weight: 800;
+    box-shadow: 0 10px 40px rgba(183,148,246,0.5);
+    position: relative;
+  }
+  .center-node .node-box::after {
+    content: '';
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 20px;
+    background: rgba(255,255,255,0.3);
+  }
+  .center-node .node-sub { font-size: 12px; font-weight: 500; opacity: 0.7; margin-top: 4px; }
+
+  /* 分支区域 */
+  .branches {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  @media (max-width: 800px) {
+    .branches { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 520px) {
+    .branches { grid-template-columns: 1fr; }
+    .book-card { flex-direction: column; text-align: center; }
+  }
+
+  /* 分支卡片 */
+  .branch {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: transform 0.25s, box-shadow 0.25s;
+  }
+  .branch:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.35);
+  }
+
+  .branch-header {
+    padding: 16px 18px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .branch-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .branch-title { font-size: 15px; font-weight: 700; color: #fff; }
+  .branch-title-en { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 2px; }
+
+  .branch-body { padding: 14px 18px 16px; }
+
+  /* 子节点 */
+  .sub-node {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .sub-node:last-child { margin-bottom: 0; }
+  .sub-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    margin-top: 6px;
+    flex-shrink: 0;
+  }
+  .sub-node-title { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.9); margin-bottom: 3px; }
+  .sub-node-desc { font-size: 12px; color: rgba(255,255,255,0.5); line-height: 1.6; }
+
+  /* 配色主题 */
+  .theme-gold .branch-icon { background: rgba(255,212,94,0.2); }
+  .theme-gold .sub-dot { background: #ffd45e; }
+  .theme-gold .branch-header { border-left: 3px solid #ffd45e; }
+
+  .theme-green .branch-icon { background: rgba(168,224,99,0.2); }
+  .theme-green .sub-dot { background: #a8e063; }
+  .theme-green .branch-header { border-left: 3px solid #a8e063; }
+
+  .theme-blue .branch-icon { background: rgba(99,179,237,0.2); }
+  .theme-blue .sub-dot { background: #63b3ed; }
+  .theme-blue .branch-header { border-left: 3px solid #63b3ed; }
+
+  .theme-purple .branch-icon { background: rgba(183,148,246,0.2); }
+  .theme-purple .sub-dot { background: #b794f6; }
+  .theme-purple .branch-header { border-left: 3px solid #b794f6; }
+
+  .theme-red .branch-icon { background: rgba(252,129,129,0.2); }
+  .theme-red .sub-dot { background: #fc8181; }
+  .theme-red .branch-header { border-left: 3px solid #fc8181; }
+
+  .theme-teal .branch-icon { background: rgba(129,230,217,0.2); }
+  .theme-teal .sub-dot { background: #81e6d9; }
+  .theme-teal .branch-header { border-left: 3px solid #81e6d9; }
+
+  /* 金句 */
+  .quote-box {
+    max-width: 860px;
+    width: 100%;
+    margin: 32px 0 0;
+    background: rgba(255,212,94,0.08);
+    border: 1px solid rgba(255,212,94,0.25);
+    border-radius: 16px;
+    padding: 20px 28px;
+    text-align: center;
+  }
+  .quote-box .quote-label { font-size: 11px; color: #ffd45e; letter-spacing: 3px; font-weight: 600; margin-bottom: 12px; }
+  .quote-box blockquote { font-size: 15px; color: rgba(255,255,255,0.85); line-height: 1.9; font-style: italic; }
+  .quote-box .quote-source { margin-top: 10px; font-size: 12px; color: rgba(255,255,255,0.4); }
+
+  /* 页脚 */
+  .footer {
+    margin-top: 40px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.25);
+    letter-spacing: 1px;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<!-- 顶部标题 -->
+<div class="header">
+  <div class="tag">📚 每日一学 · 2026.10.05</div>
+  <h1>今日书单推荐</h1>
+  <p class="subtitle">每天一本好书，点亮思维，精进认知</p>
+</div>
+
+<!-- 书籍简介 -->
+<div class="book-card">
+  <div class="book-cover">
+    <div class="cover-icon">✍️</div>
+    风格的要素
+  </div>
+  <div class="book-info">
+    <h2>《风格的要素》</h2>
+    <div class="author">作者：威廉·斯特伦克 & E.B. 怀特（William Strunk Jr. & E.B. White）· 英语写作圣经</div>
+    <div class="desc">
+      这本书薄得能塞进口袋，却被奉为写作领域的《圣经》。它只讲一件事：
+      <strong style="color:#ffd45e">把话说清楚</strong>。删掉多余的词，用主动语态，让相关词彼此靠近——
+      写作不是天赋，而是可以拆解、可以训练的手艺。模糊的文字背后，
+      往往是模糊的思想；改清楚一句话，就是厘清一个念头。
+    </div>
+    <div class="stars">★★★★★</div>
+  </div>
+</div>
+
+<!-- 中心节点 -->
+<div class="mindmap-wrapper">
+  <div class="center-node">
+    <div class="node-box">
+      ✍️ 风格的要素
+      <div class="node-sub">The Elements of Style · 清晰、简洁、有力的写作法则</div>
+    </div>
+  </div>
+
+  <!-- 六大分支 -->
+  <div class="branches">
+
+    <!-- 分支1：写作即思考 -->
+    <div class="branch theme-purple">
+      <div class="branch-header">
+        <div class="branch-icon">🧠</div>
+        <div>
+          <div class="branch-title">写作即思考</div>
+          <div class="branch-title-en">Writing Is Thinking</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">想清楚才写清楚</div>
+            <div class="sub-node-desc">句子混乱，多半因为念头没想明白——写作是检验思考的工具</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">读者时间很贵</div>
+            <div class="sub-node-desc">文字的第一义务是让读者毫不费力地理解，而不是展示作者</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">写作是手艺</div>
+            <div class="sub-node-desc">规则可学、可练、可反复打磨——天赋只是起点</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支2：省略多余词 -->
+    <div class="branch theme-gold">
+      <div class="branch-header">
+        <div class="branch-icon">✂️</div>
+        <div>
+          <div class="branch-title">铁律一：省略多余词</div>
+          <div class="branch-title-en">Omit Needless Words</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">一句无冗词，一段无冗句</div>
+            <div class="sub-node-desc">每个词都必须工作，凡不办事的词一律删掉</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">删虚胖的表达</div>
+            <div class="sub-node-desc">「进行讨论」→「讨论」；「予以重视」→「重视」；删掉可有可无的「的」</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">砍定语的勇气</div>
+            <div class="sub-node-desc">形容词副词能删则删——不是让文章花哨，而是让主张锋利</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支3：主动语态 -->
+    <div class="branch theme-blue">
+      <div class="branch-header">
+        <div class="branch-icon">➡️</div>
+        <div>
+          <div class="branch-title">铁律二：主动语态</div>
+          <div class="branch-title-en">Use Active Voice</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">谁做了什么</div>
+            <div class="sub-node-desc">主动句让施动者显形；被动句悄悄把责任藏起来</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">肯定优于否定</div>
+            <div class="sub-node-desc">「他忘了」胜过「他没能记住」——直接说是什么，别绕着说不是什么</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">动词是句子的引擎</div>
+            <div class="sub-node-desc">用具体有力的动词代替「是 + 名词」的松散结构</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支4：结构与段落 -->
+    <div class="branch theme-teal">
+      <div class="branch-header">
+        <div class="branch-icon">🧱</div>
+        <div>
+          <div class="branch-title">结构与段落</div>
+          <div class="branch-title-en">Composition</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">一段一个主题</div>
+            <div class="sub-node-desc">段落是文章的单位，开篇点明主题，其余句子都围绕它</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">相关词放一起</div>
+            <div class="sub-node-desc">修饰语紧贴被修饰词，避免悬空的「的」与错位的状语</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">平行结构</div>
+            <div class="sub-node-desc">并列的表达用相同语法形式：读起来顺，逻辑也更清楚</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支5：用词与误用 -->
+    <div class="branch theme-green">
+      <div class="branch-header">
+        <div class="branch-icon">📖</div>
+        <div>
+          <div class="branch-title">用词与常见误用</div>
+          <div class="branch-title-en">Words &amp; Expressions</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">拒绝夸张与流行腔</div>
+            <div class="sub-node-desc">「非常、极其、令人难以置信」是廉价强调；行话与套话让文字失去质感</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">具体胜过抽象</div>
+            <div class="sub-node-desc">「一位困难的同事」不如「一个总在截止前改需求的人」</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">用词准确</div>
+            <div class="sub-node-desc">易混词、搭配错误、语义重复是清晰度最常见的暗礁</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支6：风格之道 -->
+    <div class="branch theme-red">
+      <div class="branch-header">
+        <div class="branch-icon">🎨</div>
+        <div>
+          <div class="branch-title">风格之道</div>
+          <div class="branch-title-en">An Approach to Style</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">先掌握规则，再超越规则</div>
+            <div class="sub-node-desc">规则是清晰的地基，风格是在地基上盖出的房子</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">为读者而写</div>
+            <div class="sub-node-desc">写作不是自我表演，而是把想法准确交付给对方</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">修改才是写作</div>
+            <div class="sub-node-desc">好文章是改出来的：反复朗读，凡读来拗口处就是该重写处</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- 金句 -->
+<div class="quote-box">
+  <div class="quote-label">✦ 今日金句</div>
+  <blockquote>
+    "省略不必要的词——一个句子里不应有多余的词，<br>
+    一个段落里不应有多余的句子。"
+  </blockquote>
+  <div class="quote-source">— 威廉·斯特伦克 & E.B. 怀特《风格的要素》</div>
+</div>
+
+<!-- 页脚 -->
+<div class="footer">
+  每日一学 · WorkBuddy 自动推送 · 2026-10-05 &nbsp;|&nbsp; 写得清楚，是因为想得清楚
+</div>
+
+</body>
+</html>
