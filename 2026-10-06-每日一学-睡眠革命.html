@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 《睡眠革命》思维导图</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(135deg, #0d1420, #16213a, #0a0f18);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 20px 50px;
+  }
+
+  /* 顶部标题区 */
+  .header {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+  .header .tag {
+    display: inline-block;
+    background: linear-gradient(90deg, #6ba3ff, #7ee0d0);
+    color: #0d1420;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+  .header h1 {
+    font-size: 32px;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.2;
+  }
+  .header h1 span {
+    background: linear-gradient(90deg, #6ba3ff, #7ee0d0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .header .subtitle {
+    margin-top: 8px;
+    font-size: 14px;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 1px;
+  }
+
+  /* 书籍简介卡片 */
+  .book-card {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 20px;
+    padding: 24px 28px;
+    max-width: 860px;
+    width: 100%;
+    margin-bottom: 36px;
+    backdrop-filter: blur(10px);
+  }
+  .book-cover {
+    flex-shrink: 0;
+    width: 80px;
+    height: 105px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #6ba3ff, #7ee0d0);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    color: #0d1420;
+    text-align: center;
+    line-height: 1.4;
+    padding: 6px;
+    box-shadow: 0 8px 24px rgba(126,224,208,0.35);
+  }
+  .book-cover .cover-icon { font-size: 28px; margin-bottom: 6px; }
+  .book-info h2 { font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+  .book-info .author { font-size: 13px; color: #7ee0d0; margin-bottom: 10px; }
+  .book-info .desc { font-size: 13px; color: rgba(255,255,255,0.7); line-height: 1.8; }
+  .book-info .stars { margin-top: 10px; color: #6ba3ff; font-size: 16px; letter-spacing: 2px; }
+
+  /* 思维导图容器 */
+  .mindmap-wrapper {
+    max-width: 1100px;
+    width: 100%;
+  }
+
+  /* 中心节点 */
+  .center-node {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  .center-node .node-box {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(135deg, #6ba3ff, #7ee0d0);
+    color: #0d1420;
+    padding: 18px 40px;
+    border-radius: 50px;
+    font-size: 20px;
+    font-weight: 800;
+    box-shadow: 0 10px 40px rgba(107,163,255,0.45);
+    position: relative;
+  }
+  .center-node .node-box::after {
+    content: '';
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 20px;
+    background: rgba(255,255,255,0.3);
+  }
+  .center-node .node-sub { font-size: 12px; font-weight: 500; opacity: 0.7; margin-top: 4px; }
+
+  /* 分支区域 */
+  .branches {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  @media (max-width: 800px) {
+    .branches { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 520px) {
+    .branches { grid-template-columns: 1fr; }
+    .book-card { flex-direction: column; text-align: center; }
+  }
+
+  /* 分支卡片 */
+  .branch {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: transform 0.25s, box-shadow 0.25s;
+  }
+  .branch:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.35);
+  }
+
+  .branch-header {
+    padding: 16px 18px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .branch-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .branch-title { font-size: 15px; font-weight: 700; color: #fff; }
+  .branch-title-en { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 2px; }
+
+  .branch-body { padding: 14px 18px 16px; }
+
+  /* 子节点 */
+  .sub-node {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .sub-node:last-child { margin-bottom: 0; }
+  .sub-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    margin-top: 6px;
+    flex-shrink: 0;
+  }
+  .sub-node-title { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.9); margin-bottom: 3px; }
+  .sub-node-desc { font-size: 12px; color: rgba(255,255,255,0.5); line-height: 1.6; }
+
+  /* 配色主题 */
+  .theme-blue .branch-icon { background: rgba(107,163,255,0.2); }
+  .theme-blue .sub-dot { background: #6ba3ff; }
+  .theme-blue .branch-header { border-left: 3px solid #6ba3ff; }
+
+  .theme-teal .branch-icon { background: rgba(126,224,208,0.2); }
+  .theme-teal .sub-dot { background: #7ee0d0; }
+  .theme-teal .branch-header { border-left: 3px solid #7ee0d0; }
+
+  .theme-purple .branch-icon { background: rgba(167,139,250,0.2); }
+  .theme-purple .sub-dot { background: #a78bfa; }
+  .theme-purple .branch-header { border-left: 3px solid #a78bfa; }
+
+  .theme-gold .branch-icon { background: rgba(244,211,94,0.2); }
+  .theme-gold .sub-dot { background: #f4d35e; }
+  .theme-gold .branch-header { border-left: 3px solid #f4d35e; }
+
+  .theme-pink .branch-icon { background: rgba(244,114,182,0.2); }
+  .theme-pink .sub-dot { background: #f472b6; }
+  .theme-pink .branch-header { border-left: 3px solid #f472b6; }
+
+  .theme-green .branch-icon { background: rgba(134,239,172,0.2); }
+  .theme-green .sub-dot { background: #86efac; }
+  .theme-green .branch-header { border-left: 3px solid #86efac; }
+
+  /* 金句 */
+  .quote-box {
+    max-width: 860px;
+    width: 100%;
+    margin: 32px 0 0;
+    background: rgba(107,163,255,0.08);
+    border: 1px solid rgba(107,163,255,0.25);
+    border-radius: 16px;
+    padding: 20px 28px;
+    text-align: center;
+  }
+  .quote-box .quote-label { font-size: 11px; color: #7ee0d0; letter-spacing: 3px; font-weight: 600; margin-bottom: 12px; }
+  .quote-box blockquote { font-size: 15px; color: rgba(255,255,255,0.85); line-height: 1.9; font-style: italic; }
+  .quote-box .quote-source { margin-top: 10px; font-size: 12px; color: rgba(255,255,255,0.4); }
+
+  /* 页脚 */
+  .footer {
+    margin-top: 40px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.25);
+    letter-spacing: 1px;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<!-- 顶部标题 -->
+<div class="header">
+  <div class="tag">📚 每日一学 · 2026.10.06</div>
+  <h1>今日书单推荐</h1>
+  <p class="subtitle">每天一本好书，点亮思维，精进认知</p>
+</div>
+
+<!-- 书籍简介 -->
+<div class="book-card">
+  <div class="book-cover">
+    <div class="cover-icon">🌙</div>
+    睡眠革命
+  </div>
+  <div class="book-info">
+    <h2>《睡眠革命》</h2>
+    <div class="author">作者：尼克·利特尔黑尔斯（Nick Littlehales）· 全球顶级运动睡眠教练</div>
+    <div class="desc">
+      他服务过曼联、皇马等顶级球队，帮运动员把睡眠变成竞技优势。这本书颠覆了最顽固的常识：
+      <strong style="color:#7ee0d0">睡得好不好，不看睡了几小时，而看睡够了几个周期</strong>。
+      睡眠不是奢侈品，而是身体与大脑的修复系统——把它当成一件可设计、可执行的事，
+      白天的状态就会跟着改写。
+    </div>
+    <div class="stars">★★★★★</div>
+  </div>
+</div>
+
+<!-- 中心节点 -->
+<div class="mindmap-wrapper">
+  <div class="center-node">
+    <div class="node-box">
+      🌙 睡眠革命
+      <div class="node-sub">Sleep · 用 R90 方案重新设计你的恢复系统</div>
+    </div>
+  </div>
+
+  <!-- 六大分支 -->
+  <div class="branches">
+
+    <!-- 分支1：核心洞见 -->
+    <div class="branch theme-purple">
+      <div class="branch-header">
+        <div class="branch-icon">💡</div>
+        <div>
+          <div class="branch-title">睡眠的重新定义</div>
+          <div class="branch-title-en">Rethink Sleep</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">八小时睡眠是个迷思</div>
+            <div class="sub-node-desc">别再用「总时长」衡量睡眠，睡眠是以 90 分钟为单位的周期拼接</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">睡眠是恢复，不是浪费</div>
+            <div class="sub-node-desc">固定的周期与质量，比多睡一两个小时更能决定白天的状态</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">用一周补齐，而非一天</div>
+            <div class="sub-node-desc">不追求每晚完美，以 7 天为单位达成目标周期数即可</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支2：R90 方案 -->
+    <div class="branch theme-blue">
+      <div class="branch-header">
+        <div class="branch-icon">🔁</div>
+        <div>
+          <div class="branch-title">R90 睡眠方案</div>
+          <div class="branch-title-en">The R90 Method</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">以周期为单位睡觉</div>
+            <div class="sub-node-desc">一个完整周期约 90 分钟，成年人每周目标 35 个周期（每晚约 5 个）</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">固定起床时间</div>
+            <div class="sub-node-desc">起床时间固定不动，往前推 90 分钟的倍数决定入睡时间</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">起床时间是锚点</div>
+            <div class="sub-node-desc">按周统计周期数，缺了就在日间补——而不是靠赖床硬凑</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支3：区分睡眠类型 -->
+    <div class="branch theme-gold">
+      <div class="branch-header">
+        <div class="branch-icon">🐦</div>
+        <div>
+          <div class="branch-title">认清你的睡眠类型</div>
+          <div class="branch-title-en">Know Your Chronotype</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">晨型人与夜型人</div>
+            <div class="sub-node-desc">天生的昼夜节律差异，没有优劣；对抗它只会两头受损</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">把高峰留给要事</div>
+            <div class="sub-node-desc">先弄清自己何时最清醒，再把最难的工作安排在那个时段</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">别硬拗，要校准</div>
+            <div class="sub-node-desc">社交时差（周末大睡）会打乱节律，靠渐进调整而非强行早起</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支4：睡前与醒后 -->
+    <div class="branch theme-teal">
+      <div class="branch-header">
+        <div class="branch-icon">🚿</div>
+        <div>
+          <div class="branch-title">睡前与醒后例行程序</div>
+          <div class="branch-title-en">Routines</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">90 分钟缓冲带</div>
+            <div class="sub-node-desc">睡前 90 分钟开始收工：关屏、调暗灯光、清单化待办、降体温</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">醒后 90 分钟唤醒</div>
+            <div class="sub-node-desc">拉开窗帘晒光、喝水、轻活动、迟点碰手机，让身体平稳启动</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">先把担心写下来</div>
+            <div class="sub-node-desc">把未决事项与焦虑落到纸上，减少床上的反刍与拖延入睡</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支5：睡眠环境 -->
+    <div class="branch theme-green">
+      <div class="branch-header">
+        <div class="branch-icon">🛏️</div>
+        <div>
+          <div class="branch-title">打造睡眠环境</div>
+          <div class="branch-title-en">Sleep Environment</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">凉、暗、静</div>
+            <div class="sub-node-desc">卧室保持凉爽、尽可能黑、尽量减少噪音，是恢复的三块基石</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">床上用品要配套</div>
+            <div class="sub-node-desc">床垫软硬适中、枕头贴合颈肩、被褥透气——工具决定翻身次数</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">床只用来睡</div>
+            <div class="sub-node-desc">别在床上工作、刷手机，让大脑把床和睡眠牢牢绑定</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支6：日间小睡 -->
+    <div class="branch theme-pink">
+      <div class="branch-header">
+        <div class="branch-icon">⏸️</div>
+        <div>
+          <div class="branch-title">日间可控恢复期</div>
+          <div class="branch-title-en">Controlled Recovery</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">午后小睡 30 或 90 分钟</div>
+            <div class="sub-node-desc">30 分钟快速充电，或整整一个 90 分钟周期，别睡到「半周期」醒</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">休息不等于睡着</div>
+            <div class="sub-node-desc">闭眼的静息、放空与冥想同样有效，是低成本的高回报投入</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">缺口靠日间补</div>
+            <div class="sub-node-desc">这周周期数不够，就用午后小睡补回来——而不是周末一次性赖床</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- 金句 -->
+<div class="quote-box">
+  <div class="quote-label">✦ 今日金句</div>
+  <blockquote>
+    "不要问自己睡够了几个小时，<br>
+    而要问：我今天完成了几个恢复周期？"
+  </blockquote>
+  <div class="quote-source">— 尼克·利特尔黑尔斯《睡眠革命》</div>
+</div>
+
+<!-- 页脚 -->
+<div class="footer">
+  每日一学 · WorkBuddy 自动推送 · 2026-10-06 &nbsp;|&nbsp; 把睡眠当成训练，而不是消耗
+</div>
+
+</body>
+</html>
