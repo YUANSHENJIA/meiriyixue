@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 《理性》思维导图</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(135deg, #14102a, #211a42, #0d0a1c);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 20px 50px;
+  }
+
+  /* 顶部标题区 */
+  .header {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+  .header .tag {
+    display: inline-block;
+    background: linear-gradient(90deg, #ffb347, #9d7cf4);
+    color: #14102a;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+  .header h1 {
+    font-size: 32px;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.2;
+  }
+  .header h1 span {
+    background: linear-gradient(90deg, #ffb347, #9d7cf4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .header .subtitle {
+    margin-top: 8px;
+    font-size: 14px;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 1px;
+  }
+
+  /* 书籍简介卡片 */
+  .book-card {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 20px;
+    padding: 24px 28px;
+    max-width: 860px;
+    width: 100%;
+    margin-bottom: 36px;
+    backdrop-filter: blur(10px);
+  }
+  .book-cover {
+    flex-shrink: 0;
+    width: 80px;
+    height: 105px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #ffb347, #9d7cf4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    color: #14102a;
+    text-align: center;
+    line-height: 1.4;
+    padding: 6px;
+    box-shadow: 0 8px 24px rgba(157,124,244,0.4);
+  }
+  .book-cover .cover-icon { font-size: 28px; margin-bottom: 6px; }
+  .book-info h2 { font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+  .book-info .author { font-size: 13px; color: #ffb347; margin-bottom: 10px; }
+  .book-info .desc { font-size: 13px; color: rgba(255,255,255,0.7); line-height: 1.8; }
+  .book-info .stars { margin-top: 10px; color: #9d7cf4; font-size: 16px; letter-spacing: 2px; }
+
+  /* 思维导图容器 */
+  .mindmap-wrapper {
+    max-width: 1100px;
+    width: 100%;
+  }
+
+  /* 中心节点 */
+  .center-node {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  .center-node .node-box {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(135deg, #ffb347, #9d7cf4);
+    color: #14102a;
+    padding: 18px 40px;
+    border-radius: 50px;
+    font-size: 20px;
+    font-weight: 800;
+    box-shadow: 0 10px 40px rgba(157,124,244,0.45);
+    position: relative;
+  }
+  .center-node .node-box::after {
+    content: '';
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 20px;
+    background: rgba(255,255,255,0.3);
+  }
+  .center-node .node-sub { font-size: 12px; font-weight: 500; opacity: 0.7; margin-top: 4px; }
+
+  /* 分支区域 */
+  .branches {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  @media (max-width: 800px) {
+    .branches { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 520px) {
+    .branches { grid-template-columns: 1fr; }
+    .book-card { flex-direction: column; text-align: center; }
+  }
+
+  /* 分支卡片 */
+  .branch {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: transform 0.25s, box-shadow 0.25s;
+  }
+  .branch:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.35);
+  }
+
+  .branch-header {
+    padding: 16px 18px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .branch-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .branch-title { font-size: 15px; font-weight: 700; color: #fff; }
+  .branch-title-en { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 2px; }
+
+  .branch-body { padding: 14px 18px 16px; }
+
+  /* 子节点 */
+  .sub-node {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .sub-node:last-child { margin-bottom: 0; }
+  .sub-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    margin-top: 6px;
+    flex-shrink: 0;
+  }
+  .sub-node-title { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.9); margin-bottom: 3px; }
+  .sub-node-desc { font-size: 12px; color: rgba(255,255,255,0.5); line-height: 1.6; }
+
+  /* 配色主题 */
+  .theme-amber .branch-icon { background: rgba(255,179,71,0.2); }
+  .theme-amber .sub-dot { background: #ffb347; }
+  .theme-amber .branch-header { border-left: 3px solid #ffb347; }
+
+  .theme-violet .branch-icon { background: rgba(157,124,244,0.2); }
+  .theme-violet .sub-dot { background: #9d7cf4; }
+  .theme-violet .branch-header { border-left: 3px solid #9d7cf4; }
+
+  .theme-cyan .branch-icon { background: rgba(103,214,222,0.2); }
+  .theme-cyan .sub-dot { background: #67d6de; }
+  .theme-cyan .branch-header { border-left: 3px solid #67d6de; }
+
+  .theme-rose .branch-icon { background: rgba(244,130,166,0.2); }
+  .theme-rose .sub-dot { background: #f482a6; }
+  .theme-rose .branch-header { border-left: 3px solid #f482a6; }
+
+  .theme-lime .branch-icon { background: rgba(178,229,110,0.2); }
+  .theme-lime .sub-dot { background: #b2e56e; }
+  .theme-lime .branch-header { border-left: 3px solid #b2e56e; }
+
+  .theme-indigo .branch-icon { background: rgba(129,161,255,0.2); }
+  .theme-indigo .sub-dot { background: #81a1ff; }
+  .theme-indigo .branch-header { border-left: 3px solid #81a1ff; }
+
+  /* 金句 */
+  .quote-box {
+    max-width: 860px;
+    width: 100%;
+    margin: 32px 0 0;
+    background: rgba(255,179,71,0.08);
+    border: 1px solid rgba(255,179,71,0.25);
+    border-radius: 16px;
+    padding: 20px 28px;
+    text-align: center;
+  }
+  .quote-box .quote-label { font-size: 11px; color: #ffb347; letter-spacing: 3px; font-weight: 600; margin-bottom: 12px; }
+  .quote-box blockquote { font-size: 15px; color: rgba(255,255,255,0.85); line-height: 1.9; font-style: italic; }
+  .quote-box .quote-source { margin-top: 10px; font-size: 12px; color: rgba(255,255,255,0.4); }
+
+  /* 页脚 */
+  .footer {
+    margin-top: 40px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.25);
+    letter-spacing: 1px;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<!-- 顶部标题 -->
+<div class="header">
+  <div class="tag">📚 每日一学 · 2026.10.07</div>
+  <h1>今日书单推荐</h1>
+  <p class="subtitle">每天一本好书，点亮思维，精进认知</p>
+</div>
+
+<!-- 书籍简介 -->
+<div class="book-card">
+  <div class="book-cover">
+    <div class="cover-icon">🧭</div>
+    理性
+  </div>
+  <div class="book-info">
+    <h2>《理性》</h2>
+    <div class="author">作者：史蒂芬·平克（Steven Pinker）· 哈佛心理学教授 · 湛庐文化</div>
+    <div class="desc">
+      理性不是冷冰冰的计算，而是<strong style="color:#ffb347">「以最有效的方式达成目标、形成真实信念」的能力</strong>。
+      平克用逻辑、概率与贝叶斯思维，把「怎么想清楚」拆成可练的工具箱：
+      为什么我们会被小数定律骗、为什么会把相关当因果、为什么聪明人也会犯蠢。
+      理性不是天赋，而是一套可以随身携带的防身术。
+    </div>
+    <div class="stars">★★★★★</div>
+  </div>
+</div>
+
+<!-- 中心节点 -->
+<div class="mindmap-wrapper">
+  <div class="center-node">
+    <div class="node-box">
+      🧭 理性
+      <div class="node-sub">Rationality · 什么是理性，为何稀缺，为何至关重要</div>
+    </div>
+  </div>
+
+  <!-- 六大分支 -->
+  <div class="branches">
+
+    <!-- 分支1：理性是什么 -->
+    <div class="branch theme-amber">
+      <div class="branch-header">
+        <div class="branch-icon">🎯</div>
+        <div>
+          <div class="branch-title">理性是什么</div>
+          <div class="branch-title-en">What Rationality Is</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">两种理性</div>
+            <div class="sub-node-desc">工具理性：用最有效的手段达成目标；认识理性：形成与世界相符的信念</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">理性不是无趣或自私</div>
+            <div class="sub-node-desc">它服务于你真正在乎的一切——包括爱、道义与共同体</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">目标是前提</div>
+            <div class="sub-node-desc">理性只管「如何达成」，至于「要什么」得由你自己定义</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支2：概率与随机 -->
+    <div class="branch theme-violet">
+      <div class="branch-header">
+        <div class="branch-icon">🎲</div>
+        <div>
+          <div class="branch-title">概率与随机性</div>
+          <div class="branch-title-en">Probability &amp; Randomness</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">基准率优先</div>
+            <div class="sub-node-desc">先问「这类事一般有多大比例」，再考虑眼前这条具体信息</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">小数定律的陷阱</div>
+            <div class="sub-node-desc">样本越小越极端——小医院某天男婴比例偏离 50% 并不稀奇</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">赌徒谬误与热手</div>
+            <div class="sub-node-desc">独立事件没有记忆，「连开十把红」不会让黑更可能来</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支3：贝叶斯校准 -->
+    <div class="branch theme-cyan">
+      <div class="branch-header">
+        <div class="branch-icon">⚖️</div>
+        <div>
+          <div class="branch-title">信念校准：贝叶斯思维</div>
+          <div class="branch-title-en">Bayesian Thinking</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">信念是一个概率</div>
+            <div class="sub-node-desc">不说「我确定」，而说「我大概七成相信」——让信念可被更新</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">先验 × 证据</div>
+            <div class="sub-node-desc">信念强度 = 原有判断被新证据修正后的结果，而非凭单次印象推翻一切</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">看似然比，不看单边</div>
+            <div class="sub-node-desc">关键问题：这条证据在「真」与「假」两种情况下各有多常见</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支4：逻辑与论证 -->
+    <div class="branch theme-indigo">
+      <div class="branch-header">
+        <div class="branch-icon">🧩</div>
+        <div>
+          <div class="branch-title">逻辑与论证</div>
+          <div class="branch-title-en">Logic &amp; Argument</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">形式与内容分开</div>
+            <div class="sub-node-desc">前提为真 + 推理有效，结论才必然为真；两者缺一都不行</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">常见谬误清单</div>
+            <div class="sub-node-desc">肯定后件、循环论证、稻草人、以人废言——识别它们就能少被带偏</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">「且」与「或」的陷阱</div>
+            <div class="sub-node-desc">合取事件不可能比单个事件更可能——越具体的说法往往越不靠谱</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支5：相关与因果 -->
+    <div class="branch theme-rose">
+      <div class="branch-header">
+        <div class="branch-icon">🔍</div>
+        <div>
+          <div class="branch-title">相关不等于因果</div>
+          <div class="branch-title-en">Correlation &amp; Causation</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">第三变量</div>
+            <div class="sub-node-desc">两个变量同动，常因背后有共同原因，而非彼此导致</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">回归均值</div>
+            <div class="sub-node-desc">极端表现之后往往自然回落——别把它当成惩罚或治疗起了作用</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">辛普森悖论</div>
+            <div class="sub-node-desc">分组都成立的趋势，合并后可能反转——看数据要先问怎么分组</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支6：理性的公共价值 -->
+    <div class="branch theme-lime">
+      <div class="branch-header">
+        <div class="branch-icon">🤝</div>
+        <div>
+          <div class="branch-title">理性与公共生活</div>
+          <div class="branch-title-en">Rationality &amp; the Common Good</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">理性是公共善</div>
+            <div class="sub-node-desc">逻辑与证据是陌生人之间唯一可共享的裁判，是合作的底层协议</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">「我的部落一定对」</div>
+            <div class="sub-node-desc">把立场当身份的「迷因」是理性稀缺的根源——先问是非，再问立场</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">对事不对人</div>
+            <div class="sub-node-desc">用可检验的论证代替动机揣测，讨论才能继续向前</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- 金句 -->
+<div class="quote-box">
+  <div class="quote-label">✦ 今日金句</div>
+  <blockquote>
+    "理性不是拒绝情感，<br>
+    而是让你的信念与现实对齐、让你的行动与目标对齐。"
+  </blockquote>
+  <div class="quote-source">— 史蒂芬·平克《理性》</div>
+</div>
+
+<!-- 页脚 -->
+<div class="footer">
+  每日一学 · WorkBuddy 自动推送 · 2026-10-07 &nbsp;|&nbsp; 想清楚，是最被低估的能力
+</div>
+
+</body>
+</html>
