@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 《跨能致胜》思维导图</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(135deg, #0f1f1c, #16302b, #08120f);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 20px 50px;
+  }
+
+  /* 顶部标题区 */
+  .header {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+  .header .tag {
+    display: inline-block;
+    background: linear-gradient(90deg, #7ee787, #7dd3fc);
+    color: #0f1f1c;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+  .header h1 {
+    font-size: 32px;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.2;
+  }
+  .header h1 span {
+    background: linear-gradient(90deg, #7ee787, #7dd3fc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .header .subtitle {
+    margin-top: 8px;
+    font-size: 14px;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 1px;
+  }
+
+  /* 书籍简介卡片 */
+  .book-card {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 20px;
+    padding: 24px 28px;
+    max-width: 860px;
+    width: 100%;
+    margin-bottom: 36px;
+    backdrop-filter: blur(10px);
+  }
+  .book-cover {
+    flex-shrink: 0;
+    width: 80px;
+    height: 105px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #7ee787, #7dd3fc);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    color: #0f1f1c;
+    text-align: center;
+    line-height: 1.4;
+    padding: 6px;
+    box-shadow: 0 8px 24px rgba(125,211,252,0.35);
+  }
+  .book-cover .cover-icon { font-size: 28px; margin-bottom: 6px; }
+  .book-info h2 { font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+  .book-info .author { font-size: 13px; color: #7ee787; margin-bottom: 10px; }
+  .book-info .desc { font-size: 13px; color: rgba(255,255,255,0.7); line-height: 1.8; }
+  .book-info .stars { margin-top: 10px; color: #7dd3fc; font-size: 16px; letter-spacing: 2px; }
+
+  /* 思维导图容器 */
+  .mindmap-wrapper {
+    max-width: 1100px;
+    width: 100%;
+  }
+
+  /* 中心节点 */
+  .center-node {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  .center-node .node-box {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(135deg, #7ee787, #7dd3fc);
+    color: #0f1f1c;
+    padding: 18px 40px;
+    border-radius: 50px;
+    font-size: 20px;
+    font-weight: 800;
+    box-shadow: 0 10px 40px rgba(125,211,252,0.4);
+    position: relative;
+  }
+  .center-node .node-box::after {
+    content: '';
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 20px;
+    background: rgba(255,255,255,0.3);
+  }
+  .center-node .node-sub { font-size: 12px; font-weight: 500; opacity: 0.7; margin-top: 4px; }
+
+  /* 分支区域 */
+  .branches {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  @media (max-width: 800px) {
+    .branches { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 520px) {
+    .branches { grid-template-columns: 1fr; }
+    .book-card { flex-direction: column; text-align: center; }
+  }
+
+  /* 分支卡片 */
+  .branch {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: transform 0.25s, box-shadow 0.25s;
+  }
+  .branch:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.35);
+  }
+
+  .branch-header {
+    padding: 16px 18px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .branch-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .branch-title { font-size: 15px; font-weight: 700; color: #fff; }
+  .branch-title-en { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 2px; }
+
+  .branch-body { padding: 14px 18px 16px; }
+
+  /* 子节点 */
+  .sub-node {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .sub-node:last-child { margin-bottom: 0; }
+  .sub-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    margin-top: 6px;
+    flex-shrink: 0;
+  }
+  .sub-node-title { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.9); margin-bottom: 3px; }
+  .sub-node-desc { font-size: 12px; color: rgba(255,255,255,0.5); line-height: 1.6; }
+
+  /* 配色主题 */
+  .theme-green .branch-icon { background: rgba(126,231,135,0.2); }
+  .theme-green .sub-dot { background: #7ee787; }
+  .theme-green .branch-header { border-left: 3px solid #7ee787; }
+
+  .theme-sky .branch-icon { background: rgba(125,211,252,0.2); }
+  .theme-sky .sub-dot { background: #7dd3fc; }
+  .theme-sky .branch-header { border-left: 3px solid #7dd3fc; }
+
+  .theme-amber .branch-icon { background: rgba(251,191,36,0.2); }
+  .theme-amber .sub-dot { background: #fbbf24; }
+  .theme-amber .branch-header { border-left: 3px solid #fbbf24; }
+
+  .theme-coral .branch-icon { background: rgba(251,146,60,0.2); }
+  .theme-coral .sub-dot { background: #fb923c; }
+  .theme-coral .branch-header { border-left: 3px solid #fb923c; }
+
+  .theme-violet .branch-icon { background: rgba(167,139,250,0.2); }
+  .theme-violet .sub-dot { background: #a78bfa; }
+  .theme-violet .branch-header { border-left: 3px solid #a78bfa; }
+
+  .theme-pink .branch-icon { background: rgba(244,114,182,0.2); }
+  .theme-pink .sub-dot { background: #f472b6; }
+  .theme-pink .branch-header { border-left: 3px solid #f472b6; }
+
+  /* 金句 */
+  .quote-box {
+    max-width: 860px;
+    width: 100%;
+    margin: 32px 0 0;
+    background: rgba(126,231,135,0.08);
+    border: 1px solid rgba(126,231,135,0.25);
+    border-radius: 16px;
+    padding: 20px 28px;
+    text-align: center;
+  }
+  .quote-box .quote-label { font-size: 11px; color: #7ee787; letter-spacing: 3px; font-weight: 600; margin-bottom: 12px; }
+  .quote-box blockquote { font-size: 15px; color: rgba(255,255,255,0.85); line-height: 1.9; font-style: italic; }
+  .quote-box .quote-source { margin-top: 10px; font-size: 12px; color: rgba(255,255,255,0.4); }
+
+  /* 页脚 */
+  .footer {
+    margin-top: 40px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.25);
+    letter-spacing: 1px;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<!-- 顶部标题 -->
+<div class="header">
+  <div class="tag">📚 每日一学 · 2026.10.08</div>
+  <h1>今日书单推荐</h1>
+  <p class="subtitle">每天一本好书，点亮思维，精进认知</p>
+</div>
+
+<!-- 书籍简介 -->
+<div class="book-card">
+  <div class="book-cover">
+    <div class="cover-icon">🌐</div>
+    跨能致胜
+  </div>
+  <div class="book-info">
+    <h2>《跨能致胜》</h2>
+    <div class="author">作者：大卫·爱泼斯坦（David Epstein）· 《纽约时报》畅销书</div>
+    <div class="desc">
+      我们被反复告知：越早专精、越早深耕，越容易成功。但爱泼斯坦用大量研究指出，
+      在<strong style="color:#7ee787">规则模糊、反馈延迟的「棘手世界」</strong>里，
+      真正胜出的是那些先广泛尝试、再逐步聚焦的人。绕路不是浪费，
+      而是<strong style="color:#7dd3fc">建立可迁移的思维模块</strong>——广度本身就是适应力。
+    </div>
+    <div class="stars">★★★★★</div>
+  </div>
+</div>
+
+<!-- 中心节点 -->
+<div class="mindmap-wrapper">
+  <div class="center-node">
+    <div class="node-box">
+      🌐 跨能致胜
+      <div class="node-sub">Range · 为什么通才在专业化世界里胜出</div>
+    </div>
+  </div>
+
+  <!-- 六大分支 -->
+  <div class="branches">
+
+    <!-- 分支1：核心洞见 -->
+    <div class="branch theme-green">
+      <div class="branch-header">
+        <div class="branch-icon">💡</div>
+        <div>
+          <div class="branch-title">专业化迷思</div>
+          <div class="branch-title-en">The Specialization Myth</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">老虎 vs 费德勒</div>
+            <div class="sub-node-desc">早期专精只是其中一条路；费德勒童年广泛尝试多种运动，才逐渐聚焦网球</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">世界越来越「棘手」</div>
+            <div class="sub-node-desc">规则清晰、反馈即时的领域越来越少，模糊与延迟反馈成为常态</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">广度不是浅薄</div>
+            <div class="sub-node-desc">跨领域经验构成「模式库」，是应对不确定性的韧性来源</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支2：学习环境 -->
+    <div class="branch theme-sky">
+      <div class="branch-header">
+        <div class="branch-icon">🧭</div>
+        <div>
+          <div class="branch-title">友好型 vs 棘手型环境</div>
+          <div class="branch-title-en">Kind vs Wicked Learning</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">友好环境</div>
+            <div class="sub-node-desc">规则清晰、反馈即时重复（国际象棋、高尔夫）——重复练习即可精进</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">棘手环境</div>
+            <div class="sub-node-desc">规则模糊、反馈延迟甚至误导（投资、管理、创业）——需要广泛抽样与试错</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">别用错地图</div>
+            <div class="sub-node-desc">把友好环境的方法论硬套到棘手环境，是多数「越努力越挫败」的根源</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支3：刻意练习的边界 -->
+    <div class="branch theme-amber">
+      <div class="branch-header">
+        <div class="branch-icon">⏳</div>
+        <div>
+          <div class="branch-title">刻意练习的边界</div>
+          <div class="branch-title-en">Limits of Deliberate Practice</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">被过度推广的定律</div>
+            <div class="sub-node-desc">刻意练习在友好环境高度有效，却被当成放之四海皆准的成功公式</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">抽样期</div>
+            <div class="sub-node-desc">先广泛尝试不同方向，再逐步聚焦——看似低效，实则降低选错赛道的长期成本</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">匹配质量优先</div>
+            <div class="sub-node-desc">找到与自己契合的方向，比「早起步」更重要；契合度决定能否长期坚持</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支4：类比思维 -->
+    <div class="branch theme-violet">
+      <div class="branch-header">
+        <div class="branch-icon">🔗</div>
+        <div>
+          <div class="branch-title">类比思维与迁移</div>
+          <div class="branch-title-en">Analogical Thinking</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">远距离类比是创新引擎</div>
+            <div class="sub-node-desc">把 A 领域的成熟解法搬到 B 领域，是历史上大量突破的共通路径</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">抓结构，别抓表象</div>
+            <div class="sub-node-desc">深度类比看的是深层因果结构；只依表面相似会得出错误结论</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">跨界即扩充弹药</div>
+            <div class="sub-node-desc">领域跨度越大，可调用的思维模块越多，「灵光一现」的概率越高</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支5：放弃的智慧 -->
+    <div class="branch theme-coral">
+      <div class="branch-header">
+        <div class="branch-icon">🚪</div>
+        <div>
+          <div class="branch-title">放弃的智慧</div>
+          <div class="branch-title-en">The Wisdom of Quitting</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">「坚毅」也有边界</div>
+            <div class="sub-node-desc">在错误方向上死磕，代价是巨大的沉没成本与机会成本</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">换赛道≠失败</div>
+            <div class="sub-node-desc">明智的放弃是把资源重新配置到匹配度更高的方向</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">短期试错换长期匹配</div>
+            <div class="sub-node-desc">用低成本的短周期尝试，换取最终方向选择的高胜率</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分支6：迟专精 -->
+    <div class="branch theme-pink">
+      <div class="branch-header">
+        <div class="branch-icon">🧩</div>
+        <div>
+          <div class="branch-title">迟专精与整合力</div>
+          <div class="branch-title-en">Late Specialization</div>
+        </div>
+      </div>
+      <div class="branch-body">
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">通才擅长整合</div>
+            <div class="sub-node-desc">优势不在单点深度，而在把不同领域的知识重新组合</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">爱好不是「不务正业」</div>
+            <div class="sub-node-desc">看似无关的业余兴趣，常沉淀为难以复制的差异化优势</div>
+          </div>
+        </div>
+        <div class="sub-node">
+          <div class="sub-dot"></div>
+          <div class="sub-node-content">
+            <div class="sub-node-title">学习要带点「难」</div>
+            <div class="sub-node-desc">适度困难（合意困难）让知识更能迁移，短期慢、长期快</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- 金句 -->
+<div class="quote-box">
+  <div class="quote-label">✦ 今日金句</div>
+  <blockquote>
+    "广度不是浅薄，而是复杂世界里的适应力；<br>
+    最好的学习路径，常常看起来像在绕路。"
+  </blockquote>
+  <div class="quote-source">— 大卫·爱泼斯坦《跨能致胜》</div>
+</div>
+
+<!-- 页脚 -->
+<div class="footer">
+  每日一学 · WorkBuddy 自动推送 · 2026-10-08 &nbsp;|&nbsp; 先广度，后深度，也是一种策略
+</div>
+
+</body>
+</html>
