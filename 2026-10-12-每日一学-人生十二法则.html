@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 人生十二法则</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    min-height: 100vh;
+    color: #e0e0e0;
+    padding: 20px;
+  }
+  .header {
+    text-align: center;
+    padding: 40px 20px 30px;
+    animation: fadeInDown 0.8s ease;
+  }
+  .date-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 20px;
+    padding: 6px 18px;
+    font-size: 13px;
+    color: #a0c4ff;
+    margin-bottom: 16px;
+    letter-spacing: 1px;
+  }
+  .book-title {
+    font-size: 42px;
+    font-weight: 700;
+    background: linear-gradient(90deg, #a0c4ff, #c9b8ff, #ffd6a5);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+  }
+  .book-subtitle {
+    font-size: 16px;
+    color: #9ab0d0;
+    margin-bottom: 6px;
+  }
+  .book-author {
+    font-size: 14px;
+    color: #7a8fa6;
+  }
+  .mind-map {
+    max-width: 1100px;
+    margin: 30px auto;
+    position: relative;
+  }
+  .center-node {
+    background: linear-gradient(135deg, #7c4dff, #4a90d9);
+    border-radius: 20px;
+    padding: 24px 36px;
+    text-align: center;
+    margin: 0 auto 40px;
+    width: fit-content;
+    max-width: 400px;
+    box-shadow: 0 8px 32px rgba(124,77,255,0.4);
+    position: relative;
+    animation: pulse 3s infinite;
+  }
+  @keyframes pulse {
+    0%,100%{ box-shadow: 0 8px 32px rgba(124,77,255,0.4); }
+    50%{ box-shadow: 0 8px 48px rgba(124,77,255,0.7); }
+  }
+  .center-node h2 { font-size: 22px; color: #fff; font-weight: 700; }
+  .center-node p { font-size: 13px; color: rgba(255,255,255,0.75); margin-top: 6px; }
+  .branches {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 10px;
+  }
+  .branch {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 22px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    animation: fadeInUp 0.6s ease both;
+  }
+  .branch:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 36px rgba(0,0,0,0.3);
+  }
+  .branch:nth-child(1) { border-left: 4px solid #ff6b9d; animation-delay: 0.1s; }
+  .branch:nth-child(2) { border-left: 4px solid #a0c4ff; animation-delay: 0.2s; }
+  .branch:nth-child(3) { border-left: 4px solid #ffd6a5; animation-delay: 0.3s; }
+  .branch:nth-child(4) { border-left: 4px solid #9bf6a8; animation-delay: 0.4s; }
+  .branch:nth-child(5) { border-left: 4px solid #c9b8ff; animation-delay: 0.5s; }
+  .branch:nth-child(6) { border-left: 4px solid #ffb3b3; animation-delay: 0.6s; }
+  .branch-title {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .branch-icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .b1 .branch-icon { background: rgba(255,107,157,0.2); }
+  .b2 .branch-icon { background: rgba(160,196,255,0.2); }
+  .b3 .branch-icon { background: rgba(255,214,165,0.2); }
+  .b4 .branch-icon { background: rgba(155,246,168,0.2); }
+  .b5 .branch-icon { background: rgba(201,184,255,0.2); }
+  .b6 .branch-icon { background: rgba(255,179,179,0.2); }
+  .leaf-list { list-style: none; padding: 0; }
+  .leaf-list li {
+    padding: 7px 0 7px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    font-size: 14px;
+    color: #c8d8e8;
+    line-height: 1.6;
+    position: relative;
+  }
+  .leaf-list li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: rgba(255,255,255,0.3);
+    font-size: 11px;
+    top: 9px;
+  }
+  .leaf-list li:last-child { border-bottom: none; }
+  .leaf-list li strong { color: #e8f0ff; }
+  .quote-section {
+    max-width: 1100px;
+    margin: 24px auto;
+    background: linear-gradient(135deg, rgba(124,77,255,0.15), rgba(74,144,217,0.15));
+    border: 1px solid rgba(124,77,255,0.3);
+    border-radius: 16px;
+    padding: 30px;
+    animation: fadeInUp 0.6s ease 0.7s both;
+  }
+  .quote-section h3 {
+    font-size: 16px;
+    color: #c9b8ff;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .quote-item {
+    padding: 14px 20px;
+    margin: 10px 0;
+    background: rgba(255,255,255,0.04);
+    border-radius: 10px;
+    border-left: 3px solid #c9b8ff;
+    font-size: 15px;
+    font-style: italic;
+    color: #dde8f8;
+    line-height: 1.7;
+  }
+  .action-section {
+    max-width: 1100px;
+    margin: 24px auto;
+    background: rgba(155,246,168,0.06);
+    border: 1px solid rgba(155,246,168,0.2);
+    border-radius: 16px;
+    padding: 30px;
+    animation: fadeInUp 0.6s ease 0.8s both;
+  }
+  .action-section h3 {
+    font-size: 16px;
+    color: #9bf6a8;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .action-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 14px;
+  }
+  .action-card {
+    background: rgba(155,246,168,0.08);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+  }
+  .action-number {
+    width: 28px; height: 28px;
+    background: rgba(155,246,168,0.2);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    color: #9bf6a8;
+    font-weight: 700;
+    margin: 0 auto 10px;
+  }
+  .action-card p {
+    font-size: 13px;
+    color: #c0d8c8;
+    line-height: 1.6;
+  }
+  .footer {
+    text-align: center;
+    padding: 30px 20px;
+    color: #5a7a9a;
+    font-size: 13px;
+    animation: fadeIn 1s ease 1s both;
+  }
+  @keyframes fadeInDown { from { opacity:0; transform:translateY(-20px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes fadeInUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+
+  @media (max-width: 700px) {
+    .branches { grid-template-columns: 1fr; }
+    .book-title { font-size: 28px; }
+    .action-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="date-badge">📅 2026年10月12日 · 每日一学</div>
+  <div class="book-title">人生十二法则</div>
+  <div class="book-subtitle">12 Rules for Life: An Antidote to Chaos</div>
+  <div class="book-author">作者：乔丹·彼得森（Jordan B. Peterson）· 临床心理学家</div>
+</div>
+
+<div class="mind-map">
+  <div class="center-node">
+    <h2>🦞 人生十二法则</h2>
+    <p>秩序与混沌之间 · 直面苦难、承担责任的意义之路</p>
+  </div>
+
+  <div class="branches">
+
+    <!-- 核心洞见 -->
+    <div class="branch b1">
+      <div class="branch-title">
+        <div class="branch-icon">💡</div>
+        <span style="color:#ff6b9d">核心洞见</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>人生是秩序与混沌的永恒张力</strong>：意义诞生于二者之间的平衡点</li>
+        <li><strong>苦难可以被承受</strong>：前提是它有意义，而非无端降临</li>
+        <li><strong>责任是意义之源</strong>：主动背负重量，才能站得更稳、走得更远</li>
+        <li><strong>追求意义而非权宜</strong>：意义能穿越痛苦，即时快乐却转瞬即逝</li>
+        <li><strong>微小的自我改善</strong>：一次微小的正直行为，能引发连锁的积极改变</li>
+      </ul>
+    </div>
+
+    <!-- 十二法则（一） -->
+    <div class="branch b2">
+      <div class="branch-title">
+        <div class="branch-icon">🧭</div>
+        <span style="color:#a0c4ff">十二法则（一）</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>1. 挺起胸膛</strong>：姿态影响心态，站直如同你理应昂首</li>
+        <li><strong>2. 善待自己</strong>：像对待你负责照顾的人那样照顾自己</li>
+        <li><strong>3. 择良友</strong>：与真心希望你过得好的人为伍</li>
+        <li><strong>4. 与昨天的自己比</strong>：而非与今天的他人比较</li>
+        <li><strong>5. 别放纵孩子</strong>：别让他们做连你都会讨厌他们的事</li>
+        <li><strong>6. 先正己</strong>：批评世界前，先把自己的房子收拾干净</li>
+      </ul>
+    </div>
+
+    <!-- 十二法则（二） -->
+    <div class="branch b3">
+      <div class="branch-title">
+        <div class="branch-icon">⚖️</div>
+        <span style="color:#ffd6a5">十二法则（二）</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>7. 追求意义</strong>：做有意义的事，而非权宜之事</li>
+        <li><strong>8. 说真话</strong>：至少，不要撒谎</li>
+        <li><strong>9. 谦逊倾听</strong>：假设对方知道一些你所不知道的事</li>
+        <li><strong>10. 精确表达</strong>：把混乱的模糊，说成清晰的准确</li>
+        <li><strong>11. 别干涉冒险</strong>：让孩子在挑战中学习，而非过度保护</li>
+        <li><strong>12. 拥抱微小美好</strong>：路上遇到猫，就摸摸它</li>
+      </ul>
+    </div>
+
+    <!-- 秩序与混沌 -->
+    <div class="branch b4">
+      <div class="branch-title">
+        <div class="branch-icon">🌊</div>
+        <span style="color:#9bf6a8">秩序 vs 混沌</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>秩序</strong>：已知、稳定、规则，给予安全与方向</li>
+        <li><strong>混沌</strong>：未知、变动、意外，蕴含危险与可能</li>
+        <li><strong>过度秩序</strong>：僵化、专制、失去成长的空间</li>
+        <li><strong>过度混沌</strong>：失序、焦虑、被不确定性淹没</li>
+        <li><strong>意义的落脚点</strong>：在秩序与混沌交界处，主动开拓</li>
+      </ul>
+    </div>
+
+    <!-- 责任与意义 -->
+    <div class="branch b5">
+      <div class="branch-title">
+        <div class="branch-icon">📚</div>
+        <span style="color:#c9b8ff">责任·意义·痛苦</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>逃避责任=放大痛苦</strong>：回避重负，只会让问题更糟</li>
+        <li><strong>意义的代价是责任</strong>：想活得有意义，就要愿意承担</li>
+        <li><strong>痛苦是成长的门票</strong>：主动直面而非麻醉痛苦</li>
+        <li><strong>真相的疗愈力</strong>：诚实面对现实，是自愈的第一步</li>
+        <li><strong>个体与整体的连接</strong>：改善自己，也在改善周围的世界</li>
+      </ul>
+    </div>
+
+    <!-- 自我改善 -->
+    <div class="branch b6">
+      <div class="branch-title">
+        <div class="branch-icon">🛠️</div>
+        <span style="color:#ffb3b3">自我改善的路径</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>从小处开始</strong>：先收拾一个抽屉，再收拾一间房、一个人生</li>
+        <li><strong>身体先行</strong>：姿态、作息、运动，先照顾好肉身</li>
+        <li><strong>比较的智慧</strong>：把参照系从"别人"切换到"昨天的自己"</li>
+        <li><strong>诚实的纪律</strong>：每日至少一次，选择难而正确的真话</li>
+        <li><strong>承受的勇气</strong>：接纳人生必有的苦难，并为它赋予意义</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<!-- 金句 -->
+<div class="quote-section">
+  <h3>💬 核心金句</h3>
+  <div class="quote-item">"挺起胸膛，就像你有理由昂首挺立一样。"</div>
+  <div class="quote-item">"与昨天的自己比较，而不是与今天的别人比较。"</div>
+  <div class="quote-item">"先把自己的房子收拾得井井有条，再去批评世界。"</div>
+  <div class="quote-item">"追求有意义的事，而不是权宜之事。"</div>
+  <div class="quote-item">"说真话——或者至少，不要撒谎。"</div>
+</div>
+
+<!-- 行动建议 -->
+<div class="action-section">
+  <h3>🎯 五条行动建议</h3>
+  <div class="action-grid">
+    <div class="action-card">
+      <div class="action-number">1</div>
+      <p>今天先<strong>收拾好自己的一个空间</strong>：桌面、抽屉或房间一角</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">2</div>
+      <p>把比较对象从"别人"换成"<strong>昨天的自己</strong>"，记录一个小进步</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">3</div>
+      <p>练习<strong>说真话</strong>：本周至少拒绝一次违背内心的妥协</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">4</div>
+      <p>面对挫折时改问："<strong>这件事能教会我什么意义</strong>？"而非"为何是我"</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">5</div>
+      <p>挺直脊背走路、<strong>修正体态</strong>，用姿态反哺心态</p>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <p>📚 每日一学 · 人生十二法则 · 2026年10月12日</p>
+  <p style="margin-top:6px">在秩序与混沌之间，责任是通往意义的窄门</p>
+</div>
+
+</body>
+</html>
