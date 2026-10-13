@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 认知觉醒</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    min-height: 100vh;
+    color: #e0e0e0;
+    padding: 20px;
+  }
+  .header {
+    text-align: center;
+    padding: 40px 20px 30px;
+    animation: fadeInDown 0.8s ease;
+  }
+  .date-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 20px;
+    padding: 6px 18px;
+    font-size: 13px;
+    color: #a0c4ff;
+    margin-bottom: 16px;
+    letter-spacing: 1px;
+  }
+  .book-title {
+    font-size: 42px;
+    font-weight: 700;
+    background: linear-gradient(90deg, #a0c4ff, #c9b8ff, #ffd6a5);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+  }
+  .book-subtitle {
+    font-size: 16px;
+    color: #9ab0d0;
+    margin-bottom: 6px;
+  }
+  .book-author {
+    font-size: 14px;
+    color: #7a8fa6;
+  }
+  .mind-map {
+    max-width: 1100px;
+    margin: 30px auto;
+    position: relative;
+  }
+  .center-node {
+    background: linear-gradient(135deg, #7c4dff, #4a90d9);
+    border-radius: 20px;
+    padding: 24px 36px;
+    text-align: center;
+    margin: 0 auto 40px;
+    width: fit-content;
+    max-width: 400px;
+    box-shadow: 0 8px 32px rgba(124,77,255,0.4);
+    position: relative;
+    animation: pulse 3s infinite;
+  }
+  @keyframes pulse {
+    0%,100%{ box-shadow: 0 8px 32px rgba(124,77,255,0.4); }
+    50%{ box-shadow: 0 8px 48px rgba(124,77,255,0.7); }
+  }
+  .center-node h2 { font-size: 22px; color: #fff; font-weight: 700; }
+  .center-node p { font-size: 13px; color: rgba(255,255,255,0.75); margin-top: 6px; }
+  .branches {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 10px;
+  }
+  .branch {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 22px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    animation: fadeInUp 0.6s ease both;
+  }
+  .branch:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 36px rgba(0,0,0,0.3);
+  }
+  .branch:nth-child(1) { border-left: 4px solid #ff6b9d; animation-delay: 0.1s; }
+  .branch:nth-child(2) { border-left: 4px solid #a0c4ff; animation-delay: 0.2s; }
+  .branch:nth-child(3) { border-left: 4px solid #ffd6a5; animation-delay: 0.3s; }
+  .branch:nth-child(4) { border-left: 4px solid #9bf6a8; animation-delay: 0.4s; }
+  .branch:nth-child(5) { border-left: 4px solid #c9b8ff; animation-delay: 0.5s; }
+  .branch:nth-child(6) { border-left: 4px solid #ffb3b3; animation-delay: 0.6s; }
+  .branch-title {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .branch-icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .b1 .branch-icon { background: rgba(255,107,157,0.2); }
+  .b2 .branch-icon { background: rgba(160,196,255,0.2); }
+  .b3 .branch-icon { background: rgba(255,214,165,0.2); }
+  .b4 .branch-icon { background: rgba(155,246,168,0.2); }
+  .b5 .branch-icon { background: rgba(201,184,255,0.2); }
+  .b6 .branch-icon { background: rgba(255,179,179,0.2); }
+  .leaf-list { list-style: none; padding: 0; }
+  .leaf-list li {
+    padding: 7px 0 7px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    font-size: 14px;
+    color: #c8d8e8;
+    line-height: 1.6;
+    position: relative;
+  }
+  .leaf-list li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: rgba(255,255,255,0.3);
+    font-size: 11px;
+    top: 9px;
+  }
+  .leaf-list li:last-child { border-bottom: none; }
+  .leaf-list li strong { color: #e8f0ff; }
+  .quote-section {
+    max-width: 1100px;
+    margin: 24px auto;
+    background: linear-gradient(135deg, rgba(124,77,255,0.15), rgba(74,144,217,0.15));
+    border: 1px solid rgba(124,77,255,0.3);
+    border-radius: 16px;
+    padding: 30px;
+    animation: fadeInUp 0.6s ease 0.7s both;
+  }
+  .quote-section h3 {
+    font-size: 16px;
+    color: #c9b8ff;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .quote-item {
+    padding: 14px 20px;
+    margin: 10px 0;
+    background: rgba(255,255,255,0.04);
+    border-radius: 10px;
+    border-left: 3px solid #c9b8ff;
+    font-size: 15px;
+    font-style: italic;
+    color: #dde8f8;
+    line-height: 1.7;
+  }
+  .action-section {
+    max-width: 1100px;
+    margin: 24px auto;
+    background: rgba(155,246,168,0.06);
+    border: 1px solid rgba(155,246,168,0.2);
+    border-radius: 16px;
+    padding: 30px;
+    animation: fadeInUp 0.6s ease 0.8s both;
+  }
+  .action-section h3 {
+    font-size: 16px;
+    color: #9bf6a8;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .action-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 14px;
+  }
+  .action-card {
+    background: rgba(155,246,168,0.08);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+  }
+  .action-number {
+    width: 28px; height: 28px;
+    background: rgba(155,246,168,0.2);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    color: #9bf6a8;
+    font-weight: 700;
+    margin: 0 auto 10px;
+  }
+  .action-card p {
+    font-size: 13px;
+    color: #c0d8c8;
+    line-height: 1.6;
+  }
+  .footer {
+    text-align: center;
+    padding: 30px 20px;
+    color: #5a7a9a;
+    font-size: 13px;
+    animation: fadeIn 1s ease 1s both;
+  }
+  @keyframes fadeInDown { from { opacity:0; transform:translateY(-20px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes fadeInUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+
+  @media (max-width: 700px) {
+    .branches { grid-template-columns: 1fr; }
+    .book-title { font-size: 28px; }
+    .action-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="date-badge">📅 2026年10月13日 · 每日一学</div>
+  <div class="book-title">认知觉醒</div>
+  <div class="book-subtitle">开启自我改变的原动力</div>
+  <div class="book-author">作者：周岭 · 个人成长方法论作家</div>
+</div>
+
+<div class="mind-map">
+  <div class="center-node">
+    <h2>🧠 认知觉醒</h2>
+    <p>认知的觉醒，是一切自我改变的原动力</p>
+  </div>
+
+  <div class="branches">
+
+    <!-- 核心洞见 -->
+    <div class="branch b1">
+      <div class="branch-title">
+        <div class="branch-icon">💡</div>
+        <span style="color:#ff6b9d">核心洞见</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>成长即消除模糊</strong>：谁的认知模糊越少，谁的成长越快</li>
+        <li><strong>三重大脑</strong>：理智脑虽年轻，却需学会"驾驭"而非对抗本能脑与情绪脑</li>
+        <li><strong>舒适区边缘</strong>：最高效的成长，发生在舒适区与困难区之间的拉伸区</li>
+        <li><strong>元认知是终极能力</strong>：对思考的思考，是自我觉察、控制与反思的源头</li>
+        <li><strong>改变量 &gt; 学习量</strong>：学习的意义不在于知道多少，而在于改变多少</li>
+      </ul>
+    </div>
+
+    <!-- 三重大脑 -->
+    <div class="branch b2">
+      <div class="branch-title">
+        <div class="branch-icon">🧬</div>
+        <span style="color:#a0c4ff">三重大脑模型</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>本能脑</strong>：约 3.6 亿年，主司生存与本能反应</li>
+        <li><strong>情绪脑</strong>：约 2 亿年，主司情感与情绪驱动</li>
+        <li><strong>理智脑</strong>：约 250 万年，主管认知、思考与决策</li>
+        <li><strong>现实启示</strong>：理智脑太年轻，不要硬拼，要"哄着"另外两个大脑走</li>
+        <li><strong>焦虑与避难趋易</strong>：本能脑的短视，是拖延与焦虑的底层根源</li>
+      </ul>
+    </div>
+
+    <!-- 舒适区边缘 -->
+    <div class="branch b3">
+      <div class="branch-title">
+        <div class="branch-icon">🎯</div>
+        <span style="color:#ffd6a5">舒适区边缘（拉伸区）</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>舒适区</strong>：轻松熟悉，却几乎不带来成长</li>
+        <li><strong>困难区</strong>：压力过大，容易挫败与放弃</li>
+        <li><strong>拉伸区</strong>：恰到好处的挑战，成长最快的区间</li>
+        <li><strong>行动原则</strong>：把任务拆到"垫垫脚就够得着"的难度</li>
+        <li><strong>匹配的艺术</strong>：永远只做与自己能力"最近发展区"匹配的事</li>
+      </ul>
+    </div>
+
+    <!-- 元认知 -->
+    <div class="branch b4">
+      <div class="branch-title">
+        <div class="branch-icon">🪞</div>
+        <span style="color:#9bf6a8">元认知能力</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>自我觉察</strong>：看见自己的思考过程，而非被思考牵着走</li>
+        <li><strong>自我控制</strong>：在冲动与情绪升起时，保留一丝清醒的选择</li>
+        <li><strong>自我反思</strong>：复盘行为背后的动机与假设</li>
+        <li><strong>觉察之眼</strong>：在头顶"第三视角"审视自己的言行</li>
+        <li><strong>刻意练习</strong>：元认知是可以通过刻意训练不断增强的肌肉</li>
+      </ul>
+    </div>
+
+    <!-- 深度学习 -->
+    <div class="branch b5">
+      <div class="branch-title">
+        <div class="branch-icon">📖</div>
+        <span style="color:#c9b8ff">深度学习与成长权重</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>成长权重</strong>：学习量 &lt; 思考量 &lt; 行动量 &lt; 改变量</li>
+        <li><strong>触动学习法</strong>：只记录真正触动你的点，并建立关联</li>
+        <li><strong>输出倒逼输入</strong>：教是最好的学，写是最深的想</li>
+        <li><strong>无反馈不学习</strong>：作品意识与即时反馈是进步的加速器</li>
+        <li><strong>关联与体系</strong>：把新知识焊接到已有知识网络上</li>
+      </ul>
+    </div>
+
+    <!-- 人生五件套 -->
+    <div class="branch b6">
+      <div class="branch-title">
+        <div class="branch-icon">🌅</div>
+        <span style="color:#ffb3b3">早冥读写跑 · 人生五件套</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>早起</strong>：清醒的晨间，是掌控一天的起点</li>
+        <li><strong>冥想</strong>：训练专注力与元认知的日常体操</li>
+        <li><strong>阅读</strong>：低成本、高密度的认知升级通道</li>
+        <li><strong>写作</strong>：把模糊的思考，逼成清晰的语言</li>
+        <li><strong>运动</strong>：健壮的身体，是旺盛精力的地基</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<!-- 金句 -->
+<div class="quote-section">
+  <h3>💬 核心金句</h3>
+  <div class="quote-item">"焦虑的根源，是想同时做很多事，又想立即看到效果。"</div>
+  <div class="quote-item">"所谓成长，就是不断突破自己的舒适区边缘。"</div>
+  <div class="quote-item">"元认知能力，是人类区别于其他动物的根本所在。"</div>
+  <div class="quote-item">"学习不是为了知道，而是为了改变。"</div>
+  <div class="quote-item">"真正的学习，是从知道到做到的跃迁。"</div>
+</div>
+
+<!-- 行动建议 -->
+<div class="action-section">
+  <h3>🎯 五条行动建议</h3>
+  <div class="action-grid">
+    <div class="action-card">
+      <div class="action-number">1</div>
+      <p>找出当前最焦虑的一件事，用"<strong>只做一件 + 拆到拉伸区</strong>"重新规划它</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">2</div>
+      <p>每天留 15 分钟"<strong>元认知时间</strong>"，审视今天的思考、情绪与决策</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">3</div>
+      <p>把一项正在学的知识，用"<strong>教给别人或写出来</strong>"的方式做一次输出</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">4</div>
+      <p>改用"<strong>触动笔记法</strong>"：只记真正打动你的点，并写下一条行动关联</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">5</div>
+      <p>从"早冥读写跑"中<strong>选一项坚持 7 天</strong>，从最小可执行的动作开始</p>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <p>📚 每日一学 · 认知觉醒 · 2026年10月13日</p>
+  <p style="margin-top:6px">认知的觉醒，是一切自我改变的原动力</p>
+</div>
+
+</body>
+</html>
