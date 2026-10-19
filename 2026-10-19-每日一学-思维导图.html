@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 思维导图</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f3460 100%);
+    min-height: 100vh;
+    color: #e0e0e0;
+    padding: 20px;
+  }
+  .header {
+    text-align: center;
+    padding: 40px 20px 30px;
+    animation: fadeInDown 0.8s ease;
+  }
+  .date-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 20px;
+    padding: 6px 18px;
+    font-size: 13px;
+    color: #7dd3fc;
+    margin-bottom: 16px;
+    letter-spacing: 1px;
+  }
+  .book-title {
+    font-size: 42px;
+    font-weight: 700;
+    background: linear-gradient(90deg, #7dd3fc, #a5b4fc, #c4b5fd);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+  }
+  .book-subtitle {
+    font-size: 16px;
+    color: #9ab0d0;
+    margin-bottom: 6px;
+  }
+  .book-author {
+    font-size: 14px;
+    color: #7a8fa6;
+  }
+  .mind-map {
+    max-width: 1100px;
+    margin: 30px auto;
+    position: relative;
+  }
+  .center-node {
+    background: linear-gradient(135deg, #38bdf8, #6366f1);
+    border-radius: 20px;
+    padding: 24px 36px;
+    text-align: center;
+    margin: 0 auto 40px;
+    width: fit-content;
+    max-width: 460px;
+    box-shadow: 0 8px 32px rgba(56,189,248,0.4);
+    position: relative;
+    animation: pulse 3s infinite;
+  }
+  @keyframes pulse {
+    0%,100%{ box-shadow: 0 8px 32px rgba(56,189,248,0.4); }
+    50%{ box-shadow: 0 8px 48px rgba(99,102,241,0.7); }
+  }
+  .center-node h2 { font-size: 22px; color: #fff; font-weight: 700; }
+  .center-node p { font-size: 13px; color: rgba(255,255,255,0.85); margin-top: 6px; }
+  .branches {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 10px;
+  }
+  .branch {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 22px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    animation: fadeInUp 0.6s ease both;
+  }
+  .branch:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 36px rgba(0,0,0,0.3);
+  }
+  .branch:nth-child(1) { border-left: 4px solid #ff6b9d; animation-delay: 0.1s; }
+  .branch:nth-child(2) { border-left: 4px solid #f6a623; animation-delay: 0.2s; }
+  .branch:nth-child(3) { border-left: 4px solid #a0c4ff; animation-delay: 0.3s; }
+  .branch:nth-child(4) { border-left: 4px solid #ffd6a5; animation-delay: 0.4s; }
+  .branch:nth-child(5) { border-left: 4px solid #9bf6a8; animation-delay: 0.5s; }
+  .branch:nth-child(6) { border-left: 4px solid #c9b8ff; animation-delay: 0.6s; }
+  .branch-title {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .branch-icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .b1 .branch-icon { background: rgba(255,107,157,0.2); }
+  .b2 .branch-icon { background: rgba(246,166,35,0.2); }
+  .b3 .branch-icon { background: rgba(160,196,255,0.2); }
+  .b4 .branch-icon { background: rgba(255,214,165,0.2); }
+  .b5 .branch-icon { background: rgba(155,246,168,0.2); }
+  .b6 .branch-icon { background: rgba(201,184,255,0.2); }
+  .leaf-list { list-style: none; padding: 0; }
+  .leaf-list li {
+    padding: 7px 0 7px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    font-size: 14px;
+    color: #c8d8e8;
+    line-height: 1.6;
+    position: relative;
+  }
+  .leaf-list li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: rgba(255,255,255,0.3);
+    font-size: 11px;
+    top: 9px;
+  }
+  .leaf-list li:last-child { border-bottom: none; }
+  .leaf-list li strong { color: #e8f0ff; }
+  .quote-section {
+    max-width: 1100px;
+    margin: 24px auto;
+    background: linear-gradient(135deg, rgba(56,189,248,0.15), rgba(99,102,241,0.15));
+    border: 1px solid rgba(56,189,248,0.3);
+    border-radius: 16px;
+    padding: 30px;
+    animation: fadeInUp 0.6s ease 0.7s both;
+  }
+  .quote-section h3 {
+    font-size: 16px;
+    color: #7dd3fc;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .quote-item {
+    padding: 14px 20px;
+    margin: 10px 0;
+    background: rgba(255,255,255,0.04);
+    border-radius: 10px;
+    border-left: 3px solid #38bdf8;
+    font-size: 15px;
+    font-style: italic;
+    color: #dde8f8;
+    line-height: 1.7;
+  }
+  .action-section {
+    max-width: 1100px;
+    margin: 24px auto;
+    background: rgba(155,246,168,0.06);
+    border: 1px solid rgba(155,246,168,0.2);
+    border-radius: 16px;
+    padding: 30px;
+    animation: fadeInUp 0.6s ease 0.8s both;
+  }
+  .action-section h3 {
+    font-size: 16px;
+    color: #9bf6a8;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .action-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 14px;
+  }
+  .action-card {
+    background: rgba(155,246,168,0.08);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+  }
+  .action-number {
+    width: 28px; height: 28px;
+    background: rgba(155,246,168,0.2);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    color: #9bf6a8;
+    font-weight: 700;
+    margin: 0 auto 10px;
+  }
+  .action-card p {
+    font-size: 13px;
+    color: #c0d8c8;
+    line-height: 1.6;
+  }
+  .footer {
+    text-align: center;
+    padding: 30px 20px;
+    color: #5a7a9a;
+    font-size: 13px;
+    animation: fadeIn 1s ease 1s both;
+  }
+  @keyframes fadeInDown { from { opacity:0; transform:translateY(-20px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes fadeInUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+
+  @media (max-width: 700px) {
+    .branches { grid-template-columns: 1fr; }
+    .book-title { font-size: 28px; }
+    .action-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="date-badge">📅 2026年10月19日 · 每日一学</div>
+  <div class="book-title">思维导图</div>
+  <div class="book-subtitle">大脑使用说明书——用发散思维释放全脑潜能</div>
+  <div class="book-author">作者：东尼·博赞（Tony Buzan）</div>
+</div>
+
+<div class="mind-map">
+  <div class="center-node">
+    <h2>🌳 思维导图</h2>
+    <p>大脑的天性不是线性，而是发散——用思维导图把思考外化、放大、升级</p>
+  </div>
+
+  <div class="branches">
+
+    <!-- 核心洞见 -->
+    <div class="branch b1">
+      <div class="branch-title">
+        <div class="branch-icon">💡</div>
+        <span style="color:#ff6b9d">核心洞见</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>思考是发散性的</strong>：大脑不是线性记录仪，而是从一个中心向外无限联想、辐射的网络</li>
+        <li><strong>靠"关键词+图像"记忆</strong>：关键词与图像能同时激活更多脑区，记忆远比整句文字牢固</li>
+        <li><strong>左右脑协同</strong>：左脑管逻辑、语言、顺序，右脑管图像、色彩、空间，导图让两者同时开工</li>
+        <li><strong>用大脑的母语做笔记</strong>：图像、色彩、联想、分支才是大脑的"母语"，用它记笔记效率倍增</li>
+        <li><strong>导图=外化的大脑地图</strong>：把隐性、混乱的思考变成一张可见、可复盘的结构图</li>
+      </ul>
+    </div>
+
+    <!-- 中心主题 -->
+    <div class="branch b2">
+      <div class="branch-title">
+        <div class="branch-icon">🏛️</div>
+        <span style="color:#f6a623">四要素①：中心主题</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>一个核心图像</strong>：纸的中央放一个醒目的主题或简图，代表你正在思考的那个"焦点问题"</li>
+        <li><strong>所有分支的起点</strong>：一切主干分支都从这里生长出来，中心越清晰，导图越聚焦</li>
+        <li><strong>图像优于文字</strong>：中心用图像而非标题，能更快激活右脑、建立整体印象</li>
+        <li><strong>一图定焦点</strong>：把模糊的"问题"具象成一张图，是理清思路的第一步</li>
+        <li><strong>越醒目越好</strong>：用大号、彩色、带立体感的中心图，让注意力先锚定核心</li>
+      </ul>
+    </div>
+
+    <!-- 主干分支 -->
+    <div class="branch b3">
+      <div class="branch-title">
+        <div class="branch-icon">🌿</div>
+        <span style="color:#a0c4ff">四要素②：主干分支</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>从中心向外辐射</strong>：由核心概念向外画出主要分支，一条分支只承载一个主题</li>
+        <li><strong>由粗到细、由近到远</strong>：越靠近中心的分支越粗、越概括，向外逐渐细化</li>
+        <li><strong>自由生长</strong>：分支可以不断长出子分支，模拟思维天然的联想扩散</li>
+        <li><strong>结构即逻辑</strong>：分支的层级关系，直接呈现信息之间的从属与关联</li>
+        <li><strong>不限方向</strong>：上、下、左、右皆可延伸，打破线性笔记的顺序束缚</li>
+      </ul>
+    </div>
+
+    <!-- 关键词 -->
+    <div class="branch b4">
+      <div class="branch-title">
+        <div class="branch-icon">🔑</div>
+        <span style="color:#ffd6a5">四要素③：关键词</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>只用关键词</strong>：每条分支上写名词、动词等关键词，不用完整句子</li>
+        <li><strong>一词触发联想</strong>：关键词像钩子，能激活大脑自动补全整段相关记忆</li>
+        <li><strong>压缩信息</strong>：把大段文字压成最小语义单位，是理解与记忆的起点</li>
+        <li><strong>越短越有力</strong>：一个精准的词，胜过一句啰嗦的描述</li>
+        <li><strong>写在线条上</strong>：关键词贴着分支线书写，与线条长度相当，保持视觉简洁</li>
+      </ul>
+    </div>
+
+    <!-- 色彩与图像 -->
+    <div class="branch b5">
+      <div class="branch-title">
+        <div class="branch-icon">🎨</div>
+        <span style="color:#9bf6a8">四要素④：色彩与图像</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>颜色区分分支</strong>：用不同颜色标识不同主干，一眼分清信息板块</li>
+        <li><strong>图像代替文字</strong>：能用简图表达的就画图，激活右脑的想象与空间能力</li>
+        <li><strong>强化记忆</strong>：色彩与图像比灰白文字更容易被大脑记住、唤起</li>
+        <li><strong>提升区分度</strong>：相邻分支用对比色，避免视觉混淆</li>
+        <li><strong>全脑参与</strong>：逻辑（左脑）+ 图像色彩（右脑）并用，让整个大脑都参与思考</li>
+      </ul>
+    </div>
+
+    <!-- 主要知识点 -->
+    <div class="branch b6">
+      <div class="branch-title">
+        <div class="branch-icon">📖</div>
+        <span style="color:#c9b8ff">主要知识点</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>发散性思维</strong>：思考由中心向四周无限延展，天然非直线，是大脑的底层运作方式</li>
+        <li><strong>神经元结构隐喻</strong>：导图的分支与大脑神经突触的连接方式高度相似，符合生理构造</li>
+        <li><strong>关键词提取</strong>：把信息压缩成最小语义单位，是理解、记忆与复述的核心能力</li>
+        <li><strong>联想记忆</strong>：通过"图像—关键词"建立联想链，回忆率远高于死记硬背</li>
+        <li><strong>全脑学习</strong>：逻辑与想象并重，突破传统线性笔记只启动左脑的局限</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<!-- 金句 -->
+<div class="quote-section">
+  <h3>💬 核心金句</h3>
+  <div class="quote-item">"思维导图，就是大脑的使用说明书。"</div>
+  <div class="quote-item">"你的大脑不是一台录音机，而是一张不断向外辐射的网。"</div>
+  <div class="quote-item">"一个关键词，胜过一页密密麻麻的笔记。"</div>
+  <div class="quote-item">"记忆不是靠重复，而是靠联想与图像。"</div>
+  <div class="quote-item">"把思考画出来，你才能真正看见自己在想什么。"</div>
+</div>
+
+<!-- 行动建议 -->
+<div class="action-section">
+  <h3>🎯 五条行动建议</h3>
+  <div class="action-grid">
+    <div class="action-card">
+      <div class="action-number">1</div>
+      <p>用一张思维导图规划本周最重要的一件事：中心写<strong>目标</strong>，向外画出 3 条主干（做什么 / 为什么 / 怎么做）</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">2</div>
+      <p>读任意一篇文章后，只用<strong>一个关键词 + 一张简图</strong>做笔记，练习压缩信息</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">3</div>
+      <p>下次学习或会议时，用<strong>至少 4 种颜色</strong>区分不同分支，激活全脑</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">4</div>
+      <p>把今天学到的核心概念画成<strong>一幅简图</strong>，建立"图像 ↔ 关键词"联想</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">5</div>
+      <p>做一次思维导图复盘：中心是<strong>"本周目标"</strong>，分支是"成果 / 问题 / 改进"</p>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <p>📚 每日一学 · 思维导图 · 2026年10月19日</p>
+  <p style="margin-top:6px">大脑的天性不是线性，而是发散——画一张图，看见你的思考</p>
+</div>
+
+</body>
+</html>
