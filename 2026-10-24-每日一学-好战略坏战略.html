@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 好战略，坏战略</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(135deg, #0a1017 0%, #101b23 48%, #0d1712 100%);
+    min-height: 100vh;
+    color: #e2e6ea;
+    padding: 20px;
+  }
+  .header {
+    text-align: center;
+    padding: 40px 20px 30px;
+    animation: fadeInDown 0.8s ease;
+  }
+  .date-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(201,138,75,0.4);
+    border-radius: 20px;
+    padding: 6px 18px;
+    font-size: 13px;
+    color: #d9a86c;
+    margin-bottom: 16px;
+    letter-spacing: 1px;
+  }
+  .book-title {
+    font-size: 42px;
+    font-weight: 700;
+    background: linear-gradient(90deg, #d9a86c, #f2d7b0, #6fbf9b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+    letter-spacing: 3px;
+  }
+  .book-subtitle {
+    font-size: 16px;
+    color: #9aa9b6;
+    margin-bottom: 6px;
+    line-height: 1.6;
+  }
+  .book-author {
+    font-size: 14px;
+    color: #74838f;
+  }
+  .mind-map {
+    max-width: 1100px;
+    margin: 30px auto;
+    position: relative;
+  }
+  .center-node {
+    background: linear-gradient(135deg, #8a5a2b, #2f6f57);
+    border-radius: 20px;
+    padding: 24px 36px;
+    text-align: center;
+    margin: 0 auto 40px;
+    width: fit-content;
+    max-width: 560px;
+    box-shadow: 0 8px 32px rgba(201,138,75,0.32);
+    position: relative;
+    animation: pulse 3.4s infinite;
+  }
+  @keyframes pulse {
+    0%,100%{ box-shadow: 0 8px 32px rgba(201,138,75,0.32); }
+    50%{ box-shadow: 0 8px 48px rgba(111,191,155,0.55); }
+  }
+  .center-node h2 { font-size: 22px; color: #fff; font-weight: 700; letter-spacing: 2px; }
+  .center-node p { font-size: 13px; color: rgba(255,255,255,0.92); margin-top: 8px; line-height: 1.75; }
+  .branches {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 10px;
+  }
+  .branch {
+    background: rgba(255,255,255,0.045);
+    border: 1px solid rgba(255,255,255,0.09);
+    border-radius: 16px;
+    padding: 22px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    animation: fadeInUp 0.6s ease both;
+  }
+  .branch:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 36px rgba(0,0,0,0.38);
+  }
+  .branch:nth-child(1) { border-left: 4px solid #d9a86c; animation-delay: 0.1s; }
+  .branch:nth-child(2) { border-left: 4px solid #6fbf9b; animation-delay: 0.2s; }
+  .branch:nth-child(3) { border-left: 4px solid #c96a5c; animation-delay: 0.3s; }
+  .branch:nth-child(4) { border-left: 4px solid #8fa8d9; animation-delay: 0.4s; }
+  .branch:nth-child(5) { border-left: 4px solid #c4a3d9; animation-delay: 0.5s; }
+  .branch:nth-child(6) { border-left: 4px solid #9fc48a; animation-delay: 0.6s; }
+  .branch-title {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    line-height: 1.4;
+  }
+  .branch-icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .b1 .branch-icon { background: rgba(217,168,108,0.18); }
+  .b2 .branch-icon { background: rgba(111,191,155,0.18); }
+  .b3 .branch-icon { background: rgba(201,106,92,0.18); }
+  .b4 .branch-icon { background: rgba(143,168,217,0.18); }
+  .b5 .branch-icon { background: rgba(196,163,217,0.18); }
+  .b6 .branch-icon { background: rgba(159,196,138,0.18); }
+  .leaf-list { list-style: none; padding: 0; }
+  .leaf-list li {
+    padding: 7px 0 7px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.055);
+    font-size: 14px;
+    color: #c6d2da;
+    line-height: 1.65;
+    position: relative;
+  }
+  .leaf-list li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: rgba(217,168,108,0.55);
+    font-size: 11px;
+    top: 9px;
+  }
+  .leaf-list li:last-child { border-bottom: none; }
+  .leaf-list li strong { color: #f0d9b8; }
+  .quote-section {
+    max-width: 1100px;
+    margin: 24px auto;
+    background: linear-gradient(135deg, rgba(217,168,108,0.1), rgba(47,111,87,0.16));
+    border: 1px solid rgba(217,168,108,0.28);
+    border-radius: 16px;
+    padding: 30px;
+    animation: fadeInUp 0.6s ease 0.7s both;
+  }
+  .quote-section h3 {
+    font-size: 16px;
+    color: #d9a86c;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .quote-item {
+    padding: 14px 20px;
+    margin: 10px 0;
+    background: rgba(255,255,255,0.04);
+    border-radius: 10px;
+    border-left: 3px solid #d9a86c;
+    font-size: 15px;
+    font-style: italic;
+    color: #e8eef4;
+    line-height: 1.8;
+  }
+  .quote-item span { display: block; font-style: normal; font-size: 12px; color: #82909c; margin-top: 6px; }
+  .action-section {
+    max-width: 1100px;
+    margin: 24px auto;
+    background: rgba(111,191,155,0.06);
+    border: 1px solid rgba(111,191,155,0.22);
+    border-radius: 16px;
+    padding: 30px;
+    animation: fadeInUp 0.6s ease 0.8s both;
+  }
+  .action-section h3 {
+    font-size: 16px;
+    color: #6fbf9b;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .action-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 14px;
+  }
+  .action-card {
+    background: rgba(111,191,155,0.08);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+  }
+  .action-number {
+    width: 28px; height: 28px;
+    background: rgba(111,191,155,0.2);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    color: #6fbf9b;
+    font-weight: 700;
+    margin: 0 auto 10px;
+  }
+  .action-card p {
+    font-size: 13px;
+    color: #c2d4cd;
+    line-height: 1.65;
+  }
+  .footer {
+    text-align: center;
+    padding: 30px 20px;
+    color: #5c6b76;
+    font-size: 13px;
+  }
+  @keyframes fadeInDown { from { opacity:0; transform:translateY(-20px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes fadeInUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+
+  @media (max-width: 700px) {
+    .branches { grid-template-columns: 1fr; }
+    .book-title { font-size: 27px; letter-spacing: 1px; }
+    .action-grid { grid-template-columns: 1fr 1fr; }
+    .center-node { padding: 20px 22px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="date-badge">📅 2026年10月24日 · 每日一学</div>
+  <div class="book-title">好战略，坏战略</div>
+  <div class="book-subtitle">战略不是列目标，而是诊断挑战、选择放弃、集中力量</div>
+  <div class="book-author">作者：理查德·鲁梅尔特（Richard P. Rumelt）· 2011</div>
+</div>
+
+<div class="mind-map">
+  <div class="center-node">
+    <h2>♟️ 好战略，坏战略</h2>
+    <p>坏战略不是"没有战略"，而是用愿望冒充判断——<br>好战略永远始于一个准确的诊断，和一次果断的放弃</p>
+  </div>
+
+  <div class="branches">
+
+    <!-- 核心洞见 -->
+    <div class="branch b1">
+      <div class="branch-title">
+        <div class="branch-icon">💡</div>
+        <span style="color:#d9a86c">核心洞见</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>战略是"应对挑战的连贯行动"</strong>，不是目标清单，也不是愿景口号</li>
+        <li><strong>坏战略的第一症状是"不定义挑战"</strong>：说不清障碍在哪，就无从判断方案好坏</li>
+        <li><strong>把目标当战略是最流行的错误</strong>："增长 20%"是结果，不是方法</li>
+        <li><strong>战略的本质是取舍</strong>：不放弃任何东西，就等于没有战略——资源分散必然失败</li>
+        <li><strong>力量来自聚焦与不对称</strong>：在关键点上形成相对优势，而非在每一点上平均用力</li>
+        <li><strong>战略是假设，不是预言</strong>：它的价值在于被检验、被修正，而非被信仰</li>
+      </ul>
+    </div>
+
+    <!-- 框架① -->
+    <div class="branch b2">
+      <div class="branch-title">
+        <div class="branch-icon">🧱</div>
+        <span style="color:#6fbf9b">核心框架①：战略内核（Kernel）四要素</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>① 诊断（Diagnosis）</strong>：把复杂局面简化，指出"真正的挑战是什么"——一个好诊断是一个可被反驳的判断</li>
+        <li><strong>② 指导方针（Guiding Policy）</strong>：应对诊断的整体思路，明确"做什么"，尤其明确"<strong>不做什么</strong>"</li>
+        <li><strong>③ 连贯性行动（Coherent Actions）</strong>：一组互相配合、彼此支撑的具体动作，而非十个互不相干的举措</li>
+        <li><strong>④ 近端目标（Proximate Objectives）</strong>：把遥远目标切成"当下资源足以达成"的一步，用它降低不确定性</li>
+        <li><strong>结构要点</strong>：诊断→方针→行动必须一条线贯通；任何一环脱节，战略就退化成愿望</li>
+      </ul>
+    </div>
+
+    <!-- 框架② -->
+    <div class="branch b3">
+      <div class="branch-title">
+        <div class="branch-icon">⚠️</div>
+        <span style="color:#c96a5c">核心框架②：坏战略的四个标志</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>空话（Fluff）</strong>：用流行术语与宏大形容词掩盖思想空洞，听起来正确，无法执行</li>
+        <li><strong>不直面挑战</strong>：回避真正的障碍，于是所有方案都无从评估优劣</li>
+        <li><strong>错把目标当战略</strong>：把"成为第一""翻倍增长"当战略——那是愿望，缺的是路径</li>
+        <li><strong>糟糕的战略目标</strong>：目标过多、彼此冲突、无法落地，实质是"什么都想要"</li>
+        <li><strong>共同后果</strong>：坏战略比没战略更危险——它消耗资源、透支信心，还制造"我们已在行动"的幻觉</li>
+      </ul>
+    </div>
+
+    <!-- 框架③ -->
+    <div class="branch b4">
+      <div class="branch-title">
+        <div class="branch-icon">⚙️</div>
+        <span style="color:#8fa8d9">核心框架③：力量的六个来源（杠杆）</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>杠杆</strong>：找到"预期与现实的落差"和真正的瓶颈，把力量压在能撬动全局的一点上</li>
+        <li><strong>近端目标</strong>：把太大的问题转化为"下一步可解的小问题"，先动起来再校准</li>
+        <li><strong>链条系统</strong>：整体表现由最弱环节决定——只补短板，不做无效的长板堆叠</li>
+        <li><strong>专有优势</strong>：难以复制的资源、关系、知识或位置，是唯一可持续的护城河</li>
+        <li><strong>善用惯性</strong>：让趋势、路径与对手的既有节奏成为你的助力，而非与之硬碰</li>
+        <li><strong>不对称</strong>：以对手不擅长、不愿意的方式竞争；不要在对方的主场上比力气</li>
+      </ul>
+    </div>
+
+    <!-- 框架④ -->
+    <div class="branch b5">
+      <div class="branch-title">
+        <div class="branch-icon">🧠</div>
+        <span style="color:#c4a3d9">核心框架④：思维的四个陷阱与破法</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>模板思维</strong>：套用成功案例的框架，忽略条件差异 → 破法：先写诊断，再选工具</li>
+        <li><strong>从众与共识</strong>：集体赞同替代了独立判断 → 破法：允许"异端"发言，先问反证</li>
+        <li><strong>专家盲区</strong>：经验越深，越容易看不见结构性变化 → 破法：请外行描述他看到的现象</li>
+        <li><strong>计划代替判断</strong>：用详尽的表格与预测掩盖"没想清楚" → 破法：只写出三个关键假设并逐条验证</li>
+        <li><strong>核心提醒</strong>：战略工作的实质永远是——<strong>找出关键因素，并设计协调一致的行动</strong></li>
+      </ul>
+    </div>
+
+    <!-- 主要知识点 -->
+    <div class="branch b6">
+      <div class="branch-title">
+        <div class="branch-icon">📖</div>
+        <span style="color:#9fc48a">主要知识点</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>目标 / 战略 / 战术的分层</strong>：目标是"想去哪"，战略是"为什么这样走"，战术是"这一步怎么迈"</li>
+        <li><strong>战略无法外包</strong>：它需要承担取舍的责任，因此只能是决策者本人的工作</li>
+        <li><strong>注意力是稀缺资源</strong>：好战略的核心功能之一，是把组织的注意力压缩到少数关键点</li>
+        <li><strong>战略漂移</strong>：组织会在日常运营中悄悄偏离原方针，需要定期"回看诊断是否仍成立"</li>
+        <li><strong>增长是结果而非战略</strong>：把增长当目标，往往导致低质量扩张与资源错配</li>
+        <li><strong>计划的真正作用是"减少不确定性"</strong>，不是"预测未来"——所以近端目标优于五年蓝图</li>
+        <li><strong>个人同样适用</strong>：把职业与人生当一个战略问题——诊断瓶颈、明确放弃、设计连贯动作</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<!-- 金句 -->
+<div class="quote-section">
+  <h3>💬 核心金句</h3>
+  <div class="quote-item">"坏战略不是好战略的缺席，它源于特定的错误认知与领导失效。"<span>没有战略只是空白，坏战略会主动把你带错方向</span></div>
+  <div class="quote-item">"战略工作的核心永远是：发现局面中的关键因素，并设计出协调与聚焦的行动来应对它们。"<span>这句话可以当作检验任何"战略"的标尺</span></div>
+  <div class="quote-item">"如果你无法说清挑战是什么，你就无法评估一个战略。"<span>诊断缺席时，所有讨论都只是在争论口味</span></div>
+  <div class="quote-item">"增长不是战略，而是战略成功后的结果。"<span>把结果当目标，是坏战略最典型的伪装</span></div>
+  <div class="quote-item">"好战略几乎是简单的——它用平实的语言讲清一件事：我们在哪里集中力量。"<span>复杂的表述，通常是没想清楚的证据</span></div>
+  <div class="quote-item">"战略的本质是选择不做什么。"<span>每一次"都要"，都是对真正重点的背叛</span></div>
+</div>
+
+<!-- 行动建议 -->
+<div class="action-section">
+  <h3>🎯 五条行动建议</h3>
+  <div class="action-grid">
+    <div class="action-card">
+      <div class="action-number">1</div>
+      <p>用一页纸写"<strong>诊断</strong>"：当下最关键的 1–2 个障碍是什么？写成一句<strong>可被反驳</strong>的判断</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">2</div>
+      <p>把待办清单里的"<strong>愿望型目标</strong>"（更自律、更努力、要多赚钱）全部划掉，只留能改变结构的动作</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">3</div>
+      <p>写"<strong>指导方针</strong>"：明确列出<strong>三项你要主动放弃</strong>的事——放弃清单比目标清单更能定义你</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">4</div>
+      <p>设计一组"<strong>连贯性行动</strong>"：3–5 个互相支撑的动作，标出彼此的依赖顺序，而非十个散乱待办</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">5</div>
+      <p>设一个"<strong>近端目标</strong>"：把三年愿景切成 90 天内可验证的一步，并写下"什么证据说明我判断错了"</p>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <p>📚 每日一学 · 好战略，坏战略 · 2026年10月24日</p>
+  <p style="margin-top:6px">先诊断，再取舍，后集中——战略不是更努力，而是更少但更准</p>
+</div>
+
+</body>
+</html>
