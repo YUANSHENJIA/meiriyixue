@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 侦察兵思维</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(135deg, #0b0912 0%, #141a2b 50%, #0d1520 100%);
+    min-height: 100vh;
+    color: #e3e5ef;
+    padding: 20px;
+  }
+  .header {
+    text-align: center;
+    padding: 40px 20px 30px;
+    animation: fadeInDown 0.8s ease;
+  }
+  .date-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(167,139,250,0.42);
+    border-radius: 20px;
+    padding: 6px 18px;
+    font-size: 13px;
+    color: #b9a4f7;
+    margin-bottom: 16px;
+    letter-spacing: 1px;
+  }
+  .book-title {
+    font-size: 42px;
+    font-weight: 700;
+    background: linear-gradient(90deg, #a78bfa, #d9c8ff, #38d6c4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+    letter-spacing: 3px;
+  }
+  .book-subtitle {
+    font-size: 16px;
+    color: #9ba3b8;
+    margin-bottom: 6px;
+    line-height: 1.6;
+  }
+  .book-author {
+    font-size: 14px;
+    color: #757e94;
+  }
+  .mind-map {
+    max-width: 1100px;
+    margin: 30px auto;
+    position: relative;
+  }
+  .center-node {
+    background: linear-gradient(135deg, #4c3a8f, #1d6b66);
+    border-radius: 20px;
+    padding: 24px 36px;
+    text-align: center;
+    margin: 0 auto 40px;
+    width: fit-content;
+    max-width: 620px;
+    box-shadow: 0 8px 32px rgba(167,139,250,0.32);
+    position: relative;
+    animation: pulse 3.4s infinite;
+  }
+  @keyframes pulse {
+    0%,100%{ box-shadow: 0 8px 32px rgba(167,139,250,0.30); }
+    50%{ box-shadow: 0 8px 48px rgba(56,214,196,0.52); }
+  }
+  .center-node h2 { font-size: 22px; color: #fff; font-weight: 700; letter-spacing: 2px; }
+  .center-node p { font-size: 13px; color: rgba(255,255,255,0.92); margin-top: 8px; line-height: 1.75; }
+  .branches {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 10px;
+  }
+  .branch {
+    background: rgba(255,255,255,0.045);
+    border: 1px solid rgba(255,255,255,0.09);
+    border-radius: 16px;
+    padding: 22px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    animation: fadeInUp 0.6s ease both;
+  }
+  .branch:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 36px rgba(0,0,0,0.42);
+  }
+  .branch:nth-child(1) { border-left: 4px solid #a78bfa; animation-delay: 0.1s; }
+  .branch:nth-child(2) { border-left: 4px solid #38d6c4; animation-delay: 0.2s; }
+  .branch:nth-child(3) { border-left: 4px solid #f0806b; animation-delay: 0.3s; }
+  .branch:nth-child(4) { border-left: 4px solid #6fa8e8; animation-delay: 0.4s; }
+  .branch:nth-child(5) { border-left: 4px solid #e8b96f; animation-delay: 0.5s; }
+  .branch:nth-child(6) { border-left: 4px solid #8fd08a; animation-delay: 0.6s; }
+  .branch-title {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    line-height: 1.4;
+  }
+  .branch-icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .b1 .branch-icon { background: rgba(167,139,250,0.18); }
+  .b2 .branch-icon { background: rgba(56,214,196,0.18); }
+  .b3 .branch-icon { background: rgba(240,128,107,0.18); }
+  .b4 .branch-icon { background: rgba(111,168,232,0.18); }
+  .b5 .branch-icon { background: rgba(232,185,111,0.18); }
+  .b6 .branch-icon { background: rgba(143,208,138,0.18); }
+  .leaf-list { list-style: none; padding: 0; }
+  .leaf-list li {
+    padding: 7px 0 7px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.055);
+    font-size: 14px;
+    color: #c7cce0;
+    line-height: 1.65;
+    position: relative;
+  }
+  .leaf-list li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: rgba(167,139,250,0.6);
+    font-size: 11px;
+    top: 9px;
+  }
+  .leaf-list li:last-child { border-bottom: none; }
+  .leaf-list li strong { color: #dcd2ff; }
+  .quote-section {
+    max-width: 1100px;
+    margin: 24px auto;
+    background: linear-gradient(135deg, rgba(167,139,250,0.1), rgba(29,107,102,0.16));
+    border: 1px solid rgba(167,139,250,0.28);
+    border-radius: 16px;
+    padding: 30px;
+    animation: fadeInUp 0.6s ease 0.7s both;
+  }
+  .quote-section h3 {
+    font-size: 16px;
+    color: #b9a4f7;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .quote-item {
+    padding: 14px 20px;
+    margin: 10px 0;
+    background: rgba(255,255,255,0.04);
+    border-radius: 10px;
+    border-left: 3px solid #a78bfa;
+    font-size: 15px;
+    font-style: italic;
+    color: #e9ecf5;
+    line-height: 1.8;
+  }
+  .quote-item span { display: block; font-style: normal; font-size: 12px; color: #858ea4; margin-top: 6px; }
+  .action-section {
+    max-width: 1100px;
+    margin: 24px auto;
+    background: rgba(56,214,196,0.06);
+    border: 1px solid rgba(56,214,196,0.22);
+    border-radius: 16px;
+    padding: 30px;
+    animation: fadeInUp 0.6s ease 0.8s both;
+  }
+  .action-section h3 {
+    font-size: 16px;
+    color: #38d6c4;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .action-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 14px;
+  }
+  .action-card {
+    background: rgba(56,214,196,0.08);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+  }
+  .action-number {
+    width: 28px; height: 28px;
+    background: rgba(56,214,196,0.2);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    color: #38d6c4;
+    font-weight: 700;
+    margin: 0 auto 10px;
+  }
+  .action-card p {
+    font-size: 13px;
+    color: #c2d6d3;
+    line-height: 1.65;
+  }
+  .footer {
+    text-align: center;
+    padding: 30px 20px;
+    color: #5f6879;
+    font-size: 13px;
+  }
+  @keyframes fadeInDown { from { opacity:0; transform:translateY(-20px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes fadeInUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+
+  @media (max-width: 700px) {
+    .branches { grid-template-columns: 1fr; }
+    .book-title { font-size: 27px; letter-spacing: 1px; }
+    .action-grid { grid-template-columns: 1fr 1fr; }
+    .center-node { padding: 20px 22px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="date-badge">📅 2026年10月25日 · 每日一学</div>
+  <div class="book-title">侦察兵思维</div>
+  <div class="book-subtitle">制约判断力的不是知识，而是态度——你是想看清地图，还是想打赢这场辩论</div>
+  <div class="book-author">作者：朱莉娅·加利夫（Julia Galef）· 中信出版集团 2023</div>
+</div>
+
+<div class="mind-map">
+  <div class="center-node">
+    <h2>🧭 侦察兵思维</h2>
+    <p>士兵为胜利而战，侦察兵为准确而看——<br>而准确，长期看几乎总是更划算</p>
+  </div>
+
+  <div class="branches">
+
+    <!-- 核心洞见 -->
+    <div class="branch b1">
+      <div class="branch-title">
+        <div class="branch-icon">💡</div>
+        <span style="color:#a78bfa">核心洞见</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>真正制约判断力的不是智力或知识，而是"态度"</strong>：你是在收集证据，还是在给已有的结论找弹药</li>
+        <li><strong>士兵心态不是愚蠢，而是一种保护机制</strong>：它守护的是自尊、归属感与身份，所以靠"讲道理"改不动</li>
+        <li><strong>动机性推理是"有目的的"</strong>：它不服务于真相，而服务于"感觉好、被接纳、显得可靠"</li>
+        <li><strong>看清真相不是冷酷的计算，而是一种可练习的能力</strong>：它有具体的自检方法与可训练的肌肉</li>
+        <li><strong>自我欺骗的成本永远在暗处复利</strong>：错判一个事实，会在后续每一步都被放大</li>
+        <li><strong>承认错误不等于否定自己</strong>：观点是装备，不是旗帜——装备不合用就换，换了也不算背叛</li>
+      </ul>
+    </div>
+
+    <!-- 框架① -->
+    <div class="branch b2">
+      <div class="branch-title">
+        <div class="branch-icon">⚔️</div>
+        <span style="color:#38d6c4">核心框架①：士兵 vs 侦察兵</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>士兵心态（Soldier）</strong>：目标是"赢"——保卫已有立场，寻找支持证据，攻击对方漏洞</li>
+        <li><strong>侦察兵心态（Scout）</strong>：目标是"准"——绘制真实地形，先弄清楚"这里到底是什么情况"</li>
+        <li><strong>士兵的四种战术</strong>：合理化（把漏洞说成特例）、稻草人（歪曲对方观点再打倒）、特权假设（对自己一套标准，对别人另一套）、否认与回避</li>
+        <li><strong>侦察兵的四项动作</strong>：主动寻找反证、用概率表述确定程度、区分"我希望真"与"大概为真"、允许自己处在困惑中</li>
+        <li><strong>关键差别不在情绪强弱，而在"输赢"与"准确"哪个是目标</strong>——士兵也会做研究，但研究的方向被结论决定了</li>
+        <li><strong>现实提醒</strong>：两种心态同时存在于每个人身上，差别只是被触发时谁占上风</li>
+      </ul>
+    </div>
+
+    <!-- 框架② -->
+    <div class="branch b3">
+      <div class="branch-title">
+        <div class="branch-icon">🔍</div>
+        <span style="color:#f0806b">核心框架②：四个自检测试</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>① 选择性怀疑测试</strong>：对"我不喜欢的观点"和"我认同的观点"，我用的证据标准一样严吗？</li>
+        <li><strong>② 局外人测试</strong>：一个没有立场、只看行为的朋友，会怎么描述我这次的反应？</li>
+        <li><strong>③ 从众测试</strong>：如果身边的人全都改了看法，我还会坚持吗？若答案是否，那我的立场原本就不是判断</li>
+        <li><strong>④ 现状测试</strong>：如果我今天从零接手这件事（没有已投入的时间与面子），我还会做同样的选择吗？</li>
+        <li><strong>延伸：代价核算</strong>：如果这个判断是错的，我愿意付多少代价？代价越高，越要先做侦察兵</li>
+        <li><strong>用法</strong>：四个测试不必全过，只要有一个亮红灯，就说明"动机"已经在替"证据"发言</li>
+      </ul>
+    </div>
+
+    <!-- 框架③ -->
+    <div class="branch b4">
+      <div class="branch-title">
+        <div class="branch-icon">🧠</div>
+        <span style="color:#6fa8e8">核心框架③：动机性推理在保护什么</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>舒适感</strong>：相信"事情会好起来"比面对坏消息更不痛——于是我们提前关掉了坏消息</li>
+        <li><strong>自尊</strong>：承认判断失误会动摇"我是聪明的、有能力的"这一叙事，于是把错误归给环境</li>
+        <li><strong>归属感</strong>：立场常常是"入群门票"，改了观点像是要退出自己人</li>
+        <li><strong>社会形象</strong>：我们想被看作"坚定""忠诚"，而不是"随时可以改主意"</li>
+        <li><strong>代价</strong>：这些保护都是短期的；被保护下来的错误判断，会在更长的时间里持续收费</li>
+        <li><strong>破法不是压制情绪，而是换目标</strong>：不追求"不犯错的人"，只追求"错得越来越快被自己发现的人"</li>
+      </ul>
+    </div>
+
+    <!-- 框架④ -->
+    <div class="branch b5">
+      <div class="branch-title">
+        <div class="branch-icon">🛠️</div>
+        <span style="color:#e8b96f">核心框架④：想得更清楚的四件工具</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>校准（Calibration）</strong>：把"我觉得"换成"我有 70% 把握"；记录预测并打分，才知道自己的信心值不值钱</li>
+        <li><strong>反方试演（Steelman）</strong>：把对方观点复述到他自己点头，再开始反驳；打不倒最强版本，就等于没反驳</li>
+        <li><strong>微型实验（Cheap Test）</strong>：用一次低成本、7 天内可完成的小实验替代一场空转的争论</li>
+        <li><strong>失败预演（Pre-mortem）</strong>：假设三个月后彻底失败，倒推"最可能是哪一步出的问题"</li>
+        <li><strong>困惑耐受</strong>：不舒服的"我还没想明白"是有效信号——多数人用最快的解释把它按灭，于是永远停在表层</li>
+        <li><strong>身份松绑</strong>：把"我是支持 X 的人"换成"我目前认为 X 更可能对"——观点可换，人才稳定</li>
+      </ul>
+    </div>
+
+    <!-- 主要知识点 -->
+    <div class="branch b6">
+      <div class="branch-title">
+        <div class="branch-icon">📖</div>
+        <span style="color:#8fd08a">主要知识点</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>理性不是"没有情绪"</strong>：而是情绪与目标对齐——你真正想要的到底是"准确"还是"正确"</li>
+        <li><strong>真相的实用性</strong>：短期幻觉让人舒服，长期真相让人少踩坑；时间越长，侦察兵优势越大</li>
+        <li><strong>虚假乐观无用</strong>：研究并不支持"过度自信带来更好表现"；真正有效的是"相信自己能应对真相"</li>
+        <li><strong>错误的两层区分</strong>：判断错（信息不足下的合理赌注）与过程错（懒惰、偏心、回避）——只有后者值得自责</li>
+        <li><strong>不确定性表达</strong>：对结论可以犹豫，对"我在认真求真"这件事可以非常自信（认知自信 ≠ 社交自信）</li>
+        <li><strong>倾听异见</strong>：与不同意见者保持关系，是防止自己滑向回音壁的最有效手段</li>
+        <li><strong>适用范围</strong>：个人决策、职业选择、亲密关系沟通、信息消费——凡是要用判断的地方都适用</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<!-- 金句 -->
+<div class="quote-section">
+  <h3>💬 核心金句</h3>
+  <div class="quote-item">"侦察兵的任务不是打赢战斗，而是把地图画准。"<span>目标换了，方法才会跟着换</span></div>
+  <div class="quote-item">"士兵心态并不是愚蠢，它是为了保护你的自尊、你的归属和你的身份。"<span>所以别骂自己"不理性"，先看它在保护什么</span></div>
+  <div class="quote-item">"你不能既想看清世界，又想永远正确。"<span>这两件事在结构上互斥</span></div>
+  <div class="quote-item">"真相有时令人不舒服，但从长期看，它几乎总是比自我欺骗更有用。"<span>全书的核心赌注，也是最值得押的一注</span></div>
+  <div class="quote-item">"第一原则是：你不能欺骗自己——而你是最容易被自己欺骗的人。"<span>费曼的话，书中反复引用</span></div>
+  <div class="quote-item">"把观点当成装备，而不是旗帜。"<span>装备不合用就换；把观点当旗帜，换一次就像背叛一次</span></div>
+</div>
+
+<!-- 行动建议 -->
+<div class="action-section">
+  <h3>🎯 五条行动建议</h3>
+  <div class="action-grid">
+    <div class="action-card">
+      <div class="action-number">1</div>
+      <p>做一次"<strong>选择性怀疑</strong>"审计：翻出最近三次反驳别人的记录，检查是否用了<strong>比自己更松</strong>的标准</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">2</div>
+      <p>本周所有判断都加一个<strong>百分比</strong>（"我 70% 认为…"），周末回看打分，建立自己的校准表</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">3</div>
+      <p>正在纠结的事，用<strong>第三人称</strong>写一遍，再问："一个没有利益关系的朋友会怎么判断？"</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">4</div>
+      <p>为最担心的那个假设，设计一个<strong>7 天内可完成、成本极低</strong>的反证实验，替代又一轮空想</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">5</div>
+      <p>建一份<strong>错误日志</strong>：不只记"结果错了"，而记"当时推理的哪一步错了"——过程错才值得改</p>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <p>📚 每日一学 · 侦察兵思维 · 2026年10月25日</p>
+  <p style="margin-top:6px">先画准地图，再决定往哪走——看清，本身就是一种能力</p>
+</div>
+
+</body>
+</html>
