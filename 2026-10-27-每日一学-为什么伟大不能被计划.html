@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 为什么伟大不能被计划</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(135deg, #0a0908 0%, #1a1310 48%, #090d11 100%);
+    min-height: 100vh;
+    color: #ece5db;
+    padding: 20px;
+  }
+  .header {
+    text-align: center;
+    padding: 40px 20px 30px;
+    animation: fadeInDown 0.8s ease;
+  }
+  .date-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(245,158,11,0.42);
+    border-radius: 20px;
+    padding: 6px 18px;
+    font-size: 13px;
+    color: #fbbf24;
+    margin-bottom: 16px;
+    letter-spacing: 1px;
+  }
+  .book-title {
+    font-size: 42px;
+    font-weight: 700;
+    background: linear-gradient(90deg, #f59e0b, #fde68a, #22d3ee);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+    letter-spacing: 3px;
+  }
+  .book-subtitle {
+    font-size: 16px;
+    color: #a89a88;
+    margin-bottom: 6px;
+    line-height: 1.6;
+  }
+  .book-author {
+    font-size: 14px;
+    color: #7c7166;
+  }
+  .mind-map {
+    max-width: 1100px;
+    margin: 30px auto;
+    position: relative;
+  }
+  .center-node {
+    background: linear-gradient(135deg, #78350f, #0e7490);
+    border-radius: 20px;
+    padding: 24px 36px;
+    text-align: center;
+    margin: 0 auto 40px;
+    width: fit-content;
+    max-width: 640px;
+    box-shadow: 0 8px 32px rgba(245,158,11,0.28);
+    position: relative;
+    animation: pulse 3.4s infinite;
+  }
+  @keyframes pulse {
+    0%,100%{ box-shadow: 0 8px 32px rgba(245,158,11,0.26); }
+    50%{ box-shadow: 0 8px 48px rgba(34,211,238,0.46); }
+  }
+  .center-node h2 { font-size: 22px; color: #fff; font-weight: 700; letter-spacing: 2px; }
+  .center-node p { font-size: 13px; color: rgba(255,255,255,0.92); margin-top: 8px; line-height: 1.85; }
+  .branches {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 10px;
+  }
+  .branch {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.085);
+    border-radius: 16px;
+    padding: 22px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    animation: fadeInUp 0.6s ease both;
+  }
+  .branch:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 36px rgba(0,0,0,0.5);
+  }
+  .branch:nth-child(1) { border-left: 4px solid #f59e0b; animation-delay: 0.1s; }
+  .branch:nth-child(2) { border-left: 4px solid #fbbf24; animation-delay: 0.2s; }
+  .branch:nth-child(3) { border-left: 4px solid #22d3ee; animation-delay: 0.3s; }
+  .branch:nth-child(4) { border-left: 4px solid #a78bfa; animation-delay: 0.4s; }
+  .branch:nth-child(5) { border-left: 4px solid #f472b6; animation-delay: 0.5s; }
+  .branch:nth-child(6) { border-left: 4px solid #34d399; animation-delay: 0.6s; }
+  .branch-title {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    line-height: 1.4;
+  }
+  .branch-icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .b1 .branch-icon { background: rgba(245,158,11,0.18); }
+  .b2 .branch-icon { background: rgba(251,191,36,0.18); }
+  .b3 .branch-icon { background: rgba(34,211,238,0.18); }
+  .b4 .branch-icon { background: rgba(167,139,250,0.18); }
+  .b5 .branch-icon { background: rgba(244,114,182,0.18); }
+  .b6 .branch-icon { background: rgba(52,211,153,0.18); }
+  .leaf-list { list-style: none; padding: 0; }
+  .leaf-list li {
+    padding: 7px 0 7px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    font-size: 14px;
+    color: #cfc4b6;
+    line-height: 1.68;
+    position: relative;
+  }
+  .leaf-list li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: rgba(245,158,11,0.65);
+    font-size: 11px;
+    top: 9px;
+  }
+  .leaf-list li:last-child { border-bottom: none; }
+  .leaf-list li strong { color: #fde68a; }
+  .quote-section {
+    max-width: 1100px;
+    margin: 24px auto;
+    background: linear-gradient(135deg, rgba(245,158,11,0.09), rgba(14,116,144,0.16));
+    border: 1px solid rgba(245,158,11,0.24);
+    border-radius: 16px;
+    padding: 30px;
+    animation: fadeInUp 0.6s ease 0.7s both;
+  }
+  .quote-section h3 {
+    font-size: 16px;
+    color: #fbbf24;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .quote-note {
+    font-size: 12px;
+    color: #8a7d6d;
+    margin-bottom: 16px;
+  }
+  .quote-item {
+    padding: 14px 20px;
+    margin: 10px 0;
+    background: rgba(255,255,255,0.035);
+    border-radius: 10px;
+    border-left: 3px solid #f59e0b;
+    font-size: 15px;
+    font-style: italic;
+    color: #f2ebe2;
+    line-height: 1.85;
+  }
+  .quote-item span { display: block; font-style: normal; font-size: 12px; color: #93866f; margin-top: 6px; }
+  .action-section {
+    max-width: 1100px;
+    margin: 24px auto;
+    background: rgba(34,211,238,0.05);
+    border: 1px solid rgba(34,211,238,0.20);
+    border-radius: 16px;
+    padding: 30px;
+    animation: fadeInUp 0.6s ease 0.8s both;
+  }
+  .action-section h3 {
+    font-size: 16px;
+    color: #22d3ee;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .action-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 14px;
+  }
+  .action-card {
+    background: rgba(34,211,238,0.07);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+  }
+  .action-number {
+    width: 28px; height: 28px;
+    background: rgba(34,211,238,0.18);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    color: #22d3ee;
+    font-weight: 700;
+    margin: 0 auto 10px;
+  }
+  .action-card p {
+    font-size: 13px;
+    color: #c3c8c4;
+    line-height: 1.7;
+  }
+  .footer {
+    text-align: center;
+    padding: 30px 20px;
+    color: #6b625a;
+    font-size: 13px;
+  }
+  @keyframes fadeInDown { from { opacity:0; transform:translateY(-20px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes fadeInUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+
+  @media (max-width: 700px) {
+    .branches { grid-template-columns: 1fr; }
+    .book-title { font-size: 25px; letter-spacing: 0px; }
+    .action-grid { grid-template-columns: 1fr 1fr; }
+    .center-node { padding: 20px 22px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="date-badge">📅 2026年10月27日 · 每日一学</div>
+  <div class="book-title">为什么伟大不能被计划</div>
+  <div class="book-subtitle">通往伟大的路不是阶梯，而是踏脚石——你只能看见下一块，看不见终点</div>
+  <div class="book-author">作者：肯尼斯·斯坦利（Kenneth O. Stanley）· 乔尔·雷曼（Joel Lehman）· 中译出版社 2023 · 彭相珍 译</div>
+</div>
+
+<div class="mind-map">
+  <div class="center-node">
+    <h2>🗺️ 为什么伟大不能被计划 · Why Greatness Cannot Be Planned</h2>
+    <p>目标告诉你<strong>该往哪走</strong>，却同时规定了你<strong>不能往哪走</strong>；<br>而真正通向伟大的踏脚石，往往正长在被目标排除的那条路上</p>
+  </div>
+
+  <div class="branches">
+
+    <!-- 核心洞见 -->
+    <div class="branch b1">
+      <div class="branch-title">
+        <div class="branch-icon">💡</div>
+        <span style="color:#f59e0b">核心洞见</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>「目标」不是中立的工具，而是一副过滤器</strong>：它在告诉你什么是"有用的"的同时，也把"看似无用、实则关键"的东西筛掉了</li>
+        <li><strong>伟大成就的路径结构不是阶梯，而是踏脚石</strong>：阶梯的每一级都靠近终点；踏脚石只保证"从这里还能继续跳"，不保证方向</li>
+        <li><strong>目标函数具有欺骗性</strong>：很多问题里，最像"通往正确答案"的那一步，恰恰把你锁在局部最优里出不来</li>
+        <li><strong>本书的证据来自算法实验，不是励志感悟</strong>：作者在迷宫机器人、图片演化、虚拟生物等多组实验中反复观察到同一现象——去掉目标，成功率反而上升</li>
+        <li><strong>正确策略是分阶段</strong>：探索期用"新奇"作指南针，收敛期才用"目标"作筛子。多数人的错误是<strong>太早收敛</strong></li>
+        <li><strong>这不是反对努力，而是反对把目标当唯一指南针</strong>：作者明确强调，路线已知时目标管理依然高效</li>
+      </ul>
+    </div>
+
+    <!-- 框架① -->
+    <div class="branch b2">
+      <div class="branch-title">
+        <div class="branch-icon">🎯</div>
+        <span style="color:#fbbf24">核心框架①：目标神话的四道裂缝</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>裂缝一 · 幸存者偏差</strong>：我们只看到成功者事后写下的"清晰目标"，看不到同样立下目标却失败的绝大多数</li>
+        <li><strong>裂缝二 · 事后叙事</strong>：伟大的成果总被追认为"早有计划"，而当事人当时的真实状态往往是"不知道自己在做什么，但觉得有意思"</li>
+        <li><strong>裂缝三 · 度量即扭曲</strong>：一旦把目标写成可测量的指标，优化指标本身就会取代原本的目的（本书与《对赌》《噪声》在此互为印证）</li>
+        <li><strong>裂缝四 · 路径依赖</strong>：目标一旦锁定，中途出现的、比原目标更有价值的岔路，会被系统性地判为"偏离"</li>
+        <li><strong>结论</strong>：目标在高确定性任务里是加速器，在高不确定性任务里是<strong>视野收窄器</strong>——先判断任务属于哪一类，再决定用不用目标</li>
+        <li><strong>自检问题</strong>：这件事的"正确路径"我是否已经见过别人走通？是 → 用目标；否 → 用探索</li>
+      </ul>
+    </div>
+
+    <!-- 框架② -->
+    <div class="branch b3">
+      <div class="branch-title">
+        <div class="branch-icon">🪨</div>
+        <span style="color:#22d3ee">核心框架②：踏脚石模型（Stepping Stones）</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>定义</strong>：踏脚石不是"通往目标的台阶"，而是"能让你抵达更多可能性的立足点"。判断标准是<strong>后续选项是否变多</strong>，而非是否更近终点</li>
+        <li><strong>铁律</strong>：踏脚石无法被评估。它的价值只有在踩上去、看到新视野之后才显现——所以"这有什么用"是个过早的问题</li>
+        <li><strong>眼睛的来历</strong>：生物进化没有目标，眼睛的踏脚石是"一点感光能力"。若以"造出眼睛"为目标，感光点这一步通不过任何筛选</li>
+        <li><strong>非对称性</strong>：从踏脚石出发能到达的地方，往往无法从起点直接看见；反过来，看得见的目标常常无法直接抵达</li>
+        <li><strong>误用警示</strong>：踏脚石模型不是"随便乱走"。它要求每一步都<strong>真实地扩展了你的能力或选项</strong>，否则只是原地打转</li>
+        <li><strong>与人际的关系</strong>：多数关键机会来自"当时看不出用途"的连接——这解释了为什么弱连接比强连接带来更多意外收获</li>
+      </ul>
+    </div>
+
+    <!-- 框架③ -->
+    <div class="branch b4">
+      <div class="branch-title">
+        <div class="branch-icon">🧪</div>
+        <span style="color:#a78bfa">核心框架③：新奇性搜索（Novelty Search）</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>算法机制</strong>：完全删除"距目标多远"这个评价项，只奖励"与过去所有行为都不同"。不评判好坏，只评判新不新</li>
+        <li><strong>迷宫实验</strong>：以"靠近出口"为唯一标准的目标驱动搜索，40 次实验仅 3 次成功；改用新奇性搜索后，机器人在摸索中自然找到出口</li>
+        <li><strong>图片演化实验（Picbreeder）</strong>：用户只挑"看起来有趣的图"，最终演化出人脸、动物等从未被指定的形象；而一旦要求"演化出一辆车"，结果反而更差</li>
+        <li><strong>为什么有效</strong>：新奇是"通往更多新奇"的踏脚石。不断积累差异，等于不断扩大搜索空间，而目标只允许在一条窄廊里前进</li>
+        <li><strong>代价</strong>：新奇性搜索极耗资源、无法承诺时间表、无法向老板汇报进度——这是它在组织里难以推行的真实原因</li>
+        <li><strong>折中方案</strong>：不必全盘替换目标管理。只需在预算中切出一块<strong>不设 KPI 的探索区</strong>，让它与目标区并行</li>
+      </ul>
+    </div>
+
+    <!-- 框架④ -->
+    <div class="branch b5">
+      <div class="branch-title">
+        <div class="branch-icon">🔀</div>
+        <span style="color:#f472b6">核心框架④：从算法到人生（四步迁移）</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>① 识别任务类型</strong>：路线已知（考试、装修、合规）= 目标驱动；路线未知（转型、创作、研究、职业选择）= 探索驱动。用错工具是最常见的失败</li>
+        <li><strong>② 换掉评价函数</strong>：把"这件事离我的目标有多近"换成"这件事让我多知道了什么、多能做成了什么"</li>
+        <li><strong>③ 保护探索区</strong>：时间上留 15%–20% 无产出义务的探索；人际上留几个"没有用途"的连接；信息上主动读与当前目标无关的东西</li>
+        <li><strong>④ 设收敛触发器</strong>：探索不能无限期。当出现"值得下注的信号"（重复出现的兴趣、被人反复请求的能力、意外变多的选项），才切换到目标模式全力收敛</li>
+        <li><strong>教育含义</strong>：标准化考试把踏脚石压缩为一条窄路；真正稀缺的能力是"在无目标状态下持续自我驱动探索"</li>
+        <li><strong>组织含义</strong>：允许失败项目存在的公司，才可能收获意外之喜；只投"可论证回报"的项目，等于系统性剔除所有伟大的可能</li>
+      </ul>
+    </div>
+
+    <!-- 主要知识点 -->
+    <div class="branch b6">
+      <div class="branch-title">
+        <div class="branch-icon">📖</div>
+        <span style="color:#34d399">主要知识点</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>作者背景</strong>：斯坦利与雷曼均为 OpenAI 研究员、前 Uber AI 实验室创始成员，本书源于他们在"开放式搜索算法"上的研究副产品</li>
+        <li><strong>NEAT 算法</strong>：斯坦利早年的神经网络演化方法，核心思想是"同时演化结构与权重"，为后续开放式算法奠基</li>
+        <li><strong>目标驱动 vs 开放式</strong>：前者优化单一指标，后者持续生成"新问题"。人工智能的下一个前沿被作者判断为后者</li>
+        <li><strong>欺骗性问题（Deceptive Problem）</strong>：局部最优与全局最优方向相反的问题。此类问题里，越努力接近目标，越远离答案</li>
+        <li><strong>收敛与发散必须分居两段</strong>：同时追求"探索新可能"与"完成既定指标"，会让两件事都做不好</li>
+        <li><strong>收藏者 vs 寻宝者</strong>：收藏者按清单搜集，寻宝者边走边认宝。清单能保证不下错手，却也保证不会遇到清单外的东西</li>
+        <li><strong>适用边界</strong>：本书对"路径高度不确定"的领域解释力强；对工程执行、安全合规、成熟业务运营，目标管理仍是更优解</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<!-- 金句 -->
+<div class="quote-section">
+  <h3>💬 核心金句</h3>
+  <div class="quote-note">以下为书中核心论断的中文译文与意译，用于把握语气，引用时请以原书为准。</div>
+  <div class="quote-item">"目标是错误的指南针。"<span>第 4 章标题。指南针的作用是指向固定方向，而探索恰恰需要不断改向</span></div>
+  <div class="quote-item">"新奇的事物，是通往更多新奇事物的踏脚石。"<span>新奇性搜索的全部理论基础，一句话说完</span></div>
+  <div class="quote-item">"我们并不是说目标毫无用处，而是说：当你不确定该往哪走时，目标会替你做一次你并不知情的删除。"<span>目标最隐蔽的代价是"排除"，而非"限制"</span></div>
+  <div class="quote-item">"如果一条路一眼就能看出通向伟大，那它大概不是通往伟大的路。"<span>路径的不可预见性，本身就是筛选机制</span></div>
+  <div class="quote-item">"踏脚石的价值，只有在踩上去之后才会显现——这正是它无法被规划的原因。"<span>解释了为什么"这有什么用"是个过早的问题</span></div>
+  <div class="quote-item">"伟大的成就，往往是从一个连当事人自己都没打算认真对待的兴趣开始的。"<span>本书对"业余爱好"的最高评价</span></div>
+</div>
+
+<!-- 行动建议 -->
+<div class="action-section">
+  <h3>🎯 五条行动建议</h3>
+  <div class="action-grid">
+    <div class="action-card">
+      <div class="action-number">1</div>
+      <p>把当前手上的事分成<strong>两类</strong>：路线已知的用目标管理，路线未知的改为"每两周产出一个新可能"，并写下来贴在桌前</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">2</div>
+      <p>本周留出<strong>一次 3 小时</strong>无产出义务的探索，只做"有点好奇但说不出用途"的事，事后记录<strong>新出现的选项</strong></p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">3</div>
+      <p>选一个搁置已久的兴趣，用<strong>最小成本</strong>重新踩一脚（一次课、一篇论文、一次对话），只问"它让我多知道了什么"</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">4</div>
+      <p>写下你的<strong>收敛触发器</strong>三条：什么信号出现时，我会停止探索、全力投入？（如：被三个人独立请求同一件事）</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">5</div>
+      <p>复盘一次"计划失败但收获更大"的经历，找出当时那块<strong>计划外的踏脚石</strong>——它通常是你现在能力的真正来源，别把它丢掉</p>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <p>📚 每日一学 · 为什么伟大不能被计划 · 2026年10月27日</p>
+  <p style="margin-top:6px">不必先知道终点，只需确保下一步能看见更多路</p>
+</div>
+
+</body>
+</html>
