@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 意志力</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(135deg, #08090c 0%, #14161d 52%, #0a0b0f 100%);
+    min-height: 100vh;
+    color: #ece7e0;
+    padding: 20px;
+  }
+  .header {
+    text-align: center;
+    padding: 40px 20px 30px;
+    animation: fadeInDown 0.8s ease;
+  }
+  .date-badge {
+    display: inline-block;
+    background: rgba(201,138,84,0.08);
+    border: 1px solid rgba(201,138,84,0.40);
+    border-radius: 20px;
+    padding: 6px 18px;
+    font-size: 13px;
+    color: #e0a878;
+    margin-bottom: 16px;
+    letter-spacing: 1px;
+  }
+  .book-title {
+    font-size: 42px;
+    font-weight: 700;
+    background: linear-gradient(90deg, #cf6b52, #e0b96a, #5fae9c);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+    letter-spacing: 2px;
+    line-height: 1.25;
+  }
+  .book-subtitle {
+    font-size: 16px;
+    color: #b0a79b;
+    margin-bottom: 6px;
+    line-height: 1.6;
+  }
+  .book-author {
+    font-size: 14px;
+    color: #7d766c;
+  }
+  .mind-map {
+    max-width: 1100px;
+    margin: 30px auto;
+    position: relative;
+  }
+  .center-node {
+    background: linear-gradient(135deg, #2b1d12, #10312c);
+    border-radius: 20px;
+    padding: 24px 36px;
+    text-align: center;
+    margin: 0 auto 40px;
+    width: fit-content;
+    max-width: 720px;
+    box-shadow: 0 8px 32px rgba(201,138,84,0.22);
+    position: relative;
+    animation: pulse 3.6s infinite;
+  }
+  @keyframes pulse {
+    0%,100%{ box-shadow: 0 8px 32px rgba(201,138,84,0.20); }
+    50%{ box-shadow: 0 8px 48px rgba(95,174,156,0.30); }
+  }
+  .center-node h2 { font-size: 21px; color: #fff; font-weight: 700; letter-spacing: 1.5px; line-height: 1.5; }
+  .center-node p { font-size: 13px; color: rgba(255,255,255,0.92); margin-top: 10px; line-height: 1.9; }
+  .branches {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 10px;
+  }
+  .branch {
+    background: rgba(255,255,255,0.035);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 22px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    animation: fadeInUp 0.6s ease both;
+  }
+  .branch:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 36px rgba(0,0,0,0.55);
+  }
+  .branch:nth-child(1) { border-left: 4px solid #cf6b52; animation-delay: 0.1s; }
+  .branch:nth-child(2) { border-left: 4px solid #e0b96a; animation-delay: 0.2s; }
+  .branch:nth-child(3) { border-left: 4px solid #5fae9c; animation-delay: 0.3s; }
+  .branch:nth-child(4) { border-left: 4px solid #6f8fb0; animation-delay: 0.4s; }
+  .branch:nth-child(5) { border-left: 4px solid #9ec47f; animation-delay: 0.5s; }
+  .branch:nth-child(6) { border-left: 4px solid #b891b8; animation-delay: 0.6s; }
+  .branch-title {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    line-height: 1.4;
+  }
+  .branch-icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .b1 .branch-icon { background: rgba(207,107,82,0.16); }
+  .b2 .branch-icon { background: rgba(224,185,106,0.16); }
+  .b3 .branch-icon { background: rgba(95,174,156,0.16); }
+  .b4 .branch-icon { background: rgba(111,143,176,0.16); }
+  .b5 .branch-icon { background: rgba(158,196,127,0.16); }
+  .b6 .branch-icon { background: rgba(184,145,184,0.16); }
+  .leaf-list { list-style: none; padding: 0; }
+  .leaf-list li {
+    padding: 7px 0 7px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    font-size: 14px;
+    color: #cfc7bc;
+    line-height: 1.7;
+    position: relative;
+  }
+  .leaf-list li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: rgba(201,138,84,0.62);
+    font-size: 11px;
+    top: 9px;
+  }
+  .leaf-list li:last-child { border-bottom: none; }
+  .leaf-list li strong { color: #e8c887; }
+  .quote-section {
+    max-width: 1100px;
+    margin: 24px auto;
+    background: linear-gradient(135deg, rgba(224,185,106,0.07), rgba(16,49,44,0.30));
+    border: 1px solid rgba(224,185,106,0.22);
+    border-radius: 16px;
+    padding: 30px;
+    animation: fadeInUp 0.6s ease 0.7s both;
+  }
+  .quote-section h3 {
+    font-size: 16px;
+    color: #e8c887;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .quote-note {
+    font-size: 12px;
+    color: #8a8377;
+    margin-bottom: 16px;
+  }
+  .quote-item {
+    padding: 14px 20px;
+    margin: 10px 0;
+    background: rgba(255,255,255,0.035);
+    border-radius: 10px;
+    border-left: 3px solid #c98a54;
+    font-size: 15px;
+    font-style: italic;
+    color: #f2ece2;
+    line-height: 1.85;
+  }
+  .quote-item span { display: block; font-style: normal; font-size: 12px; color: #968f83; margin-top: 6px; }
+  .action-section {
+    max-width: 1100px;
+    margin: 24px auto;
+    background: rgba(95,174,156,0.05);
+    border: 1px solid rgba(95,174,156,0.18);
+    border-radius: 16px;
+    padding: 30px;
+    animation: fadeInUp 0.6s ease 0.8s both;
+  }
+  .action-section h3 {
+    font-size: 16px;
+    color: #8ec8b8;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .action-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 14px;
+  }
+  .action-card {
+    background: rgba(95,174,156,0.07);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+  }
+  .action-number {
+    width: 28px; height: 28px;
+    background: rgba(95,174,156,0.18);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    color: #8ec8b8;
+    font-weight: 700;
+    margin: 0 auto 10px;
+  }
+  .action-card p {
+    font-size: 13px;
+    color: #c6beb1;
+    line-height: 1.7;
+  }
+  .footer {
+    text-align: center;
+    padding: 30px 20px;
+    color: #6b655c;
+    font-size: 13px;
+  }
+  @keyframes fadeInDown { from { opacity:0; transform:translateY(-20px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes fadeInUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+
+  @media (max-width: 700px) {
+    .branches { grid-template-columns: 1fr; }
+    .book-title { font-size: 24px; letter-spacing: 0px; }
+    .action-grid { grid-template-columns: 1fr 1fr; }
+    .center-node { padding: 20px 22px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="date-badge">📅 2026年10月31日 · 每日一学</div>
+  <div class="book-title">意志力</div>
+  <div class="book-subtitle">自控不是品德，而是资源管理 —— 别再苛责自己"不够坚强"，先检查你的燃料与规则</div>
+  <div class="book-author">作者：罗伊·鲍迈斯特（Roy F. Baumeister）、约翰·蒂尔尼（John Tierney）· 丁丹 译 · 中信出版社</div>
+</div>
+
+<div class="mind-map">
+  <div class="center-node">
+    <h2>🔋 意志力账户 · The Willpower Account</h2>
+    <p>标准（Set a standard）→ 监控（Monitor）→ 改变的能力（Capacity to change）<br>
+    <strong>自控失败，多半不是决心不够，而是这三环中有一环塌了</strong>——这是全书唯一的主轴</p>
+  </div>
+
+  <div class="branches">
+
+    <!-- 核心洞见 -->
+    <div class="branch b1">
+      <div class="branch-title">
+        <div class="branch-icon">💡</div>
+        <span style="color:#cf6b52">核心洞见</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>意志力是有限资源，不是道德品质</strong>：它在一天之内会被消耗、需要补充，且被消耗后表现会整体下滑。把它当"品格问题"来责骂自己，是最无效的解释框架</li>
+        <li><strong>自控是通用货币，跨领域通用</strong>：抵抗甜点、忍受上司、压抑情绪、做困难决策，消耗的是同一个账户。这就是为什么"节食的人容易发火"</li>
+        <li><strong>最重要的自控对象不是行为，而是决定</strong>：一天中做的选择越多，后面的选择质量越差。真正高效的人不是更能忍，而是<strong>少做决定</strong></li>
+        <li><strong>自控的三个支柱缺一不可</strong>：有标准（知道要什么）、有监控（知道现在怎样）、有能力改变（有力量去改）。多数失败发生在"监控"这一环——你根本不知道自己在滑落</li>
+        <li><strong>规则比决心可靠</strong>：一条清晰、无例外的规则，胜过一千次临场意志力较量。模糊的"适度"是自控的最大敌人</li>
+        <li><strong>意志力的最高形态是习惯</strong>：真正的自控高手不是每次都硬扛，而是把关键行为变成不需要决策的自动化动作，从而把资源留给真正重要的事</li>
+        <li><strong>"明天我会做得更好"是最大的陷阱</strong>：我们把未来的自己想象成另一个更有空、更有毅力的人，于是今天放纵，明天补课，而明天从不来</li>
+      </ul>
+    </div>
+
+    <!-- 框架① -->
+    <div class="branch b2">
+      <div class="branch-title">
+        <div class="branch-icon">🎯</div>
+        <span style="color:#e0b96a">核心框架①：自控三要素（标准 · 监控 · 改变）</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>第一要素 · 标准（Standard）</strong>：你必须清楚"想要的表现"是什么。目标模糊的人无法自控，因为没有判断偏离的坐标</li>
+        <li><strong>目标要具体到可判定</strong>：不是"我要更健康"，而是"每周三次、每次 30 分钟"。可判定的目标才产生可执行的行动</li>
+        <li><strong>第二要素 · 监控（Monitoring）</strong>：自控的前提是知道自己此刻在做什么。监控不是道德审查，而是仪表盘读数</li>
+        <li><strong>"量表效应"</strong>：仅仅记录行为（体重、支出、时间、饮酒量），就足以显著改善行为。人一旦被测量，就会向标准靠拢</li>
+        <li><strong>监控必须是即时的、可见的</strong>：月底才看账单毫无用处。频率比精度更重要</li>
+        <li><strong>第三要素 · 改变的能力（Capacity）</strong>：知道该改、也知道现状，仍需要力量去执行。这一环依赖生理状态与资源余量</li>
+        <li><strong>诊断顺序</strong>：自控失败时，按"标准是否清晰 → 监控是否存在 → 资源是否耗尽"逐层排查，而不是直接归因于"我这个人不行"</li>
+      </ul>
+    </div>
+
+    <!-- 框架② -->
+    <div class="branch b3">
+      <div class="branch-title">
+        <div class="branch-icon">🔋</div>
+        <span style="color:#5fae9c">核心框架②：资源经济学——把意志力用在刀刃上</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>自我损耗（Ego Depletion）</strong>：先完成一项需要自控的任务，紧接着的第二项任务表现会下降。损耗是真实的即时效应，而非懒惰的借口</li>
+        <li><strong>决策疲劳</strong>：书中引用以色列假释法官研究——同一法官在餐后时段批准率显著高于临近休息时段。判断质量随决策次数递减</li>
+        <li><strong>生理基础</strong>：低血糖状态下自控表现明显变差；补充葡萄糖能短期恢复部分自控力。极端节食同时做重大决策，是最坏的组合</li>
+        <li><strong>情绪调节也在花同一笔钱</strong>：压抑情绪、假装礼貌、忍受枯燥，都是持续的隐性支出。这就是"社交一天后回家就崩溃"的原因</li>
+        <li><strong>使用策略一 · 排程</strong>：把最需要自控的事（重要决策、深度工作、艰难沟通）放在资源最充足的时段，通常是上午</li>
+        <li><strong>使用策略二 · 减少无谓消耗</strong>：固定穿搭、固定菜单、固定流程，把低价值决策从账户里删掉，腾给高价值决策</li>
+        <li><strong>使用策略三 · 主动恢复</strong>：规律进食、睡眠、短暂休息、正向情绪与社交。恢复不是偷懒，是补充燃料</li>
+        <li><strong>重要限定</strong>：损耗效应的实验可重复性在学界存疑（见"主要知识点"）。请把"意志力账户"当作<strong>有用的管理隐喻</strong>，而非精确的生理定律</li>
+      </ul>
+    </div>
+
+    <!-- 框架③ -->
+    <div class="branch b4">
+      <div class="branch-title">
+        <div class="branch-icon">⚓</div>
+        <span style="color:#6f8fb0">核心框架③：预承诺——把自控外包给制度</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>奥德修斯策略</strong>：知道自己未来会失控，就提前绑住自己。不是靠更强的意志，而是靠<strong>取消未来的选择权</strong></li>
+        <li><strong>三种预承诺工具</strong>：物理隔离（把零食不买回家）、经济押金（违约付钱给对手）、公开承诺（把目标告知他人）</li>
+        <li><strong>底线规则（Bright Lines）</strong>：设一条清晰、不可协商的界线——"工作日不饮酒""睡前不看手机"。模糊地带是反复谈判的战场，规则是停战线</li>
+        <li><strong>为什么"适度"会失败</strong>：每一次"就这一次"都需要重新做一次决策，而每次决策都在消耗资源，且倾向松动。规则把无限次谈判压缩为一次设定</li>
+        <li><strong>习惯化是终局</strong>：把行为绑定到固定线索（时间、地点、前一动作），让它在无决策状态下自动发生。自控的终点是不再需要自控</li>
+        <li><strong>改变环境优于改变自己</strong>：把诱惑移出视线、把工具放在手边。<strong>让正确的事变容易，让错误的事变麻烦</strong>，比任何决心都稳定</li>
+        <li><strong>警惕道德许可（Moral Licensing）</strong>：做完一件"好"事后容易放纵一次。进展本身就是最危险的松懈信号，需要在有进步时格外守住规则</li>
+      </ul>
+    </div>
+
+    <!-- 框架④ -->
+    <div class="branch b5">
+      <div class="branch-title">
+        <div class="branch-icon">📈</div>
+        <span style="color:#9ec47f">核心框架④：目标与时间——管住"明天的自己"</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>近端目标优于远端目标</strong>：长远愿景提供方向，但驱动行为的是本周可完成的具体任务。把"今年要读完 30 本书"拆成"今晚读 20 页"</li>
+        <li><strong>月度审计法</strong>：书中建议每月选定一两个具体目标，逐项定量追踪、月末复盘。数量少才追得动，追得动才有反馈</li>
+        <li><strong>双目标结构</strong>：一个"必须达成"的底线目标 + 一个"努力争取"的挑战目标。前者防崩溃，后者防平庸</li>
+        <li><strong>拖延的本质是时间贴现</strong>：眼前的小奖励权重被放大，未来的大回报被折价。解法不是"更有毅力"，而是缩短反馈周期——把远期收益搬到今天可见</li>
+        <li><strong>把未来的自己当同一个人</strong>：为老年储蓄、为明天留出精力，本质是与未来自我建立连续感。越是把未来自我当陌生人，越容易透支</li>
+        <li><strong>别用"进步感"替代"进步"</strong>：准备、收藏、买课带来的满足感会替代真实行动。记录产出，而不是记录投入</li>
+        <li><strong>失败后的复盘模板</strong>：触发情境是什么 → 当时账户余额如何 → 哪一环（标准/监控/能力）断了 → 下次用什么结构性安排替代意志力</li>
+      </ul>
+    </div>
+
+    <!-- 主要知识点 -->
+    <div class="branch b6">
+      <div class="branch-title">
+        <div class="branch-icon">📖</div>
+        <span style="color:#b891b8">主要知识点</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>作者背景</strong>：罗伊·鲍迈斯特，佛罗里达州立大学心理学教授，社会心理学自控研究领域的奠基者之一，"自我损耗"理论的提出者；约翰·蒂尔尼，《纽约时报》科学专栏作家</li>
+        <li><strong>出版信息</strong>：英文原版 Willpower: Rediscovering the Greatest Human Strength，2011 年出版；简体中文版由中信出版社引进，丁丹译</li>
+        <li><strong>全书结构</strong>：意志力的生理与心理机制 → 自控三要素 → 目标与监控的实践方法 → 习惯与预承诺 → 在育儿、组织、饮食、财务、戒瘾等场景的应用</li>
+        <li><strong>关键实验</strong>：萝卜与饼干的经典实验——被要求忍住饼干吃萝卜的受试者，在随后的无解几何题上坚持时间明显更短。这是"自我损耗"最常被引用的证据</li>
+        <li><strong>自我控制与人生结果</strong>：书中引用达克沃斯等人的研究，童年期自控力水平对成年后的健康、财务、犯罪记录具有预测力，其解释力在某些样本中超过智商</li>
+        <li><strong>必须知道的争议</strong>：2016 年后多项大样本多实验室重复实验未能复现"葡萄糖补充恢复自控"与强版本的自我损耗效应，学界目前倾向认为效应存在但远小于原报告，且高度依赖信念与情境。<strong>阅读时应把本书当作行为管理框架，而非生理学定论</strong></li>
+        <li><strong>与同类书的区别</strong>：不同于《习惯的力量》侧重组织与习惯回路，也不同于《掌控习惯》侧重身份认同，本书的核心贡献是<strong>把自控还原为"资源 + 监控 + 规则"的工程问题</strong></li>
+        <li><strong>最反直觉的一条</strong>：提高自控力最有效的方式，往往不是训练意志，而是<strong>减少需要动用意志的场合</strong></li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<!-- 金句 -->
+<div class="quote-section">
+  <h3>💬 核心金句</h3>
+  <div class="quote-note">以下为书中核心论断的中文译文与意译，用于把握语气，引用时请以原书为准。</div>
+  <div class="quote-item">"意志力就像肌肉：用多了会疲劳，但长期锻炼会变强。"<span>全书的基础比喻，也解释了为什么"越忙越容易崩"</span></div>
+  <div class="quote-item">"自控的第一步不是压抑冲动，而是知道自己正在做什么。"<span>监控先于控制——没有仪表盘就无法驾驶</span></div>
+  <div class="quote-item">"一条清晰的规则，胜过一千次临场抉择。"<span>预承诺的全部价值，在于取消未来的谈判</span></div>
+  <div class="quote-item">"我们最大的错觉之一，是相信明天的自己会比今天的自己更有空、更有毅力。"<span>拖延与透支的共同根源</span></div>
+  <div class="quote-item">"不要问自己能不能抵抗诱惑，要问自己能不能不遇见诱惑。"<span>环境设计优于意志对抗</span></div>
+  <div class="quote-item">"衡量一个人自控力的，不是他在诱惑前的表现，而是他为自己安排了多少不需要抵抗的时刻。"<span>结构性安排才是自控的真实水平</span></div>
+  <div class="quote-item">"进步之后是最危险的时刻。"<span>道德许可效应：刚做完好事，就更容易放纵一次</span></div>
+</div>
+
+<!-- 行动建议 -->
+<div class="action-section">
+  <h3>🎯 五条行动建议</h3>
+  <div class="action-grid">
+    <div class="action-card">
+      <div class="action-number">1</div>
+      <p><strong>做一次三要素体检</strong>：挑一个反复失败的习惯，分别回答"标准清楚吗、我在监控吗、资源够吗"，找出真正断裂的那一环</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">2</div>
+      <p><strong>建立一张即时监控表</strong>：只记录一个数字（睡眠时长／支出／专注小时），每天 30 秒，连续 14 天，不要追求精度</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">3</div>
+      <p><strong>设一条底线规则</strong>：选一个你总在"就这一次"上失守的领域，写成不可协商的一句话，贴在能看见的地方</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">4</div>
+      <p><strong>把最难的决策挪到上午</strong>：本周把一件需要判断力的事从下午移到上午 9–11 点，对比自己的输出质量</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">5</div>
+      <p><strong>做一次环境改造</strong>：今晚花 10 分钟，把一件诱惑移到看不见的地方，把一件该做的事摆到桌面正中央</p>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <p>📚 每日一学 · 意志力 · 2026年10月31日</p>
+  <p style="margin-top:6px">少做决定，多做安排</p>
+</div>
+
+</body>
+</html>
