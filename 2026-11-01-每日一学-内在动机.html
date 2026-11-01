@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 内在动机</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(135deg, #0a0913 0%, #171430 52%, #090810 100%);
+    min-height: 100vh;
+    color: #ece8f2;
+    padding: 20px;
+  }
+  .header {
+    text-align: center;
+    padding: 40px 20px 30px;
+    animation: fadeInDown 0.8s ease;
+  }
+  .date-badge {
+    display: inline-block;
+    background: rgba(232,193,90,0.08);
+    border: 1px solid rgba(232,193,90,0.40);
+    border-radius: 20px;
+    padding: 6px 18px;
+    font-size: 13px;
+    color: #e8c15a;
+    margin-bottom: 16px;
+    letter-spacing: 1px;
+  }
+  .book-title {
+    font-size: 42px;
+    font-weight: 700;
+    background: linear-gradient(90deg, #e8c15a, #9d8ad1, #6fbf9a);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+    letter-spacing: 2px;
+    line-height: 1.25;
+  }
+  .book-subtitle {
+    font-size: 16px;
+    color: #b3aec4;
+    margin-bottom: 6px;
+    line-height: 1.6;
+    max-width: 780px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .book-author {
+    font-size: 14px;
+    color: #7f7a92;
+  }
+  .mind-map {
+    max-width: 1100px;
+    margin: 30px auto;
+    position: relative;
+  }
+  .center-node {
+    background: linear-gradient(135deg, #2a2140, #10312c);
+    border-radius: 20px;
+    padding: 24px 36px;
+    text-align: center;
+    margin: 0 auto 40px;
+    width: fit-content;
+    max-width: 720px;
+    box-shadow: 0 8px 32px rgba(232,193,90,0.20);
+    position: relative;
+    animation: pulse 3.6s infinite;
+  }
+  @keyframes pulse {
+    0%,100%{ box-shadow: 0 8px 32px rgba(232,193,90,0.18); }
+    50%{ box-shadow: 0 8px 48px rgba(157,138,209,0.32); }
+  }
+  .center-node h2 { font-size: 21px; color: #fff; font-weight: 700; letter-spacing: 1.5px; line-height: 1.5; }
+  .center-node p { font-size: 13px; color: rgba(255,255,255,0.92); margin-top: 10px; line-height: 1.9; }
+  .branches {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 10px;
+  }
+  .branch {
+    background: rgba(255,255,255,0.035);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 22px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    animation: fadeInUp 0.6s ease both;
+  }
+  .branch:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 36px rgba(0,0,0,0.55);
+  }
+  .branch:nth-child(1) { border-left: 4px solid #e8c15a; animation-delay: 0.1s; }
+  .branch:nth-child(2) { border-left: 4px solid #9d8ad1; animation-delay: 0.2s; }
+  .branch:nth-child(3) { border-left: 4px solid #6fbf9a; animation-delay: 0.3s; }
+  .branch:nth-child(4) { border-left: 4px solid #7bb6d9; animation-delay: 0.4s; }
+  .branch:nth-child(5) { border-left: 4px solid #e08f6d; animation-delay: 0.5s; }
+  .branch:nth-child(6) { border-left: 4px solid #c58fc0; animation-delay: 0.6s; }
+  .branch-title {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    line-height: 1.4;
+  }
+  .branch-icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .b1 .branch-icon { background: rgba(232,193,90,0.16); }
+  .b2 .branch-icon { background: rgba(157,138,209,0.16); }
+  .b3 .branch-icon { background: rgba(111,191,154,0.16); }
+  .b4 .branch-icon { background: rgba(123,182,217,0.16); }
+  .b5 .branch-icon { background: rgba(224,143,109,0.16); }
+  .b6 .branch-icon { background: rgba(197,143,192,0.16); }
+  .leaf-list { list-style: none; padding: 0; }
+  .leaf-list li {
+    padding: 7px 0 7px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    font-size: 14px;
+    color: #cdc8d8;
+    line-height: 1.7;
+    position: relative;
+  }
+  .leaf-list li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: rgba(232,193,90,0.60);
+    font-size: 11px;
+    top: 9px;
+  }
+  .leaf-list li:last-child { border-bottom: none; }
+  .leaf-list li strong { color: #efd88e; }
+  .quote-section {
+    max-width: 1100px;
+    margin: 24px auto;
+    background: linear-gradient(135deg, rgba(232,193,90,0.07), rgba(23,20,48,0.40));
+    border: 1px solid rgba(232,193,90,0.22);
+    border-radius: 16px;
+    padding: 30px;
+    animation: fadeInUp 0.6s ease 0.7s both;
+  }
+  .quote-section h3 {
+    font-size: 16px;
+    color: #efd88e;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .quote-note {
+    font-size: 12px;
+    color: #8b869c;
+    margin-bottom: 16px;
+  }
+  .quote-item {
+    padding: 14px 20px;
+    margin: 10px 0;
+    background: rgba(255,255,255,0.035);
+    border-radius: 10px;
+    border-left: 3px solid #e8c15a;
+    font-size: 15px;
+    font-style: italic;
+    color: #f4f0e6;
+    line-height: 1.85;
+  }
+  .quote-item span { display: block; font-style: normal; font-size: 12px; color: #9892a8; margin-top: 6px; }
+  .action-section {
+    max-width: 1100px;
+    margin: 24px auto;
+    background: rgba(111,191,154,0.05);
+    border: 1px solid rgba(111,191,154,0.18);
+    border-radius: 16px;
+    padding: 30px;
+    animation: fadeInUp 0.6s ease 0.8s both;
+  }
+  .action-section h3 {
+    font-size: 16px;
+    color: #8fd2b4;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .action-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 14px;
+  }
+  .action-card {
+    background: rgba(111,191,154,0.07);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+  }
+  .action-number {
+    width: 28px; height: 28px;
+    background: rgba(111,191,154,0.18);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    color: #8fd2b4;
+    font-weight: 700;
+    margin: 0 auto 10px;
+  }
+  .action-card p {
+    font-size: 13px;
+    color: #c4bfd1;
+    line-height: 1.7;
+  }
+  .footer {
+    text-align: center;
+    padding: 30px 20px;
+    color: #6c677e;
+    font-size: 13px;
+  }
+  @keyframes fadeInDown { from { opacity:0; transform:translateY(-20px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes fadeInUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+
+  @media (max-width: 700px) {
+    .branches { grid-template-columns: 1fr; }
+    .book-title { font-size: 24px; letter-spacing: 0px; }
+    .action-grid { grid-template-columns: 1fr 1fr; }
+    .center-node { padding: 20px 22px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="date-badge">📅 2026年11月1日 · 每日一学</div>
+  <div class="book-title">内在动机</div>
+  <div class="book-subtitle">人不是被推动的机器，而是会生长的生命 —— 先给足自主、胜任、联结三种养分，再谈"自律"</div>
+  <div class="book-author">作者：爱德华·L. 德西（Edward L. Deci）、理查德·弗拉斯特（Richard Flaste）· 王正林 译 · 机械工业出版社</div>
+</div>
+
+<div class="mind-map">
+  <div class="center-node">
+    <h2>🔥 自我决定论 · Self-Determination Theory</h2>
+    <p>三大心理需求（自主 · 胜任 · 联结）→ 动机内化（外部 → 内摄 → 认同 → 整合）→ 真实的自我<br>
+    <strong>凡是"靠意志硬撑"的行为，多半卡在内化的中途</strong>——这是全书唯一的主轴</p>
+  </div>
+
+  <div class="branches">
+
+    <!-- 核心洞见 -->
+    <div class="branch b1">
+      <div class="branch-title">
+        <div class="branch-icon">💡</div>
+        <span style="color:#e8c15a">核心洞见</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>人天生有成长倾向，但成长需要养分</strong>：人的本性是主动、好奇、寻求整合的；然而这一倾向极其脆弱，高度依赖环境是否提供支持。压抑不是"人性本惰"，而是养分被抽走后的自然枯萎</li>
+        <li><strong>内在动机与外在动机是性质差异，不是程度差异</strong>：前者为活动本身的兴趣而做，后者为活动带来的结果而做。同一件事，做它的理由不同，体验、质量与持久性完全不同</li>
+        <li><strong>奖励并不总是激励</strong>：当奖励被体验为"控制"，它会把行为归因从内部推向外部，削弱内在动机——这就是<strong>过度理由效应</strong>。付钱让孩子读书，会把"我想读"悄悄换成"我为钱读"</li>
+        <li><strong>自主不等于独立</strong>：自主（autonomy）指行为出于自己的意愿，而非独自行动。人可以高度依赖他人而依然自主，也可以孤身一人却完全被操控。把"自主"误读为"不合群"，是本书最常被误解的一点</li>
+        <li><strong>真正的自控不是压住自己，而是整合自己</strong>：靠"应该、必须、羞耻"维持的行为是分裂的，会在无人监督或压力升高时崩塌；整合之后的行为不需要自我对抗</li>
+        <li><strong>三种心理需求像植物的水、光、土</strong>：自主、胜任、联结获得满足，人便蓬勃、灵活、有创造力；被剥夺，则表现为倦怠、疏离、被动，甚至病态</li>
+        <li><strong>控制换来顺从，自主换来投入</strong>：威胁与奖惩能买到短期服从，代价是创造力、灵活性与长期坚持——而这三样恰恰是复杂工作中唯一值钱的部分</li>
+        <li><strong>越推越抵抗，是结构性的而非性格问题</strong>：压力的本质是剥夺自主，被剥夺自主的人必然启动防御。想改变他人，最有效的路径是支持其自主，而不是加大压力</li>
+      </ul>
+    </div>
+
+    <!-- 框架① -->
+    <div class="branch b2">
+      <div class="branch-title">
+        <div class="branch-icon">🌱</div>
+        <span style="color:#9d8ad1">核心框架①：三大基本心理需求</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>自主（Autonomy）</strong>：感到行为出于自己，而非被操纵、被胁迫。核心体验是"我愿意"。注意：这是"意愿感"，不是"没人管"</li>
+        <li><strong>胜任（Competence）</strong>：感到自己能有效应对环境、能产生影响。核心体验是"我能行"。它需要<strong>最优挑战</strong>——太难则挫败，太易则无聊，两者都不产生胜任感</li>
+        <li><strong>联结（Relatedness）</strong>：感到与他人有真实的连接、被理解、被在意。核心体验是"我不是一个人在面对"</li>
+        <li><strong>三者缺一不可，但自主是枢纽</strong>：没有自主的胜任感是"被使用"，没有自主的联结是"依附"。只有自主参与，另两项才会转化为真正的动机</li>
+        <li><strong>需求 ≠ 欲望</strong>：需求是普遍的心理养分，欲望是被社会与文化塑造的具体目标。满足欲望（更高的薪水、更多的赞）未必满足需求，这正是"成功了却空虚"的结构</li>
+        <li><strong>三个需求都通过"体验"满足，不能通过"给予"满足</strong>：奖励是外部给予的结果，养分是活动过程本身的质量。你可以给奖金，但无法代替对方体验到他自己的意愿</li>
+        <li><strong>诊断顺序</strong>：面对倦怠、拖延、疏离，先问"哪一种需求被剥夺了"，而不是问"他缺什么激励"。用错药方，会加速恶化</li>
+        <li><strong>对自己的用法</strong>：每周回看一次——这周我有没有做过至少一件"完全由我决定"的事？有没有感到"我在变强"？有没有一次真实的对话？</li>
+      </ul>
+    </div>
+
+    <!-- 框架② -->
+    <div class="branch b3">
+      <div class="branch-title">
+        <div class="branch-icon">🪜</div>
+        <span style="color:#6fbf9a">核心框架②：动机内化的四级阶梯</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>第一级 · 外部调节</strong>：为奖惩而做。"做完有奖金""不做会被罚"。行为完全依附于外部条件，条件一撤，行为立刻消失</li>
+        <li><strong>第二级 · 内摄调节</strong>：为不内疚、为维持自尊而做。行为已进入内心，但仍是"别人的声音"在说话。表现是"不做会自责，做了也不快乐"</li>
+        <li><strong>第三级 · 认同调节</strong>：真正认可这件事的价值。"我理解它为什么对我重要"。这是关键转折点——行为第一次不需要监督</li>
+        <li><strong>第四级 · 整合调节</strong>：行为与自我完全一致，成为价值观的一部分。做它不需要理由，不做反而别扭。这是内化的终点</li>
+        <li><strong>内摄是最危险的一站，因为它长得像自律</strong>：靠羞耻与"应该"驱动的人，在有人看时表现优秀，独处时迅速崩塌。很多"高成就者的倦怠"都停在这一级</li>
+        <li><strong>内化需要三个条件</strong>：自主支持的环境、可获得的胜任体验、足够安全的联结。任缺一项，内化就会卡在原地，只能靠外部压力续命</li>
+        <li><strong>内化不能强求</strong>：要求对方"你要自觉一点"，恰恰是内化失败的最常见原因——因为这句话本身就是控制，只会把人推回第一级</li>
+        <li><strong>实践改问法</strong>：不要问"怎么让他更有动力"，改问"这个要求能被认同到什么程度，缺的是理由、能力还是关系"</li>
+      </ul>
+    </div>
+
+    <!-- 框架③ -->
+    <div class="branch b4">
+      <div class="branch-title">
+        <div class="branch-icon">⚖️</div>
+        <span style="color:#7bb6d9">核心框架③：控制 vs 自主支持</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>控制性做法</strong>：命令式措辞（"你必须""你应该"）、威胁与最后通牒、内疚诱导（"我为你付出这么多"）、爱的撤回、公开比较与排名</li>
+        <li><strong>自主支持的四个动作</strong>：① 提供选择 ② 解释理由 ③ 承认并接纳负面感受 ④ 使用非控制性语言（"可以"替代"必须"）</li>
+        <li><strong>解释理由为什么关键</strong>：理由把"任意意志"转化为"可理解的结构"，让人从"被要求"变成"理解了再选择"。哪怕最终没有选择权，理解本身也保留了自主感</li>
+        <li><strong>承认感受不是让步</strong>："我知道这很烦"与"那你可以不做"是两件事。承认感受消除对抗，边界依然可以维持</li>
+        <li><strong>评价的陷阱</strong>：等级评定与横向排名，会把注意力从"活动本身"转移到"被评价的自我"，从而削弱内在动机。反馈应<strong>对事不对人</strong>，指向具体行为与改进路径</li>
+        <li><strong>表扬也要辨方向</strong>：对天赋的表扬（"你真聪明"）容易把人推向"证明自己"的表现目标；对过程与策略的关注，更能维持持久兴趣</li>
+        <li><strong>竞争与硬性期限的副作用</strong>：在本来有趣的任务上引入竞争、截止日期与监控，内在动机会明显下降。它们适用于枯燥的机械任务，不适用于需要创造力的任务</li>
+        <li><strong>重要边界</strong>：自主支持不等于放任。结构与边界是必需的，关键在于<strong>如何给</strong>——有边界且解释理由，优于无边界，也优于强制边界</li>
+      </ul>
+    </div>
+
+    <!-- 框架④ -->
+    <div class="branch b5">
+      <div class="branch-title">
+        <div class="branch-icon">🧭</div>
+        <span style="color:#e08f6d">核心框架④：四个场景的落地</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>育儿与教育</strong>：目标不是让孩子"听话"，而是让他"认同"。把命令换成"信息 + 选择 + 理由"，允许在无关安全的范围内自己承担后果</li>
+        <li><strong>工作与管理</strong>：KPI 与排名能买来服从，买不来投入。支持自主的管理者提供三样东西：可自主的选择空间、能带来成长的挑战、真实的信息与尊重</li>
+        <li><strong>健康与行为改变</strong>：说教与恐吓短期有效、长期反弹。有效路径是帮人找到"他自己在意的理由"，并把目标切到"小到必然能成"，以积累胜任感</li>
+        <li><strong>对自己的自我管理</strong>：把每一句"我应该"改写成"我选择……因为……"。若写不出理由，说明这条要求本就不属于你，强行执行只是在内摄层面空转</li>
+        <li><strong>盘点工具</strong>：列出你正在"靠意志硬撑"的三件事，逐一标注调节类型（外部／内摄／认同／整合）。多数人的疲惫，来自同时维持太多"内摄型任务"</li>
+        <li><strong>无法选择时仍有自主</strong>：任务不可选时，仍可在"怎么做、以什么态度做、赋予什么意义"上保留决定权。这是自主的最后阵地，也是倦怠与尊严的分界线</li>
+        <li><strong>长期效应差异</strong>：自主支持型环境培养出"能自我发起的人"；控制型环境培养出"等指令的人"。前者在变化中适应，后者在变化中瘫痪</li>
+        <li><strong>最难的一条</strong>：对自己也使用同一套方法——自我苛责本质上是对自己施加控制，它同样会削弱而非增强你的内在动机</li>
+      </ul>
+    </div>
+
+    <!-- 主要知识点 -->
+    <div class="branch b6">
+      <div class="branch-title">
+        <div class="branch-icon">📖</div>
+        <span style="color:#c58fc0">主要知识点</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>作者背景</strong>：爱德华·L. 德西，罗切斯特大学心理学教授，自我决定论（SDT）创始人之一；理查德·弗拉斯特，《纽约时报》前科学编辑，负责本书的通俗化叙述</li>
+        <li><strong>理论脉络</strong>：德西与理查德·瑞安（Richard Ryan）自 1970 年代起共同发展 SDT，使其成为当代动机心理学影响力最大的理论框架之一，衍生出认知评价理论、有机整合理论等子理论</li>
+        <li><strong>关键实验一</strong>：1971 年 Soma 拼图实验——被付钱解题的被试，在自由休息时间反而更少继续玩；报酬撤除后兴趣进一步下降</li>
+        <li><strong>关键实验二</strong>：Lepper、Greene &amp; Nisbett（1973）绘画实验——事先被告知有"好玩家奖"的孩子，后续自由绘画时间显著少于未被承诺奖励的孩子</li>
+        <li><strong>核心概念</strong>：过度理由效应（overjustification effect）——外部奖励使行为归因从内部转向外部，从而削弱原本存在的内在动机</li>
+        <li><strong>元分析结论</strong>：Deci、Koestner &amp; Ryan（1999）综述表明，"完成任务即给的实物奖励"会削弱内在动机；而口头表扬与正向信息性反馈，倾向于增强内在动机</li>
+        <li><strong>与《驱动力》的区别</strong>：丹尼尔·平克的《驱动力》是 SDT 的通俗传播版本；本书是理论源头，含更多实验细节与教育、医疗、家庭场景的一手材料</li>
+        <li><strong>必须知道的边界</strong>：跨文化研究中"自主"的具体表达存在差异，集体主义语境更强调"关系中的自愿"；且实验室效应量有限，不应把"奖励一定有害"当作教条——对本来毫无兴趣的机械任务，奖励仍然有效</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<!-- 金句 -->
+<div class="quote-section">
+  <h3>💬 核心金句</h3>
+  <div class="quote-note">以下为书中核心论断的中文译文与意译，用于把握语气，引用时请以原书为准。</div>
+  <div class="quote-item">"人不是被推动的机器，而是会生长的生命。"<span>全书的人性假设，也是它与行为主义激励观的彻底分界</span></div>
+  <div class="quote-item">"当我们为做一件事而给予奖励时，我们常常是在暗示：这件事本身不值得做。"<span>过度理由效应的一句话版本</span></div>
+  <div class="quote-item">"自主并不意味着独立行事，而意味着出于自己的意愿行事。"<span>纠正"自主＝不合群"的常见误读</span></div>
+  <div class="quote-item">"真正的问题是：一个人是在做他自己，还是在做别人期望他成为的人？"<span>内摄与整合的分水岭</span></div>
+  <div class="quote-item">"控制能带来顺从，但顺从的代价是投入。"<span>短期效率与长期创造力的交换</span></div>
+  <div class="quote-item">"内化不是被说服，而是被理解。"<span>为什么讲道理无效、解释理由有效</span></div>
+  <div class="quote-item">"你可以拿走一个人的选择，但你拿不走他对意义的判断。"<span>自主的最后阵地</span></div>
+</div>
+
+<!-- 行动建议 -->
+<div class="action-section">
+  <h3>🎯 五条行动建议</h3>
+  <div class="action-grid">
+    <div class="action-card">
+      <div class="action-number">1</div>
+      <p><strong>做一次调节类型盘点</strong>：列出三件你正在硬撑的事，逐一标注是外部／内摄／认同／整合，找出那件"纯粹靠内疚驱动"的事</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">2</div>
+      <p><strong>改写一句自我对话</strong>：把一个"我必须……"改成"我选择……因为……"，如果写不出理由，考虑放下它而不是加大力气</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">3</div>
+      <p><strong>演练一次自主支持式沟通</strong>：对孩子／同事／伴侣，用"提供选择 + 解释理由 + 承认感受"替代命令，观察对方的抵抗是否减弱</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">4</div>
+      <p><strong>审查你给出的奖励</strong>：本周每一次奖励或表扬，问自己一句——这是为了控制行为，还是为了表达认可？前者换成信息性反馈</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">5</div>
+      <p><strong>恢复一件"无用"的乐趣</strong>：找回一件不产出、不打卡、不发朋友圈也愿意做的事，每周留 30 分钟给它</p>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <p>📚 每日一学 · 内在动机 · 2026年11月1日</p>
+  <p style="margin-top:6px">先问需求，再谈激励</p>
+</div>
+
+</body>
+</html>
