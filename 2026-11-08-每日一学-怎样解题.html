@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 怎样解题</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(140deg, #050d14 0%, #0a1a26 46%, #04090e 100%);
+    min-height: 100vh;
+    color: #e2eaf0;
+    padding: 20px;
+  }
+  .header {
+    text-align: center;
+    padding: 40px 20px 30px;
+    animation: fadeInDown 0.8s ease;
+  }
+  .date-badge {
+    display: inline-block;
+    background: rgba(74,159,216,0.08);
+    border: 1px solid rgba(74,159,216,0.34);
+    border-radius: 20px;
+    padding: 6px 18px;
+    font-size: 13px;
+    color: #7ec0e8;
+    margin-bottom: 16px;
+    letter-spacing: 1px;
+  }
+  .book-title {
+    font-size: 46px;
+    font-weight: 700;
+    background: linear-gradient(90deg, #4a9fd8, #d9a441, #7fae8f);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+    letter-spacing: 6px;
+    line-height: 1.3;
+  }
+  .book-subtitle {
+    font-size: 16px;
+    color: #9fb2c0;
+    margin-bottom: 6px;
+    line-height: 1.6;
+    max-width: 840px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .book-author {
+    font-size: 14px;
+    color: #71838f;
+  }
+  .mind-map {
+    max-width: 1100px;
+    margin: 30px auto;
+    position: relative;
+  }
+  .center-node {
+    background: linear-gradient(135deg, #0c1c28, #081218);
+    border-radius: 20px;
+    padding: 24px 36px;
+    text-align: center;
+    margin: 0 auto 40px;
+    width: fit-content;
+    max-width: 800px;
+    box-shadow: 0 8px 32px rgba(74,159,216,0.12);
+    position: relative;
+    animation: pulse 3.8s infinite;
+  }
+  @keyframes pulse {
+    0%,100%{ box-shadow: 0 8px 32px rgba(74,159,216,0.11); }
+    50%{ box-shadow: 0 8px 48px rgba(217,164,65,0.20); }
+  }
+  .center-node h2 { font-size: 21px; color: #fff; font-weight: 700; letter-spacing: 1.5px; line-height: 1.5; }
+  .center-node p { font-size: 13px; color: rgba(255,255,255,0.90); margin-top: 10px; line-height: 1.9; }
+  .branches {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 10px;
+  }
+  .branch {
+    background: rgba(255,255,255,0.032);
+    border: 1px solid rgba(255,255,255,0.075);
+    border-radius: 16px;
+    padding: 22px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    animation: fadeInUp 0.6s ease both;
+  }
+  .branch:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 36px rgba(0,0,0,0.6);
+  }
+  .branch:nth-child(1) { border-left: 4px solid #4a9fd8; animation-delay: 0.1s; }
+  .branch:nth-child(2) { border-left: 4px solid #d9a441; animation-delay: 0.2s; }
+  .branch:nth-child(3) { border-left: 4px solid #7fae8f; animation-delay: 0.3s; }
+  .branch:nth-child(4) { border-left: 4px solid #c07a6a; animation-delay: 0.4s; }
+  .branch:nth-child(5) { border-left: 4px solid #9b8ec4; animation-delay: 0.5s; }
+  .branch:nth-child(6) { border-left: 4px solid #7e8b94; animation-delay: 0.6s; }
+  .branch-title {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    line-height: 1.4;
+  }
+  .branch-icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .b1 .branch-icon { background: rgba(74,159,216,0.16); }
+  .b2 .branch-icon { background: rgba(217,164,65,0.16); }
+  .b3 .branch-icon { background: rgba(127,174,143,0.16); }
+  .b4 .branch-icon { background: rgba(192,122,106,0.16); }
+  .b5 .branch-icon { background: rgba(155,142,196,0.15); }
+  .b6 .branch-icon { background: rgba(126,139,148,0.15); }
+  .leaf-list { list-style: none; padding: 0; }
+  .leaf-list li {
+    padding: 7px 0 7px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.045);
+    font-size: 14px;
+    color: #bfcdd6;
+    line-height: 1.75;
+    position: relative;
+  }
+  .leaf-list li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: rgba(74,159,216,0.55);
+    font-size: 11px;
+    top: 9px;
+  }
+  .leaf-list li:last-child { border-bottom: none; }
+  .leaf-list li strong { color: #e4c793; }
+  .quote-section {
+    max-width: 1100px;
+    margin: 24px auto;
+    background: linear-gradient(135deg, rgba(74,159,216,0.06), rgba(8,18,24,0.45));
+    border: 1px solid rgba(74,159,216,0.18);
+    border-radius: 16px;
+    padding: 30px;
+    animation: fadeInUp 0.6s ease 0.7s both;
+  }
+  .quote-section h3 {
+    font-size: 16px;
+    color: #7ec0e8;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .quote-note {
+    font-size: 12px;
+    color: #7c8b96;
+    margin-bottom: 16px;
+    line-height: 1.7;
+  }
+  .quote-item {
+    padding: 14px 20px;
+    margin: 10px 0;
+    background: rgba(255,255,255,0.032);
+    border-radius: 10px;
+    border-left: 3px solid #4a9fd8;
+    font-size: 15px;
+    color: #edf2f6;
+    line-height: 1.85;
+  }
+  .quote-item span { display: block; font-size: 12px; color: #8899a4; margin-top: 6px; }
+  .action-section {
+    max-width: 1100px;
+    margin: 24px auto;
+    background: rgba(217,164,65,0.045);
+    border: 1px solid rgba(217,164,65,0.18);
+    border-radius: 16px;
+    padding: 30px;
+    animation: fadeInUp 0.6s ease 0.8s both;
+  }
+  .action-section h3 {
+    font-size: 16px;
+    color: #d9a441;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .action-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 14px;
+  }
+  .action-card {
+    background: rgba(217,164,65,0.06);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+  }
+  .action-number {
+    width: 28px; height: 28px;
+    background: rgba(217,164,65,0.18);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    color: #e8bd6b;
+    font-weight: 700;
+    margin: 0 auto 10px;
+  }
+  .action-card p {
+    font-size: 13px;
+    color: #c3ccd4;
+    line-height: 1.7;
+  }
+  .footer {
+    text-align: center;
+    padding: 30px 20px;
+    color: #63737e;
+    font-size: 13px;
+    line-height: 1.9;
+  }
+  @keyframes fadeInDown { from { opacity:0; transform:translateY(-20px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes fadeInUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+
+  @media (max-width: 700px) {
+    .branches { grid-template-columns: 1fr; }
+    .book-title { font-size: 30px; letter-spacing: 3px; }
+    .action-grid { grid-template-columns: 1fr 1fr; }
+    .center-node { padding: 20px 22px; }
+    .leaf-list li { font-size: 13.5px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="date-badge">📅 2026年11月8日 · 每日一学</div>
+  <div class="book-title">怎样解题</div>
+  <div class="book-subtitle">卡住的人不是不够聪明，而是缺一套可以反复调用的提问清单——解题是一种技能，不是一种天赋</div>
+  <div class="book-author">作者：G. 波利亚（George Pólya）｜副题：数学思维的新方法｜英文原版 How to Solve It，1945，Princeton University Press</div>
+</div>
+
+<div class="mind-map">
+  <div class="center-node">
+    <h2>📐 解题四阶段 · 把"想不出来"拆成四道可执行的动作</h2>
+    <p>理解题目（未知/已知/条件） → 拟定方案（启发式工具箱） → 执行与检验（每一步当场验货） → 回顾与迁移（价值在解完之后）<br>
+    <strong>不是"多做题"，而是把高手的隐性提问变成你的显性动作清单</strong>——这是全书的轴心</p>
+  </div>
+
+  <div class="branches">
+
+    <!-- 核心洞见 -->
+    <div class="branch b1">
+      <div class="branch-title">
+        <div class="branch-icon">💡</div>
+        <span style="color:#7ec0e8">核心洞见</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>解题是技能，不是知识</strong>：这是全书的地基。你可以背下所有解题原则而依然解不出题，正像你可以读遍游泳手册而依然不会游泳。技能只能通过<em>模仿、练习、纠错、复盘</em>长出来，无法通过"知道"获得</li>
+        <li><strong>高手与新手的差别在"提问"而非"聪明"</strong>：波利亚真正做的事，是把数学家脑中那些一闪而过、说不清道不明的自我提示（"这个条件好像没用上""能不能先看个简单情形"）逐条记录下来，变成普通人也能照着念的问题。他称之为<em>启发式</em>（heuristic）</li>
+        <li><strong>"想不出来"通常是问题被表述错了</strong>：绝大多数卡壳不是能力不足，而是题目从未被真正理解——未知量含混、条件读漏、隐含假设没被识别。所以第一个阶段占的时间理应最长，而多数人几乎不给它时间</li>
+        <li><strong>解题是渐进的逼近，不是一次性命中</strong>：先有模糊的整体预感，再逐步形式化；先解特例，再推一般；先猜，再证。承认"我不知道但我知道往哪个方向摸"，比假装"我要一次想清楚"更有生产力</li>
+        <li><strong>四阶段不是流水线，而是四个可回访的房间</strong>：波利亚本人强调顺序并非铁律。执行到一半发现理解有误，就该退回第一阶段；回顾时想到新路径，就该重回第二阶段。它是<em>检查清单</em>，不是流程图</li>
+        <li><strong>任何解题都含有一粒发现</strong>：这是他最动人的一句主张。你不必解出世纪难题才有资格谈创造；把一道平常题用第二种方法再解一遍，那一刻的体验与数学家的工作是同质的</li>
+        <li><strong>提示要给得恰到好处</strong>：太少，人无从下手；太多，等于替他做完，剥夺了他"自己发现"的那一下。这条原则既适用于教孩子，也适用于带下属、写文档、做 AI 提示</li>
+        <li><strong>必须正视的局限</strong>：本书语境几乎全是数学题——条件明确、答案唯一、可验证。现实问题往往连"未知量"都要自己定义、条件互相冲突、没有标准答案，四阶段的迁移是有损的；书中对"灵感从何而来"仍属描述而非解释；教育研究也提示，单纯教启发式清单的迁移效果，弱于"在具体领域反复练习 + 即时反馈"。读它要取<em>动作框架</em>，别把它当万能钥匙</li>
+      </ul>
+    </div>
+
+    <!-- 框架① -->
+    <div class="branch b2">
+      <div class="branch-title">
+        <div class="branch-icon">🔍</div>
+        <span style="color:#d9a441">核心框架①：理解题目 —— 未知、已知、条件</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>三件事必须先说清</strong>：未知量是什么？已知数据是什么？条件是什么？波利亚要求你不只用眼睛看，而要<em>用手指着逐条念出来</em>。看似幼稚，却是最有效的抗漏读动作</li>
+        <li><strong>核心一问 · 条件足以确定未知吗</strong>：答案有四种——充分（可解）、不足（无解或需补条件）、多余（有冗余信息）、矛盾（无解）。多数人默认"给的都能用、要的都能求"，而这四种情形在第①阶段就该被识别</li>
+        <li><strong>画图与引入符号</strong>：一句"符号是思维的手"。把文字条件转成图形或代号，等于把工作记忆的负担卸载到纸上——这一步不是记录，是<em>思考本身</em>在进行</li>
+        <li><strong>改述练习</strong>：能否用自己的话、去掉所有术语，把题目再讲一遍？能否讲给一个外行听？讲不顺的地方，就是你还没懂的地方。这个自检成本极低，命中率极高</li>
+        <li><strong>区分"字面条件"与"允许动作"</strong>：题目说了什么是一层；题目<em>没有禁止</em>什么，是另一层。大量解法诞生于"没人说不能这样做"的空间里。而新手常自行加上题目并未要求的限制</li>
+        <li><strong>最常见的失败不是算错，是读错</strong>：把"至少"读成"恰好"、把"任意"读成"某个"、把"整数"漏掉。这类错误在后期极难自查，因为你的推理会围绕错误前提自洽地展开</li>
+        <li><strong>理解是渐进的，不是开关</strong>：第一遍只求抓住轮廓，第二遍才追究细节。要求自己"一次读懂"反而会卡在第一句。波利亚明确建议：先获得整体印象，再逐步填充</li>
+        <li><strong>迁移到现实问题的落差</strong>：现实里"未知量"常常要你自己定义（"我们到底要决定什么"），"条件"常互相冲突且真假不明。此时第①阶段要做的不是解题，而是<em>把问题改写成一个可解的问题</em>——这一步比后面三步都难</li>
+      </ul>
+    </div>
+
+    <!-- 框架② -->
+    <div class="branch b3">
+      <div class="branch-title">
+        <div class="branch-icon">🧰</div>
+        <span style="color:#7fae8f">核心框架②：拟定方案 —— 启发式工具箱</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>总纲只有一句</strong>：找出已知与未知之间的联系。若找不到直接联系，就去<em>造一个中介</em>——先解一个相关的、更简单的、更一般的题目，再回到原题。全书所有技巧都是这句话的展开</li>
+        <li><strong>关键一问（最该背下来的一句）</strong>：你有没有见过它？或者见过形式稍有不同的它？你知道与此相关的某道题吗？知道能用得上的某条定理吗？——把"新题"强行接回"旧题库"，是高手的第一反射</li>
+        <li><strong>特殊化</strong>：先看 n=1、n=2，先代两个具体数字，先取极端值（0、无穷、边界）。特殊情形既能暴露结构，也能证伪猜想，成本极低。卡住时最该做的第一件事往往就是它</li>
+        <li><strong>一般化</strong>：把具体数字换成字母，看骨架长什么样。有时原题难，是因为它太特殊；把它放进一个更大的家族，反而有现成定理可用</li>
+        <li><strong>类比</strong>：找结构相同的旧题（"这像不像上次那个排队问题"）。类比提供的是<em>方法候选</em>，不是结论——它负责提案，验证负责裁决</li>
+        <li><strong>分解与重组</strong>：把题目拆成几个子问题，或把条件重新排列组合。有时解不出，是因为元素被绑定在一个固定的组合方式里；换一种排列，通道就出现了</li>
+        <li><strong>倒推法</strong>：从目标往回走——"要得到这个，先需要什么？再先需要什么？"直到碰上已知。正推是探索，倒推是收敛，两者互为补充</li>
+        <li><strong>辅助元素与变更题目</strong>：加一条线、设一个中间量、引入一个临时变量、放宽某个条件先解个"近亲题"。这些动作的共同点是——<em>先造一个更容易的问题，再从它身上取回原题的答案</em></li>
+      </ul>
+    </div>
+
+    <!-- 框架③ -->
+    <div class="branch b4">
+      <div class="branch-title">
+        <div class="branch-icon">✅</div>
+        <span style="color:#c07a6a">核心框架③：执行与检验 —— 每一步当场验货</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>执行比拟定容易，但新手恰恰在这里丢分</strong>：波利亚的原话大意是，方案一旦成形，剩下的多是机械劳动——正因如此人才会松懈。而一步算错，后面全废，且错得越晚越难查</li>
+        <li><strong>每一步都要问两句</strong>：这一步凭什么成立？你能证明它成立吗？不是要写成形式证明，而是要能说清"我依据的是哪条规则/哪个已知"</li>
+        <li><strong>直觉先行，形式化后补</strong>：允许自己先"感觉对"地走两步，但必须在关键节点把直觉翻译成可检验的语句。纯直觉的链条漂亮且脆弱</li>
+        <li><strong>"看起来对"与"确实对"的距离</strong>：很多错误不在逻辑，而在隐含假设——分母不为零、变量独立、样本有代表性。这些假设在题面里往往沉默，需要你主动点名</li>
+        <li><strong>五道低成本自检</strong>：① 是否用上了<em>所有</em>条件？（有未用条件，通常意味着漏了某条通路）② 是否引入了题面没有的假设？③ 单位/量纲对不对？④ 极端情形代入是否合理？⑤ 量级估算是否同阶？</li>
+        <li><strong>中途监控优于事后检查</strong>：每推完一小段就回头扫一眼"我还在回答原问题吗"。偏离往往发生在连续几步顺畅推导之后，因为顺畅本身会让人放弃怀疑</li>
+        <li><strong>发现错误时不要从头再来</strong>：定位到"第一个不成立的那一步"，只重做那一步之后的部分。全盘重来既是时间浪费，也会掩盖真正的错误位置</li>
+        <li><strong>与现实的差别</strong>：数学题错了会算错数，现实决策错了可能三年后才知道。所以现实场景里的"检验"要前置——在方案成形时就写下<em>什么证据会让我改变判断</em>，这是把波利亚的第③阶段搬进不确定世界的方式</li>
+      </ul>
+    </div>
+
+    <!-- 框架④ -->
+    <div class="branch b5">
+      <div class="branch-title">
+        <div class="branch-icon">🔁</div>
+        <span style="color:#9b8ec4">核心框架④：回顾与迁移 —— 价值在解完之后</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>最被忽略的一段</strong>：多数人得到答案就合上书。而波利亚把"回顾"单列为第四阶段，因为他认为<em>学习发生在解完之后</em>，解题本身只是原材料</li>
+        <li><strong>检验结果四问</strong>：答案是否满足全部条件？能否用另一条路得到同一结果？能否一眼看出它大致合理？在退化情形下它是否仍然成立？</li>
+        <li><strong>方法提炼 · 关键动作是什么</strong>：回顾时不要只记答案，要记"这道题的转折点在哪一步"——是哪一问让你想到辅助元素？是哪次特殊化暴露了结构？这个"转折点"才是可迁移的东西</li>
+        <li><strong>一题多解与多题一解</strong>：前者练的是路径的多样性（同一目标，多条通路），后者练的是模式的识别（多道题，同一骨架）。波利亚那句常被引用的主张——用五种方法解一道题，胜过用一种方法解五道题——说的正是前者</li>
+        <li><strong>把方法写进"可调用记忆"</strong>：解题日志只记三行——关键动作、卡点、下次的识别信号。第三行最重要，因为它把一个具体经验变成了一个<em>触发器</em></li>
+        <li><strong>教别人是最强的回顾</strong>：能讲到对方听懂，说明你的路径已被压缩成结构；讲不通的地方，一定是你自己含糊的地方。这条对写文档、做汇报同样成立</li>
+        <li><strong>迁移要过一道"水土"检验</strong>：数学题的严密性来自条件封闭。搬到现实（人、组织、市场）时，先问"这里的条件封闭吗？答案可验证吗？"若不成立，就只借它的<em>提问顺序</em>，不借它的结论强度</li>
+        <li><strong>长期效应</strong>：坚持回顾的人会逐渐长出"题型库"——不是题库，而是<em>情境→策略</em>的映射表。所谓"直觉好"，多半是这张表被反复调用后变得不可言说</li>
+      </ul>
+    </div>
+
+    <!-- 主要知识点 -->
+    <div class="branch b6">
+      <div class="branch-title">
+        <div class="branch-icon">📖</div>
+        <span style="color:#a9b6bf">主要知识点：作者、文本与争议</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>作者</strong>：乔治·波利亚（George Pólya，1887–1985），匈牙利裔数学家，苏黎世联邦理工任教后转任斯坦福大学教授。研究领域含概率论、组合数学、数论；晚年兴趣转向<em>数学教育</em>与"人如何发现"</li>
+        <li><strong>成书</strong>：英文原版 How to Solve It，1945 年由 Princeton University Press 出版，此后多次增补重印；中译常见版本名为《怎样解题：数学思维的新方法》。全书篇幅不大，却长期被列为数学教育与思维方法的基础读物</li>
+        <li><strong>结构四部分</strong>：① "在教室里"（教师视角）；② "怎样解题"主篇（四阶段逐一展开）；③ "启发式小词典"（数十个条目，按字母排列，可当工具书翻阅）；④ "问题、提示、解答"（用具体题目演示如何给提示）</li>
+        <li><strong>"启发式"一词的来历</strong>：源自希腊语 heuriskein（发现）。波利亚把它从哲学边缘话题变成一门<em>可教的技术</em>——这是他最大的建制性贡献：把"天才的灵光"降解为"凡人的清单"</li>
+        <li><strong>影响力跨出数学</strong>：计算机科学早期的启发式搜索研究（Newell、Simon 一系）明确受其启发；"启发式"今天在算法、产品设计、AI 提示工程里都是常用词，源头之一即在此书</li>
+        <li><strong>与《数学与猜想》的分工</strong>：波利亚另一部著作《数学与猜想》（Mathematics and Plausible Reasoning）系统论述<em>合情推理</em>——即在证据不足时如何评估一个猜想的可信度。本书是操作层（怎么做），那本是推理层（凭什么信）。两本合读才完整</li>
+        <li><strong>教师视角的落点</strong>：他给教师的原则大意是——关心你的学科、懂你的学科、懂人是怎么学会的、让学生学会猜想、也让学生学会证明。核心是"提示要少到不剥夺发现，多到不至于无从下手"</li>
+        <li><strong>主要批评（须正视）</strong>：① 四阶段被形式化后常沦为口号，"读题—想思路—计算—检查"变成仪式而非思维；② 启发式词典条目繁多，不内化就用不出来；③ 语境是数学题，向现实问题迁移有损；④ 对"灵感如何产生"是描述而非解释；⑤ 教育研究显示，脱离具体领域练习的"方法论训练"迁移效果有限——框架必须配真实任务与即时反馈</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<div class="quote-section">
+  <h3>💬 核心金句</h3>
+  <div class="quote-note">说明：以下为本书核心命题的中文概述与意译（非逐字引文），括注对应论述主题。原文表述更简洁，建议以原书为准。</div>
+
+  <div class="quote-item">「解题是一种实践技能，如同游泳或弹琴：你可以读遍所有游泳手册，然后仍然不会游泳。」
+    <span>——论技能与知识的区别，全书立论起点</span></div>
+
+  <div class="quote-item">「一个大发现解决一个大问题；但在任何一个问题的解决里，都含着一粒发现。」
+    <span>——论创造性的日常性，普通解题与重大发现同质</span></div>
+
+  <div class="quote-item">「如果你解不出这道题，就先去找一道相关的、更简单的题。」
+    <span>——论中介问题的造法，全书最实用的一条总纲</span></div>
+
+  <div class="quote-item">「未知量是什么？已知数据是什么？条件是什么？」
+    <span>——论理解题目，第①阶段的三句起手式</span></div>
+
+  <div class="quote-item">「你有没有见过它？或者见过形式稍有不同的它？」
+    <span>——论拟定方案，把新题接回旧题库的第一反射</span></div>
+
+  <div class="quote-item">「看看未知量，再想想你的目标：从目标倒着走回去。」
+    <span>——论倒推法，正推探索、倒推收敛</span></div>
+
+  <div class="quote-item">「你能检验这个结果吗？你能用另一种方法得到它吗？你能把它用到别的题目上吗？」
+    <span>——论回顾，价值发生在解完之后</span></div>
+
+  <div class="quote-item">「提示要给得恰到好处：太多就剥夺了他的发现，太少他就无从下手。」
+    <span>——论教学与协助的分寸，适用于带人、写作与 AI 提示</span></div>
+</div>
+
+<div class="action-section">
+  <h3>🎯 五条行动建议</h3>
+  <div class="action-grid">
+    <div class="action-card">
+      <div class="action-number">1</div>
+      <p><strong>三栏纸</strong><br>任何问题先写三栏：未知／已知／条件。再加一行回答"条件够不够，有没有多余或矛盾"。这一步限时 3 分钟。</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">2</div>
+      <p><strong>卡住时念五问</strong><br>见过吗？能重述吗？能先解特例吗？能从目标倒推吗？能加一个中间量吗？按顺序念，不必思考该用哪个。</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">3</div>
+      <p><strong>三行复盘</strong><br>每解完一件事记三行：关键动作／卡在哪／下次什么信号能让我想起这招。第三行才是资产。</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">4</div>
+      <p><strong>一题多解</strong><br>本月挑一个难题，强制走第二条完全不同的路径。走不通也有收获——你会看见自己依赖的隐含假设。</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">5</div>
+      <p><strong>迁移测试</strong><br>用四阶段处理一个现实决策，并标出哪一步失效。失效处就是"现实问题比数学题难在哪"的答案。</p>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  每日一学 · 2026-11-08 ｜ 《怎样解题》G. 波利亚（1945）<br>
+  阅读时长约 15 分钟 ｜ 适合在"完全不知道从哪下手""方案写到一半发现方向错了""解完就忘、下次还不会"这三种时刻重读
+</div>
+
+</body>
+</html>
