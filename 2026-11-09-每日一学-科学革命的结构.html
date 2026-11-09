@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 科学革命的结构</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(140deg, #04100e 0%, #08191a 46%, #030a0b 100%);
+    min-height: 100vh;
+    color: #e2ecea;
+    padding: 20px;
+  }
+  .header {
+    text-align: center;
+    padding: 40px 20px 30px;
+    animation: fadeInDown 0.8s ease;
+  }
+  .date-badge {
+    display: inline-block;
+    background: rgba(79,168,155,0.08);
+    border: 1px solid rgba(79,168,155,0.34);
+    border-radius: 20px;
+    padding: 6px 18px;
+    font-size: 13px;
+    color: #6fc4b4;
+    margin-bottom: 16px;
+    letter-spacing: 1px;
+  }
+  .book-title {
+    font-size: 46px;
+    font-weight: 700;
+    background: linear-gradient(90deg, #4fa89b, #c9a227, #b5563f);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+    letter-spacing: 5px;
+    line-height: 1.3;
+  }
+  .book-subtitle {
+    font-size: 16px;
+    color: #9fb5b1;
+    margin-bottom: 6px;
+    line-height: 1.6;
+    max-width: 840px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .book-author {
+    font-size: 14px;
+    color: #6f8481;
+  }
+  .mind-map {
+    max-width: 1100px;
+    margin: 30px auto;
+    position: relative;
+  }
+  .center-node {
+    background: linear-gradient(135deg, #0a1c1b, #05100f);
+    border-radius: 20px;
+    padding: 24px 36px;
+    text-align: center;
+    margin: 0 auto 40px;
+    width: fit-content;
+    max-width: 800px;
+    box-shadow: 0 8px 32px rgba(79,168,155,0.12);
+    position: relative;
+    animation: pulse 3.8s infinite;
+  }
+  @keyframes pulse {
+    0%,100%{ box-shadow: 0 8px 32px rgba(79,168,155,0.11); }
+    50%{ box-shadow: 0 8px 48px rgba(201,162,39,0.20); }
+  }
+  .center-node h2 { font-size: 21px; color: #fff; font-weight: 700; letter-spacing: 1.5px; line-height: 1.5; }
+  .center-node p { font-size: 13px; color: rgba(255,255,255,0.90); margin-top: 10px; line-height: 1.9; }
+  .branches {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 10px;
+  }
+  .branch {
+    background: rgba(255,255,255,0.032);
+    border: 1px solid rgba(255,255,255,0.075);
+    border-radius: 16px;
+    padding: 22px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    animation: fadeInUp 0.6s ease both;
+  }
+  .branch:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 36px rgba(0,0,0,0.6);
+  }
+  .branch:nth-child(1) { border-left: 4px solid #4fa89b; animation-delay: 0.1s; }
+  .branch:nth-child(2) { border-left: 4px solid #c9a227; animation-delay: 0.2s; }
+  .branch:nth-child(3) { border-left: 4px solid #b5563f; animation-delay: 0.3s; }
+  .branch:nth-child(4) { border-left: 4px solid #7b8fa3; animation-delay: 0.4s; }
+  .branch:nth-child(5) { border-left: 4px solid #9187a8; animation-delay: 0.5s; }
+  .branch:nth-child(6) { border-left: 4px solid #7d8b91; animation-delay: 0.6s; }
+  .branch-title {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    line-height: 1.4;
+  }
+  .branch-icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .b1 .branch-icon { background: rgba(79,168,155,0.16); }
+  .b2 .branch-icon { background: rgba(201,162,39,0.16); }
+  .b3 .branch-icon { background: rgba(181,86,63,0.16); }
+  .b4 .branch-icon { background: rgba(123,143,163,0.16); }
+  .b5 .branch-icon { background: rgba(145,135,168,0.15); }
+  .b6 .branch-icon { background: rgba(125,139,145,0.15); }
+  .leaf-list { list-style: none; padding: 0; }
+  .leaf-list li {
+    padding: 7px 0 7px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.045);
+    font-size: 14px;
+    color: #bfd0cd;
+    line-height: 1.75;
+    position: relative;
+  }
+  .leaf-list li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: rgba(79,168,155,0.55);
+    font-size: 11px;
+    top: 9px;
+  }
+  .leaf-list li:last-child { border-bottom: none; }
+  .leaf-list li strong { color: #e0c98a; }
+  .quote-section {
+    max-width: 1100px;
+    margin: 24px auto;
+    background: linear-gradient(135deg, rgba(79,168,155,0.06), rgba(5,16,15,0.45));
+    border: 1px solid rgba(79,168,155,0.18);
+    border-radius: 16px;
+    padding: 30px;
+    animation: fadeInUp 0.6s ease 0.7s both;
+  }
+  .quote-section h3 {
+    font-size: 16px;
+    color: #6fc4b4;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .quote-note {
+    font-size: 12px;
+    color: #7a8d8a;
+    margin-bottom: 16px;
+    line-height: 1.7;
+  }
+  .quote-item {
+    padding: 14px 20px;
+    margin: 10px 0;
+    background: rgba(255,255,255,0.032);
+    border-radius: 10px;
+    border-left: 3px solid #4fa89b;
+    font-size: 15px;
+    color: #edf4f2;
+    line-height: 1.85;
+  }
+  .quote-item span { display: block; font-size: 12px; color: #87999a; margin-top: 6px; }
+  .action-section {
+    max-width: 1100px;
+    margin: 24px auto;
+    background: rgba(201,162,39,0.045);
+    border: 1px solid rgba(201,162,39,0.18);
+    border-radius: 16px;
+    padding: 30px;
+    animation: fadeInUp 0.6s ease 0.8s both;
+  }
+  .action-section h3 {
+    font-size: 16px;
+    color: #c9a227;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .action-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 14px;
+  }
+  .action-card {
+    background: rgba(201,162,39,0.06);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+  }
+  .action-number {
+    width: 28px; height: 28px;
+    background: rgba(201,162,39,0.18);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    color: #dbb85a;
+    font-weight: 700;
+    margin: 0 auto 10px;
+  }
+  .action-card p {
+    font-size: 13px;
+    color: #c3d0cd;
+    line-height: 1.7;
+  }
+  .footer {
+    text-align: center;
+    padding: 30px 20px;
+    color: #61746f;
+    font-size: 13px;
+    line-height: 1.9;
+  }
+  @keyframes fadeInDown { from { opacity:0; transform:translateY(-20px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes fadeInUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+
+  @media (max-width: 700px) {
+    .branches { grid-template-columns: 1fr; }
+    .book-title { font-size: 28px; letter-spacing: 2px; }
+    .action-grid { grid-template-columns: 1fr 1fr; }
+    .center-node { padding: 20px 22px; }
+    .leaf-list li { font-size: 13.5px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="date-badge">📅 2026年11月9日 · 每日一学</div>
+  <div class="book-title">科学革命的结构</div>
+  <div class="book-subtitle">你不是在积累认知，你是在一套看不见的坐标系里解题；坐标系换掉的那一刻，同一堆事实会呈现截然不同的样子</div>
+  <div class="book-author">作者：托马斯·S. 库恩（Thomas S. Kuhn）｜英文原版 The Structure of Scientific Revolutions，1962 初版 / 1970 增订版（附〈后记〉），University of Chicago Press｜中译：金吾伦、胡新和</div>
+</div>
+
+<div class="mind-map">
+  <div class="center-node">
+    <h2>🌐 范式循环 · 从"解谜"到"换世界"的四段结构</h2>
+    <p>范式确立（问题与答案的样板） → 常规科学（解谜，精炼而非检验） → 反常累积与危机（规则松动、概念失序） → 革命与不可通约（世界观切换、历史被重写）<br>
+    <strong>科学不是向真理线性逼近的堆叠，而是"在既定框架内穷尽"与"框架整体更替"交替发生的循环</strong>——这是全书的轴心</p>
+  </div>
+
+  <div class="branches">
+
+    <!-- 核心洞见 -->
+    <div class="branch b1">
+      <div class="branch-title">
+        <div class="branch-icon">💡</div>
+        <span style="color:#6fc4b4">核心洞见</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>累积式科学史是一种教学产物</strong>：教科书为了训练效率，把学科史重写成"一步步逼近正确答案"的直线，删掉弯路、争论与失败。结果是：你学了结论，却看不见结论曾经是<em>选项之一</em>。库恩的全部工作，就是把这条被抹平的断层重新暴露出来</li>
+        <li><strong>范式不是"理论"，而是一整套默认设置</strong>：它同时规定"什么算一个值得问的问题""什么工具合法""什么样的答案算答案""谁有资格裁决"。理论可以被一句话反驳，范式不能——因为它决定了你用什么标准去判断反驳是否成立</li>
+        <li><strong>常规科学的天职，是"不发现新东西"</strong>：这是全书最刺人的判断。常规科学做的是解谜：答案已知存在，方法已知有效，解不出是你的问题，不是框架的问题。它以极高的效率换取极低的新颖性——这是一笔交易，不是缺陷</li>
+        <li><strong>反常不等于发现</strong>：与预期不符的现象从来不缺，绝大多数被当作噪声、误差、待修的细节。一个反常要变成"发现"，需要反复出现、无法被现有工具吸收、并且有人愿意为它押上声誉。第三项往往是决定性的，而它不是逻辑问题</li>
+        <li><strong>危机是语言危机，不是数据危机</strong>：进入危机期的标志不是新数据变多，而是科学家开始争论基本概念、方法论、甚至"我们这门学科还成不成立"。规则松动的时刻，才是替代方案有机会被听见的时刻</li>
+        <li><strong>换范式不是"被说服"，是"看见变了"</strong>：库恩用格式塔作比——同一幅双关图，转换前你看到鸭子，转换后你看到兔子，而视网膜上的图像一点没变。新范式不是提供了新事实，是重新组织了同一批事实</li>
+        <li><strong>不可通约意味着"讲道理"有天花板</strong>：两套范式的关键术语在转移中意义漂移，不存在一套中立的比较语言。所以跨范式争论常常不是论证不足，而是<em>词典不通用</em>；能做的只有翻译，而翻译必有损耗</li>
+        <li><strong>必须正视的局限</strong>：库恩自称在做<em>历史描述</em>，读者却普遍把它当<em>方法论处方</em>用，这个错位要自觉；"范式"一词在商业语境中已被滥用到几乎等于"任何变化"；他对科学共同体的社会学解释（靠代际更替完成转换）被批评为"暴民心理学"，弱化了证据与论证的作用；后续科学史研究也显示，真实共同体比"一个范式"更碎片、更局部</li>
+      </ul>
+    </div>
+
+    <!-- 框架① -->
+    <div class="branch b2">
+      <div class="branch-title">
+        <div class="branch-icon">🧭</div>
+        <span style="color:#c9a227">核心框架①：范式 —— 你看不见的那套坐标系</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>定义要抓准</strong>：范式是"在一段时间内为某个实践共同体提供问题与解答样板的、被公认的科学成就"。关键词是<em>样板</em>与<em>共同体</em>——它不是某个人的天才洞见，而是一群人共同承认的作业范本</li>
+        <li><strong>三件套同时到位才算范式</strong>：要解什么题（问题清单）、用什么解（工具与技法）、什么算解出来了（判准）。三者缺一，共同体就会分裂成学派——库恩称之为"前范式时期"，其特征是所有重要问题都还在争论</li>
+        <li><strong>范式是"免于从零论证"的仓库</strong>：正因为有公认范本，研究者不必每次重新证明基础，可以直接从前沿开工。这是它最大的生产力来源，也是它最大的惰性来源</li>
+        <li><strong>范式靠"范例"传递，不靠规则</strong>：学一门科学，主要不是背定义，而是反复做例题、模仿标准解法，直到形成"这类问题该这么看"的直觉。规则往往说不清，范例却能教会——这正是范式难以被完整言说的原因</li>
+        <li><strong>范式同时是盲区发生器</strong>：它规定了什么<em>不成为问题</em>。被排除在问题清单之外的现象，不是被否证了，而是根本没被看见。范式的力量与它的盲区，是同一件事的两面</li>
+        <li><strong>范式的韧性来自"吸收能力"</strong>：遇到不符，可以先加特例、调精度、引入辅助假设、把矛盾推给测量误差。一个范式能靠不断打补丁活很久——所以"存在反例"从来不足以推翻它</li>
+        <li><strong>关键判据 · 有没有替代品</strong>：库恩指出，人们不会因为旧范式有毛病就离开它，只有在<em>另一个范式已经站在门口</em>时，旧范式才真正危险。"放弃一个范式，必须同时走进另一个"</li>
+        <li><strong>迁移到个人</strong>：你的"默认假设集合"就是你的范式——它决定了你把什么当机会、把什么当噪声、把什么当"不值得讨论"。它最擅长的，恰恰是让你看不见替代方案的存在</li>
+      </ul>
+    </div>
+
+    <!-- 框架② -->
+    <div class="branch b3">
+      <div class="branch-title">
+        <div class="branch-icon">🔧</div>
+        <span style="color:#e08a72">核心框架②：常规科学 —— 解谜的本分与结构性盲区</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>常规科学的定义</strong>：在范式既定前提下"扫尾"的研究——把范式延伸到新领域、提高测量精度、消除概念歧义、把已知结论做得更精确更广。它的目标不是检验范式，而是<em>兑现</em>范式</li>
+        <li><strong>解谜的三个特征</strong>：答案被预设存在、方法被预设有效、失败被归因于解题者而非框架。三条同时成立，才叫解谜；缺一条，工作性质就变了</li>
+        <li><strong>它的效率无可替代</strong>：把全共同体的资源集中在"已知可解"的窄口上，这是现代科学产出的主要来源。嘲笑常规科学是智力上的浅薄——没有它，任何范式都无法被充分展开</li>
+        <li><strong>它的代价是结构性的</strong>：库恩的著名判断是，常规科学"一再压抑新事物"。这不是科学家的品格问题，是分工的必然结果——专注于精炼的人，天然对"框架可能错了"缺乏敏感</li>
+        <li><strong>常规科学家是修缮者，不是批判者</strong>：他的美德是技艺精湛、忠于标准、耐得住细节；他的风险是把"解不出"长期归因为自己不够好，而不是题出错了</li>
+        <li><strong>教育机制塑造了这种人格</strong>：教科书 + 习题 + 标准答案的训练，生产的是共识与能力，不是怀疑与越界。库恩认为这不是教育失败，而是科学得以高效运行的<em>前提条件</em></li>
+        <li><strong>比例决定组织的创新能力</strong>：一个群体里"只会解谜的人"与"会质疑谜题的人"的比例，几乎决定了它能否在环境变化时转身。全是解谜者，会在错误方向上极其高效；全是否定者，则什么都做不完</li>
+        <li><strong>迁移到个人</strong>：大多数时候你该做解谜者（把既定方向做深）；但必须保留一个定期自问的动作——"我现在解不出的，是题目难，还是题目错"</li>
+      </ul>
+    </div>
+
+    <!-- 框架③ -->
+    <div class="branch b4">
+      <div class="branch-title">
+        <div class="branch-icon">⚠️</div>
+        <span style="color:#9fb3c6">核心框架③：反常与危机 —— 范式开始失效的信号</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>反常的定义要精确</strong>：反常是"与范式预期明确不符"的现象。因此反常必须以范式为前提——没有预期，就没有反常。这也意味着：范式越精确，越容易产生可识别的反常</li>
+        <li><strong>反常无处不在，多数被消化掉</strong>：绝大多数不符会被解释成误差、杂质、未考虑的变量。这不是自欺，是研究的经济性——否则任何研究都无法推进</li>
+        <li><strong>从噪声到发现的三道门槛</strong>：① 反复出现且无法用现有工具吸收；② 有人愿意停下来认真对待它；③ 它能被表述为"范式错了"而不只是"我算错了"。第三道最难，因为它要求人质疑自己的判准</li>
+        <li><strong>危机的外显信号</strong>：开始争论基本概念与定义、方法论的合法性被反复提起、出现明显的"哲学化"倾向、权威的判断被公开质疑、年轻人开始绕开主流路径</li>
+        <li><strong>危机不是失败，是必要前置</strong>：库恩明确说，没有危机，革命性方案不会被认真考虑。危机的功能是<em>松动规则</em>，让原本"不可想象"的替代方案变得"可以讨论"</li>
+        <li><strong>危机的经济指标</strong>：补丁成本持续上升——需要越来越多的特例、越来越复杂的辅助假设，才能让旧框架自洽。这是最可操作的预警信号</li>
+        <li><strong>但要区分假危机</strong>：工具不足、样本偏差、个人能力欠缺造成的"技术性卡壳"，会被误判为范式危机。误判的代价极大——在还有解的时候换框架，等于把可修复的问题当成绝症</li>
+        <li><strong>迁移到个人</strong>：把长期不适<em>命名</em>，是改变的第一步。含糊的"我最近不太对"无法被处理；"我在这个角色里，每次成功都要靠加一个例外来维持"才可被判断</li>
+      </ul>
+    </div>
+
+    <!-- 框架④ -->
+    <div class="branch b5">
+      <div class="branch-title">
+        <div class="branch-icon">🔄</div>
+        <span style="color:#b3a8c9">核心框架④：革命与不可通约 —— 世界切换的真实代价</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>革命的定义</strong>：不是修补，而是范式整体更替——问题清单、判准、工具、术语同时改变。库恩称其为"传统链条的中断"，而非传统的延长</li>
+        <li><strong>观察渗透理论</strong>：不存在中立的"原始数据"。你带着哪套范畴去看，就决定了你会看见什么、把什么记为同一类。因此"用实验判决两套理论"这个想法，比想象中困难得多</li>
+        <li><strong>不可通约性的实质</strong>：不是"无法比较"，而是"没有共享的度量语言"。同一个词在两套范式里指向不同的对象与操作（牛顿的"质量"与爱因斯坦的"质量"不是同一个概念），逐词翻译会在关键处失真</li>
+        <li><strong>因此理论选择没有算法</strong>：精确、一致、广博、简单、丰产——这些标准本身会互相冲突，而如何权衡没有公式。库恩的结论不是"怎么都行"，而是"选择的依据部分地来自共同体，而非纯逻辑"</li>
+        <li><strong>转换靠什么发生</strong>：说服、示范、权威更替、代际替换。老一辈往往终其一生不转换——这不是智力问题，是他们的直觉、技艺、声誉都已沉淀在旧范式里</li>
+        <li><strong>格式塔式的"看见"</strong>：革命后，人不是知道了更多事实，而是用新方式组织了同一批事实。"革命之后，科学家面对的是一个不同的世界"——这句话常被误读为夸张，它其实是在描述知觉层面的重组</li>
+        <li><strong>胜利者重写历史</strong>：新范式会把过去叙述成"一直朝着自己走来"，把曾经的竞争方案降格为"错误"或"前史"。于是每一代人都以为自己站在累积的顶点，而不是某次革命的结果</li>
+        <li><strong>迁移到个人</strong>：换行业、换方法论、换人生阶段时，旧术语会拖住你。有效做法不是把新东西翻译成旧词（那会保留旧结构），而是<em>先学新词典本身</em>，允许自己在一段时间内说不出话</li>
+      </ul>
+    </div>
+
+    <!-- 主要知识点 -->
+    <div class="branch b6">
+      <div class="branch-title">
+        <div class="branch-icon">📚</div>
+        <span style="color:#93a3a0">主要知识点 · 概念校准与边界</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>1970 年〈后记〉是关键补丁</strong>：为回应"范式过于含混"的批评，库恩把范式细化为"学科基质"——符号概括、模型、价值、范例四类要素。读原书务必读后记，那里才是他相对精确的版本</li>
+        <li><strong>"不可通约"常被误读为"不可比较"</strong>：库恩后期强调局部可译、可局部比较。把它理解成"两套框架完全无法对话"，是对他的简化，也常被用来回避真正的论证</li>
+        <li><strong>相对主义指控与他的否认</strong>：批评者认为"范式靠共同体认可"等于取消真理。库恩否认"任何范式一样好"，但他确实放弃了"存在唯一理性算法"这一强主张。这是一个<em>中间立场</em>，不必替他极端化</li>
+        <li><strong>与波普尔的分歧要点</strong>：波普尔主张科学靠证伪推进，库恩指出实际科学史中，反例从不自动推翻理论，科学家会先修补。经验事实更支持库恩的描述，而科学共同体的<em>规范</em>更接近波普尔——描述与规范应分开看</li>
+        <li><strong>历史学界的后续修正</strong>：后来的科学史研究显示，真实科学共同体远比"一个范式"碎片化，同时并存多个局部传统；"范式"作为分析单位偏大、偏整体主义</li>
+        <li><strong>概念的商业滥用</strong>："范式转移"如今常被用来指任何变化、任何新方法、任何流行趋势，已基本脱离"共同体判准整体更替"的原意。看到这个词，先问：判准真的变了吗，还是只是工具变了</li>
+        <li><strong>描述与规范的错位</strong>：库恩说"科学实际上这样运作"，读者读成"科学应该这样运作"。前者是史学，后者是方法论。混用会导致一种危险态度——把"换框架"当成解决一切困难的捷径</li>
+        <li><strong>阅读路径建议</strong>：先读第 1、2、6、9、10 章 + 1970 年〈后记〉，可掌握全书骨架；第 4 章（常规科学即解谜）与第 6 章（反常与发现）对个人实践最有用，第 10 章（革命与世界观的改变）是哲学核心</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<div class="quote-section">
+  <h3>💬 核心金句</h3>
+  <div class="quote-note">说明：以下为本书核心命题的中文概述与意译（非逐字引文），括注对应论述主题。库恩原文表述更克制、更长，建议以原书与中译本为准。</div>
+
+  <div class="quote-item">「常规科学并不旨在发现新事物，事实上它一再压抑新事物。」
+    <span>——论常规科学的保守功能，全书最被引用也最被误读的一句</span></div>
+
+  <div class="quote-item">「在革命之后，科学家面对的是一个不同的世界。」
+    <span>——论格式塔式转换，同一批事实被重新组织</span></div>
+
+  <div class="quote-item">「范式的改变，就是世界观的改变。」
+    <span>——论革命的范围，不是增加知识而是更换坐标系</span></div>
+
+  <div class="quote-item">「科学革命是传统链条的中断，而不是它的延长。」
+    <span>——论革命的断裂性，累积史观在此失效</span></div>
+
+  <div class="quote-item">「危机来临时，科学家第一次把目光从谜题移向谜题的前提，认真追问：这套规则本身对不对？」
+    <span>——论危机的功能，规则松动的窗口期</span></div>
+
+  <div class="quote-item">「不可通约的双方，像说着不同语言的人：只能靠翻译沟通，而翻译总有损耗。」
+    <span>——论不可通约性，跨范式争论的真实困难所在</span></div>
+
+  <div class="quote-item">「没有中立的观察语言：你带着哪套范畴去看，就决定了你会看见什么。」
+    <span>——论观察渗透理论，判决性实验的限度</span></div>
+
+  <div class="quote-item">「放弃一个范式，必须同时走进另一个。」
+    <span>——论转换的必要条件，也解释了为什么"破而不立"难以持久</span></div>
+
+  <div class="quote-item">「教科书重写了历史，把革命写成累积。」
+    <span>——论教育的隐性作用，为什么你看不见断层</span></div>
+</div>
+
+<div class="action-section">
+  <h3>🎯 五条行动建议</h3>
+  <div class="action-grid">
+    <div class="action-card">
+      <div class="action-number">1</div>
+      <p><strong>反常台账</strong><br>每周只记一条"解释不通但被我绕过去"的事，不急着解释，只登记。满十条回看，找它们共同预设的那个前提。</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">2</div>
+      <p><strong>换框判据</strong><br>连续三次同类失败，且每次都要"再加一个例外"才自洽——这是范式问题，不是努力问题。反之，先当技术问题修。</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">3</div>
+      <p><strong>术语先行</strong><br>与立场不同的人争论前，先各用一句话定义三个关键术语。定义对不上，就不要争事实——此时争的是词典。</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">4</div>
+      <p><strong>读革命前的原文</strong><br>学任何领域，找一篇该领域"转折之前"的原始文献，看它当时在反对什么。这比读三本教科书更能让你看见框架。</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">5</div>
+      <p><strong>主动接触异类</strong><br>范式转换主要靠外来者完成。每季度安排一次与完全不同行业、不同训练背景的人做深度对话，只问"你们那儿什么不算问题"。</p>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  每日一学 · 2026-11-09 ｜ 《科学革命的结构》托马斯·库恩（1962 / 1970 增订版）<br>
+  阅读时长约 15 分钟 ｜ 适合在"越努力越没进展""所有人都在做同一件事却没效果""我刚换了一套做法，却说不出为什么对"这三种时刻重读
+</div>
+
+</body>
+</html>
