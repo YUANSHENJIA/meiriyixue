@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 理性之谜</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(140deg, #0a0a12 0%, #121020 46%, #06060b 100%);
+    min-height: 100vh;
+    color: #e4e6ef;
+    padding: 20px;
+  }
+  .header {
+    text-align: center;
+    padding: 40px 20px 30px;
+    animation: fadeInDown 0.8s ease;
+  }
+  .date-badge {
+    display: inline-block;
+    background: rgba(110,158,196,0.08);
+    border: 1px solid rgba(110,158,196,0.34);
+    border-radius: 20px;
+    padding: 6px 18px;
+    font-size: 13px;
+    color: #86b0d4;
+    margin-bottom: 16px;
+    letter-spacing: 1px;
+  }
+  .book-title {
+    font-size: 46px;
+    font-weight: 700;
+    background: linear-gradient(90deg, #6e9ec4, #c98f4e, #b0656f);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+    letter-spacing: 5px;
+    line-height: 1.3;
+  }
+  .book-subtitle {
+    font-size: 16px;
+    color: #a3a9ba;
+    margin-bottom: 6px;
+    line-height: 1.7;
+    max-width: 860px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .book-author {
+    font-size: 13px;
+    color: #71788a;
+    line-height: 1.8;
+    max-width: 880px;
+    margin: 0 auto;
+  }
+  .mind-map {
+    max-width: 1100px;
+    margin: 30px auto;
+    position: relative;
+  }
+  .center-node {
+    background: linear-gradient(135deg, #101322, #07070d);
+    border-radius: 20px;
+    padding: 24px 36px;
+    text-align: center;
+    margin: 0 auto 40px;
+    width: fit-content;
+    max-width: 840px;
+    box-shadow: 0 8px 32px rgba(110,158,196,0.12);
+    position: relative;
+    animation: pulse 3.8s infinite;
+  }
+  @keyframes pulse {
+    0%,100%{ box-shadow: 0 8px 32px rgba(110,158,196,0.11); }
+    50%{ box-shadow: 0 8px 48px rgba(201,143,78,0.20); }
+  }
+  .center-node h2 { font-size: 21px; color: #fff; font-weight: 700; letter-spacing: 1.5px; line-height: 1.5; }
+  .center-node p { font-size: 13px; color: rgba(255,255,255,0.90); margin-top: 10px; line-height: 1.9; }
+  .branches {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 10px;
+  }
+  .branch {
+    background: rgba(255,255,255,0.032);
+    border: 1px solid rgba(255,255,255,0.075);
+    border-radius: 16px;
+    padding: 22px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    animation: fadeInUp 0.6s ease both;
+  }
+  .branch:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 36px rgba(0,0,0,0.6);
+  }
+  .branch:nth-child(1) { border-left: 4px solid #6e9ec4; animation-delay: 0.1s; }
+  .branch:nth-child(2) { border-left: 4px solid #c98f4e; animation-delay: 0.2s; }
+  .branch:nth-child(3) { border-left: 4px solid #b0656f; animation-delay: 0.3s; }
+  .branch:nth-child(4) { border-left: 4px solid #7da393; animation-delay: 0.4s; }
+  .branch:nth-child(5) { border-left: 4px solid #9787b0; animation-delay: 0.5s; }
+  .branch:nth-child(6) { border-left: 4px solid #8b93a3; animation-delay: 0.6s; }
+  .branch-title {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    line-height: 1.4;
+  }
+  .branch-icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .b1 .branch-icon { background: rgba(110,158,196,0.16); }
+  .b2 .branch-icon { background: rgba(201,143,78,0.16); }
+  .b3 .branch-icon { background: rgba(176,101,111,0.16); }
+  .b4 .branch-icon { background: rgba(125,163,147,0.16); }
+  .b5 .branch-icon { background: rgba(151,135,176,0.15); }
+  .b6 .branch-icon { background: rgba(139,147,163,0.15); }
+  .leaf-list { list-style: none; padding: 0; }
+  .leaf-list li {
+    padding: 7px 0 7px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.045);
+    font-size: 14px;
+    color: #c2c7d6;
+    line-height: 1.78;
+    position: relative;
+  }
+  .leaf-list li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: rgba(110,158,196,0.55);
+    font-size: 11px;
+    top: 9px;
+  }
+  .leaf-list li:last-child { border-bottom: none; }
+  .leaf-list li strong { color: #e2cf9d; }
+  .leaf-list li em { font-style: normal; color: #9fb6cc; }
+  .quote-section {
+    max-width: 1100px;
+    margin: 24px auto;
+    background: linear-gradient(135deg, rgba(110,158,196,0.06), rgba(6,6,11,0.45));
+    border: 1px solid rgba(110,158,196,0.18);
+    border-radius: 16px;
+    padding: 30px;
+    animation: fadeInUp 0.6s ease 0.7s both;
+  }
+  .quote-section h3 {
+    font-size: 16px;
+    color: #86b0d4;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .quote-note {
+    font-size: 12px;
+    color: #7b8294;
+    margin-bottom: 16px;
+    line-height: 1.7;
+  }
+  .quote-item {
+    padding: 14px 20px;
+    margin: 10px 0;
+    background: rgba(255,255,255,0.032);
+    border-radius: 10px;
+    border-left: 3px solid #6e9ec4;
+    font-size: 15px;
+    color: #eef0f6;
+    line-height: 1.85;
+  }
+  .quote-item span { display: block; font-size: 12px; color: #858c9e; margin-top: 6px; }
+  .action-section {
+    max-width: 1100px;
+    margin: 24px auto;
+    background: rgba(201,143,78,0.045);
+    border: 1px solid rgba(201,143,78,0.18);
+    border-radius: 16px;
+    padding: 30px;
+    animation: fadeInUp 0.6s ease 0.8s both;
+  }
+  .action-section h3 {
+    font-size: 16px;
+    color: #c98f4e;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .action-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 14px;
+  }
+  .action-card {
+    background: rgba(201,143,78,0.06);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+  }
+  .action-number {
+    width: 28px; height: 28px;
+    background: rgba(201,143,78,0.18);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    color: #dba569;
+    font-weight: 700;
+    margin: 0 auto 10px;
+  }
+  .action-card p {
+    font-size: 13px;
+    color: #c6cbda;
+    line-height: 1.7;
+  }
+  .footer {
+    text-align: center;
+    padding: 30px 20px;
+    color: #646b7d;
+    font-size: 13px;
+    line-height: 1.9;
+  }
+  @keyframes fadeInDown { from { opacity:0; transform:translateY(-20px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes fadeInUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+
+  @media (max-width: 700px) {
+    .branches { grid-template-columns: 1fr; }
+    .book-title { font-size: 28px; letter-spacing: 2px; }
+    .action-grid { grid-template-columns: 1fr 1fr; }
+    .center-node { padding: 20px 22px; }
+    .leaf-list li { font-size: 13.5px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="date-badge">📅 2026年11月10日 · 每日一学</div>
+  <div class="book-title">理性之谜</div>
+  <div class="book-subtitle">你不是不会推理，你只是在没有听众的时候不肯认真推理。理性不是求真的器官，而是把话说通的器官——这个错位，解释了人类认知里最刺眼的那对矛盾</div>
+  <div class="book-author">作者：雨果·梅西耶（Hugo Mercier）｜丹·斯珀伯（Dan Sperber）<br>英文原版 The Enigma of Reason，Harvard University Press，2017｜中译：张慧玉、刘雨婷、徐开，中信出版社 2018-11</div>
+</div>
+
+<div class="mind-map">
+  <div class="center-node">
+    <h2>🧠 论证理性 · 从"双重谜团"到"群体更好"的四段结构</h2>
+    <p>双重谜团（理性既稀有又易错） → 重新定位（理性是论证器官，不是求真器官） → 双机制（直觉推理 / 反思推理，后者胜在可交流） → 双方向（生产论证 / 评估论证）+ 分工（异质群体优于个体）<br>
+    <strong>偏误不是理性的故障，而是"为说服而设计"的器官被单独关在房间里使用时的正常表现</strong>——这是全书的轴心</p>
+  </div>
+
+  <div class="branches">
+
+    <!-- 核心洞见 -->
+    <div class="branch b1">
+      <div class="branch-title">
+        <div class="branch-icon">💡</div>
+        <span style="color:#86b0d4">核心洞见</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>两个事实必须同时被解释</strong>：人在独处时惊人地不理性（一遇到支持自己立场的信息就停止思考）；人在争论时又惊人地敏锐（能精准挑出对方论据的漏洞，哪怕对内容并不熟悉）。传统理论把后者当作前者的补丁，本书把顺序倒过来——<em>敏锐才是原本的功能，失效是功能的代价</em></li>
+        <li><strong>理性不是"求真器官"，是"论证器官"</strong>：作者称之为互动主义理性观（interactionist view）。它被演化出来不是为了让你一个人想对，而是为了让你在群体里说服别人、并评估别人对你的说服。用途单一，但用得极频繁</li>
+        <li><strong>于是"确认偏误"不再是 bug</strong>：一个专为"替自己立场找理由"而设计的系统，独自求真时当然会偏。作者把它精确化为<em>我方偏向</em>（myside bias）：不是对理由不敏感，而是<em>对支持我方的理由格外敏感</em>。同一个机制，在争论里是武器，在独思里是陷阱</li>
+        <li><strong>独思时你是"懒惰推理者"</strong>：只要现有理由足以支撑合意的结论，推理立刻停止。这不是意志薄弱，是系统设计——单人模式没有听众，论证不必完成。这解释了为什么人<em>只在被反驳时</em>才突然想起反例</li>
+        <li><strong>一旦有真实听众，推理质量立刻跳档</strong>：会产出更多论据、主动处理反例、措辞更谨慎。不是因为变聪明了，而是因为任务变了——从"给自己一个交代"变成"给别人一个交代"，后者有验收标准</li>
+        <li><strong>群体的智慧不来自人多，来自分工</strong>：每个人只需在自己最熟悉的角度提供一个强论据，不必全能；我的偏差由你检验，你的偏差由我检验。整体优于任何个体——但前提是存在真实异议</li>
+        <li><strong>元表征是这一切的地基</strong>：能表征"他相信 P""我认为他相信 P""他认为我认为 P"，才可能进行说服与反说服的嵌套。这是人与多数动物的分水岭，也是"读心"与"讲理"共用同一套能力的原因</li>
+        <li><strong>必须正视的局限</strong>：① 演化叙事属"最佳解释推断"，无直接化石或实验判决，"模块/适应"是推论不是事实；② 群体并不天然更优——同质群体讨论后会<em>更极端</em>，回音室会把群体退化为"集体独思"，作者承认但解释为"论证结构被扭曲"；③ 把偏误重新定义为"设计特征"，被 Kahneman、Stanovich 一路研究者批评有"为偏误开脱"之嫌，个体理性仍可通过规则与统计训练改善；④ 中译本豆瓣评分约 6.5，主要批评集中在译文与篇幅，可优先读第二、三部分</li>
+      </ul>
+    </div>
+
+    <!-- 框架① -->
+    <div class="branch b2">
+      <div class="branch-title">
+        <div class="branch-icon">🧩</div>
+        <span style="color:#c98f4e">核心框架①：双重谜团 —— 理性为何既稀有又易错</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>谜团一 · 为何稀有</strong>：真正的推理能力在动物界近乎不存在，却在人类中普遍具备。若它如此有用，演化早该广泛赋予——为什么只有我们？</li>
+        <li><strong>谜团二 · 为何低效</strong>：若它如此有用，为何一启用就系统性出错？半个世纪的行为经济学实验已经把偏误清单列得足够长：忽视基础比率、锚定、过度自信、只找支持证据</li>
+        <li><strong>传统答案为何答不上</strong>："理性是普遍求真能力，只是常被情绪与懒惰干扰"——这个说法无法同时解释两者：若普遍有用，为何只出现在人身上？若常常失效，为何没被淘汰？</li>
+        <li><strong>作者的答案</strong>：理性是一个<em>专用的、窄用途的模块</em>，服务对象是社会中的人际论证。它不是通用推理机，而是"社交场合的专用工具"，所以既不必在所有物种出现，也不必在所有场景可靠</li>
+        <li><strong>两个方向都要元表征</strong>：说服他人（生产论证）需要表征对方的信念；被他人说服（评估论证）需要表征对方<em>对你的</em>信念的判断。双向压力共同塑造了这个模块</li>
+        <li><strong>偏误是设计的正常输出</strong>：这套系统优化的是"在争论中不落下风"，不是"在独处时逼近真相"。目标函数不同，最优解自然不同——用求真标准去考核它，等于用秒表考核一把锤子</li>
+        <li><strong>关键判据 · 看它在什么场景最好用</strong>：推理在有对手时表现最佳，这正是它的"原生环境"。一个能力的最佳表现场景，往往就是它被设计来解决的场景</li>
+        <li><strong>诚实的边界</strong>：这是"最佳解释推断"，不是判决性实验。竞争解释（一般智力提升的副产品、语言能力的延伸）并未被排除，本书提供的是一个更省事、覆盖面更广的解释，而非唯一解释</li>
+      </ul>
+    </div>
+
+    <!-- 框架② -->
+    <div class="branch b3">
+      <div class="branch-title">
+        <div class="branch-icon">⚙️</div>
+        <span style="color:#b0656f">核心框架②：两种推理机制 —— 直觉与反思的真实分工</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>机制一 · 直觉推理</strong>：无意识、快速、自动，同样在做推理，只是不外显。它依赖大量经验与情境线索，日常判断绝大多数在此完成，而且质量并不差——这是很多人低估的部分</li>
+        <li><strong>机制二 · 反思推理</strong>：有意识、缓慢、序列化、受工作记忆严格限制。它的独特优势<em>不是更正确</em>，而是<strong>可被言说</strong>：它能产出一条可以拿给别人看的理由链</li>
+        <li><strong>关键区分</strong>：反思推理的价值在于"可交流性"（communicability），而非计算力。它是论证器官的出口，不是更高级的裁判</li>
+        <li><strong>元表征的三层阶梯</strong>：一阶（我信 P）→ 二阶（他信 Q）→ 三阶（他认为我信 P）。说服至少需要二阶，反说服与策略性表达需要三阶。层级越高，认知负荷越重，也越容易被操纵</li>
+        <li><strong>反思为何容易错</strong>：工作记忆窄、序列化会丢掉并行信息、一旦沿某条链走就难以回头。它像一个"单线程解说员"，不是全能法官——它擅长把理由排成队，不擅长同时评估多支队伍</li>
+        <li><strong>由此得出的用法</strong>：不要用反思去"重算"直觉给出的结论，而要用它去<em>检验直觉给的依据是否站得住</em>。前者是让解说员替运动员比赛，后者才是分工</li>
+        <li><strong>实践含义</strong>：把反思推理派给它真正擅长的任务——构造论证、检查论证、向他人解释。不要指望它在你不具备背景知识的领域凭空推出正确答案，那从来不是它的工作</li>
+      </ul>
+    </div>
+
+    <!-- 框架③ -->
+    <div class="branch b4">
+      <div class="branch-title">
+        <div class="branch-icon">⚖️</div>
+        <span style="color:#7da393">核心框架③：生产与评估 —— 一套双标准的不对称</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>生产（production）</strong>：为已持有的结论寻找支持理由。默认模式，成本低，倾向"够用即停"。它的目标不是完备，是<em>足以应付当前听众</em></li>
+        <li><strong>评估（evaluation）</strong>：判断他人给出的论证是否成立。这一侧人类出奇地擅长——即使对内容不熟，也能识别"论据与结论不相关""样本太小""偷换概念""以偏概全"</li>
+        <li><strong>不对称的证据</strong>：同一个人，评估别人的论证时严格，生产自己的论证时松懈。这不是虚伪，是两种任务的不同激励结构——生产要付出成本，评估只需挑错</li>
+        <li><strong>懒惰推理者（lazy reasoner）</strong>：只要现有理由足以支撑合意结论，推理即终止；只有结论<em>不合意</em>时，才会继续往下挖。这就是"人为什么总在被反驳时才想起反例"的机制解释</li>
+        <li><strong>选择性严格（selective scrutiny）</strong>：对自己有利的论证降低验收门槛，对不利的论证抬高门槛。与"看不见信息"不同——信息都看见了，只是用了两套验收标准</li>
+        <li><strong>说服的两条路径</strong>：直觉路径（情绪、权威、重复、生动个案）与论证路径（理由与证据）。前者更快、更常用、也更难被评估挡住——这解释了为什么"讲道理"经常输</li>
+        <li><strong>有效性的前提</strong>：论证路径何时有效？当对方进入<em>评估模式</em>时。对方在防御、匆忙、群体压力或身份受威胁的状态下，论证基本无效——此时你在做一件工具与任务不匹配的事</li>
+      </ul>
+    </div>
+
+    <!-- 框架④ -->
+    <div class="branch b5">
+      <div class="branch-title">
+        <div class="branch-icon">👥</div>
+        <span style="color:#9787b0">核心框架④：群体为何更好 —— 以及它在什么条件下更糟</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>分工效应</strong>：一个人只需在自己最强的角度给出一个强论据，不必样样精通。群体因此能覆盖远多于任何个体的角度——这是"三个臭皮匠"的真实机制，不是人多势众</li>
+        <li><strong>评估的外部性</strong>：我的偏误由你检验，你的偏误由我检验。单点偏差在互相评估中被削平——前提是双方<em>真的不同</em>，且都有发言权</li>
+        <li><strong>声誉机制</strong>：论证要被接受需要可信度；在长期重复博弈中，"永远强辩"会持续损失信誉。这给"讲理"提供了内生激励——讲理不完全靠道德，也靠算账</li>
+        <li><strong>失效条件一 · 同质化</strong>：同质群体讨论后立场更极端（群体极化）。因为每个人听到的都是"支持自己方向的更多论据"，分工变成了论据军备竞赛</li>
+        <li><strong>失效条件二 · 回音室</strong>：异议被排斥后，评估环节消失，只剩生产环节——群体退化为"集体独思"。人数增加了，检验却归零</li>
+        <li><strong>失效条件三 · 无裁决标准</strong>：没有数据、没有预注册、没有事前约定，争论就退化为地位与口才的较量，此时"论证更强"无法判定</li>
+        <li><strong>结论要收紧</strong>：群体优于个体的条件不是"人多"，而是<strong>异质 + 真实异议 + 可裁决标准</strong>。缺一项，群体就可能比单独思考更糟——这一点比"群体智慧"的口号重要得多</li>
+        <li><strong>设计含义</strong>：要提升判断质量，先问一个组织问题——"这个群里，有没有人真的会反对我，且反对的成本足够低？"这比再多开一次会有效</li>
+      </ul>
+    </div>
+
+    <!-- 主要知识点 -->
+    <div class="branch b6">
+      <div class="branch-title">
+        <div class="branch-icon">📚</div>
+        <span style="color:#a9b0c0">主要知识点与对照</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>定义要收窄</strong>：本书谈的是"推理能力"（reasoning），不是广义智能，也不是决策最优。三者混用是误读本书的头号原因</li>
+        <li><strong>我方偏向 ≠ 确认偏误</strong>：前者指"偏向自己一方"，后者指"偏向已有假设"。前者在群体中可被分工利用，后者不能——这个区别决定了本书能否成立</li>
+        <li><strong>论证强度是相对的</strong>：对已被说服的人是废话，对持反方立场的人才是论证。所以"这个论证站不站得住"必须相对<em>具体听众</em>来评估，不存在脱离听众的绝对强度</li>
+        <li><strong>评估早熟，生产晚成</strong>：儿童很早就能识别"坏论证"，但要很久以后才会生产好论证。生产比评估难，也更晚成熟——这解释了为什么"会挑错"远不等于"会论证"</li>
+        <li><strong>写作的特殊地位</strong>：写作能提升思考，部分原因是它伪造了一个"未来的读者"，把系统拉进论证模式。但这是本书较弱的一环——实践证据多于理论解释，作者未给出机制细节</li>
+        <li><strong>情绪不是论证的反面</strong>：情绪常是"这个论证不可信"的快速信号，有信息价值；问题在于信号会被滥用——讨厌一个人，就顺便判定他的论证无效</li>
+        <li><strong>与平克《理性》对照</strong>：平克认为理性是可训练的工具箱（贝叶斯、相关性、概率），个体靠规则改善；本书认为理性是社交器官，改善主要靠<em>换环境里的听众与异议</em>。两者不冲突：规则改善"评估"，听众改善"生产"</li>
+        <li><strong>与库恩《科学革命的结构》对照</strong>：库恩说范式靠共同体协商更替，本书恰好补上了协商为何可能的认知基础——人天生是论证动物，所以"讲理"在群体中才有土壤</li>
+        <li><strong>最大的滥用风险</strong>："我偏是因为我被设计成这样"极易被用来为不讲理开脱。作者明确反对这种用法，但文本确实留了空间——读到"偏误是特征"时，务必同时记住"特征不等于免罪"</li>
+        <li><strong>阅读路径建议</strong>：第二部分（两种机制）与第三部分（论证的双重产出）是核心；第一部分的思想史梳理（逻辑学史、"裁判官"隐喻）可略读；第四部分的社会意涵较松散，观点密度低于前三部分</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<div class="quote-section">
+  <h3>💬 金句</h3>
+  <div class="quote-note">说明：以下为本书核心命题的中文概述与意译，用于传达论点，非逐字引文；引用时请以原著及中译本原文为准。</div>
+  <div class="quote-item">
+    理性不是用来独自抵达真理的，而是用来在人群中把话说通的。
+    <span>—— 全书立论的一句话版本：功能决定形态，形态决定失效方式</span>
+  </div>
+  <div class="quote-item">
+    人不是不会推理，而是只在需要说服或被说服的时候，才肯认真推理。
+    <span>—— 关于"懒惰推理者"：不是能力缺失，是场景缺失</span>
+  </div>
+  <div class="quote-item">
+    我们用两套标准验收论证：对自己的宽松，对别人的严格。
+    <span>—— 选择性严格：信息都看见了，只是门槛不一样</span>
+  </div>
+  <div class="quote-item">
+    确认偏误不是理性的故障，而是它被设计来做的那件事，在错误场景下的表现。
+    <span>—— 本书最反直觉、也最容易被滥用的判断</span>
+  </div>
+  <div class="quote-item">
+    直觉先给出答案，反思后补上理由；真正的问题是，我们常把补上的理由当成答案的来源。
+    <span>—— 对"理由"的事后性保持警惕，是本书最实用的一条</span>
+  </div>
+  <div class="quote-item">
+    评估别人的论证，比生产自己的论证容易得多——这既是分工的起点，也是懒惰的借口。
+    <span>—— 一句同时说明群体优势与个体懈怠的话</span>
+  </div>
+  <div class="quote-item">
+    论证的说服力不取决于它有多正确，而取决于它对听者有多强的反驳抵抗。
+    <span>—— 强度的相对性：脱离听众谈"论证好坏"没有意义</span>
+  </div>
+  <div class="quote-item">
+    一个没有异议的群体，不是达成了共识，而是停止了推理。
+    <span>—— 回音室的认知定义：评估环节消失，只剩生产环节</span>
+  </div>
+  <div class="quote-item">
+    写作之所以能让人想清楚，是因为它逼你面对一个会质疑你的读者。
+    <span>—— 本书引申义，非原文；但它解释了"为什么写下来比想一遍有效"</span>
+  </div>
+</div>
+
+<div class="action-section">
+  <h3>🎯 行动建议</h3>
+  <div class="action-grid">
+    <div class="action-card">
+      <div class="action-number">1</div>
+      <p><strong>独思设假想反对者</strong><br>重要判断前，先写三条"最可能反对我的那个人会怎么说"，写不满就不下结论。这是在单人环境里人工制造听众。</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">2</div>
+      <p><strong>换听众，而不是更用力</strong><br>把想法讲给一个背景不同、且愿意反驳你的人。如果身边没人会反对你，问题不在你的论证，在你的圈子。</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">3</div>
+      <p><strong>双标准自检</strong><br>挑一个你目前最确信的判断，用"你审别人时"的标准重审一遍，看它还剩几条依据。通常剩不到一半。</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">4</div>
+      <p><strong>分离两种场合</strong><br>"要说服"时走论证路径（理由、证据、预答反驳）；"要判断"时先关掉说服欲。不要在为自己辩护的状态下做决策。</p>
+    </div>
+    <div class="action-card">
+      <div class="action-number">5</div>
+      <p><strong>建异质小组</strong><br>三人以上、背景不同、有可裁决标准（数据 / 预注册 / 事前约定），并明确给异议者"安全许可"。这是防群体极化的最低配置。</p>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  每日一学 · 2026-11-10 ｜ 《理性之谜》雨果·梅西耶 & 丹·斯珀伯（Harvard University Press, 2017；中信 2018-11）<br>
+  阅读时长约 16 分钟 ｜ 适合在"我知道自己偏，但改不掉""讲道理讲不赢""团队越讨论越极端"这三种时刻重读
+</div>
+
+</body>
+</html>
