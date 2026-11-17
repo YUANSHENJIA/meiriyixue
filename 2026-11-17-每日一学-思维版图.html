@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 思维版图</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(160deg, #040c0d 0%, #0a1a1c 46%, #03090a 100%);
+    min-height: 100vh;
+    color: #e2e4e2;
+    padding: 20px;
+  }
+  .header {
+    text-align: center;
+    padding: 40px 20px 30px;
+    animation: fadeInDown 0.8s ease;
+  }
+  .date-badge {
+    display: inline-block;
+    background: rgba(200,96,74,0.07);
+    border: 1px solid rgba(200,96,74,0.30);
+    border-radius: 20px;
+    padding: 6px 18px;
+    font-size: 13px;
+    color: #d98a76;
+    margin-bottom: 16px;
+    letter-spacing: 1px;
+  }
+  .book-title {
+    font-size: 44px;
+    font-weight: 700;
+    background: linear-gradient(90deg, #c8604a, #c9a227, #6fa8a0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+    letter-spacing: 5px;
+    line-height: 1.3;
+  }
+  .book-subtitle {
+    font-size: 16px;
+    color: #a3a8a6;
+    margin-bottom: 8px;
+    line-height: 1.75;
+    max-width: 880px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .book-author {
+    font-size: 13px;
+    color: #6e7a78;
+    line-height: 1.8;
+    max-width: 980px;
+    margin: 0 auto;
+  }
+  .mind-map {
+    max-width: 1100px;
+    margin: 30px auto;
+    position: relative;
+  }
+  .center-node {
+    background: linear-gradient(135deg, #0c1c1e, #050e0f);
+    border-radius: 20px;
+    padding: 24px 36px;
+    text-align: center;
+    margin: 0 auto 40px;
+    width: fit-content;
+    max-width: 900px;
+    box-shadow: 0 8px 32px rgba(200,96,74,0.12);
+    position: relative;
+    animation: pulse 3.8s infinite;
+  }
+  @keyframes pulse {
+    0%,100%{ box-shadow: 0 8px 32px rgba(200,96,74,0.12); }
+    50%{ box-shadow: 0 8px 48px rgba(111,168,160,0.18); }
+  }
+  .center-node h2 { font-size: 21px; color: #fff; font-weight: 700; letter-spacing: 1.5px; line-height: 1.5; }
+  .center-node p { font-size: 13px; color: rgba(255,255,255,0.90); margin-top: 10px; line-height: 1.9; }
+  .branches {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 10px;
+  }
+  .branch {
+    background: rgba(255,255,255,0.030);
+    border: 1px solid rgba(255,255,255,0.072);
+    border-radius: 16px;
+    padding: 22px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    animation: fadeInUp 0.6s ease both;
+  }
+  .branch:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 36px rgba(0,0,0,0.6);
+  }
+  .branch:nth-child(1) { border-left: 4px solid #c8604a; animation-delay: 0.1s; }
+  .branch:nth-child(2) { border-left: 4px solid #c9a227; animation-delay: 0.2s; }
+  .branch:nth-child(3) { border-left: 4px solid #6fa8a0; animation-delay: 0.3s; }
+  .branch:nth-child(4) { border-left: 4px solid #b088c0; animation-delay: 0.4s; }
+  .branch:nth-child(5) { border-left: 4px solid #7f9ec4; animation-delay: 0.5s; }
+  .branch:nth-child(6) { border-left: 4px solid #9aa6ac; animation-delay: 0.6s; }
+  .branch-title {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    line-height: 1.4;
+  }
+  .branch-icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .b1 .branch-icon { background: rgba(200,96,74,0.15); }
+  .b2 .branch-icon { background: rgba(201,162,39,0.15); }
+  .b3 .branch-icon { background: rgba(111,168,160,0.15); }
+  .b4 .branch-icon { background: rgba(176,136,192,0.15); }
+  .b5 .branch-icon { background: rgba(127,158,196,0.15); }
+  .b6 .branch-icon { background: rgba(154,166,172,0.15); }
+  .leaf-list { list-style: none; padding: 0; }
+  .leaf-list li {
+    padding: 7px 0 7px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.042);
+    font-size: 14px;
+    color: #c3c7c5;
+    line-height: 1.78;
+    position: relative;
+  }
+  .leaf-list li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: rgba(200,96,74,0.55);
+    font-size: 11px;
+    top: 9px;
+  }
+  .leaf-list li:last-child { border-bottom: none; }
+  .leaf-list li strong { color: #e2b3a2; }
+  .leaf-list li em { font-style: normal; color: #a9c9c4; }
+  .quote-section {
+    max-width: 1100px;
+    margin: 24px auto;
+    background: linear-gradient(135deg, rgba(200,96,74,0.055), rgba(3,9,10,0.45));
+    border: 1px solid rgba(200,96,74,0.20);
+    border-radius: 16px;
+    padding: 30px;
+    animation: fadeInUp 0.6s ease 0.7s both;
+  }
+  .quote-section h3 {
+    font-size: 16px;
+    color: #d98a76;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .quote-note {
+    font-size: 12px;
+    color: #7a8482;
+    margin-bottom: 16px;
+    line-height: 1.7;
+  }
+  .quote-item {
+    padding: 14px 20px;
+    margin: 10px 0;
+    background: rgba(255,255,255,0.030);
+    border-radius: 10px;
+    border-left: 3px solid #c8604a;
+    font-size: 15px;
+    color: #eff2f0;
+    line-height: 1.85;
+  }
+  .quote-item span { display: block; font-size: 12px; color: #838e8c; margin-top: 6px; }
+  .action-section {
+    max-width: 1100px;
+    margin: 24px auto;
+    background: rgba(111,168,160,0.040);
+    border: 1px solid rgba(111,168,160,0.20);
+    border-radius: 16px;
+    padding: 30px;
+    animation: fadeInUp 0.6s ease 0.8s both;
+  }
+  .action-section h3 {
+    font-size: 16px;
+    color: #94c4bc;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .action-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 14px;
+  }
+  .action-card {
+    background: rgba(111,168,160,0.065);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+  }
+  .action-number {
+    width: 28px; height: 28px;
+    background: rgba(111,168,160,0.18);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    color: #a8d4cb;
+    font-weight: 700;
+    margin: 0 auto 10px;
+  }
+  .action-card p {
+    font-size: 13px;
+    color: #c2c6c4;
+    line-height: 1.7;
+  }
+  .footer {
+    text-align: center;
+    padding: 30px 20px;
+    color: #67716f;
+    font-size: 13px;
+    line-height: 1.9;
+  }
+  @keyframes fadeInDown { from { opacity:0; transform:translateY(-20px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes fadeInUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+
+  @media (max-width: 700px) {
+    .branches { grid-template-columns: 1fr; }
+    .book-title { font-size: 27px; letter-spacing: 3px; }
+    .action-grid { grid-template-columns: 1fr 1fr; }
+    .center-node { padding: 20px 22px; }
+    .leaf-list li { font-size: 13.5px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="date-badge">📅 2026年11月17日 · 每日一学</div>
+  <div class="book-title">思维版图</div>
+  <div class="book-subtitle">同一片水下场景，有人第一眼看见一条大鱼，有人第一眼看见一个池塘。亚里士多德的后代与孔子的后代，看到的是同一个世界吗？</div>
+  <div class="book-author">作者：理查德·尼斯贝特（Richard E. Nisbett，密歇根大学社会心理学教授，美国心理学会杰出科学贡献奖、美国国家科学院院士）<br>英文原版 The Geography of Thought: How Asians and Westerners Think Differently... and Why，Free Press 2003｜中译：李秀霞 译，中信出版集团 2017-11，ISBN 978-7-5086-7885-6（215 页，精装）；2006 年曾以《思维的版图》为名首版<br>结构提示：全书 7 章——三段论与道、思维的社会界线、群体意识与个人意识、统揽全局与紧盯目标、人性本恶与近墨者黑、名词与动词、逻辑与道理</div>
+</div>
+
+<div class="mind-map">
+  <div class="center-node">
+    <h2>🗺️ 认知没有统一出厂设置</h2>
+    <p><strong>注意</strong>落在哪里，决定了你看到什么样的世界——而这落点是被生态、社会结构与哲学长期训练出来的<br>
+    <strong>核心命题：思维风格不是天赋，是默认设置；因而可被识别，也可被局部改写</strong></p>
+  </div>
+
+  <div class="branches">
+
+    <!-- 核心洞见 -->
+    <div class="branch b1">
+      <div class="branch-title">
+        <div class="branch-icon">💡</div>
+        <span style="color:#d98a76">核心洞见</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>起点是一个反常的实验结果</strong>：上世纪 90 年代的跨文化研究反复发现，看同一段水下动画，美国受试者先报"一条大鱼正往左游"，日本受试者先说"这是个池塘，水是绿的，底下有石头"。差异不在看到多少，而在<em>第一眼落在哪里</em></li>
+        <li><strong>核心命题：认知过程不是物种常量，而是文化变量</strong>。感知、注意、归因、分类、推理五个层面，都带文化指纹</li>
+        <li><strong>两种风格的命名</strong>：整体性思维（holistic）把对象放回场（field）里理解；分析性思维（analytic）把对象从场里抽出来、用属性与规则描述</li>
+        <li><strong>哲学源头不同</strong>：希腊人发明公理—演绎（三段论），追问事物的"本质"；中国人追问"关系"与"位置"，用阴阳、五行、祸福相倚描述变化。前者求真值，后者求均衡</li>
+        <li><strong>社会源头不同</strong>：定居灌溉农业需要协作与不冲突；狩猎、航海、贸易需要个人决断与可移动的财产。生存结构塑造自我概念，自我概念再塑造认知</li>
+        <li><strong>最容易被误读的第一点</strong>：这是<em>群体均值差异，不是个体判据</em>。两个分布的重叠远大于分离——用它预测"这个人怎么想"，准确率极低</li>
+        <li><strong>第二点误解</strong>：不是"东方优于西方"或反之。整体思维在复杂系统、关系治理、风险预警上占优；分析思维在形式证明、去偏、标准化上占优。这是<em>配置差异，不是水平差异</em></li>
+        <li><strong>这本书真正的价值</strong>：它把"我的思维方式是默认的"改写成"我的思维方式是选项之一"。看见默认设置，才有资格谈选择</li>
+        <li><strong>与 11-09《科学革命的结构》的接缝</strong>：库恩讲共同体如何更换框架，这本讲<strong>共同体如何长成默认框架</strong>——框架不是选出来的，是长出来的</li>
+        <li><strong>必须提前说清的保留</strong>：核心证据多为 1990s–2000s 的大学生样本、小样本比较；文化启动类研究的复现性在 2010s 遭遇严重质疑；宏观历史解释（"希腊为何如此"）不可因果检验。可信的是<em>方向</em>，不是<em>剂量</em></li>
+      </ul>
+    </div>
+
+    <!-- 框架① -->
+    <div class="branch b2">
+      <div class="branch-title">
+        <div class="branch-icon">👁️</div>
+        <span style="color:#dcc07a">框架① 注意：整体场 vs 焦点对象</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>水下实验</strong>（Masuda &amp; Nisbett, 2001）：日美受试看同一段水下动画并自由描述。日本人第一句多提背景（水、植物、石头），美国人第一句多提最大的鱼；日本人提及背景元素的数量约为美国人的两倍</li>
+        <li><strong>记忆测验的关键差异</strong>：把背景换掉（鱼不变、池塘变），日本人对鱼的再认准确率显著下降，美国人几乎不受影响。→ 差异发生在<em>编码</em>阶段，不是报告阶段的措辞习惯</li>
+        <li><strong>场依存性</strong>（field dependence）：棒框测验中，东亚受试更易被外框倾斜干扰，判断"竖直"时更依赖背景线索；西方受试更依赖身体轴线</li>
+        <li><strong>框架线测验</strong>（Kitayama et al., 2003）：让受试画一条与原线段<strong>绝对等长</strong>的线，或<strong>相对比例相同</strong>的线。美国人擅长前者，日本人擅长后者——注意的"计量单位"不同</li>
+        <li><strong>眼动证据</strong>：东亚受试的眼跳更多在背景与对象之间往返，西方受试更多停留在焦点对象内部。差异<em>早于语言</em>，在数百毫秒内出现</li>
+        <li><strong>变化检测</strong>：给受试看两段几乎相同的场景，问"什么变了"。东亚人更容易发现<strong>关系</strong>的变化（谁站在谁旁边），西方人更容易发现<strong>物体属性</strong>的变化</li>
+        <li><strong>反面提醒</strong>：这不是"看不见细节" vs "看不见全局"的简单二分。东亚受试对焦点对象的记忆同样准确，只是<em>额外</em>编码了背景；成本是速度，收益是情境</li>
+        <li><strong>迁移到工作场景</strong>：同一份报表，一个人先看趋势线的斜率（对象），一个人先看它嵌在哪个业务周期里（场）。争论"你没抓住重点"，往往不是能力问题，是取景框不同</li>
+        <li><strong>迁移到阅读</strong>：分析取向的读法是"找论点—找证据—找漏洞"（剥离对象）；整体取向的读法是"这本书在回应什么处境"（还原场）。两种都能读出东西，也都能漏掉东西</li>
+        <li><strong>可操作的一句话</strong>：评价一个判断之前，先问"<em>他把什么算作了背景</em>"。多数分歧停在这一层，根本没有走到结论层</li>
+      </ul>
+    </div>
+
+    <!-- 框架② -->
+    <div class="branch b3">
+      <div class="branch-title">
+        <div class="branch-icon">🫂</div>
+        <span style="color:#94c4bc">框架② 自我：互依 vs 独立</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>独立自我</strong>（independent self-construal）：自我是边界清晰的容器，属性、能力、偏好定义"我是谁"；关系是可加可减的外部连接</li>
+        <li><strong>互依自我</strong>（interdependent self-construal）：自我是关系网络中的一个节点，角色与位置定义"我是谁"；脱离关系时，自我描述会变得困难</li>
+        <li><strong>经典测量</strong>：二十项陈述测验（TST，连写 20 条"我是谁"）。美国人多写特质（"我很外向"），东亚人多写角色与关系（"我是长子""我在公司做财务"）</li>
+        <li><strong>专才 vs 杂家</strong>：美国人描述他人先给类别标签（职业、性格）；日本人先给关系与情境（"他在一家小公司，和上司关系不错"）</li>
+        <li><strong>说服路径不同</strong>：美国受试更容易被"这符合你的个人利益与价值观"说动；东亚受试更容易被"你信任的人也在这么做""这符合你的角色期待"说动</li>
+        <li><strong>直白 vs 含蓄</strong>（Hall 的高／低语境）：不是不敢说，而是<em>信息被放在了关系里</em>而不是句子里。把它读成"不诚实"，是典型的框架冲突</li>
+        <li><strong>"自主"的内容不同</strong>：美国人把"自己选"本身当价值（哪怕选项更差也更满意）；东亚人更看重"这个选择是否被重要他人认可"。同一个词，两种所指</li>
+        <li><strong>冲突处理</strong>：美国人倾向当面澄清（问题在信息不对称）；东亚人倾向先维护关系（问题在关系受损）。前者怕留下未解的问题，后者怕留下未修的关系</li>
+        <li><strong>必须拒绝的推论</strong>：互依不等于无自我，集体取向不等于没主见。研究反复显示东亚受试在<em>私下</em>表达异议的比例并不低，差异主要在<strong>公开场合的表达阈值</strong></li>
+        <li><strong>对个人的用法</strong>：不是"学西方人更独立"。而是识别自己在哪种关系里<em>无法说真话</em>——那通常不是性格缺陷，是互依成本太高。先降成本，再谈坦诚</li>
+      </ul>
+    </div>
+
+    <!-- 框架③ -->
+    <div class="branch b4">
+      <div class="branch-title">
+        <div class="branch-icon">🧭</div>
+        <span style="color:#c8a4d6">框架③ 归因：情境 vs 气质</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>基本归因错误的文化梯度</strong>：把他人行为归因于其人格（"他就是这种人"）而非处境——这一倾向在西方样本中最强，在东亚样本中显著减弱</li>
+        <li><strong>卢刚事件</strong>（Morris &amp; Peng, 1994）：1991 年爱荷华大学枪击案。美国媒体报道多归因于凶手长期的人格问题（嫉妒、偏执）；中国媒体报道多归因于处境（推荐不公、就业压力、孤立）。同一事件，两套因果</li>
+        <li><strong>组织归因</strong>（Menon et al., 1999）：给美日中受试看"交易员违规致银行巨亏"的报道。美国人归因于<strong>个人</strong>品性，中日受试更多归因于<strong>组织</strong>文化与管理失职</li>
+        <li><strong>事后诸葛</strong>（hindsight bias）：知道结果后回看，认为"本来就该预料到"。西方受试的这一偏差更强；东亚受试更倾向认为结果本可避免、也本可不发生</li>
+        <li><strong>控制错觉</strong>（illusion of control）：西方受试高估自己对随机结果的影响力（掷骰子时更愿意自己掷）；东亚受试更接受"结果不完全由我决定"</li>
+        <li><strong>价值判断要小心</strong>：控制错觉在<em>可影响</em>的情境里是适应性的（让人持续尝试），在<em>不可影响</em>的情境里是纯损耗。东亚的"接受"同样两面：省下无效用力，也可能过早放弃</li>
+        <li><strong>一笔隐形的税</strong>：把失败归于情境的人，容易被听成"推卸责任"；归于人格的人，容易被听成"有担当"。<em>语言习惯被误读成道德品质</em>，这是跨框架沟通中最贵的损耗</li>
+        <li><strong>反向也成立</strong>：把结构性问题归因于个人，是管理上最常见的错误——它让系统继续坏下去，同时让一个人承担全部代价</li>
+        <li><strong>一个可用的检验</strong>：对同一件事，你能写出<strong>三条情境解释</strong>和<strong>三条人格解释</strong>吗？写不出的那一边，通常就是你默认的归因方向</li>
+        <li><strong>决策含义</strong>：归因决定干预点。归因于人格→换人；归因于情境→改流程。多数组织在"换人"上花的钱远多于"改流程"，因为换人更快见效、更容易叙事</li>
+      </ul>
+    </div>
+
+    <!-- 框架④ -->
+    <div class="branch b5">
+      <div class="branch-title">
+        <div class="branch-icon">⚖️</div>
+        <span style="color:#a4bcd8">框架④ 推理：辩证 vs 逻辑</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>形式逻辑的三条铁律</strong>：同一律、排中律、矛盾律。一个命题与其否定不能同时为真——这是西方推理的<em>硬边界</em></li>
+        <li><strong>辩证推理的三条原则</strong>（Peng &amp; Nisbett, 1999）：① 现实是变化的；② 现实充满矛盾，矛盾是常态；③ 整体大于部分之和，关系优先于实体</li>
+        <li><strong>矛盾处理实验</strong>：给受试看两条互相冲突的研究结论。美国人倾向判定"一方对、一方错"，并给出更高确信度；中国人倾向"两者都有道理、各适用于不同条件"，确信度更低，但<strong>保留了两条信息</strong></li>
+        <li><strong>折中 ≠ 中庸</strong>：折中是各让一步（数量妥协），中庸（执两用中）是<em>找到使两端都成立的更高层条件</em>。前者常被误当后者，这是辩证思维最常见的赝品</li>
+        <li><strong>两种推理的任务不同</strong>：逻辑判定<strong>有效性</strong>，辩证容纳<strong>张力</strong>。前者在封闭系统内无可替代（数学、法律、代码），后者在开放系统内更稳（人事、战略、公共政策）</li>
+        <li><strong>三段论测试的发现</strong>：东亚受试更容易接受"结论可信但推理无效"的三段论，更容易拒绝"推理有效但结论不可信"的三段论——形式有效性不是他们的首要判据</li>
+        <li><strong>代价</strong>：整体与辩证取向更容易<em>同时持有互斥立场</em>而不觉不适。这在需要明确取舍的时刻会拖慢决断，也更容易被"两面都有道理"的话术俘获</li>
+        <li><strong>收益</strong>：在信息不全、因果纠缠的局面里，过早二选一是更大的错误。辩证取向保留"再看一步"的空间——高不确定性下，这是正收益</li>
+        <li><strong>双文化个体</strong>（Hong et al., 2000）：给中英双语者看中国文化符号（龙、长城）或美国符号（自由女神），随后的归因倾向会向对应文化偏移。→ 风格<em>可切换</em>；但此类启动研究复现性存疑，宜作可能性而非机制</li>
+        <li><strong>实操结论</strong>：不是选一套，而是<strong>知道当前该用哪一套</strong>。签合同、写代码、做审计时用形式逻辑；判断人、定战略、处理长期关系时用辩证——并且明确告诉对方你在用哪一套</li>
+      </ul>
+    </div>
+
+    <!-- 主要知识点 -->
+    <div class="branch b6">
+      <div class="branch-title">
+        <div class="branch-icon">📚</div>
+        <span style="color:#b3bcc2">主要知识点</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>Masuda &amp; Nisbett (2001)</strong>, <em>JPSP</em>：水下动画的描述与再认，日美背景敏感度差异。跨文化认知研究的奠基实验之一</li>
+        <li><strong>Ji, Zhang &amp; Nisbett (2004)</strong>, <em>JPSP</em>：三分类任务（牛—草—鸡）。中国人多按<strong>主题关系</strong>配对（牛—草），美国人多按<strong>类别</strong>配对（牛—鸡）；双语者受<em>测试语言</em>影响——语言是开关之一，不是唯一开关</li>
+        <li><strong>Norenzayan, Smith, Kim &amp; Nisbett (2002)</strong>, <em>Cognitive Science</em>：形式推理与直觉相似性判断的文化偏好差异</li>
+        <li><strong>Peng &amp; Nisbett (1999)</strong>, <em>American Psychologist</em>：矛盾处理与辩证推理的系统比较，本书的理论骨架</li>
+        <li><strong>Choi &amp; Nisbett (2000)</strong>, <em>JPSP</em>：惊讶与矛盾识别——东亚受试对"反常结果"更倾向寻找情境解释</li>
+        <li><strong>Morris &amp; Peng (1994)</strong>, <em>JPSP</em>：卢刚事件的归因分析，内容分析法（报纸报道）与实验法双轨互证</li>
+        <li><strong>Menon, Morris, Chiu &amp; Hong (1999)</strong>, <em>JPSP</em>：组织 vs 个人归因，美、日、中三方比较</li>
+        <li><strong>Kitayama et al. (2003)</strong>, <em>Psychological Science</em>：框架线测验，绝对判断 vs 相对判断</li>
+        <li><strong>Miller, Smith, Zhu &amp; Zhang (1995)</strong>, <em>Psychological Science</em>：中美幼儿计数与数词系统——中文数词十进位规则更透明（"十一"＝十加一），可能降低早期算术的认知负荷</li>
+        <li><strong>名词与动词</strong>：名词偏好在英语儿童中更强，汉语／韩语儿童动词习得更早。注意：<em>相关不等于因果</em>，教学方式与成人互动同样在起作用</li>
+        <li><strong>宏观解释链</strong>（尼斯贝特的框架）：生态（农耕定居 vs 狩猎航海）→ 社会结构（互依 vs 独立）→ 哲学与语言 → 认知风格。这条链是<strong>解释性重构，不是因果实验</strong></li>
+        <li><strong>批评一 · 二分过粗</strong>："东亚"内含中、日、韩，三国在多项测验上并不一致（日本的场依存性常高于中国）；"西方"也掩盖了南欧、北欧、东欧的内部差异</li>
+        <li><strong>批评二 · 方法</strong>：多为大学生样本、每组几十人；WEIRD 抽样问题（Henrich et al., 2010）使"西方"本身成为统计上的异常值，而非人类基准</li>
+        <li><strong>批评三 · 复现</strong>：文化启动（符号 priming）与部分框架效应的复现结果弱于原报告。效应<em>方向</em>较稳，效应<em>量</em>需下调</li>
+        <li><strong>批评四 · 时代漂移</strong>：城市化、教育普及、互联网使用会削弱组间差异。用 2003 年的结论判断 2026 年的年轻人，需要重新校准</li>
+        <li><strong>批评五 · 被政治化</strong>：本书易被读成"文明冲突"的心理学注脚，但尼斯贝特本人明确反对以此论证文明优劣或冲突必然</li>
+        <li><strong>三种常见误读</strong>：把群体均值当个体标签（"他是中国人所以整体思维"）；把描述当处方（"应该培养整体思维"）；把差异当优劣（"我们比他们聪明"）。三者都偏离原书</li>
+        <li><strong>建设性用法</strong>：把它当<strong>跨框架翻译手册</strong>——识别对方在哪个层面（注意／自我／归因／推理）与你不同，比争论结论有效得多</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<div class="quote-section">
+  <h3>💬 金句摘录</h3>
+  <div class="quote-note">以下为本书核心命题的中文概述／意译，用于把握立场，非逐字引文；引用请以中译本原文为准。</div>
+  <div class="quote-item">
+    西方人见木，东方人见森。
+    <span>—— 全书最简概括：注意的单位不同，世界的样貌就不同</span>
+  </div>
+  <div class="quote-item">
+    思维不是天生的器官，是长出来的习惯。
+    <span>—— 生态与社会的长期塑造，先于任何个人选择</span>
+  </div>
+  <div class="quote-item">
+    你以为你在看世界，其实你在看自己的取景框。
+    <span>—— 注意的落点先于判断，而落点是被训练出来的</span>
+  </div>
+  <div class="quote-item">
+    差异在均值上明显，在个体上模糊。
+    <span>—— 用群体结论判断具体的人，是这本书最容易被滥用的地方</span>
+  </div>
+  <div class="quote-item">
+    不是谁更聪明，是各自在什么局面里更不吃亏。
+    <span>—— 配置差异而非水平差异</span>
+  </div>
+  <div class="quote-item">
+    同一件事，一套因果讲人格，一套因果讲处境。
+    <span>—— 归因方式不同，干预点就不同</span>
+  </div>
+  <div class="quote-item">
+    矛盾不是要被消灭的错误，有时是要被容纳的事实。
+    <span>—— 辩证推理的核心立场</span>
+  </div>
+  <div class="quote-item">
+    中庸不是各让一步，是找到让两端都成立的那一层。
+    <span>—— 折中与中庸的分野，也是辩证思维最容易造假的地方</span>
+  </div>
+  <div class="quote-item">
+    看见默认设置，才有资格谈选择。
+    <span>—— 全书对个人成长的真实贡献：把思维从命运降级为选项</span>
+  </div>
+</div>
+
+<div class="action-section">
+  <h3>🎯 行动建议</h3>
+  <div class="action-grid">
+    <div class="action-card">
+      <div class="action-number">1</div>
+      <p><strong>做一次「取景框对账」</strong><br>选一个你和同事或家人反复争执的判断。各自写下：你把什么算作背景？对方把什么算作背景？只回答这一问，暂不辩结论。多数争执会在这一步自行消解。</p>
+    </div>
+
+    <div class="action-card">
+      <div class="action-number">2</div>
+      <p><strong>用三分类任务自测一次</strong><br>写下「牛、草、鸡」，凭第一反应说出哪两个更该放一起，再问自己为什么。按关系配对＝主题取向，按类别配对＝分类取向。知道自己默认哪边，才谈得上换边。</p>
+    </div>
+
+    <div class="action-card">
+      <div class="action-number">3</div>
+      <p><strong>给一件失败写两套归因</strong><br>同一件事，写三条人格解释、三条情境解释。然后只问一句：哪一套能导出可执行的改动？选那一套去改，另一套留作备忘。</p>
+    </div>
+
+    <div class="action-card">
+      <div class="action-number">4</div>
+      <p><strong>建立「框架切换开关」</strong><br>列出你的三类高频场景（审合同／做审计、带人／谈判、判断长期趋势），为每类标注该用形式逻辑还是辩证推理。写在一张卡片上，动手前看一眼。</p>
+    </div>
+
+    <div class="action-card">
+      <div class="action-number">5</div>
+      <p><strong>先定位层面，再争论</strong><br>下次觉得"对方不讲道理"，先判断分歧在注意（看到的不一样）、自我（关系权重不同）、归因（因果不同）还是推理（判定标准不同）的哪一层。定位对了，争论少一半。</p>
+    </div>
+
+    <div class="action-card">
+      <div class="action-number">6</div>
+      <p><strong>给结论补一句「适用范围」</strong><br>本月内，每次说"事实证明……"时加一句"这个结论适用于什么条件"。这是把辩证取向落成习惯的最小动作，也能直接压低你的过度自信。</p>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  每日一学 · 2026-11-17 ·《思维版图：东西方思维的差异及成因》<br>
+  内容为阅读提炼与结构化整理，含对实验证据等级、复现情况、样本局限与适用边界的标注；建议对照原著与中译本核读
+</div>
+
+</body>
+</html>
