@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一学 · 看不见的大猩猩</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(165deg, #0a0708 0%, #16100f 46%, #060505 100%);
+    min-height: 100vh;
+    color: #dcd6d4;
+    padding: 20px;
+  }
+  .header {
+    text-align: center;
+    padding: 40px 20px 30px;
+    animation: fadeInDown 0.8s ease;
+  }
+  @keyframes fadeInDown { from { opacity: 0; transform: translateY(-18px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeInUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+  .date-badge {
+    display: inline-block;
+    background: rgba(224,87,76,0.09);
+    border: 1px solid rgba(224,87,76,0.32);
+    border-radius: 20px;
+    padding: 6px 18px;
+    font-size: 13px;
+    color: #d9786f;
+    margin-bottom: 16px;
+    letter-spacing: 1px;
+  }
+  .book-title {
+    font-size: 44px;
+    font-weight: 700;
+    background: linear-gradient(90deg, #e0574c, #e8b04a, #5fb8b0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+    letter-spacing: 6px;
+    line-height: 1.3;
+  }
+  .book-subtitle {
+    font-size: 16px;
+    color: #a99e9a;
+    margin-bottom: 8px;
+    line-height: 1.75;
+    max-width: 880px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .book-author {
+    font-size: 13px;
+    color: #7a6f6c;
+    line-height: 1.8;
+    max-width: 980px;
+    margin: 0 auto;
+  }
+  .mind-map { max-width: 1100px; margin: 30px auto; position: relative; }
+  .center-node {
+    background: linear-gradient(135deg, #16100f, #0a0708);
+    border-radius: 20px;
+    padding: 24px 36px;
+    text-align: center;
+    margin: 0 auto 40px;
+    width: fit-content;
+    max-width: 900px;
+    box-shadow: 0 8px 32px rgba(224,87,76,0.14);
+    position: relative;
+    animation: pulse 3.8s infinite;
+  }
+  @keyframes pulse {
+    0%,100%{ box-shadow: 0 8px 32px rgba(224,87,76,0.14); }
+    50%{ box-shadow: 0 8px 48px rgba(232,176,74,0.15); }
+  }
+  .center-node h2 { font-size: 21px; color: #fff; font-weight: 700; letter-spacing: 1.5px; line-height: 1.5; }
+  .center-node p { font-size: 13px; color: rgba(255,255,255,0.90); margin-top: 10px; line-height: 1.9; }
+  .branches { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 10px; }
+  .branch {
+    background: rgba(255,255,255,0.030);
+    border: 1px solid rgba(255,255,255,0.072);
+    border-radius: 16px;
+    padding: 22px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    animation: fadeInUp 0.6s ease both;
+  }
+  .branch:hover { transform: translateY(-4px); box-shadow: 0 12px 36px rgba(0,0,0,0.6); }
+  .branch:nth-child(1) { border-left: 4px solid #e0574c; animation-delay: 0.1s; }
+  .branch:nth-child(2) { border-left: 4px solid #e8b04a; animation-delay: 0.2s; }
+  .branch:nth-child(3) { border-left: 4px solid #5fb8b0; animation-delay: 0.3s; }
+  .branch:nth-child(4) { border-left: 4px solid #a98ac4; animation-delay: 0.4s; }
+  .branch:nth-child(5) { border-left: 4px solid #7f9fd4; animation-delay: 0.5s; }
+  .branch:nth-child(6) { border-left: 4px solid #8b95a0; animation-delay: 0.6s; }
+  .branch-title {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    line-height: 1.4;
+  }
+  .branch-icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .b1 .branch-icon { background: rgba(224,87,76,0.16); }
+  .b2 .branch-icon { background: rgba(232,176,74,0.15); }
+  .b3 .branch-icon { background: rgba(95,184,176,0.15); }
+  .b4 .branch-icon { background: rgba(169,138,196,0.15); }
+  .b5 .branch-icon { background: rgba(127,159,212,0.15); }
+  .b6 .branch-icon { background: rgba(139,149,160,0.15); }
+  .leaf-list { list-style: none; padding: 0; }
+  .leaf-list li {
+    padding: 7px 0 7px 16px;
+    border-bottom: 1px dashed rgba(255,255,255,0.055);
+    font-size: 13.5px;
+    line-height: 1.85;
+    color: #cbc4c1;
+    position: relative;
+  }
+  .leaf-list li:last-child { border-bottom: none; }
+  .leaf-list li::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 16px;
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.22);
+  }
+  .leaf-list strong { color: #f2edeb; font-weight: 600; }
+  .leaf-list em { color: #e8bf7d; font-style: normal; }
+  .quote-section {
+    max-width: 1100px;
+    margin: 24px auto;
+    background: linear-gradient(135deg, rgba(224,87,76,0.055), rgba(6,5,5,0.45));
+    border: 1px solid rgba(224,87,76,0.22);
+    border-radius: 16px;
+    padding: 30px;
+    animation: fadeInUp 0.6s ease 0.7s both;
+  }
+  .quote-section h3 {
+    font-size: 16px;
+    color: #d9786f;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .quote-note { font-size: 12px; color: #80736f; margin-bottom: 16px; line-height: 1.7; }
+  .quote-item {
+    padding: 14px 20px;
+    margin: 10px 0;
+    background: rgba(255,255,255,0.030);
+    border-radius: 10px;
+    border-left: 3px solid #e0574c;
+    font-size: 15px;
+    color: #f2edeb;
+    line-height: 1.85;
+  }
+  .quote-item span { display: block; font-size: 12px; color: #8a7d79; margin-top: 6px; }
+  .action-section {
+    max-width: 1100px;
+    margin: 24px auto;
+    background: rgba(95,184,176,0.045);
+    border: 1px solid rgba(95,184,176,0.22);
+    border-radius: 16px;
+    padding: 30px;
+    animation: fadeInUp 0.6s ease 0.8s both;
+  }
+  .action-section h3 {
+    font-size: 16px;
+    color: #7cc7c0;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .action-card {
+    display: flex;
+    gap: 12px;
+    background: rgba(255,255,255,0.028);
+    border-radius: 12px;
+    padding: 16px 18px;
+    border: 1px solid rgba(95,184,176,0.14);
+  }
+  .action-number {
+    width: 26px; height: 26px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: rgba(95,184,176,0.17);
+    color: #7cc7c0;
+    font-size: 13px;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .action-card p { font-size: 13.5px; line-height: 1.85; color: #cbc4c1; }
+  .action-card strong { color: #f2edeb; }
+  .footer {
+    max-width: 1100px;
+    margin: 34px auto 20px;
+    text-align: center;
+    font-size: 12px;
+    color: #6e6360;
+    line-height: 2;
+    padding-bottom: 20px;
+  }
+  @media (max-width: 860px) {
+    .branches, .action-grid { grid-template-columns: 1fr; }
+    .book-title { font-size: 32px; letter-spacing: 3px; }
+    .center-node { padding: 20px 22px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="date-badge">📅 2026年11月21日 · 每日一学</div>
+  <div class="book-title">看不见的大猩猩</div>
+  <div class="book-subtitle">「我们以为自己看见了世界，其实只看见了自己正在找的东西。」——为什么最明显的失误恰好发生在你最专注、最自信的时刻。</div>
+  <div class="book-author">作者：克里斯托弗·查布里斯（Christopher F. Chabris，哈佛大学心理学博士，联合学院）／丹尼尔·西蒙斯（Daniel J. Simons，康奈尔大学心理学博士，伊利诺伊大学）<br>英文原版 The Invisible Gorilla: And Other Ways Our Intuitions Deceive Us，Crown 2010｜中译：段然 译，中国人民大学出版社·湛庐文化，2011-01（ISBN 9787300131153），224 页；2016 湛庐新版，北京联合出版公司（ISBN 9787550288751），213 页<br>二人因「大猩猩实验」获 2004 年 Ig Nobel 奖（搞笑诺贝尔心理学奖）</div>
+</div>
+
+<div class="mind-map">
+  <div class="center-node">
+    <h2>🦍 错觉最危险的地方，是它骗你的时候你毫无感觉</h2>
+    <p><strong>核心命题</strong>：人类的心智不是一台忠实的记录仪，而是一台<em>必须主动删减</em>的推测机。删除本身是功能，不是缺陷；真正的缺陷是我们<em>没有把删除这件事写进自我认识</em>——于是"我看见的"被当成"发生过的"，"我相信的"被当成"我知道的"<br>
+    <strong>一句话</strong>：你不需要更聪明，你需要知道自己的观测窗口有多窄，并且在窗口之外不下判断</p>
+  </div>
+
+  <div class="branches">
+
+    <!-- 核心洞见 -->
+    <div class="branch b1">
+      <div class="branch-title">
+        <div class="branch-icon">💡</div>
+        <span style="color:#d9786f">核心洞见</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>本书攻击的不是"人会犯错"，而是"人不知道自己正在犯错"</strong>。前者是能力问题，后者是<em>监测问题</em>。六大错觉的共同结构是：错误发生在元认知层，而计算层运转得极其流畅——所以你感觉不到任何异常</li>
+        <li><strong>书名那场实验只用了 40 秒</strong>：受试者数白色球衣队员的传球次数，一个穿猩猩服的人从画面中央走过、停留、拍胸、离开。约一半人数完了球，却没看见猩猩。这不是粗心，是<em>专注的代价</em></li>
+        <li><strong>真正的震撼在后续</strong>：西蒙斯把结果告诉受试者，多数人拒绝相信"我会漏掉"；即使先告知、再做一遍，仍有人漏掉。<em>对自身盲区的无知，比对盲区本身更难消除</em></li>
+        <li><strong>作者的立场不是"人类很蠢"</strong>：注意力必须过滤，否则每秒数百万比特的输入会瘫痪系统。问题只在于，我们的自我模型把"过滤后的结果"当成了"未经过滤的世界"</li>
+        <li><strong>六大错觉可归为两族</strong>：<em>输入侧</em>（注意、记忆）——我们拿到的东西比以为的少、比以为的歪；<em>评估侧</em>（自信、知识、因果、潜能）——我们对自己掌握的、以及事物之间关系的判断，系统性地偏高</li>
+        <li><strong>为什么值得认真对待</strong>：这些不是考试题里的陷阱，而是驾驶、目击证词、医疗影像、投资决策、招聘面试的日常背景。放射科医生在寻找肺结节时，83% 没看见屏幕上那张巨大的猩猩图（Drew 等，2013）</li>
+        <li><strong>本书的方法论是"实验 + 反常识"</strong>：每一章都从一个真实事故或著名实验切入，再拆掉读者的默认假设。它不给修炼法门，给的是<em>失效清单</em>——告诉你哪些场合你的判断不可信</li>
+        <li><strong>与 2026-11-16《知识的错觉》的接缝</strong>：斯洛曼说"知识记在别人账上，却记在自己名下"；本书说"感知记在自己账上，却记错了内容"。同一台元认知机器，两个方向的失灵</li>
+        <li><strong>与 2026-11-14《错不在我》的分工</strong>：阿伦森讲错误<em>发生之后</em>的自我辩护（动机性），本书讲错误<em>发生之时</em>的采集失败（结构性）。一个解释"为什么不改"，一个解释"为什么没看见有错"</li>
+        <li><strong>必须提前说清的边界</strong>：全书证据以实验室范式为主，外推到日常需打折；"一半人看不见"高度依赖任务负荷，不是恒定常数；第 6 章「潜能错觉」的批判对象（10% 大脑、莫扎特效应、学习风格）证据扎实，但对"潜能"概念本身的处理偏随笔，弱于前五章</li>
+      </ul>
+    </div>
+
+    <!-- 框架① -->
+    <div class="branch b2">
+      <div class="branch-title">
+        <div class="branch-icon">👁️</div>
+        <span style="color:#e8bf7d">框架① 注意错觉：「看到」不等于「看见」</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>非注意视盲</strong>（inattentional blindness）：当注意力被一项任务占满，视野中未预期的显著物体可以被完全漏掉。它不等于"视而不见"的敷衍，而是<em>知觉层面根本没有生成该物体</em></li>
+        <li><strong>原始数据</strong>： Simons &amp; Chabris（1999，Perception）——白色队传球条件约 42% 未察觉猩猩，黑色队（更难）条件约 83% 未察觉；2010 年作者在千人级重复中复现了同一量级</li>
+        <li><strong>它的兄弟是变化盲</strong>（change blindness）：西蒙斯与莱文 1998 的"门实验"，问路人借路，两工人抬门穿过，问路人被换成另一个人，多数人没发现对话对象已换脸</li>
+        <li><strong>机制：注意是零和的</strong>。容量固定，选择一项即放弃其余。所谓"眼观六路"不是能力，是错觉；训练能提高特定任务的效率，但不能取消容量约束</li>
+        <li><strong>最实用的推论在驾驶</strong>：免提通话与手持通话的分心程度接近——被占用的是<em>认知资源</em>，不是手。Strayer &amp; Johnston（2001）的模拟驾驶显示，通话中错过出口的概率显著上升，且驾驶者自评"没受影响"</li>
+        <li><strong>"看见"与"被影响"是两件事</strong>：未被报告的猩猩仍可能影响后续判断（启动效应、无意识加工）。所以"他没看见"不等于"对他没作用"——这是本书最容易被读者略过的一处精细区分</li>
+        <li><strong>专家没有豁免权</strong>：西蒙斯本人多次在演示中漏看；放射科研究里，专业训练与漏看率无稳定相关。专业知识改变<em>找什么</em>，不改变<em>能同时找几样</em></li>
+        <li><strong>为什么它难以自我纠正</strong>：漏看留下的记忆是"画面里没有猩猩"，而不是"我漏了猩猩"。没有缺口感，就没有搜索的动机——<em>错觉的标志正是主观上的完整</em></li>
+        <li><strong>边界</strong>：实验室多用视频计数这类高负荷任务；日常低负荷场景的盲视率明显更低。"50% 看不见"是特定条件下的数字，不应作为普适常数引用</li>
+        <li><strong>与 2026-11-18《浅薄》的接缝</strong>：卡尔担心媒介把注意力切碎；本书提醒，注意力本来就是窄的。媒介没有制造窄，只是把窄变成了<em>可被定价、可被劫持</em>的窄——这个区别决定了该怪工具还是怪自己</li>
+      </ul>
+    </div>
+
+    <!-- 框架② -->
+    <div class="branch b3">
+      <div class="branch-title">
+        <div class="branch-icon">🧩</div>
+        <span style="color:#7cc7c0">框架② 记忆错觉：「记得」不等于「记得准」</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>记忆不是回放，是重建</strong>：每次提取都是拿碎片重新搭一次布景，搭的过程会掺入此刻的知识、情绪与期待。巴特利特 1932 年的"幽灵之战"重述实验已显示，回忆会被图式悄悄改写</li>
+        <li><strong>闪光灯记忆的骗局</strong>：人们对 9·11 现场的记忆主观上极其清晰生动，但长期追踪显示，<em>生动度与准确率几乎无关</em>。两年后仍有大量细节错误，而当事人信心不减</li>
+        <li><strong>误导信息效应</strong>：Loftus &amp; Palmer（1974）用一个动词换掉另一个（"撞上" vs "猛撞"），改变了受试者对车速的估计，也改变了他们一周后"是否看见碎玻璃"的报告——提问方式改写了记忆内容</li>
+        <li><strong>记忆可以被植入</strong>：Loftus &amp; Pickrell（1995）用"你在商场走失"的虚构叙事，让约四分之一受试者长出细节完整的假记忆；Wade 等（2002）用一张伪造的热气球照片达到类似效果</li>
+        <li><strong>自信与准确率的相关系数很低</strong>：目击证词研究中，高度自信的辨认并不比犹豫的辨认更可靠。这是美国多起错案复查后的共识，也是本书最具公共价值的论点</li>
+        <li><strong>为什么大脑要这样设计</strong>：录像式记忆会占满存储、且无法泛化。重建式记忆牺牲保真度，换取<em>提取速度与模式概括</em>——它是为"下次怎么办"服务的，不是为"上次发生了什么"服务的</li>
+        <li><strong>争执双方各执一词，常常都是诚实的</strong>：不是有人在撒谎，而是两套重建系统在各自补全空白。理解这一点，能把"你在骗我"的对抗降级为"我们对一遍原始记录"</li>
+        <li><strong>边界</strong>：植入效应的效应量在实验室远大于真实创伤情境；"压抑记忆的恢复"是临床与法律的雷区，本书对此保持克制，读者也不应据此推断任何具体个案</li>
+        <li><strong>可操作的一点</strong>：记忆的可靠性随"即时外置"急剧上升。事发十分钟内写下的三行字，价值高于一年后的一小时复盘——不是因为更真诚，而是因为掺入更少</li>
+        <li><strong>与 2026-11-02《暗时间》的接缝</strong>：刘未鹏强调用书写把隐性思考显性化；本书给出了更硬的理由——不写下来，你连"当时想了什么"都会记错</li>
+      </ul>
+    </div>
+
+    <!-- 框架③ -->
+    <div class="branch b4">
+      <div class="branch-title">
+        <div class="branch-icon">📣</div>
+        <span style="color:#c3aade">框架③ 自信错觉与知识错觉</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>自信不是能力的读数，是情绪的读数</strong>。二者相关，但远不到可以互相替代的程度。全书的判据很朴素：问"他有多确信"不能代替问"他过去有多准"</li>
+        <li><strong>优于平均水平效应</strong>：多数司机认为自己驾驶水平高于中位数——逻辑上不可能全员如此。这不是自恋，是<em>缺乏绝对标准时，人只能靠自我感觉定位</em></li>
+        <li><strong>校准</strong>（calibration）才是可训练的指标：说"70% 把握"的事，是否真有三成会错？天气预报员校准极好，因为每天都有反馈；医生、投资人、招聘官校准很差，因为反馈稀疏、延迟、且被解释掉</li>
+        <li><strong>邓宁—克鲁格效应要谨慎引用</strong>：本书用的是弱版本——<em>低能力者缺少判断自身水平所需的同一套知识</em>，这个机制成立；但网上流传的"愚昧之山"曲线，相当一部分可由回归到均值与量表地板效应解释，不宜当作定论</li>
+        <li><strong>解释深度错觉</strong>（Rozenblit &amp; Keil，2002）：让受试者自评"你多懂拉链／马桶／自行车"，再要求详细解释其原理，解释完后自评显著下降。我们对自己"懂多少"的判断，建立在对<em>熟悉感</em>的反应上，而非对<em>机制</em>的掌握上</li>
+        <li><strong>熟悉感的三个来源都是假的</strong>：见过很多次、能说出术语、能想象画面。三者都不等于能推出因果链。这就是为什么"我知道"最容易被术语撑起来</li>
+        <li><strong>自信有社交回报，与准确率脱钩</strong>：面试、路演、诊室里，表达确信的人更容易被相信。市场奖励的是<em>可信度</em>，不是<em>正确率</em>——于是自信被系统性过度生产</li>
+        <li><strong>"人多力量大"也是一种错觉</strong>：群体讨论常提高的是共识与信心，而非准确度；只有在成员独立判断、且错误不相关时，聚合才真正增益。先讨论再投票，等于先污染再平均</li>
+        <li><strong>边界</strong>：自信并非全然有害。执行、说服、承担风险都需要它；本书批的是<em>把自信当作证据</em>，不是批自信本身。这个区别若读丢，全书会变成一锅鸡汤式的自我否定</li>
+        <li><strong>与 2026-11-11《风险与好的决策》的接缝</strong>：吉仁泽提醒直觉在<em>有反馈的稳定环境</em>里是可靠的；本书提醒在没有反馈的领域，直觉连"自己不准"都察觉不到。两本书合起来给出分界线：先问环境给不给反馈，再决定信不信直觉</li>
+      </ul>
+    </div>
+
+    <!-- 框架④ -->
+    <div class="branch b5">
+      <div class="branch-title">
+        <div class="branch-icon">🔗</div>
+        <span style="color:#a8c0e4">框架④ 因果错觉与潜能错觉</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>人脑是天生的因果编剧</strong>：两个事件先后出现，叙事自动补一条箭头。这条箭头在进化上极其有用（躲开上次咬人的东西），在统计上极其危险（把噪声读成规律）</li>
+        <li><strong>三个最常见的误判</strong>：忽略<em>基线率</em>（某病本来就常见）、忽略<em>回归到均值</em>（极端之后自然回落，被归功于干预）、忽略<em>共同原因</em>（两件事同升，可能都由第三因素驱动）</li>
+        <li><strong>回归到均值是最不被识别的那个</strong>：业绩最差时换帅、最痛时求医、最差评时改版——改善常会自然发生，却被记在干预账上。这不是玄学，是统计的必然</li>
+        <li><strong>疫苗—自闭症是教科书级案例</strong>：1998 年那篇论文的样本仅 12 人、方法被查实造假、已被撤稿，作者被吊销执照；但"先后发生"的直觉太强，谣言活了二十余年，代价是可测量的公共卫生损失</li>
+        <li><strong>潜能错觉有四个常驻成员</strong>：「我们只用了大脑的 10%」（无任何神经科学依据，大脑几乎所有区域在一天内都会被调用）、「莫扎特效应」（原研究效应微弱且短暂，且难复现）、「左右脑人格」（功能偏侧化存在，但"左脑人理性／右脑人感性"是彻底的商品化误读）、「学习风格匹配教学」（多国大规模检验未发现匹配收益）</li>
+        <li><strong>这些神话为什么顽固</strong>：它们符合直觉、承诺无需努力的特殊性、自我验证（信了就会找到例证）、且有完整的商业链（测评、课程、教具）。反证需要统计素养，而神话只需要一句好记的话</li>
+        <li><strong>同时要防反向误读</strong>：「10% 大脑」是假的，不等于「潜能已被证实有限」；「学习风格」无效，不等于「教学方式无所谓」。否定一个具体主张，不构成对相反主张的证明</li>
+        <li><strong>本书对"刻意练习"的引用有简化</strong>：它把 expert performance 研究当作"潜能非天生"的支撑，但原研究强调的是<em>特定领域的反馈结构</em>，而非"努力即可无限提升"。引用时需回原作校准</li>
+        <li><strong>边界</strong>：本章是全书写得最松的一章，批判对象明确、论证密度却低于前五章；把它当作"神话清单"读，比当作"潜能理论"读更合适</li>
+        <li><strong>与 2026-11-10《理性之谜》的接缝</strong>：梅西耶说理性是为<em>说服与评估理由</em>而演化，不是为求真；本书补上素材层——我们拿来论证的"事实"，本身就是在注意与记忆的漏斗里被筛过的</li>
+      </ul>
+    </div>
+
+    <!-- 主要知识点 -->
+    <div class="branch b6">
+      <div class="branch-title">
+        <div class="branch-icon">📌</div>
+        <span style="color:#a9b3c2">主要知识点 · 证据、争议与误读</span>
+      </div>
+      <ul class="leaf-list">
+        <li><strong>版本</strong>：The Invisible Gorilla，Crown 2010；中译 段然 译，中国人民大学出版社·湛庐 2011-01（ISBN 9787300131153，224 页）；2016 湛庐新版由北京联合出版公司出版（ISBN 9787550288751，213 页）。两个中译名一致，为同一译本换版</li>
+        <li><strong>六章骨架</strong>：1 注意错觉（「看到」不等于「看见」）／2 记忆错觉（「记得」不等于「记得准」）／3 自信错觉（「自信」不代表「能力强」）／4 知识错觉（「知道」不代表「明白」）／5 因果错觉（「相关」并不是「因果」）／6 潜能错觉（「潜力」并不是「无限的」）／结语：直觉只是一个传说</li>
+        <li><strong>证据等级差异很大</strong>：大猩猩与门实验属心理学最稳健的演示之一，多国、多版本重复成功；解释深度错觉有稳定重复；<em>邓宁—克鲁格曲线、学习风格批判的部分具体数字</em>则争议较大。读时应按章分配信任</li>
+        <li><strong>争议一 · 实验室到现实的外推</strong>：视频计数是极端高负荷任务。真实场景中盲视率通常更低，但<em>方向不变</em>——"专注导致漏看"是稳健的，"一半人会漏看"是不稳健的</li>
+        <li><strong>争议二 · 对直觉的整体否定过强</strong>：本书语气偏向"直觉皆不可信"，但吉仁泽一脉的研究显示，在<em>反馈及时、环境稳定</em>的领域（消防、急救、棋类），专家直觉显著优于分析。作者的立场需要这个限定词</li>
+        <li><strong>争议三 · 归因层次</strong>：把公共失误（医疗、司法、金融）主要归因于个体认知，容易低估<em>制度设计</em>的作用。同样的盲视，在双人复核、强制清单、盲测流程下损失可被大幅削减——这不是靠"更小心"能解决的</li>
+        <li><strong>争议四 · 第 6 章的松散</strong>：批判"潜能神话"很有效，但作者未正面讨论"潜能到底有多大"这一实质问题，也未充分处理刻意练习研究的内部争议，容易被读成"别指望变强"</li>
+        <li><strong>误读一 · 把本书读成"人总是错的"</strong>：准确表述是"我们对错误的<em>监测</em>失效"。前者导向虚无，后者导向流程设计——差别在于你是否还愿意建立外部校验</li>
+        <li><strong>误读二 · 以为可以靠训练消除盲视</strong>：训练能提高特定任务的检出率，不能取消注意的容量约束。正确策略不是"练到不漏"，而是"在不该漏的场合降低负荷、增加冗余"</li>
+        <li><strong>误读三 · 把"自信不等于能力"读成"要表现得谦逊"</strong>：作者批的是<em>用自信替代证据</em>，不是批表达方式。一个确信但能说出"我错的条件"的人，比一个含糊其辞的人更可靠</li>
+        <li><strong>阅读建议</strong>：六章可独立读。若时间有限，读第 1、2、4 章（注意、记忆、知识），证据最硬、可操作性最强；第 3 章注意 D-K 的引用风险；第 5、6 章当"神话清单"读</li>
+        <li><strong>与 2026-11-04《我们如何思维》的关系</strong>：杜威描述了反省性思维<em>应该</em>怎么走；本书解释了它<em>为什么不启动</em>——因为系统根本没报告异常。先修监测，再谈方法</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<div class="quote-section">
+  <h3>💬 金句</h3>
+  <div class="quote-note">以下为全书核心命题的中文概述／意译，非逐字引文。原书为通俗写作，句子本身不长，但语境依赖实验细节，脱离案例单独引用容易失真，建议对照中译本第 1、2 章读。</div>
+
+  <div class="quote-item">我们以为自己看见了世界，其实只看见了自己正在找的东西。<span>全书的起点。它改写的不是"注意力有限"这个常识，而是"我以为我看见了全部"这个感觉</span></div>
+
+  <div class="quote-item">最危险的无知，不是不知道，而是不知道自己不知道，并且感觉良好。<span>六大错觉共享的骨架：错误发生在监测层，所以它不产生任何警报</span></div>
+
+  <div class="quote-item">注意力不是照亮一切的灯，而是一束手电——照到哪里，哪里才有世界。<span>手电的比喻比"过滤器"更准：过滤器暗示被滤掉的东西仍在，而手电之外是真的没有画面</span></div>
+
+  <div class="quote-item">记忆不是录像带，是每次播放时重新搭起来的布景。<span>这句话解释了为什么"我记得很清楚"与"我记得很准"可以完全脱钩</span></div>
+
+  <div class="quote-item">自信是一种社交信号，不是一份准确率的证明。<span>把自信从认识论里请出去，只留在沟通里——这一步是本书最实用的换位</span></div>
+
+  <div class="quote-item">我们能解释一件事如何运作的深度，远比我们以为的浅。<span>解释深度错觉的一句话版本。检验方法只有一种：真的往下讲三层</span></div>
+
+  <div class="quote-item">相关性会自己长出一副因果的骨架，因为人脑天生要给世界编故事。<span>不是逻辑错误，是叙事本能在越界工作；它讲故事的速度，永远快过算概率的速度</span></div>
+
+  <div class="quote-item">关于潜能的传说之所以流行，是因为它们承诺：你还没开始，就已经很特别。<span>第 6 章的心理学解释，也是对一整条自我提升产业的准确描述</span></div>
+
+  <div class="quote-item">错觉最难缠的地方不在于它会骗你，而在于它骗你的时候，你没有任何感觉。<span>全书结论。所有纠错机制的前提，都是先承认"我感觉不到"本身不构成证据</span></div>
+</div>
+
+<div class="action-section">
+  <h3>🎯 行动建议</h3>
+  <div class="action-grid">
+    <div class="action-card">
+      <div class="action-number">1</div>
+      <p><strong>亲手做一次大猩猩测试</strong><br>找一段传球计数视频，认真数白色队的传球次数。数完之后再回看一遍。<em>这一次体验胜过读十章</em>——因为你需要的是"我确实会漏"的身体记忆，而不是"我知道人会漏"的知识。</p>
+    </div>
+
+    <div class="action-card">
+      <div class="action-number">2</div>
+      <p><strong>列出你的「盲视场景」并设为免判断区</strong><br>开车接电话、疲惫时看合同、开会同时回消息、深夜做重大决定。这些场合不必强迫自己更专注，只需<em>规定此处不下判断</em>。承认窗口窄，比试图拓宽窗口更可靠。</p>
+    </div>
+
+    <div class="action-card">
+      <div class="action-number">3</div>
+      <p><strong>争执后十分钟内写「三事实 + 两推测」</strong><br>三行写你确定看到／听到的，两行写你的解释。多数争执的燃料，是把推测当事实陈述。<em>不必说服对方，先把两份原始记录摆在一起</em>，很多分歧会自动缩小。</p>
+    </div>
+
+    <div class="action-card">
+      <div class="action-number">4</div>
+      <p><strong>用「再往下三层」测一次知识</strong><br>挑一个你自认为懂的概念（比如"区块链""复利""免疫"），连问三次"具体怎么运作"。卡住的那一层，就是你的真实边界。<em>术语的熟悉感，是这个测试里最会骗人的东西</em>。</p>
+    </div>
+
+    <div class="action-card">
+      <div class="action-number">5</div>
+      <p><strong>给预测记「信心百分比」，攒够 20 条</strong><br>每次重要判断写下"我认为有 X% 把握"，并记下结果。20 条之后你会看到自己的校准偏差：是普遍高估，还是在特定领域才高估。这是唯一能自我训练的部分。</p>
+    </div>
+
+    <div class="action-card">
+      <div class="action-number">6</div>
+      <p><strong>看到「A 导致 B」时问三句</strong><br>基线率是多少？有没有可能只是回归？谁从这个结论里获益？三问不必都答得出，但只要能问出一问，就足以把一条断言降级为待查。<em>尤其警惕"改革后指标好转"这类叙事</em>。</p>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  每日一学 · 2026-11-21 ·《看不见的大猩猩：无处不在的 6 大错觉》<br>
+  内容为阅读提炼与结构化整理，含对证据等级、争议焦点与常见误读的标注；本书证据以实验室范式为主，"约半数看不见"依赖任务负荷，不应作为普适常数引用；邓宁—克鲁格效应与部分潜能神话的具体数字存在学术争议，已在正文标明；金句为中文概述／意译，非逐字引文，建议对照中译本核读
+</div>
+
+</body>
+</html>
